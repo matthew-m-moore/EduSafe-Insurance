@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduSafe.IO", "EduSafe.IO\Ed
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduSafe.WebSite", "EduSafe.WebSite\EduSafe.WebSite.csproj", "{8BCF55A4-380B-44A4-A328-D8C6FA2CCF46}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduSafe.Common", "EduSafe.Common\EduSafe.Common.csproj", "{2847BD82-29C4-4441-A290-E4A1CEA71B10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{8BCF55A4-380B-44A4-A328-D8C6FA2CCF46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BCF55A4-380B-44A4-A328-D8C6FA2CCF46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BCF55A4-380B-44A4-A328-D8C6FA2CCF46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2847BD82-29C4-4441-A290-E4A1CEA71B10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2847BD82-29C4-4441-A290-E4A1CEA71B10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2847BD82-29C4-4441-A290-E4A1CEA71B10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2847BD82-29C4-4441-A290-E4A1CEA71B10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

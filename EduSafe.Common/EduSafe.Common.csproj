@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B6ADB00A-7F9B-4A3E-BB0C-95AE27AD2534}</ProjectGuid>
+    <ProjectGuid>{2847BD82-29C4-4441-A290-E4A1CEA71B10}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EduSafe.IO</RootNamespace>
-    <AssemblyName>EduSafe.IO</AssemblyName>
+    <RootNamespace>EduSafe.Common</RootNamespace>
+    <AssemblyName>EduSafe.Common</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,18 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClosedXML, Version=0.94.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ClosedXML.0.94.2\lib\net40\ClosedXML.dll</HintPath>
-    </Reference>
-    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
-      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
-    </Reference>
-    <Reference Include="ExcelNumberFormat, Version=1.0.3.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
-      <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
-    </Reference>
-    <Reference Include="FastMember, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FastMember.1.3.0\lib\net45\FastMember.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,28 +39,27 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Excel\ExcelFileWriter.cs" />
-    <Compile Include="Excel\ExcelFileReader.cs" />
-    <Compile Include="Excel\Records\TabDataTypeRecord.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="ExtensionMethods\DictionaryExtensions.cs" />
+    <Compile Include="ExtensionMethods\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\BuildIdentifierUtility.cs" />
+    <Compile Include="Utilities\DataTableUtility.cs" />
+    <Compile Include="Utilities\NumericalSearchUtility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Database\Contexts\" />
-    <Folder Include="Database\Entities\" />
-    <Folder Include="Database\Mappings\" />
-    <Folder Include="Database\SQL\" />
+    <Folder Include="Enums\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <EmbeddedResource Include="Resources\CaptureChangeSetOnBuild.bat" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EduSafe.Common\EduSafe.Common.csproj">
-      <Project>{2847bd82-29c4-4441-a290-e4a1cea71b10}</Project>
-      <Name>EduSafe.Common</Name>
-    </ProjectReference>
+    <EmbeddedResource Include="Resources\ChangeSet.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>..\..\Resources\CaptureChangeSetOnBuild.bat</PostBuildEvent>
+  </PropertyGroup>
 </Project>
