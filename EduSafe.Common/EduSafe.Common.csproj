@@ -42,16 +42,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Curves\DataCurve.cs" />
+    <Compile Include="Curves\InterestRateCurve.cs" />
+    <Compile Include="Enums\CompoundingConvention.cs" />
+    <Compile Include="Enums\DayCountConvention.cs" />
+    <Compile Include="Enums\InterestRateCurveType.cs" />
+    <Compile Include="Enums\Month.cs" />
+    <Compile Include="Enums\PaymentConvention.cs" />
+    <Compile Include="Enums\StudentEnrollmentState.cs" />
     <Compile Include="ExtensionMethods\DictionaryExtensions.cs" />
+    <Compile Include="ExtensionMethods\EnumExtensions.cs" />
+    <Compile Include="ExtensionMethods\ListExtensions.cs" />
     <Compile Include="ExtensionMethods\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\BuildIdentifierUtility.cs" />
     <Compile Include="Utilities\DataTableUtility.cs" />
+    <Compile Include="Utilities\DateUtility.cs" />
+    <Compile Include="Utilities\InterpolationUtility.cs" />
+    <Compile Include="Utilities\MathUtility.cs" />
     <Compile Include="Utilities\NumericalSearchUtility.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Enums\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Resources\CaptureChangeSetOnBuild.bat" />
   </ItemGroup>
