@@ -33,6 +33,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,14 +44,45 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\Containers\StudentEnrollmentCurvesDictionary.cs" />
+    <Compile Include="BusinessLogic\Containers\StudentEnrollmentModelInput.cs" />
+    <Compile Include="BusinessLogic\Containers\StudentEnrollmentStateArray.cs" />
+    <Compile Include="BusinessLogic\Models\AnalyticalPremiumCalculationModel.cs" />
+    <Compile Include="BusinessLogic\Models\NumericalPremiumCalculationModel.cs" />
+    <Compile Include="BusinessLogic\Models\PremiumCalculationModel.cs" />
+    <Compile Include="BusinessLogic\Models\StudentEnrollmentModel.cs" />
+    <Compile Include="BusinessLogic\CostsOrFees\CostOrFee.cs" />
+    <Compile Include="BusinessLogic\CostsOrFees\EventBasedCostOrFee.cs" />
+    <Compile Include="BusinessLogic\CostsOrFees\PeriodicCostOrFee.cs" />
+    <Compile Include="BusinessLogic\Models\ServicingCostsModel.cs" />
+    <Compile Include="BusinessLogic\Vectors\AdditiveVector.cs" />
+    <Compile Include="BusinessLogic\Vectors\MutiliplicativeVector.cs" />
+    <Compile Include="BusinessLogic\Vectors\Vector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\Excel\Converters\CostOrFeeConverter.cs" />
+    <Compile Include="Repositories\Excel\Converters\StudentEnrollmentModelInputConverter.cs" />
+    <Compile Include="Repositories\Excel\Converters\VectorConverter.cs" />
+    <Compile Include="Repositories\Excel\ServicingCostsModelRepository.cs" />
+    <Compile Include="Repositories\Excel\StudentEnrollmentModelRepository.cs" />
+    <Compile Include="Repositories\Excel\VectorRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BusinessLogic\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Repositories\Database\Converters\" />
-    <Folder Include="Repositories\Excel\Converters\" />
     <Folder Include="Savers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EduSafe.Common\EduSafe.Common.csproj">
+      <Project>{2847bd82-29c4-4441-a290-e4a1cea71b10}</Project>
+      <Name>EduSafe.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EduSafe.IO\EduSafe.IO.csproj">
+      <Project>{b6adb00a-7f9b-4a3e-bb0c-95ae27ad2534}</Project>
+      <Name>EduSafe.IO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

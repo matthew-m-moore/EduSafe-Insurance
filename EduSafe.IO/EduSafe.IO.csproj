@@ -56,9 +56,13 @@
   <ItemGroup>
     <Compile Include="Excel\ExcelFileWriter.cs" />
     <Compile Include="Excel\ExcelFileReader.cs" />
+    <Compile Include="Excel\Records\CostOrFeeInputRecord.cs" />
+    <Compile Include="Excel\Records\StudentEnrollmentModelInputRecord.cs" />
+    <Compile Include="Excel\Records\StudentEnrollmentStateTargetRecord.cs" />
     <Compile Include="Excel\Records\TabDataTypeRecord.cs" />
     <Compile Include="Excel\Records\TestRecords\TestRecordA.cs" />
     <Compile Include="Excel\Records\TestRecords\TestRecordB.cs" />
+    <Compile Include="Excel\Records\VectorRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
