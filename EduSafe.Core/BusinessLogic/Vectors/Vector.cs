@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using EduSafe.Common.Curves;
 
 namespace EduSafe.Core.BusinessLogic.Vectors
 {
     public abstract class Vector
     {
-        public DataCurve<double> Values { get; }
+        protected DataCurve<double> _VectorValues { get; }
 
         public Vector (DataCurve<double> values)
         {
-            Values = values;
+            _VectorValues = values;
         }
 
+        public double this[int index]
+        {
+            get { return _VectorValues[index]; }
+        }
+
+        public abstract double ApplyVector(int index, double suppliedValue);
         public abstract List<double> ApplyVector(List<double> suppliedValues);
+
+        public abstract double UnapplyVector(int index, double suppliedValue);
+        public abstract List<double> UnapplyVector(List<double> suppliedValues);
     }
 }

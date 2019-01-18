@@ -5,16 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using EduSafe.Common.Curves;
 using EduSafe.Common.Enums;
-using EduSafe.Core.BusinessLogic.Vectors;
+using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;
 
 namespace EduSafe.Core.BusinessLogic.Containers
 {
     public class StudentEnrollmentModelInput
     {
-        public StudentEnrollmentState TargetEnrollmentState { get; }
-        public List<(int TargetMonth, double TargetValue)> EnrollmentTargetValues { get; }
+        public EnrollmentTargetsArray EnrollmentTargetsArray { get; }
+        public EnrollmentTransitionsArray TransitionRatesArray { get; }
 
-        public Dictionary<StudentEnrollmentState, Vector> VectorsDictionary { get; }
-        public Dictionary<StudentEnrollmentState, StudentEnrollmentCurvesDictionary> EnrollmentArray { get; }
+        public int NumberOfMonthlyPeriodsToProject { get; }
     }
 }

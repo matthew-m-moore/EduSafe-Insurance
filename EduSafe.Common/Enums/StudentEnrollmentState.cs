@@ -6,11 +6,11 @@
         
         Enrolled,
         DroppedOut,
-
         Graduated,
+
+        EarlyHire,
         GraduatedEmployed,
         GraduatedUnemployed,
         GraduateSchool,
-        EarlyHire,
     }
 }

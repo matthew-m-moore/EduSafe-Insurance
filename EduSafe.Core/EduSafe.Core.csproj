@@ -44,17 +44,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessLogic\Containers\StudentEnrollmentCurvesDictionary.cs" />
     <Compile Include="BusinessLogic\Containers\StudentEnrollmentModelInput.cs" />
-    <Compile Include="BusinessLogic\Containers\StudentEnrollmentStateArray.cs" />
-    <Compile Include="BusinessLogic\Models\AnalyticalPremiumCalculationModel.cs" />
-    <Compile Include="BusinessLogic\Models\NumericalPremiumCalculationModel.cs" />
-    <Compile Include="BusinessLogic\Models\PremiumCalculationModel.cs" />
-    <Compile Include="BusinessLogic\Models\StudentEnrollmentModel.cs" />
+    <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentStateArray.cs" />
+    <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentTarget.cs" />
+    <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentTargetsArray.cs" />
+    <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentTransition.cs" />
+    <Compile Include="BusinessLogic\Models\Premiums\AnalyticalPremiumCalculationModel.cs" />
+    <Compile Include="BusinessLogic\Models\Premiums\NumericalPremiumCalculationModel.cs" />
+    <Compile Include="BusinessLogic\Models\Premiums\PremiumCalculationModel.cs" />
+    <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentModel.cs" />
     <Compile Include="BusinessLogic\CostsOrFees\CostOrFee.cs" />
     <Compile Include="BusinessLogic\CostsOrFees\EventBasedCostOrFee.cs" />
     <Compile Include="BusinessLogic\CostsOrFees\PeriodicCostOrFee.cs" />
     <Compile Include="BusinessLogic\Models\ServicingCostsModel.cs" />
+    <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentTransitionsArray.cs" />
     <Compile Include="BusinessLogic\Vectors\AdditiveVector.cs" />
     <Compile Include="BusinessLogic\Vectors\MutiliplicativeVector.cs" />
     <Compile Include="BusinessLogic\Vectors\Vector.cs" />

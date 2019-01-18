@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;
 
-namespace EduSafe.Core.BusinessLogic.Models
+namespace EduSafe.Core.BusinessLogic.Models.Premiums
 {
     public abstract class PremiumCalculationModel
     {
         private ServicingCostsModel _servicingCostsModel { get; }
-        private StudentEnrollmentModel _studentEnrollmentModel { get; }
+        private EnrollmentModel _studentEnrollmentModel { get; }
     }
 }
