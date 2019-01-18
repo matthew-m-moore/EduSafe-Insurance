@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using EduSafe.Common.Enums;
 
@@ -16,6 +17,17 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
         public bool Contains(StudentEnrollmentState studentEnrollmentState)
         {
             return _enrollmentStateArray.ContainsKey(studentEnrollmentState);
+        }
+
+        public void FillStateToReachUnity(StudentEnrollmentState enrollmentState)
+        {
+            var remainingFractionOfArray = _enrollmentStateArray.Where(a => a.Key != enrollmentState).Sum(s => s.Value);
+            _enrollmentStateArray[enrollmentState] = 1.0 - remainingFractionOfArray;
+
+            if (_enrollmentStateArray[enrollmentState] < 0.0)
+            {
+                throw new Exception("ERROR: Invalid model paramaters. Enrollment cannot be less than zero.");
+            }
         }
 
         public void RenormalizeArray(EnrollmentStateArray baseEnrollmentStateArray, StudentEnrollmentState renormalizedState)
@@ -57,11 +69,6 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
                     _enrollmentStateArray[studentEnrollmentState] = value;
                 }
             }
-        }
-
-        public bool CheckGreaterThanUnity()
-        {
-            return (_enrollmentStateArray.Values.Sum() > 1.0);
         }
     }
 }

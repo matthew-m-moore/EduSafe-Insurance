@@ -58,6 +58,9 @@
     <Compile Include="BusinessLogic\CostsOrFees\PeriodicCostOrFee.cs" />
     <Compile Include="BusinessLogic\Models\ServicingCostsModel.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentTransitionsArray.cs" />
+    <Compile Include="BusinessLogic\Models\StudentEnrollment\Parameterization\DropOutRateParameterizer.cs" />
+    <Compile Include="BusinessLogic\Models\StudentEnrollment\Parameterization\EarlyHireRateParameterizer.cs" />
+    <Compile Include="BusinessLogic\Models\StudentEnrollment\Parameterization\GraduateSchoolRateParameterizer.cs" />
     <Compile Include="BusinessLogic\Vectors\AdditiveVector.cs" />
     <Compile Include="BusinessLogic\Vectors\MutiliplicativeVector.cs" />
     <Compile Include="BusinessLogic\Vectors\Vector.cs" />
