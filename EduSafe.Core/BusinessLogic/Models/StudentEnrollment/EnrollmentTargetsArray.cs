@@ -1,18 +1,36 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using EduSafe.Common.Enums;
 
 namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
 {
     public class EnrollmentTargetsArray
     {
-        private Dictionary<int?, Dictionary<StudentEnrollmentState, StudentEnrollmentTarget>> _enrollmentTargetsArray;
+        private Dictionary<int, Dictionary<StudentEnrollmentState, EnrollmentTarget>> _enrollmentTargetsArray;
+        private const int _totalTargetKey = -1;
 
         public EnrollmentTargetsArray()
         {
-            _enrollmentTargetsArray = new Dictionary<int?, Dictionary<StudentEnrollmentState, StudentEnrollmentTarget>>();
+            _enrollmentTargetsArray = new Dictionary<int, Dictionary<StudentEnrollmentState, EnrollmentTarget>>();
         }
 
-        public StudentEnrollmentTarget this[int? monthlyPeriod, StudentEnrollmentState targetEnrollmentState]
+        public double TotalTarget(StudentEnrollmentState enrollmentState)
+        {
+            // Note that the null key is used to indicate the total target over all projected months
+            if (_enrollmentTargetsArray.ContainsKey(_totalTargetKey) &&
+                _enrollmentTargetsArray[_totalTargetKey].ContainsKey(enrollmentState))
+            {
+                return _enrollmentTargetsArray[_totalTargetKey][enrollmentState].TargetValue;
+            }
+
+            var totalTarget = _enrollmentTargetsArray
+                .Where(e => e.Key != _totalTargetKey)
+                .Sum(a => a.Value[enrollmentState].TargetValue);
+
+            return totalTarget;
+        }
+
+        public EnrollmentTarget this[int monthlyPeriod, StudentEnrollmentState targetEnrollmentState]
         {
             get
             {
@@ -28,7 +46,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
             {
                 if (!_enrollmentTargetsArray.ContainsKey(monthlyPeriod))
                 {
-                    _enrollmentTargetsArray.Add(monthlyPeriod, new Dictionary<StudentEnrollmentState, StudentEnrollmentTarget>());
+                    _enrollmentTargetsArray.Add(monthlyPeriod, new Dictionary<StudentEnrollmentState, EnrollmentTarget>());
                 }
 
                 if (!_enrollmentTargetsArray[monthlyPeriod].ContainsKey(targetEnrollmentState))
@@ -42,7 +60,19 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
             }
         }
 
-        public Dictionary<StudentEnrollmentState, StudentEnrollmentTarget> this[int? monthlyPeriod]
+        public EnrollmentTarget this[StudentEnrollmentState targetEnrollmentState]
+        {
+            get
+            {
+                return this[_totalTargetKey, targetEnrollmentState];
+            }
+            set
+            {
+                this[_totalTargetKey, targetEnrollmentState] = value;
+            }
+        }
+
+        public Dictionary<StudentEnrollmentState, EnrollmentTarget> this[int monthlyPeriod]
         {
             get
             {

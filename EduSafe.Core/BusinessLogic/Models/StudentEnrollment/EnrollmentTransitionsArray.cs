@@ -7,17 +7,17 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
     {
         private Dictionary<StudentEnrollmentState, 
                 Dictionary<StudentEnrollmentState, 
-                Dictionary<int, StudentEnrollmentTransition>>> _enrollmentTransitionArray;
+                Dictionary<int, EnrollmentTransition>>> _enrollmentTransitionArray;
 
         public EnrollmentTransitionsArray()
         {
             _enrollmentTransitionArray = 
                 new Dictionary<StudentEnrollmentState, 
                     Dictionary<StudentEnrollmentState, 
-                    Dictionary<int, StudentEnrollmentTransition>>>();
+                    Dictionary<int, EnrollmentTransition>>>();
         }
 
-        public StudentEnrollmentTransition this
+        public EnrollmentTransition this
             [StudentEnrollmentState startEnrollmentState, StudentEnrollmentState endEnrollmentState, int monthlyPeriod]
         {
             get
@@ -31,18 +31,18 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
 
                 return null;
             }
-            set
+            private set
             {
                 if (!_enrollmentTransitionArray.ContainsKey(startEnrollmentState))
                 {
                     _enrollmentTransitionArray.Add(startEnrollmentState,
-                        new Dictionary<StudentEnrollmentState, Dictionary<int, StudentEnrollmentTransition>>());
+                        new Dictionary<StudentEnrollmentState, Dictionary<int, EnrollmentTransition>>());
                 }
 
                 if (!_enrollmentTransitionArray[startEnrollmentState].ContainsKey(endEnrollmentState))
                 {
                     _enrollmentTransitionArray[startEnrollmentState].Add(endEnrollmentState,
-                        new Dictionary<int, StudentEnrollmentTransition>());
+                        new Dictionary<int, EnrollmentTransition>());
                 }
 
                 if (!_enrollmentTransitionArray[startEnrollmentState][endEnrollmentState].ContainsKey(monthlyPeriod))
@@ -56,7 +56,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
             }
         }
 
-        public StudentEnrollmentTransition this[StudentEnrollmentTransition studentEnrollmentTransition]
+        public EnrollmentTransition this[EnrollmentTransition studentEnrollmentTransition]
         {
             get
             {

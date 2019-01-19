@@ -19,15 +19,10 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
             return _enrollmentStateArray.ContainsKey(studentEnrollmentState);
         }
 
-        public void FillStateToReachUnity(StudentEnrollmentState enrollmentState)
+        public void AdjustForTerminalStates(double priorEnrollmentStateValue, StudentEnrollmentState enrollmentState)
         {
             var remainingFractionOfArray = _enrollmentStateArray.Where(a => a.Key != enrollmentState).Sum(s => s.Value);
-            _enrollmentStateArray[enrollmentState] = 1.0 - remainingFractionOfArray;
-
-            if (_enrollmentStateArray[enrollmentState] < 0.0)
-            {
-                throw new Exception("ERROR: Invalid model paramaters. Enrollment cannot be less than zero.");
-            }
+            _enrollmentStateArray[enrollmentState] = Math.Max(priorEnrollmentStateValue - remainingFractionOfArray, 0.0);
         }
 
         public void RenormalizeArray(EnrollmentStateArray baseEnrollmentStateArray, StudentEnrollmentState renormalizedState)

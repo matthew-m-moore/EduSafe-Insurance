@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EduSafe.Common.Curves;
+using EduSafe.Common.Enums;
+using EduSafe.Core.BusinessLogic.Containers;
+using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;
+using EduSafe.Core.BusinessLogic.Vectors;
+using EduSafe.IO.Excel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
@@ -10,10 +16,122 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
     [TestClass]
     public class EnrollmentModelTests
     {
+        private EnrollmentModel _studentEnrollmentModel;
+
         [TestMethod, Owner("Matthew Moore")]
         public void EnrollmentModel_ProofOfConceptTest()
         {
+            EnrollmentModel_TestPopulation();
+            _studentEnrollmentModel.ParameterizeModel();
+            Assert.IsTrue(_studentEnrollmentModel.IsParameterized);
 
+            OutputEnrollmentArrayTimeSeriesToExcel();
+        }
+
+        private void OutputEnrollmentArrayTimeSeriesToExcel()
+        {
+            var listOfTimeSeriesEntries = _studentEnrollmentModel.EnrollmentStateTimeSeries
+                .Select((enrollmentStateArray, i) =>
+                    {
+                        return new StudentEnrollmentStateTimeSeriesEntry
+                        {
+                            Period = i,
+                            Enrolled = enrollmentStateArray[StudentEnrollmentState.Enrolled],
+                            DroppedOut = enrollmentStateArray[StudentEnrollmentState.DroppedOut],
+                            Graduated = enrollmentStateArray[StudentEnrollmentState.Graduated],
+                            Employed = enrollmentStateArray[StudentEnrollmentState.GraduatedEmployed],
+                            EalyHire = enrollmentStateArray[StudentEnrollmentState.EarlyHire],
+                            Unemployed = enrollmentStateArray[StudentEnrollmentState.GraduatedUnemployed],
+                            GradSchool = enrollmentStateArray[StudentEnrollmentState.GraduateSchool],
+                        };
+                    }
+                );
+
+            var excelFileWriter = new ExcelFileWriter(openFileOnSave: true);
+            excelFileWriter.AddWorksheetForListOfData(listOfTimeSeriesEntries.ToList());
+            excelFileWriter.ExportWorkbook();
+        }
+
+        private void EnrollmentModel_TestPopulation()
+        {
+            var enrollmentTargetsArray = new EnrollmentTargetsArray();
+
+            var graduationState = StudentEnrollmentState.Graduated;
+            enrollmentTargetsArray[48, graduationState] = new EnrollmentTarget(graduationState, 0.40, 48);
+            enrollmentTargetsArray[60, graduationState] = new EnrollmentTarget(graduationState, 0.15, 60);
+            enrollmentTargetsArray[72, graduationState] = new EnrollmentTarget(graduationState, 0.05, 72);
+
+            var dropOutState = StudentEnrollmentState.DroppedOut;
+            var dropOutValue = 1.0 - enrollmentTargetsArray.TotalTarget(StudentEnrollmentState.Graduated);
+            enrollmentTargetsArray[dropOutState] = new EnrollmentTarget(dropOutState, dropOutValue);
+
+            var gradSchoolState = StudentEnrollmentState.GraduateSchool;
+            enrollmentTargetsArray[gradSchoolState] = new EnrollmentTarget(gradSchoolState, 0.15);
+
+            var earlyHireState = StudentEnrollmentState.EarlyHire;
+            enrollmentTargetsArray[earlyHireState] = new EnrollmentTarget(earlyHireState, 0.05);
+
+            var flatMultiplicativeVector = new MultiplicativeVector(new DataCurve<double>());
+            var enrollmentTransitionsArray = new EnrollmentTransitionsArray();
+
+            var hiringTransitionRate1 = new EnrollmentTransition(
+                StudentEnrollmentState.Graduated,
+                StudentEnrollmentState.GraduatedEmployed,
+                flatMultiplicativeVector, 48);
+
+            var hiringTransitionRate2 = new EnrollmentTransition(
+                StudentEnrollmentState.Graduated,
+                StudentEnrollmentState.GraduatedEmployed,
+                flatMultiplicativeVector, 60);
+
+            var hiringTransitionRate3 = new EnrollmentTransition(
+                StudentEnrollmentState.Graduated,
+                StudentEnrollmentState.GraduatedEmployed,
+                flatMultiplicativeVector, 72);
+
+            var hiringRate = 0.65;
+            hiringTransitionRate1.SetBaseTransitionRate(hiringRate);
+            hiringTransitionRate2.SetBaseTransitionRate(hiringRate);
+            hiringTransitionRate3.SetBaseTransitionRate(hiringRate);
+
+            enrollmentTransitionsArray[hiringTransitionRate1] = hiringTransitionRate1;
+            enrollmentTransitionsArray[hiringTransitionRate2] = hiringTransitionRate2;
+            enrollmentTransitionsArray[hiringTransitionRate3] = hiringTransitionRate3;
+
+            var gradSchoolTransitionRate1 = new EnrollmentTransition(
+                StudentEnrollmentState.Graduated,
+                StudentEnrollmentState.GraduateSchool,
+                flatMultiplicativeVector, 48);
+
+            var gradSchoolTransitionRate2 = new EnrollmentTransition(
+                StudentEnrollmentState.Graduated,
+                StudentEnrollmentState.GraduateSchool,
+                flatMultiplicativeVector, 60);
+
+            var gradSchoolTransitionRate3 = new EnrollmentTransition(
+                StudentEnrollmentState.Graduated,
+                StudentEnrollmentState.GraduateSchool,
+                flatMultiplicativeVector, 72);
+
+            var graduateSchoolRate = 0.25;
+            gradSchoolTransitionRate1.SetBaseTransitionRate(graduateSchoolRate );
+            gradSchoolTransitionRate2.SetBaseTransitionRate(graduateSchoolRate);
+            gradSchoolTransitionRate3.SetBaseTransitionRate(graduateSchoolRate);
+
+            enrollmentTransitionsArray[gradSchoolTransitionRate1] = gradSchoolTransitionRate1;
+            enrollmentTransitionsArray[gradSchoolTransitionRate2] = gradSchoolTransitionRate2;
+            enrollmentTransitionsArray[gradSchoolTransitionRate3] = gradSchoolTransitionRate3;
+
+            var numberOfMonthlyPeriodsToProject = 72;
+            var earlyHireStartingPeriod = 36;
+
+            var studentEnrollmentModelInput = new StudentEnrollmentModelInput(
+                enrollmentTargetsArray,
+                enrollmentTransitionsArray,
+                numberOfMonthlyPeriodsToProject,
+                earlyHireStartingPeriod);
+
+            _studentEnrollmentModel = new EnrollmentModel(studentEnrollmentModelInput);
         }
     }
 }

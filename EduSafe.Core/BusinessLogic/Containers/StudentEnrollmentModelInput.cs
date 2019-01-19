@@ -15,5 +15,19 @@ namespace EduSafe.Core.BusinessLogic.Containers
         public EnrollmentTransitionsArray TransitionRatesArray { get; }
 
         public int NumberOfMonthlyPeriodsToProject { get; }
+        public int EarlyHireStartingMonth { get; }
+
+        public StudentEnrollmentModelInput(
+            EnrollmentTargetsArray enrollmentTargetsArray,
+            EnrollmentTransitionsArray transitionRatesArray,
+            int numberOfMonthlyPeriodsToProject,
+            int earlyHireStartingMonth)
+        {
+            EnrollmentTargetsArray = enrollmentTargetsArray;
+            TransitionRatesArray = transitionRatesArray;
+
+            NumberOfMonthlyPeriodsToProject = numberOfMonthlyPeriodsToProject;
+            EarlyHireStartingMonth = earlyHireStartingMonth;
+        }
     }
 }

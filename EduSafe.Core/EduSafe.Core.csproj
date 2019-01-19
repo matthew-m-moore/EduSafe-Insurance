@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\Containers\StudentEnrollmentModelInput.cs" />
+    <Compile Include="BusinessLogic\Containers\StudentEnrollmentStateTimeSeriesEntry.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentStateArray.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentTarget.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentTargetsArray.cs" />
@@ -62,7 +63,7 @@
     <Compile Include="BusinessLogic\Models\StudentEnrollment\Parameterization\EarlyHireRateParameterizer.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\Parameterization\GraduateSchoolRateParameterizer.cs" />
     <Compile Include="BusinessLogic\Vectors\AdditiveVector.cs" />
-    <Compile Include="BusinessLogic\Vectors\MutiliplicativeVector.cs" />
+    <Compile Include="BusinessLogic\Vectors\MultiplicativeVector.cs" />
     <Compile Include="BusinessLogic\Vectors\Vector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Excel\Converters\CostOrFeeConverter.cs" />

@@ -3,7 +3,7 @@ using EduSafe.Core.BusinessLogic.Vectors;
 
 namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
 {
-    public class StudentEnrollmentTransition
+    public class EnrollmentTransition
     {
         public StudentEnrollmentState StartEnrollmentState { get; }
         public StudentEnrollmentState EndEnrollmentState { get; }
@@ -12,24 +12,16 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
         public double BaseTransitionRate { get; private set; }
         public Vector ShapingVector { get; private set; }
 
-        public StudentEnrollmentTransition(
-            StudentEnrollmentState startEnrollmentState,
-            StudentEnrollmentState endEnrollmentState,
-            int monthlyPeriod)
-        {
-            StartEnrollmentState = startEnrollmentState;
-            EndEnrollmentState = endEnrollmentState;  
-            MonthlyPeriod = monthlyPeriod;
-        }
-
-        public StudentEnrollmentTransition(
+        public EnrollmentTransition(
             StudentEnrollmentState startEnrollmentState,
             StudentEnrollmentState endEnrollmentState,
             Vector shapingVector,
-            int monthlyPeriod) : 
-                this(startEnrollmentState, endEnrollmentState, monthlyPeriod)
+            int monthlyPeriod) 
         {
+            StartEnrollmentState = startEnrollmentState;
+            EndEnrollmentState = endEnrollmentState;
             ShapingVector = shapingVector;
+            MonthlyPeriod = monthlyPeriod;
         }
 
         public double GetTransitionRate()

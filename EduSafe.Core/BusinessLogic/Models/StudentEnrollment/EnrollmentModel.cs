@@ -13,16 +13,17 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
     {
         public bool IsParameterized = false;
 
-        private StudentEnrollmentModelInput _studentEnrollmentModelInput;
-        private List<EnrollmentStateArray> _enrollmentStateTimeSeries;
-        private MutiliplicativeVector _flatMultiplicativeVector;
+        public List<EnrollmentStateArray> EnrollmentStateTimeSeries { get; private set; }
+
+        private StudentEnrollmentModelInput _studentEnrollmentModelInput;       
+        private MultiplicativeVector _flatMultiplicativeVector;     
 
         private const double _targetPrecision = 1e-14;
 
         public EnrollmentModel(StudentEnrollmentModelInput studentEnrollmentModelInput)
         {
             _studentEnrollmentModelInput = studentEnrollmentModelInput;
-            _flatMultiplicativeVector = new MutiliplicativeVector(new DataCurve<double>(1.0));
+            _flatMultiplicativeVector = new MultiplicativeVector(new DataCurve<double>(1.0));
         }
 
         public void ParameterizeModel()
@@ -36,19 +37,26 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
 
         private void ParameterizeDropOutRate()
         {
-            var dropOutTarget = _studentEnrollmentModelInput.EnrollmentTargetsArray[null, StudentEnrollmentState.DroppedOut];
+            var dropOutTarget = _studentEnrollmentModelInput.EnrollmentTargetsArray[StudentEnrollmentState.DroppedOut];
             if (dropOutTarget != null)
             {
                 var targetValue = dropOutTarget.TargetValue;
                 var dropOutRateParameterizer = new DropOutRateParameterizer(
-                    _studentEnrollmentModelInput,
-                    _enrollmentStateTimeSeries,
+                    _studentEnrollmentModelInput,            
                     _flatMultiplicativeVector);
 
                 NumericalSearchUtility.NewtonRaphsonWithBisection(
                     dropOutRateParameterizer.Parameterize,
                     targetValue,
-                    _targetPrecision);
+                    _targetPrecision,
+                    floorValue: 0.0,
+                    ceilingValue: 1.0);
+
+                EnrollmentStateTimeSeries = dropOutRateParameterizer.EnrollmentStateTimeSeries;
+            }
+            else
+            {
+                throw new Exception("ERROR: An overall drop-out target must be provided.");
             }
         }        
 

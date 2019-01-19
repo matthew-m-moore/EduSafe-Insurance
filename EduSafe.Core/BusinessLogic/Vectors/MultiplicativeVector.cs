@@ -4,9 +4,9 @@ using EduSafe.Common.Curves;
 
 namespace EduSafe.Core.BusinessLogic.Vectors
 {
-    public class MutiliplicativeVector : Vector
+    public class MultiplicativeVector : Vector
     {
-        public MutiliplicativeVector(DataCurve<double> values) : base(values)
+        public MultiplicativeVector(DataCurve<double> values) : base(values)
         { }
 
         public override double ApplyVector(int index, double suppliedValue)

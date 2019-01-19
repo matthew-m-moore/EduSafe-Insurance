@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EduSafe.Core.BusinessLogic.Containers
+{
+    public class StudentEnrollmentStateTimeSeriesEntry
+    {
+        public double Period { get; set; }
+        public double Enrolled { get; set; }
+        public double DroppedOut { get; set; }
+        public double Graduated { get; set; }
+        public double Employed { get; set; }
+        public double EalyHire { get; set; }
+        public double Unemployed { get; set; }
+        public double GradSchool { get; set; }
+    }
+}

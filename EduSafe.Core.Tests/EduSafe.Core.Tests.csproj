@@ -57,9 +57,17 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\EduSafe.Common\EduSafe.Common.csproj">
+      <Project>{2847BD82-29C4-4441-A290-E4A1CEA71B10}</Project>
+      <Name>EduSafe.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EduSafe.Core\EduSafe.Core.csproj">
       <Project>{a2979f45-8efa-4a60-be65-ac025ffa6f94}</Project>
       <Name>EduSafe.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EduSafe.IO\EduSafe.IO.csproj">
+      <Project>{B6ADB00A-7F9B-4A3E-BB0C-95AE27AD2534}</Project>
+      <Name>EduSafe.IO</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
