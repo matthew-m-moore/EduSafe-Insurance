@@ -3,16 +3,23 @@ using System.Linq;
 using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.Core.BusinessLogic.Vectors;
+using EduSafe.Core.Interfaces;
 
 namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
 {
-    public class DropOutRateParameterizer
+    public class DropOutRateParameterizer : IParameterizer
     {
-        public List<EnrollmentStateArray> EnrollmentStateTimeSeries => _enrollmentStateTimeSeries;
+        public List<EnrollmentStateArray> EnrollmentStateTimeSeries { get; private set; }
 
         private StudentEnrollmentModelInput _studentEnrollmentModelInput;
-        private List<EnrollmentStateArray> _enrollmentStateTimeSeries;
         private MultiplicativeVector _flatMultiplicativeVector;
+
+        private readonly List<StudentEnrollmentState> _allowedParameterizationTargets = new List<StudentEnrollmentState>
+            {
+                StudentEnrollmentState.Enrolled,
+                StudentEnrollmentState.DroppedOut,
+                StudentEnrollmentState.Graduated
+            };
 
         public DropOutRateParameterizer(
             StudentEnrollmentModelInput studentEnrollmentModelInput,
@@ -31,7 +38,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
             var enrollmentTargetsArray = _studentEnrollmentModelInput.EnrollmentTargetsArray;
             var transitionRatesArray = _studentEnrollmentModelInput.TransitionRatesArray;
 
-            var priorPeriodEnrollmentStateArray = _enrollmentStateTimeSeries.First();
+            var priorPeriodEnrollmentStateArray = EnrollmentStateTimeSeries.First();
             for (var monthlyPeriod = 1; monthlyPeriod <= numberOfMonthlyPeriodsToProject; monthlyPeriod++)
             {
                 PrepareTransitionRatesArray(transitionRatesArray, dropOutRateGuess, monthlyPeriod);
@@ -47,6 +54,8 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
                         var enrollmentState = enrollmentStateEntry.Key;
                         var targetValue = enrollmentStateEntry.Value.TargetValue;
 
+                        if (!_allowedParameterizationTargets.Contains(enrollmentState)) continue;
+
                         enrollmentStateArray[enrollmentState] = targetValue;
                         SetTransitionRateEntry(transitionRatesArray, enrollmentState, priorPeriodEnrollment, targetValue, monthlyPeriod);
                     }
@@ -56,13 +65,12 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
                 CalculateGraduationAmount(transitionRatesArray, enrollmentStateArray, priorPeriodEnrollment, monthlyPeriod);
 
                 enrollmentStateArray.AdjustForTerminalStates(priorPeriodEnrollment, StudentEnrollmentState.Enrolled);
-                CalculateEmploymentAmount(transitionRatesArray, enrollmentStateArray, monthlyPeriod);
 
                 priorPeriodEnrollmentStateArray = enrollmentStateArray;
-                _enrollmentStateTimeSeries.Add(enrollmentStateArray);
+                EnrollmentStateTimeSeries.Add(enrollmentStateArray);
             }
 
-            var totalDropOutAmount = _enrollmentStateTimeSeries.Sum(t => t[StudentEnrollmentState.DroppedOut]);
+            var totalDropOutAmount = EnrollmentStateTimeSeries.Sum(t => t[StudentEnrollmentState.DroppedOut]);
             return totalDropOutAmount;
         }
 
@@ -71,8 +79,8 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
             var initialEnrollmentStateArray = new EnrollmentStateArray();
             initialEnrollmentStateArray[StudentEnrollmentState.Enrolled] = initialEnrollmentPercentage;
 
-            _enrollmentStateTimeSeries = new List<EnrollmentStateArray>();
-            _enrollmentStateTimeSeries.Add(initialEnrollmentStateArray);
+            EnrollmentStateTimeSeries = new List<EnrollmentStateArray>();
+            EnrollmentStateTimeSeries.Add(initialEnrollmentStateArray);
         }
 
         private void PrepareTransitionRatesArray(
@@ -148,23 +156,6 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
                 var graduationRate = graduationTransitionRate.GetTransitionRate();
                 var graduationAmount = priorPeriodEnrollment * graduationRate;
                 enrollmentStateArray[StudentEnrollmentState.Graduated] = graduationAmount;
-            }
-        }
-
-        private void CalculateEmploymentAmount(
-            EnrollmentTransitionsArray transitionRatesArray,
-            EnrollmentStateArray enrollmentStateArray,
-            int monthlyPeriod)
-        {
-            var employmentTransitionRate = transitionRatesArray
-                [StudentEnrollmentState.Graduated, StudentEnrollmentState.GraduatedEmployed, monthlyPeriod];
-
-            if (employmentTransitionRate != null &&
-                !enrollmentStateArray.Contains(StudentEnrollmentState.Graduated))
-            {
-                var employmentRate = employmentTransitionRate.GetTransitionRate();
-                var employmentAmount = enrollmentStateArray[StudentEnrollmentState.Graduated] * employmentRate;
-                enrollmentStateArray[StudentEnrollmentState.GraduatedEmployed] = employmentAmount;
             }
         }
     }

@@ -18,8 +18,6 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
         private StudentEnrollmentModelInput _studentEnrollmentModelInput;       
         private MultiplicativeVector _flatMultiplicativeVector;     
 
-        private const double _targetPrecision = 1e-14;
-
         public EnrollmentModel(StudentEnrollmentModelInput studentEnrollmentModelInput)
         {
             _studentEnrollmentModelInput = studentEnrollmentModelInput;
@@ -29,7 +27,8 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
         public void ParameterizeModel()
         {
             ParameterizeDropOutRate();
-            ParameterizeGraduateSchoolRate();
+            ParameterizePostGraduationRate(StudentEnrollmentState.GraduatedEmployed);
+            ParameterizePostGraduationRate(StudentEnrollmentState.GraduateSchool);
             ParameterizeEarlyHireRate();
 
             IsParameterized = true;          
@@ -48,7 +47,6 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
                 NumericalSearchUtility.NewtonRaphsonWithBisection(
                     dropOutRateParameterizer.Parameterize,
                     targetValue,
-                    _targetPrecision,
                     floorValue: 0.0,
                     ceilingValue: 1.0);
 
@@ -60,9 +58,30 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
             }
         }        
 
-        private void ParameterizeGraduateSchoolRate()
+        private void ParameterizePostGraduationRate(StudentEnrollmentState postGraduationState)
         {
+            var postGraduationRateParameterizer = new PostGraduationParameterizer(
+                    EnrollmentStateTimeSeries,
+                    _studentEnrollmentModelInput,
+                    _flatMultiplicativeVector,
+                    postGraduationState);
 
+            var postGraduationTarget = _studentEnrollmentModelInput.EnrollmentTargetsArray[postGraduationState];
+            if (postGraduationTarget != null)
+            {
+                var targetValue = postGraduationTarget.TargetValue;
+                
+                NumericalSearchUtility.NewtonRaphsonWithBisection(
+                    postGraduationRateParameterizer.Parameterize,
+                    targetValue,
+                    floorValue: 0.0,
+                    ceilingValue: 1.0);
+            }
+            else
+            {
+                // Note: Parameterization without a target will just default to whatever input rates are given
+                postGraduationRateParameterizer.Parameterize();
+            }
         }
 
         private void ParameterizeEarlyHireRate()

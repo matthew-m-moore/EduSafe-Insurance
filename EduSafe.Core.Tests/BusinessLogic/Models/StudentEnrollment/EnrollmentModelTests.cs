@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EduSafe.Common.Curves;
 using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;
 using EduSafe.Core.BusinessLogic.Vectors;
 using EduSafe.IO.Excel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
 {
@@ -19,9 +19,19 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
         private EnrollmentModel _studentEnrollmentModel;
 
         [TestMethod, Owner("Matthew Moore")]
-        public void EnrollmentModel_ProofOfConceptTest()
+        public void EnrollmentModel_ProofOfConceptTest_WithPostgraduationTargets()
         {
-            EnrollmentModel_TestPopulation();
+            PopulateEnrollmentModel(true);
+            _studentEnrollmentModel.ParameterizeModel();
+            Assert.IsTrue(_studentEnrollmentModel.IsParameterized);
+
+            OutputEnrollmentArrayTimeSeriesToExcel();
+        }
+
+        [TestMethod, Owner("Matthew Moore")]
+        public void EnrollmentModel_ProofOfConceptTest_WithoutPostgraduationTargets()
+        {
+            PopulateEnrollmentModel(false);
             _studentEnrollmentModel.ParameterizeModel();
             Assert.IsTrue(_studentEnrollmentModel.IsParameterized);
 
@@ -52,7 +62,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
             excelFileWriter.ExportWorkbook();
         }
 
-        private void EnrollmentModel_TestPopulation()
+        private void PopulateEnrollmentModel(bool includePostGraduationTargets)
         {
             var enrollmentTargetsArray = new EnrollmentTargetsArray();
 
@@ -65,14 +75,40 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
             var dropOutValue = 1.0 - enrollmentTargetsArray.TotalTarget(StudentEnrollmentState.Graduated);
             enrollmentTargetsArray[dropOutState] = new EnrollmentTarget(dropOutState, dropOutValue);
 
+            var enrollmentTransitionsArray = new EnrollmentTransitionsArray();
+
+            if (includePostGraduationTargets)
+                AddPostGraduationTargets(enrollmentTargetsArray);
+            else
+                AddPostGraduationTransitionRates(enrollmentTransitionsArray);
+
+            var numberOfMonthlyPeriodsToProject = 72;
+            var earlyHireStartingPeriod = 36;
+
+            var studentEnrollmentModelInput = new StudentEnrollmentModelInput(
+                enrollmentTargetsArray,
+                enrollmentTransitionsArray,
+                numberOfMonthlyPeriodsToProject,
+                earlyHireStartingPeriod);
+
+            _studentEnrollmentModel = new EnrollmentModel(studentEnrollmentModelInput);
+        }
+
+        private void AddPostGraduationTargets(EnrollmentTargetsArray enrollmentTargetsArray)
+        {
             var gradSchoolState = StudentEnrollmentState.GraduateSchool;
             enrollmentTargetsArray[gradSchoolState] = new EnrollmentTarget(gradSchoolState, 0.15);
 
+            var employeedState = StudentEnrollmentState.GraduatedEmployed;
+            enrollmentTargetsArray[employeedState] = new EnrollmentTarget(employeedState, 0.39);
+
             var earlyHireState = StudentEnrollmentState.EarlyHire;
             enrollmentTargetsArray[earlyHireState] = new EnrollmentTarget(earlyHireState, 0.05);
+        }
 
-            var flatMultiplicativeVector = new MultiplicativeVector(new DataCurve<double>());
-            var enrollmentTransitionsArray = new EnrollmentTransitionsArray();
+        private void AddPostGraduationTransitionRates(EnrollmentTransitionsArray enrollmentTransitionsArray)
+        {
+            var flatMultiplicativeVector = new MultiplicativeVector(new DataCurve<double>(1.0));
 
             var hiringTransitionRate1 = new EnrollmentTransition(
                 StudentEnrollmentState.Graduated,
@@ -114,24 +150,13 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
                 flatMultiplicativeVector, 72);
 
             var graduateSchoolRate = 0.25;
-            gradSchoolTransitionRate1.SetBaseTransitionRate(graduateSchoolRate );
+            gradSchoolTransitionRate1.SetBaseTransitionRate(graduateSchoolRate);
             gradSchoolTransitionRate2.SetBaseTransitionRate(graduateSchoolRate);
             gradSchoolTransitionRate3.SetBaseTransitionRate(graduateSchoolRate);
 
             enrollmentTransitionsArray[gradSchoolTransitionRate1] = gradSchoolTransitionRate1;
             enrollmentTransitionsArray[gradSchoolTransitionRate2] = gradSchoolTransitionRate2;
             enrollmentTransitionsArray[gradSchoolTransitionRate3] = gradSchoolTransitionRate3;
-
-            var numberOfMonthlyPeriodsToProject = 72;
-            var earlyHireStartingPeriod = 36;
-
-            var studentEnrollmentModelInput = new StudentEnrollmentModelInput(
-                enrollmentTargetsArray,
-                enrollmentTransitionsArray,
-                numberOfMonthlyPeriodsToProject,
-                earlyHireStartingPeriod);
-
-            _studentEnrollmentModel = new EnrollmentModel(studentEnrollmentModelInput);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace EduSafe.Common.Utilities
         public static double NewtonRaphsonWithBisection(
             Func<double, double> functionToSearch,
             double searchTargetValue,
-            double targetPrecision,
+            double targetPrecision = _maximumPrecision,
             double? floorValue = null,
             double? ceilingValue = null,
             int maximumIterations = 100,
