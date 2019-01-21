@@ -7,29 +7,36 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
 {
     public class EnrollmentStateArray
     {
-        private Dictionary<StudentEnrollmentState, double> _enrollmentStateArray { get; }
+        private Dictionary<StudentEnrollmentState, double> _incrementalStateArray { get; }
+        private Dictionary<StudentEnrollmentState, double> _totalStateArray { get; }
 
         public EnrollmentStateArray()
         {
-            _enrollmentStateArray = new Dictionary<StudentEnrollmentState, double>();
+            _incrementalStateArray = new Dictionary<StudentEnrollmentState, double>();
+            _totalStateArray = new Dictionary<StudentEnrollmentState, double>();
         }
 
         public bool Contains(StudentEnrollmentState studentEnrollmentState)
         {
-            return _enrollmentStateArray.ContainsKey(studentEnrollmentState);
+            return _incrementalStateArray.ContainsKey(studentEnrollmentState);
         }
 
-        public void AdjustForTerminalStates(double priorEnrollmentStateValue, StudentEnrollmentState enrollmentState)
+        public bool ContainsTotal(StudentEnrollmentState studentEnrollmentState)
         {
-            var remainingFractionOfArray = _enrollmentStateArray.Where(a => a.Key != enrollmentState).Sum(s => s.Value);
-            _enrollmentStateArray[enrollmentState] = Math.Max(priorEnrollmentStateValue - remainingFractionOfArray, 0.0);
+            return _totalStateArray.ContainsKey(studentEnrollmentState);
+        }
+
+        public void AdjustForTerminalStates(StudentEnrollmentState enrollmentState)
+        {
+            var remainingFractionOfArray = _incrementalStateArray.Where(a => a.Key != enrollmentState).Sum(s => s.Value);
+            _incrementalStateArray[enrollmentState] = -1 * remainingFractionOfArray;
         }
 
         public void RenormalizeArray(EnrollmentStateArray baseEnrollmentStateArray, StudentEnrollmentState renormalizedState)
         {
-            foreach(var enrollmentState in _enrollmentStateArray.Keys)
+            foreach(var enrollmentState in _totalStateArray.Keys)
             {
-                var originalValue = _enrollmentStateArray[enrollmentState];
+                var originalValue = _totalStateArray[enrollmentState];
                 var baseValue = baseEnrollmentStateArray[renormalizedState];
 
                 var renormalizedValue = originalValue / baseValue;
@@ -42,26 +49,51 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
             }
         }
 
-        public double this[StudentEnrollmentState studentEnrollmentState]
+        public double GetTotalState(StudentEnrollmentState enrollmentState)
+        {
+            if (_totalStateArray.ContainsKey(enrollmentState))
+            {
+                return _totalStateArray[enrollmentState];
+            }
+
+            return 0.0;
+        }
+
+        public void SetTotalState(StudentEnrollmentState enrollmentState, double priorStateValue = 0.0)
+        {
+            var incrementalStateValue = this[enrollmentState];
+            var value = priorStateValue + incrementalStateValue;
+
+            if (!_totalStateArray.ContainsKey(enrollmentState))
+            {
+                _totalStateArray.Add(enrollmentState, value);
+            }
+            else
+            {
+                _totalStateArray[enrollmentState] = value;
+            }
+        }
+
+        public double this[StudentEnrollmentState enrollmentState]
         {
             get
             {
-                if (_enrollmentStateArray.ContainsKey(studentEnrollmentState))
+                if (_incrementalStateArray.ContainsKey(enrollmentState))
                 {
-                    return _enrollmentStateArray[studentEnrollmentState];
+                    return _incrementalStateArray[enrollmentState];
                 }
 
                 return 0.0;
             }
             set
             {
-                if (!_enrollmentStateArray.ContainsKey(studentEnrollmentState))
+                if (!_incrementalStateArray.ContainsKey(enrollmentState))
                 {
-                    _enrollmentStateArray.Add(studentEnrollmentState, value);
+                    _incrementalStateArray.Add(enrollmentState, value);
                 }
                 else
                 {
-                    _enrollmentStateArray[studentEnrollmentState] = value;
+                    _incrementalStateArray[enrollmentState] = value;
                 }
             }
         }

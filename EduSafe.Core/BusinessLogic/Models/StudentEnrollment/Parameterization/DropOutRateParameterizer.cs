@@ -38,13 +38,13 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
             var enrollmentTargetsArray = _studentEnrollmentModelInput.EnrollmentTargetsArray;
             var transitionRatesArray = _studentEnrollmentModelInput.TransitionRatesArray;
 
-            var priorPeriodEnrollmentStateArray = EnrollmentStateTimeSeries.First();
+            var priorPeriodStateArray = EnrollmentStateTimeSeries.First();
             for (var monthlyPeriod = 1; monthlyPeriod <= numberOfMonthlyPeriodsToProject; monthlyPeriod++)
             {
                 PrepareTransitionRatesArray(transitionRatesArray, dropOutRateGuess, monthlyPeriod);
 
-                var enrollmentStateArray = new EnrollmentStateArray();
-                var priorPeriodEnrollment = priorPeriodEnrollmentStateArray[StudentEnrollmentState.Enrolled];
+                var currentPeriodStateArray = new EnrollmentStateArray();
+                var priorPeriodEnrollment = priorPeriodStateArray.GetTotalState(StudentEnrollmentState.Enrolled);
 
                 var enrollmentTargetsDictionary = enrollmentTargetsArray[monthlyPeriod];
                 if (enrollmentTargetsDictionary != null)
@@ -56,28 +56,31 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
 
                         if (!_allowedParameterizationTargets.Contains(enrollmentState)) continue;
 
-                        enrollmentStateArray[enrollmentState] = targetValue;
+                        currentPeriodStateArray[enrollmentState] = targetValue;
                         SetTransitionRateEntry(transitionRatesArray, enrollmentState, priorPeriodEnrollment, targetValue, monthlyPeriod);
                     }
                 }
 
-                CalculateDropOutAmount(transitionRatesArray, enrollmentStateArray, priorPeriodEnrollment, monthlyPeriod);
-                CalculateGraduationAmount(transitionRatesArray, enrollmentStateArray, priorPeriodEnrollment, monthlyPeriod);
+                CalculateTerminalStateAmount
+                    (transitionRatesArray, currentPeriodStateArray, priorPeriodStateArray, StudentEnrollmentState.DroppedOut, monthlyPeriod);
+                CalculateTerminalStateAmount
+                    (transitionRatesArray, currentPeriodStateArray, priorPeriodStateArray, StudentEnrollmentState.Graduated, monthlyPeriod);
 
-                enrollmentStateArray.AdjustForTerminalStates(priorPeriodEnrollment, StudentEnrollmentState.Enrolled);
+                currentPeriodStateArray.AdjustForTerminalStates(StudentEnrollmentState.Enrolled);
+                currentPeriodStateArray.SetTotalState(StudentEnrollmentState.Enrolled, priorPeriodEnrollment);
 
-                priorPeriodEnrollmentStateArray = enrollmentStateArray;
-                EnrollmentStateTimeSeries.Add(enrollmentStateArray);
+                priorPeriodStateArray = currentPeriodStateArray;
+                EnrollmentStateTimeSeries.Add(currentPeriodStateArray);
             }
 
-            var totalDropOutAmount = EnrollmentStateTimeSeries.Sum(t => t[StudentEnrollmentState.DroppedOut]);
+            var totalDropOutAmount = EnrollmentStateTimeSeries[numberOfMonthlyPeriodsToProject].GetTotalState(StudentEnrollmentState.DroppedOut);
             return totalDropOutAmount;
         }
 
         private void CreateInitialEnrollmentStateArrayEntry(double initialEnrollmentPercentage)
         {
             var initialEnrollmentStateArray = new EnrollmentStateArray();
-            initialEnrollmentStateArray[StudentEnrollmentState.Enrolled] = initialEnrollmentPercentage;
+            initialEnrollmentStateArray.SetTotalState(StudentEnrollmentState.Enrolled, initialEnrollmentPercentage);
 
             EnrollmentStateTimeSeries = new List<EnrollmentStateArray>();
             EnrollmentStateTimeSeries.Add(initialEnrollmentStateArray);
@@ -124,39 +127,25 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
             transitionRate.SetBaseTransitionRate(baseTransitionRate);
         }
 
-        private void CalculateDropOutAmount(
+        private void CalculateTerminalStateAmount(
             EnrollmentTransitionsArray transitionRatesArray,
-            EnrollmentStateArray enrollmentStateArray,
-            double priorPeriodEnrollment,
+            EnrollmentStateArray currentPeriodStateArray,
+            EnrollmentStateArray priorPeriodStateArray,
+            StudentEnrollmentState enrollmentState,
             int monthlyPeriod)
         {
-            var dropOutTransitionRate = transitionRatesArray
-                [StudentEnrollmentState.Enrolled, StudentEnrollmentState.DroppedOut, monthlyPeriod];
+            var terminalStateTransitionRate = transitionRatesArray
+                [StudentEnrollmentState.Enrolled, enrollmentState, monthlyPeriod];
 
-            if (!enrollmentStateArray.Contains(StudentEnrollmentState.DroppedOut))
+            if (terminalStateTransitionRate != null && !currentPeriodStateArray.Contains(enrollmentState))
             {
-                var dropOutRate = dropOutTransitionRate.GetTransitionRate();
-                var dropOutAmount = priorPeriodEnrollment * dropOutRate;
-                enrollmentStateArray[StudentEnrollmentState.DroppedOut] = dropOutAmount;
+                var terminalStateRate = terminalStateTransitionRate.GetTransitionRate();
+                var terminalStateAmount = priorPeriodStateArray.GetTotalState(StudentEnrollmentState.Enrolled) * terminalStateRate;
+                currentPeriodStateArray[enrollmentState] = terminalStateAmount;               
             }
-        }
-
-        private void CalculateGraduationAmount(
-            EnrollmentTransitionsArray transitionRatesArray,
-            EnrollmentStateArray enrollmentStateArray,
-            double priorPeriodEnrollment,
-            int monthlyPeriod)
-        {
-            var graduationTransitionRate = transitionRatesArray
-                [StudentEnrollmentState.Enrolled, StudentEnrollmentState.Graduated, monthlyPeriod];
-
-            if (graduationTransitionRate != null &&
-                !enrollmentStateArray.Contains(StudentEnrollmentState.Graduated))
-            {
-                var graduationRate = graduationTransitionRate.GetTransitionRate();
-                var graduationAmount = priorPeriodEnrollment * graduationRate;
-                enrollmentStateArray[StudentEnrollmentState.Graduated] = graduationAmount;
-            }
+   
+            var priorPeriodTotalAmount = priorPeriodStateArray.GetTotalState(enrollmentState);
+            currentPeriodStateArray.SetTotalState(enrollmentState, priorPeriodTotalAmount);
         }
     }
 }

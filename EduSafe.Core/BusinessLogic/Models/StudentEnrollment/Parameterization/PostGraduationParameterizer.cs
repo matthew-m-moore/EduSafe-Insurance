@@ -40,28 +40,30 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
             var enrollmentTargetsArray = _studentEnrollmentModelInput.EnrollmentTargetsArray;
             var transitionRatesArray = _studentEnrollmentModelInput.TransitionRatesArray;
 
+            var priorPeriodStateArray = EnrollmentStateTimeSeries.First();
             for (var monthlyPeriod = 1; monthlyPeriod <= numberOfMonthlyPeriodsToProject; monthlyPeriod++)
             {
                 // This conditional is only to leverage the default value of -1.0 to skip optimization when rates are provided without targets
                 if (postGraduationRateGuess >= 0.0)
                     PrepareTransitionRatesArray(transitionRatesArray, postGraduationRateGuess, monthlyPeriod);
 
-                var enrollmentStateArray = EnrollmentStateTimeSeries[monthlyPeriod];
-                var currentPeriodGraduates = enrollmentStateArray[StudentEnrollmentState.Graduated];
+                var currentPeriodStateArray = EnrollmentStateTimeSeries[monthlyPeriod];
+                var currentPeriodGraduates = currentPeriodStateArray[StudentEnrollmentState.Graduated];
 
                 var enrollmentTargetsDictionary = enrollmentTargetsArray[monthlyPeriod];
                 if (enrollmentTargetsDictionary != null && enrollmentTargetsDictionary.ContainsKey(_postGraduationState))
                 {
                     var targetValue = enrollmentTargetsDictionary[_postGraduationState].TargetValue;
 
-                    enrollmentStateArray[_postGraduationState] = targetValue;
+                    currentPeriodStateArray[_postGraduationState] = targetValue;
                     SetTransitionRateEntry(transitionRatesArray, currentPeriodGraduates, targetValue, monthlyPeriod);
                 }
 
-                CalculatePostGraduationAmount(transitionRatesArray, enrollmentStateArray, monthlyPeriod);
+                CalculatePostGraduationAmount(transitionRatesArray, currentPeriodStateArray, priorPeriodStateArray, monthlyPeriod);
+                priorPeriodStateArray = currentPeriodStateArray;
             }
 
-            var totalPostGraduationAmount = EnrollmentStateTimeSeries.Sum(t => t[_postGraduationState]);
+            var totalPostGraduationAmount = EnrollmentStateTimeSeries[numberOfMonthlyPeriodsToProject].GetTotalState(_postGraduationState);
             return totalPostGraduationAmount;
         }
 
@@ -107,19 +109,23 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
 
         private void CalculatePostGraduationAmount(
             EnrollmentTransitionsArray transitionRatesArray,
-            EnrollmentStateArray enrollmentStateArray,
+            EnrollmentStateArray currentPeriodStateArray,
+            EnrollmentStateArray priorPeriodStateArray,
             int monthlyPeriod)
         {
             var postGraduationTransitionRate = transitionRatesArray
                 [StudentEnrollmentState.Graduated, _postGraduationState, monthlyPeriod];
 
             if (postGraduationTransitionRate != null &&
-                enrollmentStateArray.Contains(StudentEnrollmentState.Graduated))
+                currentPeriodStateArray.Contains(StudentEnrollmentState.Graduated))
             {
                 var postGraduationRate = postGraduationTransitionRate.GetTransitionRate();
-                var postGraduationAmount = enrollmentStateArray[StudentEnrollmentState.Graduated] * postGraduationRate;
-                enrollmentStateArray[_postGraduationState] = postGraduationAmount;
+                var postGraduationAmount = currentPeriodStateArray[StudentEnrollmentState.Graduated] * postGraduationRate;
+                currentPeriodStateArray[_postGraduationState] = postGraduationAmount;                
             }
+
+            var priorPeriodTotalAmount = priorPeriodStateArray.GetTotalState(_postGraduationState);
+            currentPeriodStateArray.SetTotalState(_postGraduationState, priorPeriodTotalAmount);
         }
     }
 }

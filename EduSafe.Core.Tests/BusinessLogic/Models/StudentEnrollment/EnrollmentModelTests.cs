@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EduSafe.Common.Curves;
 using EduSafe.Common.Enums;
@@ -46,13 +42,22 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
                         return new StudentEnrollmentStateTimeSeriesEntry
                         {
                             Period = i,
-                            Enrolled = enrollmentStateArray[StudentEnrollmentState.Enrolled],
-                            DroppedOut = enrollmentStateArray[StudentEnrollmentState.DroppedOut],
-                            Graduated = enrollmentStateArray[StudentEnrollmentState.Graduated],
-                            Employed = enrollmentStateArray[StudentEnrollmentState.GraduatedEmployed],
-                            EalyHire = enrollmentStateArray[StudentEnrollmentState.EarlyHire],
-                            Unemployed = enrollmentStateArray[StudentEnrollmentState.GraduatedUnemployed],
-                            GradSchool = enrollmentStateArray[StudentEnrollmentState.GraduateSchool],
+
+                            Enrolled = enrollmentStateArray.GetTotalState(StudentEnrollmentState.Enrolled),
+                            DroppedOut = enrollmentStateArray.GetTotalState(StudentEnrollmentState.DroppedOut),
+                            Graduated = enrollmentStateArray.GetTotalState(StudentEnrollmentState.Graduated),
+                            Employed = enrollmentStateArray.GetTotalState(StudentEnrollmentState.GraduatedEmployed),
+                            EalyHire = enrollmentStateArray.GetTotalState(StudentEnrollmentState.EarlyHire),
+                            Unemployed = enrollmentStateArray.GetTotalState(StudentEnrollmentState.GraduatedUnemployed),
+                            GradSchool = enrollmentStateArray.GetTotalState(StudentEnrollmentState.GraduateSchool),
+
+                            DeltaEnrolled = enrollmentStateArray[StudentEnrollmentState.Enrolled],
+                            DeltaDroppedOut = enrollmentStateArray[StudentEnrollmentState.DroppedOut],
+                            DeltaGraduated = enrollmentStateArray[StudentEnrollmentState.Graduated],
+                            DeltaEmployed = enrollmentStateArray[StudentEnrollmentState.GraduatedEmployed],
+                            DeltaEalyHire = enrollmentStateArray[StudentEnrollmentState.EarlyHire],
+                            DeltaUnemployed = enrollmentStateArray[StudentEnrollmentState.GraduatedUnemployed],
+                            DeltaGradSchool = enrollmentStateArray[StudentEnrollmentState.GraduateSchool],
                         };
                     }
                 );
