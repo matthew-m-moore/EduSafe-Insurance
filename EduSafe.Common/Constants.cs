@@ -20,16 +20,23 @@ namespace EduSafe.Common
         public const int ThirtyDaysInOneMonth = 30;
         public const int ThirtyOneDaysInOneMonth = 31;
 
-        public static List<InterestRateCurveType> DiscountFactorCurves = new List<InterestRateCurveType>
+        public static readonly List<InterestRateCurveType> DiscountFactorCurves = new List<InterestRateCurveType>
         {
             InterestRateCurveType.LiborDiscount,
             InterestRateCurveType.TreasuryDiscount
         };
 
-        public static List<InterestRateCurveType> ZeroVolatilitySpotRateCurves = new List<InterestRateCurveType>
+        public static readonly List<InterestRateCurveType> ZeroVolatilitySpotRateCurves = new List<InterestRateCurveType>
         {
             InterestRateCurveType.LiborSpot,
             InterestRateCurveType.TreasurySpot
+        };
+
+        public static readonly List<StudentEnrollmentState> PostGraduationEnrollmentStates = new List<StudentEnrollmentState>
+        {
+            StudentEnrollmentState.GraduatedEmployed,
+            StudentEnrollmentState.GraduatedUnemployed,
+            StudentEnrollmentState.GraduateSchool
         };
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EduSafe.Common;
 using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.Core.BusinessLogic.Vectors;
@@ -14,22 +15,28 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
 
         private StudentEnrollmentModelInput _studentEnrollmentModelInput;
         private MultiplicativeVector _flatMultiplicativeVector;
-        private StudentEnrollmentState _postGraduationState;
+
+        protected StudentEnrollmentState _StartingEnrollmentState;
+        protected StudentEnrollmentState _EndingEnrollmentState;
+        protected int _StartingMonthlyPeriod;
 
         public PostGraduationParameterizer(
             List<EnrollmentStateArray> enrollmentStateTimeSeries,
             StudentEnrollmentModelInput studentEnrollmentModelInput,
             MultiplicativeVector flatMultiplicativeVector,
-            StudentEnrollmentState postGraduationState)
+            StudentEnrollmentState endingEnrollmentState)
         {
             EnrollmentStateTimeSeries = enrollmentStateTimeSeries;
 
             _studentEnrollmentModelInput = studentEnrollmentModelInput;
             _flatMultiplicativeVector = flatMultiplicativeVector;
-            _postGraduationState = postGraduationState;
+
+            _StartingEnrollmentState = StudentEnrollmentState.Graduated;
+            _EndingEnrollmentState = endingEnrollmentState;
+            _StartingMonthlyPeriod = 1;
         }
 
-        public double Parameterize(double postGraduationRateGuess = -1.0)
+        public double Parameterize(double transitionRateGuess = -1.0)
         {
             if (EnrollmentStateTimeSeries == null || !EnrollmentStateTimeSeries.Any())
             {
@@ -41,52 +48,88 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
             var transitionRatesArray = _studentEnrollmentModelInput.TransitionRatesArray;
 
             var priorPeriodStateArray = EnrollmentStateTimeSeries.First();
-            for (var monthlyPeriod = 1; monthlyPeriod <= numberOfMonthlyPeriodsToProject; monthlyPeriod++)
+            for (var monthlyPeriod = _StartingMonthlyPeriod; monthlyPeriod <= numberOfMonthlyPeriodsToProject; monthlyPeriod++)
             {
                 // This conditional is only to leverage the default value of -1.0 to skip optimization when rates are provided without targets
-                if (postGraduationRateGuess >= 0.0)
-                    PrepareTransitionRatesArray(transitionRatesArray, postGraduationRateGuess, monthlyPeriod);
+                if (transitionRateGuess >= 0.0)
+                    PrepareTransitionRatesArray(transitionRatesArray, transitionRateGuess, monthlyPeriod);
 
                 var currentPeriodStateArray = EnrollmentStateTimeSeries[monthlyPeriod];
-                var currentPeriodGraduates = currentPeriodStateArray[StudentEnrollmentState.Graduated];
-
                 var enrollmentTargetsDictionary = enrollmentTargetsArray[monthlyPeriod];
-                if (enrollmentTargetsDictionary != null && enrollmentTargetsDictionary.ContainsKey(_postGraduationState))
-                {
-                    var targetValue = enrollmentTargetsDictionary[_postGraduationState].TargetValue;
 
-                    currentPeriodStateArray[_postGraduationState] = targetValue;
-                    SetTransitionRateEntry(transitionRatesArray, currentPeriodGraduates, targetValue, monthlyPeriod);
+                if (enrollmentTargetsDictionary != null && enrollmentTargetsDictionary.ContainsKey(_EndingEnrollmentState))
+                {
+                    var currentPeriodDeltaAmount = currentPeriodStateArray[_StartingEnrollmentState];
+                    var targetValue = enrollmentTargetsDictionary[_EndingEnrollmentState].TargetValue;
+
+                    currentPeriodStateArray[_EndingEnrollmentState] = targetValue;
+                    SetTransitionRateEntry(transitionRatesArray, currentPeriodDeltaAmount, targetValue, monthlyPeriod);
                 }
 
-                CalculatePostGraduationAmount(transitionRatesArray, currentPeriodStateArray, priorPeriodStateArray, monthlyPeriod);
+                PopulateStateArray(transitionRatesArray, currentPeriodStateArray, priorPeriodStateArray, monthlyPeriod);              
                 priorPeriodStateArray = currentPeriodStateArray;
             }
 
-            var totalPostGraduationAmount = EnrollmentStateTimeSeries[numberOfMonthlyPeriodsToProject].GetTotalState(_postGraduationState);
-            return totalPostGraduationAmount;
+            var totalEndingStateAmount = EnrollmentStateTimeSeries[numberOfMonthlyPeriodsToProject].GetTotalState(_EndingEnrollmentState);
+            return totalEndingStateAmount;
+        }
+
+        protected virtual void PopulateStateArray(
+            EnrollmentTransitionsArray transitionRatesArray, 
+            EnrollmentStateArray currentPeriodStateArray, 
+            EnrollmentStateArray priorPeriodStateArray, 
+            int monthlyPeriod)
+        {
+            CalculateEndingStateAmount(transitionRatesArray, currentPeriodStateArray, priorPeriodStateArray, monthlyPeriod);
+            CalculateRemainingStateAmount(currentPeriodStateArray, priorPeriodStateArray);
+        }
+
+        protected void CalculateEndingStateAmount(
+            EnrollmentTransitionsArray transitionRatesArray,
+            EnrollmentStateArray currentPeriodStateArray,
+            EnrollmentStateArray priorPeriodStateArray,
+            int monthlyPeriod)
+        {
+            var transitionRateEntry = transitionRatesArray
+                [_StartingEnrollmentState, _EndingEnrollmentState, monthlyPeriod];
+
+            if (transitionRateEntry != null &&
+                currentPeriodStateArray.Contains(_StartingEnrollmentState))
+            {
+                var transitionRate = transitionRateEntry.GetTransitionRate();
+                var endingStateAmount = GetEndingStateAmount(currentPeriodStateArray) * transitionRate;
+                currentPeriodStateArray[_EndingEnrollmentState] = endingStateAmount;
+            }
+
+            var priorPeriodTotalAmount = priorPeriodStateArray.GetTotalState(_EndingEnrollmentState);
+            currentPeriodStateArray.SetTotalState(_EndingEnrollmentState, priorPeriodTotalAmount);
+        }
+
+        protected virtual double GetEndingStateAmount(EnrollmentStateArray currentPeriodStateArray)
+        {
+            return currentPeriodStateArray[_StartingEnrollmentState];
         }
 
         private void PrepareTransitionRatesArray(
             EnrollmentTransitionsArray transitionRatesArray,
-            double postGraduationRateGuess,
+            double transitionRateGuess,
             int monthlyPeriod)
         {
             var transitionRate = transitionRatesArray
-                [StudentEnrollmentState.Graduated, _postGraduationState, monthlyPeriod];
+                [_StartingEnrollmentState, _EndingEnrollmentState, monthlyPeriod];
 
             if (transitionRate == null)
             {
                 transitionRate = new EnrollmentTransition(
-                    StudentEnrollmentState.Graduated,
-                    _postGraduationState,
+                    _StartingEnrollmentState,
+                    _EndingEnrollmentState,
                     _flatMultiplicativeVector,
                     monthlyPeriod);
 
                 transitionRatesArray[transitionRate] = transitionRate;
             }
 
-            transitionRate.SetBaseTransitionRate(postGraduationRateGuess);
+            transitionRate.SetBaseTransitionRate(transitionRateGuess);
         }
 
         private void SetTransitionRateEntry(
@@ -96,8 +139,8 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
             int monthlyPeriod)
         {
             var transitionRate = new EnrollmentTransition(
-                StudentEnrollmentState.Graduated,
-                _postGraduationState,
+                _StartingEnrollmentState,
+                _EndingEnrollmentState,
                 _flatMultiplicativeVector,
                 monthlyPeriod);
 
@@ -107,25 +150,42 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
             transitionRate.SetBaseTransitionRate(baseTransitionRate);
         }
 
-        private void CalculatePostGraduationAmount(
-            EnrollmentTransitionsArray transitionRatesArray,
-            EnrollmentStateArray currentPeriodStateArray,
-            EnrollmentStateArray priorPeriodStateArray,
-            int monthlyPeriod)
+        private void CalculateRemainingStateAmount(EnrollmentStateArray currentPeriodStateArray, EnrollmentStateArray priorPeriodStateArray)
         {
-            var postGraduationTransitionRate = transitionRatesArray
-                [StudentEnrollmentState.Graduated, _postGraduationState, monthlyPeriod];
+            var remainingEnrollmentState = Constants.PostGraduationEnrollmentStates
+                .SingleOrDefault(s => !_studentEnrollmentModelInput.PostGraduationTargetStates.Contains(s));
 
-            if (postGraduationTransitionRate != null &&
-                currentPeriodStateArray.Contains(StudentEnrollmentState.Graduated))
+            if (remainingEnrollmentState == default(StudentEnrollmentState))
+                ThrowTooFewTargetsException();
+
+            currentPeriodStateArray.AdjustForRemainingState(
+                remainingEnrollmentState, 
+                _StartingEnrollmentState, 
+                Constants.PostGraduationEnrollmentStates);
+
+            var priorPeriodTotalAmount = priorPeriodStateArray.GetTotalState(remainingEnrollmentState);
+            currentPeriodStateArray.SetTotalState(remainingEnrollmentState, priorPeriodTotalAmount);
+        }
+
+        private void ThrowTooFewTargetsException()
+        {
+            var targetedStates = string.Empty;
+
+            // Basically, this means the sytem is under-determined, so it returns an error
+            var tooFewTargetsText = string.Format("ERROR: There are not enough post-graduation states targeted. "
+                + "The following states are already being targeted: {0}", targetedStates);
+
+            if (_studentEnrollmentModelInput.PostGraduationTargetStates.Any())
             {
-                var postGraduationRate = postGraduationTransitionRate.GetTransitionRate();
-                var postGraduationAmount = currentPeriodStateArray[StudentEnrollmentState.Graduated] * postGraduationRate;
-                currentPeriodStateArray[_postGraduationState] = postGraduationAmount;                
+                _studentEnrollmentModelInput.PostGraduationTargetStates.ToList()
+                    .ForEach(s => targetedStates += (" " + s.ToString() + " "));
+            }
+            else
+            {
+                targetedStates = "(none)";
             }
 
-            var priorPeriodTotalAmount = priorPeriodStateArray.GetTotalState(_postGraduationState);
-            currentPeriodStateArray.SetTotalState(_postGraduationState, priorPeriodTotalAmount);
+            throw new Exception(tooFewTargetsText);
         }
     }
 }

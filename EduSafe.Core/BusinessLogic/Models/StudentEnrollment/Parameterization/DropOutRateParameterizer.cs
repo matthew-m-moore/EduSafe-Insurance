@@ -43,7 +43,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
             {
                 PrepareTransitionRatesArray(transitionRatesArray, dropOutRateGuess, monthlyPeriod);
 
-                var currentPeriodStateArray = new EnrollmentStateArray();
+                var currentPeriodStateArray = new EnrollmentStateArray(monthlyPeriod);
                 var priorPeriodEnrollment = priorPeriodStateArray.GetTotalState(StudentEnrollmentState.Enrolled);
 
                 var enrollmentTargetsDictionary = enrollmentTargetsArray[monthlyPeriod];
@@ -66,6 +66,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
                 CalculateTerminalStateAmount
                     (transitionRatesArray, currentPeriodStateArray, priorPeriodStateArray, StudentEnrollmentState.Graduated, monthlyPeriod);
 
+                // Note: There is an order-dependency to this adjustment. It assumes the drop-out paramaterizer runs first.
                 currentPeriodStateArray.AdjustForTerminalStates(StudentEnrollmentState.Enrolled);
                 currentPeriodStateArray.SetTotalState(StudentEnrollmentState.Enrolled, priorPeriodEnrollment);
 
@@ -79,7 +80,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
 
         private void CreateInitialEnrollmentStateArrayEntry(double initialEnrollmentPercentage)
         {
-            var initialEnrollmentStateArray = new EnrollmentStateArray();
+            var initialEnrollmentStateArray = new EnrollmentStateArray(0);
             initialEnrollmentStateArray.SetTotalState(StudentEnrollmentState.Enrolled, initialEnrollmentPercentage);
 
             EnrollmentStateTimeSeries = new List<EnrollmentStateArray>();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using EduSafe.Common.Curves;
 using EduSafe.Common.Enums;
 using EduSafe.Common.Utilities;
@@ -27,8 +28,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
         public void ParameterizeModel()
         {
             ParameterizeDropOutRate();
-            ParameterizePostGraduationRate(StudentEnrollmentState.GraduatedEmployed);
-            ParameterizePostGraduationRate(StudentEnrollmentState.GraduateSchool);
+            ParameterizePostGraduationRates();
             ParameterizeEarlyHireRate();
 
             IsParameterized = true;          
@@ -54,9 +54,16 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
             }
             else
             {
-                throw new Exception("ERROR: An overall drop-out target must be provided.");
+                throw new Exception("ERROR: An overall drop-out target must be provided, either directly or indirectly.");
             }
-        }        
+        }
+
+        private void ParameterizePostGraduationRates()
+        {
+            _studentEnrollmentModelInput
+                .PostGraduationTargetStates.ToList()
+                .ForEach(ParameterizePostGraduationRate);
+        }
 
         private void ParameterizePostGraduationRate(StudentEnrollmentState postGraduationState)
         {
@@ -86,7 +93,40 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
 
         private void ParameterizeEarlyHireRate()
         {
+            var earlyHireRateParameterizer = new EarlyHireRateParameterizer(
+                EnrollmentStateTimeSeries,
+                _studentEnrollmentModelInput,
+                _flatMultiplicativeVector);
 
+            var earlyHireTarget = _studentEnrollmentModelInput.EnrollmentTargetsArray[StudentEnrollmentState.EarlyHire];
+            if (earlyHireTarget != null)
+            {
+                NumericalSearchUtility.BisectionWithNotANumber(
+                    earlyHireRateParameterizer.Parameterize, 
+                    out double ceilingValue,
+                    floorValue: 0.0);
+
+                if (!double.IsNaN(ceilingValue))
+                {
+                    var targetValue = earlyHireTarget.TargetValue;
+
+                    NumericalSearchUtility.NewtonRaphsonWithBisection(
+                        earlyHireRateParameterizer.Parameterize,
+                        targetValue,
+                        floorValue: 0.0,
+                        ceilingValue: ceilingValue);
+                }
+                else
+                {
+                    throw new Exception("ERROR: Cannot find a valid range to serach for early hire rates");
+                }
+            }
+            else
+            {
+                // Note: Parameterization without a target will just default to whatever input rates are given,
+                // even if this returns a double.NaN due to invalid inputs.
+                earlyHireRateParameterizer.Parameterize();
+            }
         }   
     }
 }

@@ -96,6 +96,9 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
                 numberOfMonthlyPeriodsToProject,
                 earlyHireStartingPeriod);
 
+            studentEnrollmentModelInput.AddPostGraduationTargetState(StudentEnrollmentState.GraduateSchool);
+            studentEnrollmentModelInput.AddPostGraduationTargetState(StudentEnrollmentState.GraduatedEmployed);
+
             _studentEnrollmentModel = new EnrollmentModel(studentEnrollmentModelInput);
         }
 

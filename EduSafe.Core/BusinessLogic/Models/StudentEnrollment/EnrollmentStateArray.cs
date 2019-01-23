@@ -7,11 +7,15 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
 {
     public class EnrollmentStateArray
     {
+        public int MonthlyPeriod { get; }
+
         private Dictionary<StudentEnrollmentState, double> _incrementalStateArray { get; }
         private Dictionary<StudentEnrollmentState, double> _totalStateArray { get; }
 
-        public EnrollmentStateArray()
+        public EnrollmentStateArray(int monthlyPeriod)
         {
+            MonthlyPeriod = monthlyPeriod;
+
             _incrementalStateArray = new Dictionary<StudentEnrollmentState, double>();
             _totalStateArray = new Dictionary<StudentEnrollmentState, double>();
         }
@@ -29,7 +33,20 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
         public void AdjustForTerminalStates(StudentEnrollmentState enrollmentState)
         {
             var remainingFractionOfArray = _incrementalStateArray.Where(a => a.Key != enrollmentState).Sum(s => s.Value);
-            _incrementalStateArray[enrollmentState] = -1 * remainingFractionOfArray;
+            _incrementalStateArray[enrollmentState] = -1.0 * remainingFractionOfArray;
+        }
+
+        public void AdjustForRemainingState(
+            StudentEnrollmentState remainingEnrollmentState,
+            StudentEnrollmentState startingEnrollmentState,
+            List<StudentEnrollmentState> mutuallyExclusiveEnrollmentStates)
+        {
+            var remainingFractionOfArray = _incrementalStateArray
+                .Where(a => mutuallyExclusiveEnrollmentStates.Contains(a.Key) && a.Key != remainingEnrollmentState)
+                .Sum(s => s.Value);
+
+            var startingEnrollmentAmount = this[startingEnrollmentState];
+            _incrementalStateArray[remainingEnrollmentState] = startingEnrollmentAmount - remainingFractionOfArray;
         }
 
         public void RenormalizeArray(EnrollmentStateArray baseEnrollmentStateArray, StudentEnrollmentState renormalizedState)

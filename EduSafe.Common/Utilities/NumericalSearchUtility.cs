@@ -74,8 +74,8 @@ namespace EduSafe.Common.Utilities
 
         public static double BisectionWithNotANumber(
             Func<double, double> functionToSearch,
-            double targetPrecision,
             out double inputValueAtSuccess,
+            double targetPrecision = _maximumPrecision,
             double? floorValue = null,
             double? ceilingValue = null,
             int maximumIterations = 100)
