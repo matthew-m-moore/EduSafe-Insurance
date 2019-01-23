@@ -11,7 +11,8 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
 {
     public class PostGraduationParameterizer : IParameterizer
     {
-        public List<EnrollmentStateArray> EnrollmentStateTimeSeries { get; protected set; }
+        public List<EnrollmentStateArray> InputEnrollmentStateTimeSeries { get; }
+        public List<EnrollmentStateArray> OutputEnrollmentStateTimeSeries { get; protected set; }
 
         private StudentEnrollmentModelInput _studentEnrollmentModelInput;
         private MultiplicativeVector _flatMultiplicativeVector;
@@ -19,6 +20,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
         protected StudentEnrollmentState _StartingEnrollmentState;
         protected StudentEnrollmentState _EndingEnrollmentState;
         protected int _StartingMonthlyPeriod;
+        protected bool _InvalidGuess;
 
         public PostGraduationParameterizer(
             List<EnrollmentStateArray> enrollmentStateTimeSeries,
@@ -26,7 +28,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
             MultiplicativeVector flatMultiplicativeVector,
             StudentEnrollmentState endingEnrollmentState)
         {
-            EnrollmentStateTimeSeries = enrollmentStateTimeSeries;
+            InputEnrollmentStateTimeSeries = enrollmentStateTimeSeries;
 
             _studentEnrollmentModelInput = studentEnrollmentModelInput;
             _flatMultiplicativeVector = flatMultiplicativeVector;
@@ -38,23 +40,28 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
 
         public double Parameterize(double transitionRateGuess = -1.0)
         {
-            if (EnrollmentStateTimeSeries == null || !EnrollmentStateTimeSeries.Any())
+            if (InputEnrollmentStateTimeSeries == null || !InputEnrollmentStateTimeSeries.Any())
             {
                 throw new Exception("ERROR: The initial enrollment state time series must exist before post-graduation rates can be determined.");
             }
 
+            // Note: It's important to do a deep copy of the time series so that that starting point is always
+            // the same for the purpose of optimizations and searches.
+            OutputEnrollmentStateTimeSeries = InputEnrollmentStateTimeSeries.Select(t => t.Copy()).ToList();
+
             var numberOfMonthlyPeriodsToProject = _studentEnrollmentModelInput.NumberOfMonthlyPeriodsToProject;
             var enrollmentTargetsArray = _studentEnrollmentModelInput.EnrollmentTargetsArray;
             var transitionRatesArray = _studentEnrollmentModelInput.TransitionRatesArray;
+            _InvalidGuess = false;
 
-            var priorPeriodStateArray = EnrollmentStateTimeSeries.First();
+            var priorPeriodStateArray = OutputEnrollmentStateTimeSeries.First();
             for (var monthlyPeriod = _StartingMonthlyPeriod; monthlyPeriod <= numberOfMonthlyPeriodsToProject; monthlyPeriod++)
             {
                 // This conditional is only to leverage the default value of -1.0 to skip optimization when rates are provided without targets
                 if (transitionRateGuess >= 0.0)
                     PrepareTransitionRatesArray(transitionRatesArray, transitionRateGuess, monthlyPeriod);
 
-                var currentPeriodStateArray = EnrollmentStateTimeSeries[monthlyPeriod];
+                var currentPeriodStateArray = OutputEnrollmentStateTimeSeries[monthlyPeriod];
                 var enrollmentTargetsDictionary = enrollmentTargetsArray[monthlyPeriod];
 
                 if (enrollmentTargetsDictionary != null && enrollmentTargetsDictionary.ContainsKey(_EndingEnrollmentState))
@@ -68,9 +75,11 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
 
                 PopulateStateArray(transitionRatesArray, currentPeriodStateArray, priorPeriodStateArray, monthlyPeriod);              
                 priorPeriodStateArray = currentPeriodStateArray;
+
+                if (_InvalidGuess) break;
             }
 
-            var totalEndingStateAmount = EnrollmentStateTimeSeries[numberOfMonthlyPeriodsToProject].GetTotalState(_EndingEnrollmentState);
+            var totalEndingStateAmount = OutputEnrollmentStateTimeSeries[numberOfMonthlyPeriodsToProject].GetTotalState(_EndingEnrollmentState);
             return totalEndingStateAmount;
         }
 

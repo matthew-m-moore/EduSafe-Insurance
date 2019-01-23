@@ -68,7 +68,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
         private void ParameterizePostGraduationRate(StudentEnrollmentState postGraduationState)
         {
             var postGraduationRateParameterizer = new PostGraduationParameterizer(
-                    EnrollmentStateTimeSeries,
+                    EnrollmentStateTimeSeries, // Need to do a deep copy of this first
                     _studentEnrollmentModelInput,
                     _flatMultiplicativeVector,
                     postGraduationState);
@@ -89,6 +89,8 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
                 // Note: Parameterization without a target will just default to whatever input rates are given
                 postGraduationRateParameterizer.Parameterize();
             }
+
+            EnrollmentStateTimeSeries = postGraduationRateParameterizer.OutputEnrollmentStateTimeSeries;
         }
 
         private void ParameterizeEarlyHireRate()
@@ -127,6 +129,8 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
                 // even if this returns a double.NaN due to invalid inputs.
                 earlyHireRateParameterizer.Parameterize();
             }
+
+            EnrollmentStateTimeSeries = earlyHireRateParameterizer.OutputEnrollmentStateTimeSeries;
         }   
     }
 }

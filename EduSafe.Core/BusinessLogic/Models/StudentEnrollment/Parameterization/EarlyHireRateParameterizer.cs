@@ -44,14 +44,14 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
         {
             if (currentPeriodStateArray[StudentEnrollmentState.GraduatedEmployed] > 0.0)
             {
-                var lastStateArrayWithGraduates = EnrollmentStateTimeSeries
+                var lastStateArrayWithGraduates = OutputEnrollmentStateTimeSeries
                     .LastOrDefault(t => t[StudentEnrollmentState.Graduated] > 0.0 && t.MonthlyPeriod < monthlyPeriod);
 
                 var lastPeriodWithGraduates = (lastStateArrayWithGraduates != null)
                     ? lastStateArrayWithGraduates.MonthlyPeriod
                     : 0;
 
-                var totalEarlyHireAmountAdjustment = EnrollmentStateTimeSeries
+                var totalEarlyHireAmountAdjustment = OutputEnrollmentStateTimeSeries
                     .Where(t => t.MonthlyPeriod > lastPeriodWithGraduates && t.MonthlyPeriod <= monthlyPeriod)
                     .Sum(e => e[StudentEnrollmentState.EarlyHire]);
 
@@ -61,7 +61,8 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment.Parameterization
                 {
                     // This protects against violating the princple that you cannot have more early hires 
                     // than available employed graduates
-                    EnrollmentStateTimeSeries.Last().SetTotalState(StudentEnrollmentState.EarlyHire, double.NaN);
+                    OutputEnrollmentStateTimeSeries.Last().SetTotalState(StudentEnrollmentState.EarlyHire, double.NaN);
+                    _InvalidGuess = true;
                 }
                 else
                 {

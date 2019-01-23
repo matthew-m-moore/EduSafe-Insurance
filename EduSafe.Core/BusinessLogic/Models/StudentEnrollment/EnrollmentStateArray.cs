@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using EduSafe.Common.Enums;
 
@@ -18,6 +17,22 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
 
             _incrementalStateArray = new Dictionary<StudentEnrollmentState, double>();
             _totalStateArray = new Dictionary<StudentEnrollmentState, double>();
+        }
+
+        private EnrollmentStateArray(EnrollmentStateArray enrollmentStateArray)
+        {
+            MonthlyPeriod = enrollmentStateArray.MonthlyPeriod;
+
+            _incrementalStateArray = enrollmentStateArray
+                ._incrementalStateArray.ToDictionary(entry => entry.Key, entry => entry.Value);
+
+            _totalStateArray = enrollmentStateArray
+                ._totalStateArray.ToDictionary(entry => entry.Key, entry => entry.Value);
+        }
+
+        public EnrollmentStateArray Copy()
+        {
+            return new EnrollmentStateArray(this);
         }
 
         public bool Contains(StudentEnrollmentState studentEnrollmentState)

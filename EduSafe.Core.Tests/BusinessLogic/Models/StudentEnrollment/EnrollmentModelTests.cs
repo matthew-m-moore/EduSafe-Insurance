@@ -165,6 +165,18 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
             enrollmentTransitionsArray[gradSchoolTransitionRate1] = gradSchoolTransitionRate1;
             enrollmentTransitionsArray[gradSchoolTransitionRate2] = gradSchoolTransitionRate2;
             enrollmentTransitionsArray[gradSchoolTransitionRate3] = gradSchoolTransitionRate3;
+
+            var earlyHireRate = 0.00440975890188199;
+            for (var period = 36; period <= 72; period++)
+            {
+                var earlyHireTransitionRate = new EnrollmentTransition(
+                    StudentEnrollmentState.Enrolled,
+                    StudentEnrollmentState.EarlyHire,
+                    flatMultiplicativeVector, period);
+
+                earlyHireTransitionRate.SetBaseTransitionRate(earlyHireRate);
+                enrollmentTransitionsArray[earlyHireTransitionRate] = earlyHireTransitionRate;
+            }
         }
     }
 }
