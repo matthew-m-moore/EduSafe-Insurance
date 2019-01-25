@@ -1,8 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EduSafe.Common.Curves;
 using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Containers;
+using EduSafe.Core.BusinessLogic.CostsOrFees;
+using EduSafe.Core.BusinessLogic.Models;
 using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;
 using EduSafe.Core.BusinessLogic.Vectors;
 using EduSafe.IO.Excel;
@@ -12,29 +17,77 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
     [TestClass]
     public class EnrollmentModelTests
     {
+        private bool _outputExel = true;
+        private double _precision = 1e-8;
+
         private EnrollmentModel _studentEnrollmentModel;
+        private ServicingCostsModel _servicingCostsModel;
 
         [TestMethod, Owner("Matthew Moore")]
         public void EnrollmentModel_ProofOfConceptTest_WithPostgraduationTargets()
         {
-            PopulateEnrollmentModel(true);
+            PopulateEnrollmentModel(includePostGraduationTargets: true);
             _studentEnrollmentModel.ParameterizeModel();
-            Assert.IsTrue(_studentEnrollmentModel.IsParameterized);
 
-            OutputEnrollmentArrayTimeSeriesToExcel();
+            PopulateServicingCostsModel();
+            var enrollmentStateTimeSeries = _studentEnrollmentModel.EnrollmentStateTimeSeries;
+            var servicingCosts = _servicingCostsModel.CalculateServicingCosts(enrollmentStateTimeSeries);
+
+            CheckResults();
+            
+            if (_outputExel)
+                OutputResultsToExcel(servicingCosts);
         }
 
         [TestMethod, Owner("Matthew Moore")]
         public void EnrollmentModel_ProofOfConceptTest_WithoutPostgraduationTargets()
         {
-            PopulateEnrollmentModel(false);
+            PopulateEnrollmentModel(includePostGraduationTargets: false);
             _studentEnrollmentModel.ParameterizeModel();
-            Assert.IsTrue(_studentEnrollmentModel.IsParameterized);
 
-            OutputEnrollmentArrayTimeSeriesToExcel();
+            PopulateServicingCostsModel();
+            var enrollmentStateTimeSeries = _studentEnrollmentModel.EnrollmentStateTimeSeries;
+            var servicingCosts = _servicingCostsModel.CalculateServicingCosts(enrollmentStateTimeSeries);
+
+            CheckResults();
+
+            if (_outputExel)
+                OutputResultsToExcel(servicingCosts);
         }
 
-        private void OutputEnrollmentArrayTimeSeriesToExcel()
+        private void CheckResults()
+        {
+            Assert.IsTrue(_studentEnrollmentModel.IsParameterized);
+
+            var totalEnrollmentChange = _studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.Enrolled]);
+            Assert.AreEqual(-1.0, totalEnrollmentChange, _precision);
+
+            var totalDropOuts = _studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.DroppedOut]);
+            Assert.AreEqual(0.40, totalDropOuts, _precision);
+
+            totalDropOuts = _studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.DroppedOut);
+            Assert.AreEqual(0.40, totalDropOuts, _precision);
+
+            var totalGradStudents = _studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.GraduateSchool]);
+            Assert.AreEqual(0.15, totalGradStudents, _precision);
+
+            totalGradStudents = _studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.GraduateSchool);
+            Assert.AreEqual(0.15, totalGradStudents, _precision);
+
+            var totalEarlyHires = _studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.EarlyHire]);
+            Assert.AreEqual(0.05, totalEarlyHires, _precision);
+
+            totalEarlyHires = _studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.EarlyHire);
+            Assert.AreEqual(0.05, totalEarlyHires, _precision);
+
+            var totalEmployed = _studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.GraduatedEmployed]);
+            Assert.AreEqual(0.39, totalEmployed + totalEarlyHires, _precision);
+
+            totalEmployed = _studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.GraduatedEmployed);
+            Assert.AreEqual(0.39, totalEmployed + totalEarlyHires, _precision);
+        }
+
+        private void OutputResultsToExcel(DataTable servicingCosts)
         {
             var listOfTimeSeriesEntries = _studentEnrollmentModel.EnrollmentStateTimeSeries
                 .Select((enrollmentStateArray, i) =>
@@ -63,8 +116,36 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
                 );
 
             var excelFileWriter = new ExcelFileWriter(openFileOnSave: true);
-            excelFileWriter.AddWorksheetForListOfData(listOfTimeSeriesEntries.ToList());
+            excelFileWriter.AddWorksheetForListOfData(listOfTimeSeriesEntries.ToList(), "Enrollment Model");
+            excelFileWriter.AddWorksheetForDataTable(servicingCosts, "Servicing Costs");
             excelFileWriter.ExportWorkbook();
+        }
+
+        private void PopulateServicingCostsModel()
+        {
+            var listOfCostsOrFees = new List<CostOrFee>();
+
+            var backgroundCheckFee = new PeriodicCostOrFee(PaymentConvention.Annual, "Background Check", 100);
+            var creditScoreFee = new PeriodicCostOrFee(PaymentConvention.Annual, "Credit Score", 25);
+            var transcriptsFee = new PeriodicCostOrFee(PaymentConvention.Annual, "Transcripts", 25);
+            var servicingFee = new PeriodicCostOrFee(PaymentConvention.Monthly, "Servicing", 20);
+
+            var dropOutVerificationFee = new EventBasedCostOrFee(StudentEnrollmentState.DroppedOut, "Drop Out Verification", 150);
+            var gradSchoolVerificationFee = new EventBasedCostOrFee(StudentEnrollmentState.GraduateSchool, "Graduate School Verification", 150);
+            var earlyHireVerificationFee = new EventBasedCostOrFee(StudentEnrollmentState.EarlyHire, "Early Hire Verification", 300);
+            var unemploymentVerificationFee = new EventBasedCostOrFee(StudentEnrollmentState.GraduatedUnemployed, "Unemployment Verification", 1000);
+
+            listOfCostsOrFees.Add(backgroundCheckFee);
+            listOfCostsOrFees.Add(creditScoreFee);
+            listOfCostsOrFees.Add(transcriptsFee);
+            listOfCostsOrFees.Add(servicingFee);
+
+            listOfCostsOrFees.Add(dropOutVerificationFee);
+            listOfCostsOrFees.Add(gradSchoolVerificationFee);
+            listOfCostsOrFees.Add(earlyHireVerificationFee);
+            listOfCostsOrFees.Add(unemploymentVerificationFee);
+
+            _servicingCostsModel = new ServicingCostsModel(listOfCostsOrFees, 72);
         }
 
         private void PopulateEnrollmentModel(bool includePostGraduationTargets)

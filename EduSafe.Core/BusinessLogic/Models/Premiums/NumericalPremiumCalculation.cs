@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace EduSafe.Core.BusinessLogic.Models.Premiums
 {
-    public class AnalyticalPremiumCalculationModel : PremiumCalculationModel
+    public class NumericalPremiumCalculation : PremiumCalculation
+
     {
     }
 }

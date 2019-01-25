@@ -50,9 +50,9 @@
     <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentTarget.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentTargetsArray.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentTransition.cs" />
-    <Compile Include="BusinessLogic\Models\Premiums\AnalyticalPremiumCalculationModel.cs" />
-    <Compile Include="BusinessLogic\Models\Premiums\NumericalPremiumCalculationModel.cs" />
-    <Compile Include="BusinessLogic\Models\Premiums\PremiumCalculationModel.cs" />
+    <Compile Include="BusinessLogic\Models\Premiums\AnalyticalPremiumCalculation.cs" />
+    <Compile Include="BusinessLogic\Models\Premiums\NumericalPremiumCalculation.cs" />
+    <Compile Include="BusinessLogic\Models\Premiums\PremiumCalculation.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentModel.cs" />
     <Compile Include="BusinessLogic\CostsOrFees\CostOrFee.cs" />
     <Compile Include="BusinessLogic\CostsOrFees\EventBasedCostOrFee.cs" />
