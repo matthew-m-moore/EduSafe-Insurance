@@ -68,7 +68,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
         private void ParameterizePostGraduationRate(StudentEnrollmentState postGraduationState)
         {
             var postGraduationRateParameterizer = new PostGraduationParameterizer(
-                    EnrollmentStateTimeSeries, // Need to do a deep copy of this first
+                    EnrollmentStateTimeSeries,
                     _studentEnrollmentModelInput,
                     _flatMultiplicativeVector,
                     postGraduationState);

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EduSafe.Core.BusinessLogic.Containers
+﻿namespace EduSafe.Core.BusinessLogic.Containers
 {
     public class StudentEnrollmentStateTimeSeriesEntry
     {
-        public double Period { get; set; }
+        public int Period { get; set; }
 
         public double Enrolled { get; set; }
         public double DroppedOut { get; set; }

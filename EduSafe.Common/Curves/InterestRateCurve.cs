@@ -30,6 +30,11 @@ namespace EduSafe.Common.Curves
             DayCountConvention = dayCountConvention;
         }
 
+        public double this[int index]
+        {
+            get { return RateCurve[index]; }
+        }
+
         /// <summary>
         /// Returns a deep, member-wise copy of the object.
         /// </summary>

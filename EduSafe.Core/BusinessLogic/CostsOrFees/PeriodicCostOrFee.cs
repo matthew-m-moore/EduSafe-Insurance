@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EduSafe.Common.Enums;
+using EduSafe.Common.Utilities;
 using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;
 
 namespace EduSafe.Core.BusinessLogic.CostsOrFees
@@ -35,7 +36,7 @@ namespace EduSafe.Core.BusinessLogic.CostsOrFees
         public override double CalculateAmount(int monthlyPeriod, List<EnrollmentStateArray> enrollmentStateTimeSeries)
         {
             var adjustedMonthlyPeriod = monthlyPeriod - StartingPeriodOfCostOrFee;
-            var isCostOrFeeMonth = (adjustedMonthlyPeriod % FrequencyInMonths == 0);
+            var isCostOrFeeMonth = MathUtility.CheckDivisibilityOfIntegers(adjustedMonthlyPeriod, FrequencyInMonths);
 
             if (!isCostOrFeeMonth) return 0.0;
 

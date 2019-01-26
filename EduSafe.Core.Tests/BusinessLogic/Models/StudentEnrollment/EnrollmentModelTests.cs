@@ -8,9 +8,11 @@ using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.Core.BusinessLogic.CostsOrFees;
 using EduSafe.Core.BusinessLogic.Models;
+using EduSafe.Core.BusinessLogic.Models.Premiums;
 using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;
 using EduSafe.Core.BusinessLogic.Vectors;
 using EduSafe.IO.Excel;
+
 
 namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
 {
@@ -22,40 +24,41 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
 
         private EnrollmentModel _studentEnrollmentModel;
         private ServicingCostsModel _servicingCostsModel;
+        private PremiumCalculation _premiumCalculation;
 
         [TestMethod, Owner("Matthew Moore")]
-        public void EnrollmentModel_ProofOfConceptTest_WithPostgraduationTargets()
+        public void EnrollmentModel_WithPostgraduationTargets_NumericalPremiumSearch()
         {
             PopulateEnrollmentModel(includePostGraduationTargets: true);
             _studentEnrollmentModel.ParameterizeModel();
 
             PopulateServicingCostsModel();
             var enrollmentStateTimeSeries = _studentEnrollmentModel.EnrollmentStateTimeSeries;
-            var servicingCosts = _servicingCostsModel.CalculateServicingCosts(enrollmentStateTimeSeries);
-
-            CheckResults();
+            var premiumCalculationModelInput = PreparePremiumCalculationModelInput();
+            var premium = CalculatePremiumNumerically(premiumCalculationModelInput, enrollmentStateTimeSeries, out DataTable servicingCosts);
+            CheckResults(premium);
             
             if (_outputExel)
                 OutputResultsToExcel(servicingCosts);
         }
 
         [TestMethod, Owner("Matthew Moore")]
-        public void EnrollmentModel_ProofOfConceptTest_WithoutPostgraduationTargets()
+        public void EnrollmentModel_WithoutPostgraduationTargets_NumericalPremiumSearch()
         {
             PopulateEnrollmentModel(includePostGraduationTargets: false);
             _studentEnrollmentModel.ParameterizeModel();
 
             PopulateServicingCostsModel();
             var enrollmentStateTimeSeries = _studentEnrollmentModel.EnrollmentStateTimeSeries;
-            var servicingCosts = _servicingCostsModel.CalculateServicingCosts(enrollmentStateTimeSeries);
-
-            CheckResults();
+            var premiumCalculationModelInput = PreparePremiumCalculationModelInput();
+            var premium = CalculatePremiumNumerically(premiumCalculationModelInput, enrollmentStateTimeSeries, out DataTable servicingCosts);
+            CheckResults(premium);
 
             if (_outputExel)
                 OutputResultsToExcel(servicingCosts);
         }
 
-        private void CheckResults()
+        private void CheckResults(double premium)
         {
             Assert.IsTrue(_studentEnrollmentModel.IsParameterized);
 
@@ -118,7 +121,46 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
             var excelFileWriter = new ExcelFileWriter(openFileOnSave: true);
             excelFileWriter.AddWorksheetForListOfData(listOfTimeSeriesEntries.ToList(), "Enrollment Model");
             excelFileWriter.AddWorksheetForDataTable(servicingCosts, "Servicing Costs");
+            excelFileWriter.AddWorksheetForListOfData(_premiumCalculation.CalculatedCashFlows, "Cash Flows");
             excelFileWriter.ExportWorkbook();
+        }
+
+        private PremiumCalculationModelInput PreparePremiumCalculationModelInput()
+        {
+            var discountFactorCurve = new InterestRateCurve(
+                InterestRateCurveType.Treasury1Mo,
+                new DateTime(2018, 12, 19),
+                new DataCurve<double>(0.0235), 1, 
+                DayCountConvention.Thirty360);
+
+            var annualIncomeCoverage = 50000;
+            var monthsOfIncomeCoverage = 6;
+            var dropOutCoverageOption = 0.25;
+            var gradSchoolCoverageOption = 0.25;
+            var earlyHireCoverageOption = 0.25;
+
+            var premiumCalculationModelInput = 
+                new PremiumCalculationModelInput(
+                    annualIncomeCoverage, 
+                    monthsOfIncomeCoverage, 
+                    discountFactorCurve,
+                    dropOutCoverageOption,
+                    gradSchoolCoverageOption,
+                    earlyHireCoverageOption);
+
+            return premiumCalculationModelInput;
+        }
+
+        private double CalculatePremiumNumerically(
+            PremiumCalculationModelInput premiumCalculationModelInput,
+            List<EnrollmentStateArray> enrollmentStateTimeSeries,
+            out DataTable servicingCosts)
+        {
+            _premiumCalculation = new NumericalPremiumCalculation(premiumCalculationModelInput);
+            var premium = _premiumCalculation.CalculatePremium(enrollmentStateTimeSeries, _servicingCostsModel);
+
+            servicingCosts = _premiumCalculation.ServicingCostsDataTable;
+            return premium;
         }
 
         private void PopulateServicingCostsModel()
