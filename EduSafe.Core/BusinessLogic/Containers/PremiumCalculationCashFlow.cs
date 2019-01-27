@@ -24,5 +24,22 @@
 
         public double TotalCashFlow => ProbabilityAdjustedPremium - TotalCostsAndClaims;
         public double DiscountedCashFlow => TotalCashFlow * DiscountFactor;
+
+        public PremiumCalculationCashFlow() { }
+
+        protected PremiumCalculationCashFlow(PremiumCalculationCashFlow premiumCalculationCashFlow)
+        {
+            Period = premiumCalculationCashFlow.Period;
+            DiscountFactor = premiumCalculationCashFlow.DiscountFactor;
+
+            Premium = premiumCalculationCashFlow.Premium;
+            ProbabilityAdjustedPremium = premiumCalculationCashFlow.ProbabilityAdjustedPremium;
+
+            ProbabilityAdjustedCostsAndFees = premiumCalculationCashFlow.ProbabilityAdjustedCostsAndFees;
+            ProbabilityAdjustedDropOutClaims = premiumCalculationCashFlow.ProbabilityAdjustedDropOutClaims;
+            ProbabilityAdjustedGradSchoolClaims = premiumCalculationCashFlow.ProbabilityAdjustedGradSchoolClaims;
+            ProbabilityAdjustedEarlyHireClaims = premiumCalculationCashFlow.ProbabilityAdjustedEarlyHireClaims;
+            ProbabilityAdjustedUnemploymentClaims = premiumCalculationCashFlow.ProbabilityAdjustedUnemploymentClaims;
+        }
     }
 }

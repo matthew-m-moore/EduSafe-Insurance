@@ -58,6 +58,38 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
                 OutputResultsToExcel(servicingCosts);
         }
 
+        [TestMethod, Owner("Matthew Moore")]
+        public void EnrollmentModel_WithPostgraduationTargets_AnalyticalPremiumCalculation()
+        {
+            PopulateEnrollmentModel(includePostGraduationTargets: true);
+            _studentEnrollmentModel.ParameterizeModel();
+
+            PopulateServicingCostsModel();
+            var enrollmentStateTimeSeries = _studentEnrollmentModel.EnrollmentStateTimeSeries;
+            var premiumCalculationModelInput = PreparePremiumCalculationModelInput();
+            var premium = CalculatePremiumAnalytically(premiumCalculationModelInput, enrollmentStateTimeSeries, out DataTable servicingCosts);
+            CheckResults(premium);
+
+            if (_outputExel)
+                OutputResultsToExcel(servicingCosts);
+        }
+
+        [TestMethod, Owner("Matthew Moore")]
+        public void EnrollmentModel_WithoutPostgraduationTargets_AnalyticalPremiumCalculation()
+        {
+            PopulateEnrollmentModel(includePostGraduationTargets: false);
+            _studentEnrollmentModel.ParameterizeModel();
+
+            PopulateServicingCostsModel();
+            var enrollmentStateTimeSeries = _studentEnrollmentModel.EnrollmentStateTimeSeries;
+            var premiumCalculationModelInput = PreparePremiumCalculationModelInput();
+            var premium = CalculatePremiumAnalytically(premiumCalculationModelInput, enrollmentStateTimeSeries, out DataTable servicingCosts);
+            CheckResults(premium);
+
+            if (_outputExel)
+                OutputResultsToExcel(servicingCosts);
+        }
+
         private void CheckResults(double premium)
         {
             Assert.IsTrue(_studentEnrollmentModel.IsParameterized);
@@ -88,6 +120,8 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
 
             totalEmployed = _studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.GraduatedEmployed);
             Assert.AreEqual(0.39, totalEmployed + totalEarlyHires, _precision);
+
+            Assert.AreEqual(82.35792486, premium, _precision);
         }
 
         private void OutputResultsToExcel(DataTable servicingCosts)
@@ -157,6 +191,18 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
             out DataTable servicingCosts)
         {
             _premiumCalculation = new NumericalPremiumCalculation(premiumCalculationModelInput);
+            var premium = _premiumCalculation.CalculatePremium(enrollmentStateTimeSeries, _servicingCostsModel);
+
+            servicingCosts = _premiumCalculation.ServicingCostsDataTable;
+            return premium;
+        }
+
+        private double CalculatePremiumAnalytically(
+            PremiumCalculationModelInput premiumCalculationModelInput,
+            List<EnrollmentStateArray> enrollmentStateTimeSeries,
+            out DataTable servicingCosts)
+        {
+            _premiumCalculation = new AnalyticalPremiumCalculation(premiumCalculationModelInput);
             var premium = _premiumCalculation.CalculatePremium(enrollmentStateTimeSeries, _servicingCostsModel);
 
             servicingCosts = _premiumCalculation.ServicingCostsDataTable;

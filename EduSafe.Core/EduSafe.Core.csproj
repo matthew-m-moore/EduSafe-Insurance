@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\Containers\AnalyticalPremiumCalculationCashFlow.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumCalculationModelInput.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumCalculationCashFlow.cs" />
     <Compile Include="BusinessLogic\Containers\StudentEnrollmentModelInput.cs" />

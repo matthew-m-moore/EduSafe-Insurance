@@ -269,6 +269,9 @@ namespace EduSafe.Common.Utilities
                 {
                     stepSize = Math.Abs(lowEndOfSearchBracket - highEndOfSearchBracket) / 2.0;
 
+                    // The algorithm would be irrelevant if this were the case, since there is likely an analytical solution
+                    if (stepSize < _maximumPrecision) return guess;
+
                     // Be careful to step in the right direction, depending on the sign of low versus high
                     if (highEndOfSearchBracket > lowEndOfSearchBracket)
                     {
