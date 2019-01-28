@@ -52,7 +52,8 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
                 var monthlyPeriod = enrollmentStateArray.MonthlyPeriod;
                 if (monthlyPeriod == 0) continue;
 
-                CalculateCashFlow(enrollmentStateArray, premiumAmountGuess, monthlyPeriod);
+                var currentPeriodCashFlow = CalculateCashFlow(enrollmentStateArray, premiumAmountGuess, monthlyPeriod);
+                _calculatedCashFlows.Add(currentPeriodCashFlow);
             }
 
             return _calculatedCashFlows.Sum(c => c.DiscountedCashFlow);
@@ -96,7 +97,6 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
                 ProbabilityAdjustedUnemploymentClaims = unemploymentCoverage * unemploymentFraction
             };
 
-            _calculatedCashFlows.Add(currentPeriodCashFlow);
             return currentPeriodCashFlow;
         }
     }

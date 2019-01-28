@@ -20,6 +20,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
     public class EnrollmentModelTests
     {
         private bool _outputExel = true;
+        private bool _analyticalOuput = false;
         private double _precision = 1e-8;
 
         private EnrollmentModel _studentEnrollmentModel;
@@ -29,6 +30,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
         [TestMethod, Owner("Matthew Moore")]
         public void EnrollmentModel_WithPostgraduationTargets_NumericalPremiumSearch()
         {
+            _analyticalOuput = false;
             PopulateEnrollmentModel(includePostGraduationTargets: true);
             _studentEnrollmentModel.ParameterizeModel();
 
@@ -45,6 +47,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
         [TestMethod, Owner("Matthew Moore")]
         public void EnrollmentModel_WithoutPostgraduationTargets_NumericalPremiumSearch()
         {
+            _analyticalOuput = false;
             PopulateEnrollmentModel(includePostGraduationTargets: false);
             _studentEnrollmentModel.ParameterizeModel();
 
@@ -61,6 +64,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
         [TestMethod, Owner("Matthew Moore")]
         public void EnrollmentModel_WithPostgraduationTargets_AnalyticalPremiumCalculation()
         {
+            _analyticalOuput = true;
             PopulateEnrollmentModel(includePostGraduationTargets: true);
             _studentEnrollmentModel.ParameterizeModel();
 
@@ -77,6 +81,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
         [TestMethod, Owner("Matthew Moore")]
         public void EnrollmentModel_WithoutPostgraduationTargets_AnalyticalPremiumCalculation()
         {
+            _analyticalOuput = true;
             PopulateEnrollmentModel(includePostGraduationTargets: false);
             _studentEnrollmentModel.ParameterizeModel();
 
@@ -155,7 +160,19 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
             var excelFileWriter = new ExcelFileWriter(openFileOnSave: true);
             excelFileWriter.AddWorksheetForListOfData(listOfTimeSeriesEntries.ToList(), "Enrollment Model");
             excelFileWriter.AddWorksheetForDataTable(servicingCosts, "Servicing Costs");
-            excelFileWriter.AddWorksheetForListOfData(_premiumCalculation.CalculatedCashFlows, "Cash Flows");
+                
+            if (_analyticalOuput)
+            {
+                var analyticalPremiumCalculationCashFlows = 
+                    _premiumCalculation.CalculatedCashFlows.Select(c => (AnalyticalPremiumCalculationCashFlow)c).ToList();
+
+                excelFileWriter.AddWorksheetForListOfData(analyticalPremiumCalculationCashFlows, "Cash Flows");
+            }
+            else
+            {
+                excelFileWriter.AddWorksheetForListOfData(_premiumCalculation.CalculatedCashFlows, "Cash Flows");
+            }
+
             excelFileWriter.ExportWorkbook();
         }
 
