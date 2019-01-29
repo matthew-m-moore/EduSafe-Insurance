@@ -27,5 +27,7 @@ namespace EduSafe.Core.BusinessLogic.CostsOrFees
         }
 
         public abstract double CalculateAmount(int monthlyPeriod, List<EnrollmentStateArray> enrollmentStateTimeSeries);
+
+        public abstract CostOrFee Copy();
     }
 }

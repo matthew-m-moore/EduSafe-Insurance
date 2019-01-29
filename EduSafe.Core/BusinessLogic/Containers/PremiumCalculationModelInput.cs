@@ -13,6 +13,8 @@ namespace EduSafe.Core.BusinessLogic.Containers
         public double IncomeCoverageAmount => AnnualIncomeCoverageAmount * _fractionOfYearCovered;
         private double _fractionOfYearCovered => (double) MonthsOfIncomeCoverage / Constants.MonthsInOneYear;
 
+        public double PreviouslyPaidInPremiums { get; set; }
+
         public InterestRateCurve DiscountRateCurve { get; private set; }
 
         public double? DropOutOptionCoveragePercentage { get; }

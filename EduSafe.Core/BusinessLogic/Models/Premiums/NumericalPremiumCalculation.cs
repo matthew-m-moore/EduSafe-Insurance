@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using EduSafe.Common;
@@ -46,6 +47,8 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
         protected double CalculateCashFlows(double premiumAmountGuess = 1.0)
         {
             _calculatedCashFlows = new List<PremiumCalculationCashFlow>();
+            var initialPeriodCashFlow = CreateInitialCashFlow();
+            _calculatedCashFlows.Add(initialPeriodCashFlow);
 
             foreach (var enrollmentStateArray in _enrollmentStateTimeSeries)
             {
@@ -57,6 +60,20 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             }
 
             return _calculatedCashFlows.Sum(c => c.DiscountedCashFlow);
+        }
+
+        protected virtual PremiumCalculationCashFlow CreateInitialCashFlow()
+        {
+            var initialPeriodCashFlow = new PremiumCalculationCashFlow
+            {
+                Period = 0,
+                DiscountFactor = 1.0,
+
+                Premium = _PremiumCalculationModelInput.PreviouslyPaidInPremiums,
+                ProbabilityAdjustedPremium = _PremiumCalculationModelInput.PreviouslyPaidInPremiums,
+            };
+
+            return initialPeriodCashFlow;
         }
 
         protected virtual PremiumCalculationCashFlow CalculateCashFlow

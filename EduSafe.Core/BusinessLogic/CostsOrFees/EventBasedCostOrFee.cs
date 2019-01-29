@@ -27,5 +27,16 @@ namespace EduSafe.Core.BusinessLogic.CostsOrFees
             var amount = eventStateDeltaAmount * BaseAmount;
             return amount;
         }
+
+        public override CostOrFee Copy()
+        {
+            var eventBasedCostOrFee = new EventBasedCostOrFee(
+                EventStateForCostOrFee,
+                Description,
+                BaseAmount);
+
+            eventBasedCostOrFee.SetStartingPeriod(StartingPeriodOfCostOrFee);
+            return eventBasedCostOrFee;
+        }
     }
 }

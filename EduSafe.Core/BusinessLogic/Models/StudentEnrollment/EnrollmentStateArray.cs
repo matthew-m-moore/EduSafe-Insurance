@@ -6,7 +6,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
 {
     public class EnrollmentStateArray
     {
-        public int MonthlyPeriod { get; }
+        public int MonthlyPeriod { get; set; }
 
         private Dictionary<StudentEnrollmentState, double> _incrementalStateArray { get; }
         private Dictionary<StudentEnrollmentState, double> _totalStateArray { get; }
@@ -64,7 +64,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
             _incrementalStateArray[remainingEnrollmentState] = startingEnrollmentAmount - remainingFractionOfArray;
         }
 
-        public void RenormalizeArray(EnrollmentStateArray baseEnrollmentStateArray, StudentEnrollmentState renormalizedState)
+        public void RenormalizeTotalStateArray(EnrollmentStateArray baseEnrollmentStateArray, StudentEnrollmentState renormalizedState)
         {
             foreach(var enrollmentState in _totalStateArray.Keys)
             {
@@ -78,6 +78,21 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
                     var priorValue = baseEnrollmentStateArray[enrollmentState];
                     renormalizedValue -= (priorValue / baseValue);
                 }
+
+                _totalStateArray[enrollmentState] = renormalizedValue;
+            }
+        }
+
+        public void ResetIncrementalStateArray(EnrollmentStateArray priorEnrollmentStateArray)
+        {
+            foreach (var enrollmentState in _totalStateArray.Keys)
+            {
+                var priorStateValue = priorEnrollmentStateArray.GetTotalState(enrollmentState);
+                var currentStateValue = _totalStateArray[enrollmentState];
+
+                var incrementalStateChange = currentStateValue - priorStateValue;
+
+                this[enrollmentState] = incrementalStateChange;
             }
         }
 

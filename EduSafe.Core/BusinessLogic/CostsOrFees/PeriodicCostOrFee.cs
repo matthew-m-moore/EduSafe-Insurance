@@ -47,5 +47,17 @@ namespace EduSafe.Core.BusinessLogic.CostsOrFees
 
             return amount;
         }
+
+        public override CostOrFee Copy()
+        {
+            var paymentConvention = (PaymentConvention)FrequencyInMonths;
+            var periodicCostOrFee = new PeriodicCostOrFee(
+                paymentConvention,
+                Description,
+                BaseAmount);
+
+            periodicCostOrFee.SetStartingPeriod(StartingPeriodOfCostOrFee);
+            return periodicCostOrFee;
+        }
     }
 }

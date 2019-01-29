@@ -19,7 +19,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
     [TestClass]
     public class EnrollmentModelTests
     {
-        private bool _outputExel = true;
+        private bool _outputExel = false;
         private bool _analyticalOuput = false;
         private double _precision = 1e-8;
 
@@ -31,10 +31,10 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
         public void EnrollmentModel_WithPostgraduationTargets_NumericalPremiumSearch()
         {
             _analyticalOuput = false;
-            PopulateEnrollmentModel(includePostGraduationTargets: true);
+            _studentEnrollmentModel = PopulateEnrollmentModel(includePostGraduationTargets: true);
             _studentEnrollmentModel.ParameterizeModel();
 
-            PopulateServicingCostsModel();
+            _servicingCostsModel = PopulateServicingCostsModel();
             var enrollmentStateTimeSeries = _studentEnrollmentModel.EnrollmentStateTimeSeries;
             var premiumCalculationModelInput = PreparePremiumCalculationModelInput();
             var premium = CalculatePremiumNumerically(premiumCalculationModelInput, enrollmentStateTimeSeries, out DataTable servicingCosts);
@@ -48,10 +48,10 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
         public void EnrollmentModel_WithoutPostgraduationTargets_NumericalPremiumSearch()
         {
             _analyticalOuput = false;
-            PopulateEnrollmentModel(includePostGraduationTargets: false);
+            _studentEnrollmentModel = PopulateEnrollmentModel(includePostGraduationTargets: false);
             _studentEnrollmentModel.ParameterizeModel();
 
-            PopulateServicingCostsModel();
+            _servicingCostsModel = PopulateServicingCostsModel();
             var enrollmentStateTimeSeries = _studentEnrollmentModel.EnrollmentStateTimeSeries;
             var premiumCalculationModelInput = PreparePremiumCalculationModelInput();
             var premium = CalculatePremiumNumerically(premiumCalculationModelInput, enrollmentStateTimeSeries, out DataTable servicingCosts);
@@ -65,10 +65,10 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
         public void EnrollmentModel_WithPostgraduationTargets_AnalyticalPremiumCalculation()
         {
             _analyticalOuput = true;
-            PopulateEnrollmentModel(includePostGraduationTargets: true);
+            _studentEnrollmentModel = PopulateEnrollmentModel(includePostGraduationTargets: true);
             _studentEnrollmentModel.ParameterizeModel();
 
-            PopulateServicingCostsModel();
+            _servicingCostsModel = PopulateServicingCostsModel();
             var enrollmentStateTimeSeries = _studentEnrollmentModel.EnrollmentStateTimeSeries;
             var premiumCalculationModelInput = PreparePremiumCalculationModelInput();
             var premium = CalculatePremiumAnalytically(premiumCalculationModelInput, enrollmentStateTimeSeries, out DataTable servicingCosts);
@@ -82,10 +82,10 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
         public void EnrollmentModel_WithoutPostgraduationTargets_AnalyticalPremiumCalculation()
         {
             _analyticalOuput = true;
-            PopulateEnrollmentModel(includePostGraduationTargets: false);
+            _studentEnrollmentModel = PopulateEnrollmentModel(includePostGraduationTargets: false);
             _studentEnrollmentModel.ParameterizeModel();
 
-            PopulateServicingCostsModel();
+            _servicingCostsModel = PopulateServicingCostsModel();
             var enrollmentStateTimeSeries = _studentEnrollmentModel.EnrollmentStateTimeSeries;
             var premiumCalculationModelInput = PreparePremiumCalculationModelInput();
             var premium = CalculatePremiumAnalytically(premiumCalculationModelInput, enrollmentStateTimeSeries, out DataTable servicingCosts);
@@ -176,7 +176,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
             excelFileWriter.ExportWorkbook();
         }
 
-        private PremiumCalculationModelInput PreparePremiumCalculationModelInput()
+        public PremiumCalculationModelInput PreparePremiumCalculationModelInput()
         {
             var discountFactorCurve = new InterestRateCurve(
                 InterestRateCurveType.Treasury1Mo,
@@ -226,7 +226,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
             return premium;
         }
 
-        private void PopulateServicingCostsModel()
+        public ServicingCostsModel PopulateServicingCostsModel()
         {
             var listOfCostsOrFees = new List<CostOrFee>();
 
@@ -250,10 +250,10 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
             listOfCostsOrFees.Add(earlyHireVerificationFee);
             listOfCostsOrFees.Add(unemploymentVerificationFee);
 
-            _servicingCostsModel = new ServicingCostsModel(listOfCostsOrFees, 72);
+            return new ServicingCostsModel(listOfCostsOrFees, 72);
         }
 
-        private void PopulateEnrollmentModel(bool includePostGraduationTargets)
+        public EnrollmentModel PopulateEnrollmentModel(bool includePostGraduationTargets)
         {
             var enrollmentTargetsArray = new EnrollmentTargetsArray();
 
@@ -285,7 +285,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
             studentEnrollmentModelInput.AddPostGraduationTargetState(StudentEnrollmentState.GraduateSchool);
             studentEnrollmentModelInput.AddPostGraduationTargetState(StudentEnrollmentState.GraduatedEmployed);
 
-            _studentEnrollmentModel = new EnrollmentModel(studentEnrollmentModelInput);
+            return new EnrollmentModel(studentEnrollmentModelInput);
         }
 
         private void AddPostGraduationTargets(EnrollmentTargetsArray enrollmentTargetsArray)

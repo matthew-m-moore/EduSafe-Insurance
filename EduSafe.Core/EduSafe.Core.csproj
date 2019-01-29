@@ -49,6 +49,7 @@
     <Compile Include="BusinessLogic\Containers\PremiumCalculationCashFlow.cs" />
     <Compile Include="BusinessLogic\Containers\StudentEnrollmentModelInput.cs" />
     <Compile Include="BusinessLogic\Containers\StudentEnrollmentStateTimeSeriesEntry.cs" />
+    <Compile Include="BusinessLogic\Models\RollForwardRepricingModel.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentStateArray.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentTarget.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentTargetsArray.cs" />
