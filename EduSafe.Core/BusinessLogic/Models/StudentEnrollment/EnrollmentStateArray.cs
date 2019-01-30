@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using EduSafe.Common.Enums;
 
@@ -66,16 +67,17 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
 
         public void RenormalizeTotalStateArray(EnrollmentStateArray baseEnrollmentStateArray, StudentEnrollmentState renormalizedState)
         {
-            foreach(var enrollmentState in _totalStateArray.Keys)
+            var enrollmentStates = _totalStateArray.Keys.ToList();
+            foreach(var enrollmentState in enrollmentStates)
             {
                 var originalValue = _totalStateArray[enrollmentState];
-                var baseValue = baseEnrollmentStateArray[renormalizedState];
+                var baseValue = baseEnrollmentStateArray.GetTotalState(renormalizedState);
 
                 var renormalizedValue = originalValue / baseValue;
 
                 if (enrollmentState != renormalizedState)
                 {
-                    var priorValue = baseEnrollmentStateArray[enrollmentState];
+                    var priorValue = baseEnrollmentStateArray.GetTotalState(enrollmentState);
                     renormalizedValue -= (priorValue / baseValue);
                 }
 
@@ -85,7 +87,8 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
 
         public void ResetIncrementalStateArray(EnrollmentStateArray priorEnrollmentStateArray)
         {
-            foreach (var enrollmentState in _totalStateArray.Keys)
+            var enrollmentStates = _totalStateArray.Keys.ToList();
+            foreach (var enrollmentState in enrollmentStates)
             {
                 var priorStateValue = priorEnrollmentStateArray.GetTotalState(enrollmentState);
                 var currentStateValue = _totalStateArray[enrollmentState];
@@ -93,6 +96,15 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
                 var incrementalStateChange = currentStateValue - priorStateValue;
 
                 this[enrollmentState] = incrementalStateChange;
+            }
+        }
+
+        public void ZeroOutIncrementalStateArray()
+        {
+            var enrollmentStates = _incrementalStateArray.Keys.ToList();
+            foreach (var enrollmentState in enrollmentStates)
+            {
+                this[enrollmentState] = 0.0;
             }
         }
 

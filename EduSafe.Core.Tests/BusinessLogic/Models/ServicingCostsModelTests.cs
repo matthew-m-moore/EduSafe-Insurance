@@ -2,16 +2,14 @@
 using System.Data;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using EduSafe.Common;
 using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.CostsOrFees;
 using EduSafe.Core.BusinessLogic.Models;
 using EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment;
 using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;
 using EduSafe.IO.Excel;
-using EduSafe.Common;
 
 namespace EduSafe.Core.Tests.BusinessLogic.Models
 {
@@ -26,6 +24,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models
         {
             var studentEnrollmentModel = EnrollmentModelTests.PopulateEnrollmentModel(includePostGraduationTargets: true);
             studentEnrollmentModel.ParameterizeModel();
+            Assert.IsTrue(studentEnrollmentModel.IsParameterized);
 
             var servicingCostsModel = PopulateServicingCostsModel();
             var enrollmentStateTimeSeries = studentEnrollmentModel.EnrollmentStateTimeSeries;
@@ -34,7 +33,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models
 
             if (_outputExcel)
             {
-                var excelFileWriter = CreateExcelOutput(studentEnrollmentModel, servicingCosts);
+                var excelFileWriter = CreateExcelOutput(enrollmentStateTimeSeries, servicingCosts);
                 excelFileWriter.ExportWorkbook();
             }
         }
@@ -44,6 +43,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models
         {
             var studentEnrollmentModel = EnrollmentModelTests.PopulateEnrollmentModel(includePostGraduationTargets: false);
             studentEnrollmentModel.ParameterizeModel();
+            Assert.IsTrue(studentEnrollmentModel.IsParameterized);
 
             var servicingCostsModel = PopulateServicingCostsModel();
             var enrollmentStateTimeSeries = studentEnrollmentModel.EnrollmentStateTimeSeries;
@@ -52,7 +52,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models
 
             if (_outputExcel)
             {
-                var excelFileWriter = CreateExcelOutput(studentEnrollmentModel, servicingCosts);
+                var excelFileWriter = CreateExcelOutput(enrollmentStateTimeSeries, servicingCosts);
                 excelFileWriter.ExportWorkbook();
             }
         }
@@ -100,9 +100,9 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models
             Assert.AreEqual(1548.30, totalCostsAndFees, _precision);
         }
 
-        public static ExcelFileWriter CreateExcelOutput(EnrollmentModel studentEnrollmentModel, DataTable servicingCosts)
+        public static ExcelFileWriter CreateExcelOutput(List<EnrollmentStateArray> enrollmentStateTimeSeries, DataTable servicingCosts)
         {
-            var excelFileWriter = EnrollmentModelTests.CreateExcelOutput(studentEnrollmentModel);
+            var excelFileWriter = EnrollmentModelTests.CreateExcelOutput(enrollmentStateTimeSeries);
             excelFileWriter.AddWorksheetForDataTable(servicingCosts, "Servicing Costs");
             return excelFileWriter;
         }

@@ -38,16 +38,22 @@ namespace EduSafe.Core.BusinessLogic.Models
             {
                 var monthlyPeriod = enrollmentStateArray.MonthlyPeriod;
                 if (monthlyPeriod < numberOfPeriodsToRollForward) continue;
-
-                // There should be no way for montlyPeriod to be zero given the conditionals above
-                var priorEnrollmentStateArray = enrollmentStateTimeSeries[monthlyPeriod - 1];
+                
                 var rollForwardEnrollmentState = enrollmentStateArray.Copy();
-
                 rollForwardEnrollmentState.RenormalizeTotalStateArray(baseEnrollmentStateArray, _baseEnrollmentState);
-                rollForwardEnrollmentState.ResetIncrementalStateArray(priorEnrollmentStateArray);
                 rollForwardEnrollmentState.MonthlyPeriod -= numberOfPeriodsToRollForward;
-
                 rollForwardEnrollmentStateTimeSeries.Add(rollForwardEnrollmentState);
+
+                if (monthlyPeriod == numberOfPeriodsToRollForward)
+                {
+                    rollForwardEnrollmentState.ZeroOutIncrementalStateArray();
+                }
+                else
+                {
+                    var adjustedPriorPeriodIndex = monthlyPeriod - numberOfPeriodsToRollForward - 1;
+                    var priorEnrollmentStateArray = rollForwardEnrollmentStateTimeSeries[adjustedPriorPeriodIndex];
+                    rollForwardEnrollmentState.ResetIncrementalStateArray(priorEnrollmentStateArray);
+                }
             }
 
             return rollForwardEnrollmentStateTimeSeries;

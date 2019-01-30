@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Linq;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EduSafe.Common.Curves;
 using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Containers;
-using EduSafe.Core.BusinessLogic.CostsOrFees;
-using EduSafe.Core.BusinessLogic.Models;
 using EduSafe.Core.BusinessLogic.Models.Premiums;
 using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;
 using EduSafe.Core.BusinessLogic.Vectors;
 using EduSafe.IO.Excel;
-
 
 namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
 {
@@ -22,20 +18,19 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
         private bool _outputExcel = false;
         private double _precision = 1e-8;
 
-        private PremiumCalculation _premiumCalculation;
-
         [TestMethod, Owner("Matthew Moore")]
         public void EnrollmentModel_WithPostgraduationTargets()
         {
             var studentEnrollmentModel = PopulateEnrollmentModel(includePostGraduationTargets: true);
             studentEnrollmentModel.ParameterizeModel();
+            Assert.IsTrue(studentEnrollmentModel.IsParameterized);
 
             var enrollmentStateTimeSeries = studentEnrollmentModel.EnrollmentStateTimeSeries;
-            CheckResults(studentEnrollmentModel);
+            CheckResults(enrollmentStateTimeSeries);
 
             if (_outputExcel)
             {
-                var excelFileWriter = CreateExcelOutput(studentEnrollmentModel);
+                var excelFileWriter = CreateExcelOutput(enrollmentStateTimeSeries);
                 excelFileWriter.ExportWorkbook();
             }
         }
@@ -45,53 +40,52 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
         {
             var studentEnrollmentModel = PopulateEnrollmentModel(includePostGraduationTargets: false);
             studentEnrollmentModel.ParameterizeModel();
+            Assert.IsTrue(studentEnrollmentModel.IsParameterized);
 
             var enrollmentStateTimeSeries = studentEnrollmentModel.EnrollmentStateTimeSeries;
-            CheckResults(studentEnrollmentModel);
+            CheckResults(enrollmentStateTimeSeries);
 
             if (_outputExcel)
             {
-                var excelFileWriter = CreateExcelOutput(studentEnrollmentModel);
+                var excelFileWriter = CreateExcelOutput(enrollmentStateTimeSeries);
                 excelFileWriter.ExportWorkbook();
             }
         }
 
-        private void CheckResults(EnrollmentModel studentEnrollmentModel)
+        private void CheckResults(List<EnrollmentStateArray> enrollmentStateTimeSeries)
         {
-            Assert.IsTrue(studentEnrollmentModel.IsParameterized);
-
-            var totalEnrollmentChange = studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.Enrolled]);
+            var totalEnrollmentChange = enrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.Enrolled]);
             Assert.AreEqual(-1.0, totalEnrollmentChange, _precision);
 
-            var totalDropOuts = studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.DroppedOut]);
+            var totalDropOuts = enrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.DroppedOut]);
             Assert.AreEqual(0.40, totalDropOuts, _precision);
 
-            totalDropOuts = studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.DroppedOut);
+            totalDropOuts = enrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.DroppedOut);
             Assert.AreEqual(0.40, totalDropOuts, _precision);
 
-            var totalGradStudents = studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.GraduateSchool]);
+            var totalGradStudents = enrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.GraduateSchool]);
             Assert.AreEqual(0.15, totalGradStudents, _precision);
 
-            totalGradStudents = studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.GraduateSchool);
+            totalGradStudents = enrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.GraduateSchool);
             Assert.AreEqual(0.15, totalGradStudents, _precision);
 
-            var totalEarlyHires = studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.EarlyHire]);
+            var totalEarlyHires = enrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.EarlyHire]);
             Assert.AreEqual(0.05, totalEarlyHires, _precision);
 
-            totalEarlyHires = studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.EarlyHire);
+            totalEarlyHires = enrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.EarlyHire);
             Assert.AreEqual(0.05, totalEarlyHires, _precision);
 
-            var totalEmployed = studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.GraduatedEmployed]);
+            var totalEmployed = enrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.GraduatedEmployed]);
             Assert.AreEqual(0.39, totalEmployed + totalEarlyHires, _precision);
 
-            totalEmployed = studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.GraduatedEmployed);
+            totalEmployed = enrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.GraduatedEmployed);
             Assert.AreEqual(0.39, totalEmployed + totalEarlyHires, _precision);
         }
 
-        public static ExcelFileWriter CreateExcelOutput(EnrollmentModel studentEnrollmentModel)
+        public static ExcelFileWriter CreateExcelOutput(List<EnrollmentStateArray> enrollmentStateTimeSeries)
         {
-            var listOfTimeSeriesEntries = studentEnrollmentModel.EnrollmentStateTimeSeries
-                .Select((enrollmentStateArray, i) =>
+            var listOfTimeSeriesEntries = 
+                enrollmentStateTimeSeries.Select((enrollmentStateArray, i) =>
                     {
                         return new StudentEnrollmentStateTimeSeriesEntry
                         {
