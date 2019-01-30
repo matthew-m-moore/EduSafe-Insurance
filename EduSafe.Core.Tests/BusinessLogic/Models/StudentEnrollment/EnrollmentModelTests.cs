@@ -19,119 +19,78 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
     [TestClass]
     public class EnrollmentModelTests
     {
-        private bool _outputExel = false;
-        private bool _analyticalOuput = false;
+        private bool _outputExcel = false;
         private double _precision = 1e-8;
 
-        private EnrollmentModel _studentEnrollmentModel;
-        private ServicingCostsModel _servicingCostsModel;
         private PremiumCalculation _premiumCalculation;
 
         [TestMethod, Owner("Matthew Moore")]
-        public void EnrollmentModel_WithPostgraduationTargets_NumericalPremiumSearch()
+        public void EnrollmentModel_WithPostgraduationTargets()
         {
-            _analyticalOuput = false;
-            _studentEnrollmentModel = PopulateEnrollmentModel(includePostGraduationTargets: true);
-            _studentEnrollmentModel.ParameterizeModel();
+            var studentEnrollmentModel = PopulateEnrollmentModel(includePostGraduationTargets: true);
+            studentEnrollmentModel.ParameterizeModel();
 
-            _servicingCostsModel = PopulateServicingCostsModel();
-            var enrollmentStateTimeSeries = _studentEnrollmentModel.EnrollmentStateTimeSeries;
-            var premiumCalculationModelInput = PreparePremiumCalculationModelInput();
-            var premium = CalculatePremiumNumerically(premiumCalculationModelInput, enrollmentStateTimeSeries, out DataTable servicingCosts);
-            CheckResults(premium);
-            
-            if (_outputExel)
-                OutputResultsToExcel(servicingCosts);
+            var enrollmentStateTimeSeries = studentEnrollmentModel.EnrollmentStateTimeSeries;
+            CheckResults(studentEnrollmentModel);
+
+            if (_outputExcel)
+            {
+                var excelFileWriter = CreateExcelOutput(studentEnrollmentModel);
+                excelFileWriter.ExportWorkbook();
+            }
         }
 
         [TestMethod, Owner("Matthew Moore")]
-        public void EnrollmentModel_WithoutPostgraduationTargets_NumericalPremiumSearch()
+        public void EnrollmentModel_WithoutPostgraduationTargets()
         {
-            _analyticalOuput = false;
-            _studentEnrollmentModel = PopulateEnrollmentModel(includePostGraduationTargets: false);
-            _studentEnrollmentModel.ParameterizeModel();
+            var studentEnrollmentModel = PopulateEnrollmentModel(includePostGraduationTargets: false);
+            studentEnrollmentModel.ParameterizeModel();
 
-            _servicingCostsModel = PopulateServicingCostsModel();
-            var enrollmentStateTimeSeries = _studentEnrollmentModel.EnrollmentStateTimeSeries;
-            var premiumCalculationModelInput = PreparePremiumCalculationModelInput();
-            var premium = CalculatePremiumNumerically(premiumCalculationModelInput, enrollmentStateTimeSeries, out DataTable servicingCosts);
-            CheckResults(premium);
+            var enrollmentStateTimeSeries = studentEnrollmentModel.EnrollmentStateTimeSeries;
+            CheckResults(studentEnrollmentModel);
 
-            if (_outputExel)
-                OutputResultsToExcel(servicingCosts);
+            if (_outputExcel)
+            {
+                var excelFileWriter = CreateExcelOutput(studentEnrollmentModel);
+                excelFileWriter.ExportWorkbook();
+            }
         }
 
-        [TestMethod, Owner("Matthew Moore")]
-        public void EnrollmentModel_WithPostgraduationTargets_AnalyticalPremiumCalculation()
+        private void CheckResults(EnrollmentModel studentEnrollmentModel)
         {
-            _analyticalOuput = true;
-            _studentEnrollmentModel = PopulateEnrollmentModel(includePostGraduationTargets: true);
-            _studentEnrollmentModel.ParameterizeModel();
+            Assert.IsTrue(studentEnrollmentModel.IsParameterized);
 
-            _servicingCostsModel = PopulateServicingCostsModel();
-            var enrollmentStateTimeSeries = _studentEnrollmentModel.EnrollmentStateTimeSeries;
-            var premiumCalculationModelInput = PreparePremiumCalculationModelInput();
-            var premium = CalculatePremiumAnalytically(premiumCalculationModelInput, enrollmentStateTimeSeries, out DataTable servicingCosts);
-            CheckResults(premium);
-
-            if (_outputExel)
-                OutputResultsToExcel(servicingCosts);
-        }
-
-        [TestMethod, Owner("Matthew Moore")]
-        public void EnrollmentModel_WithoutPostgraduationTargets_AnalyticalPremiumCalculation()
-        {
-            _analyticalOuput = true;
-            _studentEnrollmentModel = PopulateEnrollmentModel(includePostGraduationTargets: false);
-            _studentEnrollmentModel.ParameterizeModel();
-
-            _servicingCostsModel = PopulateServicingCostsModel();
-            var enrollmentStateTimeSeries = _studentEnrollmentModel.EnrollmentStateTimeSeries;
-            var premiumCalculationModelInput = PreparePremiumCalculationModelInput();
-            var premium = CalculatePremiumAnalytically(premiumCalculationModelInput, enrollmentStateTimeSeries, out DataTable servicingCosts);
-            CheckResults(premium);
-
-            if (_outputExel)
-                OutputResultsToExcel(servicingCosts);
-        }
-
-        private void CheckResults(double premium)
-        {
-            Assert.IsTrue(_studentEnrollmentModel.IsParameterized);
-
-            var totalEnrollmentChange = _studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.Enrolled]);
+            var totalEnrollmentChange = studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.Enrolled]);
             Assert.AreEqual(-1.0, totalEnrollmentChange, _precision);
 
-            var totalDropOuts = _studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.DroppedOut]);
+            var totalDropOuts = studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.DroppedOut]);
             Assert.AreEqual(0.40, totalDropOuts, _precision);
 
-            totalDropOuts = _studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.DroppedOut);
+            totalDropOuts = studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.DroppedOut);
             Assert.AreEqual(0.40, totalDropOuts, _precision);
 
-            var totalGradStudents = _studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.GraduateSchool]);
+            var totalGradStudents = studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.GraduateSchool]);
             Assert.AreEqual(0.15, totalGradStudents, _precision);
 
-            totalGradStudents = _studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.GraduateSchool);
+            totalGradStudents = studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.GraduateSchool);
             Assert.AreEqual(0.15, totalGradStudents, _precision);
 
-            var totalEarlyHires = _studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.EarlyHire]);
+            var totalEarlyHires = studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.EarlyHire]);
             Assert.AreEqual(0.05, totalEarlyHires, _precision);
 
-            totalEarlyHires = _studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.EarlyHire);
+            totalEarlyHires = studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.EarlyHire);
             Assert.AreEqual(0.05, totalEarlyHires, _precision);
 
-            var totalEmployed = _studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.GraduatedEmployed]);
+            var totalEmployed = studentEnrollmentModel.EnrollmentStateTimeSeries.Sum(e => e[StudentEnrollmentState.GraduatedEmployed]);
             Assert.AreEqual(0.39, totalEmployed + totalEarlyHires, _precision);
 
-            totalEmployed = _studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.GraduatedEmployed);
+            totalEmployed = studentEnrollmentModel.EnrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.GraduatedEmployed);
             Assert.AreEqual(0.39, totalEmployed + totalEarlyHires, _precision);
-
-            Assert.AreEqual(82.35792486, premium, _precision);
         }
 
-        private void OutputResultsToExcel(DataTable servicingCosts)
+        public static ExcelFileWriter CreateExcelOutput(EnrollmentModel studentEnrollmentModel)
         {
-            var listOfTimeSeriesEntries = _studentEnrollmentModel.EnrollmentStateTimeSeries
+            var listOfTimeSeriesEntries = studentEnrollmentModel.EnrollmentStateTimeSeries
                 .Select((enrollmentStateArray, i) =>
                     {
                         return new StudentEnrollmentStateTimeSeriesEntry
@@ -159,101 +118,11 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
 
             var excelFileWriter = new ExcelFileWriter(openFileOnSave: true);
             excelFileWriter.AddWorksheetForListOfData(listOfTimeSeriesEntries.ToList(), "Enrollment Model");
-            excelFileWriter.AddWorksheetForDataTable(servicingCosts, "Servicing Costs");
-                
-            if (_analyticalOuput)
-            {
-                var analyticalPremiumCalculationCashFlows = 
-                    _premiumCalculation.CalculatedCashFlows.Select(c => (AnalyticalPremiumCalculationCashFlow)c).ToList();
 
-                excelFileWriter.AddWorksheetForListOfData(analyticalPremiumCalculationCashFlows, "Cash Flows");
-            }
-            else
-            {
-                excelFileWriter.AddWorksheetForListOfData(_premiumCalculation.CalculatedCashFlows, "Cash Flows");
-            }
-
-            excelFileWriter.ExportWorkbook();
+            return excelFileWriter;
         }
 
-        public PremiumCalculationModelInput PreparePremiumCalculationModelInput()
-        {
-            var discountFactorCurve = new InterestRateCurve(
-                InterestRateCurveType.Treasury1Mo,
-                new DateTime(2018, 12, 19),
-                new DataCurve<double>(0.0235), 1, 
-                DayCountConvention.Thirty360);
-
-            var annualIncomeCoverage = 50000;
-            var monthsOfIncomeCoverage = 6;
-            var dropOutCoverageOption = 0.25;
-            var gradSchoolCoverageOption = 0.25;
-            var earlyHireCoverageOption = 0.25;
-
-            var premiumCalculationModelInput = 
-                new PremiumCalculationModelInput(
-                    annualIncomeCoverage, 
-                    monthsOfIncomeCoverage, 
-                    discountFactorCurve,
-                    dropOutCoverageOption,
-                    gradSchoolCoverageOption,
-                    earlyHireCoverageOption);
-
-            return premiumCalculationModelInput;
-        }
-
-        private double CalculatePremiumNumerically(
-            PremiumCalculationModelInput premiumCalculationModelInput,
-            List<EnrollmentStateArray> enrollmentStateTimeSeries,
-            out DataTable servicingCosts)
-        {
-            _premiumCalculation = new NumericalPremiumCalculation(premiumCalculationModelInput);
-            var premium = _premiumCalculation.CalculatePremium(enrollmentStateTimeSeries, _servicingCostsModel);
-
-            servicingCosts = _premiumCalculation.ServicingCostsDataTable;
-            return premium;
-        }
-
-        private double CalculatePremiumAnalytically(
-            PremiumCalculationModelInput premiumCalculationModelInput,
-            List<EnrollmentStateArray> enrollmentStateTimeSeries,
-            out DataTable servicingCosts)
-        {
-            _premiumCalculation = new AnalyticalPremiumCalculation(premiumCalculationModelInput);
-            var premium = _premiumCalculation.CalculatePremium(enrollmentStateTimeSeries, _servicingCostsModel);
-
-            servicingCosts = _premiumCalculation.ServicingCostsDataTable;
-            return premium;
-        }
-
-        public ServicingCostsModel PopulateServicingCostsModel()
-        {
-            var listOfCostsOrFees = new List<CostOrFee>();
-
-            var backgroundCheckFee = new PeriodicCostOrFee(PaymentConvention.Annual, "Background Check", 100);
-            var creditScoreFee = new PeriodicCostOrFee(PaymentConvention.Annual, "Credit Score", 25);
-            var transcriptsFee = new PeriodicCostOrFee(PaymentConvention.Annual, "Transcripts", 25);
-            var servicingFee = new PeriodicCostOrFee(PaymentConvention.Monthly, "Servicing", 20);
-
-            var dropOutVerificationFee = new EventBasedCostOrFee(StudentEnrollmentState.DroppedOut, "Drop Out Verification", 150);
-            var gradSchoolVerificationFee = new EventBasedCostOrFee(StudentEnrollmentState.GraduateSchool, "Graduate School Verification", 150);
-            var earlyHireVerificationFee = new EventBasedCostOrFee(StudentEnrollmentState.EarlyHire, "Early Hire Verification", 300);
-            var unemploymentVerificationFee = new EventBasedCostOrFee(StudentEnrollmentState.GraduatedUnemployed, "Unemployment Verification", 1000);
-
-            listOfCostsOrFees.Add(backgroundCheckFee);
-            listOfCostsOrFees.Add(creditScoreFee);
-            listOfCostsOrFees.Add(transcriptsFee);
-            listOfCostsOrFees.Add(servicingFee);
-
-            listOfCostsOrFees.Add(dropOutVerificationFee);
-            listOfCostsOrFees.Add(gradSchoolVerificationFee);
-            listOfCostsOrFees.Add(earlyHireVerificationFee);
-            listOfCostsOrFees.Add(unemploymentVerificationFee);
-
-            return new ServicingCostsModel(listOfCostsOrFees, 72);
-        }
-
-        public EnrollmentModel PopulateEnrollmentModel(bool includePostGraduationTargets)
+        public static EnrollmentModel PopulateEnrollmentModel(bool includePostGraduationTargets)
         {
             var enrollmentTargetsArray = new EnrollmentTargetsArray();
 
@@ -288,7 +157,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
             return new EnrollmentModel(studentEnrollmentModelInput);
         }
 
-        private void AddPostGraduationTargets(EnrollmentTargetsArray enrollmentTargetsArray)
+        private static void AddPostGraduationTargets(EnrollmentTargetsArray enrollmentTargetsArray)
         {
             var gradSchoolState = StudentEnrollmentState.GraduateSchool;
             enrollmentTargetsArray[gradSchoolState] = new EnrollmentTarget(gradSchoolState, 0.15);
@@ -300,7 +169,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
             enrollmentTargetsArray[earlyHireState] = new EnrollmentTarget(earlyHireState, 0.05);
         }
 
-        private void AddPostGraduationTransitionRates(EnrollmentTransitionsArray enrollmentTransitionsArray)
+        private static void AddPostGraduationTransitionRates(EnrollmentTransitionsArray enrollmentTransitionsArray)
         {
             var flatMultiplicativeVector = new MultiplicativeVector(new DataCurve<double>(1.0));
 

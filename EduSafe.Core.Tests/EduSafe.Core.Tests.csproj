@@ -48,10 +48,13 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\Models\Premiums\PremiumCalculationTests.cs" />
     <Compile Include="BusinessLogic\Models\RollForwardRepricingModelTests.cs" />
+    <Compile Include="BusinessLogic\Models\ServicingCostsModelTests.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
