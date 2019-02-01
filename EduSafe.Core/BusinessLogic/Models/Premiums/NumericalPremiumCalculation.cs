@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using EduSafe.Common;
@@ -95,8 +94,9 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             var earlyHireFraction = enrollmentStateArray[StudentEnrollmentState.EarlyHire];
             var unemploymentFraction = enrollmentStateArray[StudentEnrollmentState.GraduatedUnemployed];
 
+            var previouslyPaidInPremiums = _PremiumCalculationModelInput.PreviouslyPaidInPremiums;
             var probabilityAdjustedPremium = premiumAmountGuess * enrollmentFraction;
-            var totalPremiumsPaidIn = monthlyPeriod * premiumAmountGuess;
+            var totalPremiumsPaidIn = (monthlyPeriod * premiumAmountGuess) + previouslyPaidInPremiums;
 
             var currentPeriodCashFlow = new PremiumCalculationCashFlow
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;
 
@@ -15,7 +16,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
 
         public override double CalculatePremium(List<EnrollmentStateArray> enrollmentStateTimeSeries, ServicingCostsModel servicingCostsModel)
         {
-            _analyticalFormulaNumerator = 0.0;
+            _analyticalFormulaNumerator = (-1) * _PremiumCalculationModelInput.PreviouslyPaidInPremiums;
             _analyticalFormulaDenominator = 0.0;
 
             ServicingCostsDataTable = servicingCostsModel.CalculateServicingCosts(enrollmentStateTimeSeries);
@@ -35,6 +36,9 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             var initialPeriodCashFlow = base.CreateInitialCashFlow();
             var initialPeriodAnalyticalCashFlow = new AnalyticalPremiumCalculationCashFlow(initialPeriodCashFlow);
 
+            initialPeriodAnalyticalCashFlow.Premium = 0.0;
+            initialPeriodAnalyticalCashFlow.ProbabilityAdjustedPremium = 0.0;
+
             return initialPeriodAnalyticalCashFlow;
         }
 
@@ -44,10 +48,37 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             var currentPeriodCashFlow  = base.CalculateCashFlow(enrollmentStateArray, premiumAmountGuess, monthlyPeriod);
             var analyticalPremiumCashFlow = new AnalyticalPremiumCalculationCashFlow(currentPeriodCashFlow);
 
+            var previouslyPaidInPremiums = _PremiumCalculationModelInput.PreviouslyPaidInPremiums;
+            if (previouslyPaidInPremiums > 0.0)
+                AdjustCashFlowForPaidInPremiums(analyticalPremiumCashFlow, enrollmentStateArray, previouslyPaidInPremiums, monthlyPeriod);
+
             _analyticalFormulaNumerator += analyticalPremiumCashFlow.DiscountedTotalNumerator;
             _analyticalFormulaDenominator += analyticalPremiumCashFlow.DiscountedTotalDenominator;
 
             return analyticalPremiumCashFlow;
+        }
+
+        private void AdjustCashFlowForPaidInPremiums(
+            AnalyticalPremiumCalculationCashFlow analyticalPremiumCashFlow,
+            EnrollmentStateArray enrollmentStateArray,
+            double previouslyPaidInPremiums,
+            int monthlyPeriod)
+        {
+            var dropOutCoverage = _PremiumCalculationModelInput.DropOutOptionCoveragePercentage.GetValueOrDefault(0.0);
+            var gradSchoolCoverage = _PremiumCalculationModelInput.GradSchoolOptionCoveragePercentage.GetValueOrDefault(0.0);
+            var earlyHireCoverage = _PremiumCalculationModelInput.EarlyHireOptionCoveragePercentage.GetValueOrDefault(0.0);
+
+            var dropOutFraction = enrollmentStateArray[StudentEnrollmentState.DroppedOut];
+            var gradSchoolFraction = enrollmentStateArray[StudentEnrollmentState.GraduateSchool];
+            var earlyHireFraction = enrollmentStateArray[StudentEnrollmentState.EarlyHire];
+
+            analyticalPremiumCashFlow.ProbabilityAdjustedDropOutClaims = dropOutCoverage * dropOutFraction * monthlyPeriod;
+            analyticalPremiumCashFlow.ProbabilityAdjustedGradSchoolClaims = gradSchoolCoverage * gradSchoolFraction * monthlyPeriod;
+            analyticalPremiumCashFlow.ProbabilityAdjustedEarlyHireClaims = earlyHireCoverage * earlyHireFraction * monthlyPeriod;
+
+            analyticalPremiumCashFlow.PaidInPremiumDropOutAdjustment = dropOutCoverage * dropOutFraction * previouslyPaidInPremiums;
+            analyticalPremiumCashFlow.PaidInPremiumGradSchoolAdjustment = gradSchoolCoverage * gradSchoolFraction * previouslyPaidInPremiums;
+            analyticalPremiumCashFlow.PaidInPremiumEarlyHireAdjustment = earlyHireCoverage * earlyHireFraction * previouslyPaidInPremiums;
         }
     }
 }

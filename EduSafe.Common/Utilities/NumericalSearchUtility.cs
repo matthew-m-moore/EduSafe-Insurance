@@ -277,15 +277,15 @@ namespace EduSafe.Common.Utilities
                     {
                         guess = lowEndOfSearchBracket + stepSize;
 
-                        if (initiated &&
-                            Math.Abs(lowEndOfSearchBracket - guess) < _maximumPrecision) return double.NaN;
+                        if (initiated && Math.Abs(lowEndOfSearchBracket - guess) < _maximumPrecision)
+                            return acceptBestGuess ? guess : double.NaN; ;
                     }
                     else
                     {
                         guess = highEndOfSearchBracket + stepSize;
 
-                        if (initiated &&
-                            Math.Abs(highEndOfSearchBracket - guess) < _maximumPrecision) return double.NaN;
+                        if (initiated && Math.Abs(highEndOfSearchBracket - guess) < _maximumPrecision)
+                            return acceptBestGuess ? guess : double.NaN; ;
                     }
                 }
                 else

@@ -63,7 +63,7 @@ namespace EduSafe.Core.BusinessLogic.Models
         /// Rolls forward servicing costs model the desired integer number of periods without affecting the original model provided.
         /// Also accounts for the new starting payment period of rolled forward periodic costs or fees.
         /// </summary>
-        public ServicingCostsModel RollForwardServicingCosts(int numberOfPeriodsToRollForward)
+        public ServicingCostsModel RollForwardServicingCosts(int numberOfPeriodsToRollForward, bool isStudentNew = false)
         {
             if (numberOfPeriodsToRollForward == 0) return _servicingCostsModel;
 
@@ -78,7 +78,7 @@ namespace EduSafe.Core.BusinessLogic.Models
                     var isStartingPeriodUnchanged = MathUtility
                         .CheckDivisibilityOfIntegers(numberOfPeriodsToRollForward, frequencyInMonths);
 
-                    if (!isStartingPeriodUnchanged)
+                    if (!isStartingPeriodUnchanged && !isStudentNew)
                     {
                         var remainderPeriods = numberOfPeriodsToRollForward % frequencyInMonths;
                         var rollForwardStartingPeriod = frequencyInMonths - remainderPeriods + 1;
