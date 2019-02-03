@@ -4,6 +4,8 @@ using EduSafe.Core.BusinessLogic.Models;
 using EduSafe.Core.BusinessLogic.Models.Premiums;
 using EduSafe.Core.Tests.BusinessLogic.Models.Premiums;
 using EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment;
+using System.Collections.Generic;
+using EduSafe.IO.Excel;
 
 namespace EduSafe.Core.Tests.BusinessLogic.Models
 {
@@ -234,6 +236,58 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models
             }
 
             return premium;
+        }
+
+        private double RollforwardRepricingModel_AnalyticalCalculation(int periodsToRollForward, bool isNewStudent, double paidInPremiums)
+        {
+            var enrollmentModel = EnrollmentModelTests.PopulateEnrollmentModel(includePostGraduationTargets: true);
+            var servicingCostsModel = ServicingCostsModelTests.PopulateServicingCostsModel();
+            var rollForwardRepricingModel = new RollForwardRepricingModel(enrollmentModel, servicingCostsModel);
+
+            var rollForwardEnrollmentStateTimeSeries = rollForwardRepricingModel.RollForwardEnrollmentStates(periodsToRollForward);
+            var rollForwardServicingCosts = rollForwardRepricingModel.RollForwardServicingCosts(periodsToRollForward, isNewStudent);
+
+            var premiumCalculationModelInput = PremiumCalculationTests.PreparePremiumCalculationModelInput();
+            premiumCalculationModelInput.PreviouslyPaidInPremiums = paidInPremiums;
+
+            var premium = PremiumCalculationTests.CalculatePremiumAnalytically(
+                premiumCalculationModelInput,
+                rollForwardServicingCosts,
+                rollForwardEnrollmentStateTimeSeries,
+                out PremiumCalculation premiumCalculation,
+                out DataTable servicingCosts);
+
+            return premium;
+        }
+
+        [TestMethod, Owner("Matthew Moore"), Ignore]
+        public void RollforwardRepricingModel_InputsStudy()
+        {
+            var listOfPremiums = new List<PremiumData>();
+            var paidInAmount = 0.0;
+            var monthlyPaidIn = 0.0;
+
+            for (var i = 0; i <= 72; i++)
+            {               
+                var premium = RollforwardRepricingModel_AnalyticalCalculation(i, false, paidInAmount);
+                var premiumData = new PremiumData { Period = i, Premium = premium };
+                listOfPremiums.Add(premiumData);
+
+                if (i == 0 || ((i % 12) == 0))
+                    monthlyPaidIn = premium;
+
+                paidInAmount += monthlyPaidIn;
+            }
+
+            var excelFileWriter = new ExcelFileWriter();
+            excelFileWriter.AddWorksheetForListOfData(listOfPremiums);
+            excelFileWriter.ExportWorkbook(openFileOnSave: true);
+        }
+
+        private class PremiumData
+        {
+            public int Period { get; set; }
+            public double Premium { get; set; }
         }
     }
 }

@@ -3,5 +3,11 @@
     {{ headerText }}
   </h1>
   <router-outlet></router-outlet>
-  <edusafe-home></edusafe-home>
+  <div *ngIf="!calculateIsClicked">
+    <edusafe-home></edusafe-home>
+    <button type="button" (click)="revealModelInputs()">Calculate Your Coverage</button>
+  </div>
+  <div *ngIf="calculateIsClicked">
+    <edusafe-model></edusafe-model>
+  </div>
 </div>

@@ -173,6 +173,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ModelInputEntry.cs" />
     <Compile Include="Models\ModelOutputEntry.cs" />
     <Compile Include="Models\ModelOutputSummary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

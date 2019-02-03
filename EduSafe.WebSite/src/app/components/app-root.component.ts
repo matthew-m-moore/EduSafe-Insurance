@@ -8,4 +8,10 @@ import { Component } from '@angular/core';
 
 export class AppRootComponent {
   headerText = 'EduSafe - Securing Your Future';
+
+  public calculateIsClicked = false;
+
+  revealModelInputs(): void {
+    this.calculateIsClicked = true;
+  }
 }

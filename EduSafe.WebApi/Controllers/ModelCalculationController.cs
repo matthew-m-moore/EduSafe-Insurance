@@ -23,5 +23,19 @@ namespace Dream.WebApp.Controllers
 
             return modelOutputSummary;
         }
+
+        // PUT: api/calculate/premiums
+        [Route("premiums")]
+        [HttpPut]
+        public ModelOutputSummary Put(ModelInputEntry modelInputEntry)
+        {
+            var modelOutputSummary = new ModelOutputSummary
+            {
+                OutputTitle = "The Model Calculation Submission Works",
+                ModelOutputEntries = _modelOutputEntries
+            };
+
+            return modelOutputSummary;
+        }
     }
 }

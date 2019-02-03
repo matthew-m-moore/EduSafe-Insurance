@@ -1,6 +1,9 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+
 import { RoutingModule } from '../modules/routing.module';
 
 import { AppRootComponent } from '../components/app-root.component';
@@ -12,6 +15,8 @@ import { ModelCalculationService} from '../services/modelCalculationService';
 @NgModule({
   imports: [
     BrowserModule,
+    CommonModule,
+    FormsModule
     HttpModule,
     RoutingModule
   ],

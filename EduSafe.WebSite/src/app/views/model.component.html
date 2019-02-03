@@ -1,2 +1,29 @@
 <body>[ Model Goes Here ]</body>
 {{ modelOutputSummary.OutputTitle }}
+<div>
+  <label>Name of Your College: </label>
+  <input [(ngModel)]="modelInputEntry.CollegeName" placeholder="(Type to auto-complete...)" />
+  <br clear="all" />
+
+  <label>Public or Private School: </label>
+  <input [(ngModel)]="modelInputEntry.PublicOrPrivateSchool" placeholder="(Choose 'Public' or 'Private')" />
+  <br clear="all" />
+
+  <label>Your Major: </label>
+  <input [(ngModel)]="modelInputEntry.CollegeMajor" placeholder="(Type to auto-complete...)" />
+  <br clear="all" />
+
+  <label>Approximately when did you Start College? </label>
+  <input type="date" [(ngModel)]="modelInputEntry.CollegeStartDate" />
+  <br clear="all" />
+
+  <label>What is your Expected Graduation Date? </label>
+  <input type="date" [(ngModel)]="modelInputEntry.ExpectedGraduationDate" />
+  <br clear="all" />
+
+  <label>How much would you like to be covered? </label>
+  <input [(ngModel)]="modelInputEntry.IncomeCoverageAmount" placeholder="(Enter annual coverage amount)" />
+  <br clear="all" />
+</div>
+<br clear="all" />
+<button type="button" (click)="submitForCalculation()">Find Out Your Monthly Payment</button>
