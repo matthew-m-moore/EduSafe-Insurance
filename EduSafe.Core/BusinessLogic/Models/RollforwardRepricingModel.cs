@@ -8,6 +8,9 @@ namespace EduSafe.Core.BusinessLogic.Models
 {
     public class RollForwardRepricingModel
     {
+        public int? ScenarioId { get; set; }
+        public string ScenarioName { get; set; }
+
         private EnrollmentModel _enrollmentModel;
         private ServicingCostsModel _servicingCostsModel;
         private StudentEnrollmentState _baseEnrollmentState;

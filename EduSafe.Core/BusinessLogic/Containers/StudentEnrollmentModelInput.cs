@@ -9,6 +9,9 @@ namespace EduSafe.Core.BusinessLogic.Containers
 {
     public class StudentEnrollmentModelInput
     {
+        public int? ScenarioId { get; set; }
+        public string ScenarioName { get; set; }
+
         public EnrollmentTargetsArray EnrollmentTargetsArray { get; }
         public EnrollmentTransitionsArray TransitionRatesArray { get; }
 

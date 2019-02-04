@@ -16,7 +16,7 @@ import { ModelCalculationService} from '../services/modelCalculationService';
   imports: [
     BrowserModule,
     CommonModule,
-    FormsModule
+    FormsModule,
     HttpModule,
     RoutingModule
   ],

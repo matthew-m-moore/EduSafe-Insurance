@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClosedXML, Version=0.94.2.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -45,8 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\Containers\AnalyticalPremiumCalculationCashFlow.cs" />
+    <Compile Include="BusinessLogic\Containers\CompoundKeys\VectorAssignmentEntry.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumCalculationModelInput.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumCalculationCashFlow.cs" />
+    <Compile Include="BusinessLogic\Containers\PremiumCalculationModelResult.cs" />
     <Compile Include="BusinessLogic\Containers\StudentEnrollmentModelInput.cs" />
     <Compile Include="BusinessLogic\Containers\StudentEnrollmentStateTimeSeriesEntry.cs" />
     <Compile Include="BusinessLogic\Models\RollForwardRepricingModel.cs" />
@@ -72,10 +75,14 @@
     <Compile Include="Interfaces\IParameterizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Excel\Converters\CostOrFeeConverter.cs" />
-    <Compile Include="Repositories\Excel\Converters\StudentEnrollmentModelInputConverter.cs" />
+    <Compile Include="Repositories\Excel\Converters\EnrollmentModelInputConverter.cs" />
+    <Compile Include="Repositories\Excel\Converters\PaymentConventionConverter.cs" />
+    <Compile Include="Repositories\Excel\Converters\StudentEnrollmentStateConverter.cs" />
     <Compile Include="Repositories\Excel\Converters\VectorConverter.cs" />
+    <Compile Include="Repositories\Excel\ExcelDataRepository.cs" />
+    <Compile Include="Repositories\Excel\InterestRateCurveRepository.cs" />
     <Compile Include="Repositories\Excel\ServicingCostsModelRepository.cs" />
-    <Compile Include="Repositories\Excel\StudentEnrollmentModelRepository.cs" />
+    <Compile Include="Repositories\Excel\RollForwardRepricingModelRepository.cs" />
     <Compile Include="Repositories\Excel\VectorRepository.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,9 @@ namespace EduSafe.Core.BusinessLogic.Containers
 {
     public class PremiumCalculationModelInput
     {
+        public int? ScenarioId { get; set; }
+        public string ScenarioName { get; set; }
+
         public double AnnualIncomeCoverageAmount { get; }
         public int MonthsOfIncomeCoverage { get; }
 
