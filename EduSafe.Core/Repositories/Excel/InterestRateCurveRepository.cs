@@ -21,9 +21,14 @@ namespace EduSafe.Core.Repositories.Excel
 
         private int _maxColumnCount;
 
+        private InterestRateCurveTypeRepository _interestRateCurveTypeRepository;
+        private DayCountConventionRepository _dayCountConventionRepository;
+
         public InterestRateCurveRepository(string pathToExcelDataFile)
             : base(pathToExcelDataFile, _discountRatesTab)
         {
+            _interestRateCurveTypeRepository = new InterestRateCurveTypeRepository();
+            _dayCountConventionRepository = new DayCountConventionRepository();
             _excelDataRows = _ExcelFileReader.GetExcelDataRowsFromWorksheet(_discountRatesTab);
             _columnNumbersList = new List<int>();
         }
@@ -42,7 +47,11 @@ namespace EduSafe.Core.Repositories.Excel
                 var interestRateCurveType = InterestRateCurveTypeConverter.ConvertStringToInterestRateCurveType(interestRateCurveTypeText);
                 var interestRateCurveValues = rateCurveValuesArray[columnNumber];
 
-                var interestRateCurve = InterestRateCurveConverter.ConvertInputsToInterestRateCurve(
+                var interestRateCurveConverter = new InterestRateCurveConverter(
+                    _interestRateCurveTypeRepository.InterestRateCurveTypeDetails,
+                    _dayCountConventionRepository.DayCountConventionDescriptions);
+
+                var interestRateCurve = interestRateCurveConverter.ConvertInputsToInterestRateCurve(
                     interestRateCurveType,
                     interestRateCurveDate,
                     interestRateCurveValues);

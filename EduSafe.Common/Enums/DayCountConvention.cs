@@ -15,5 +15,8 @@ namespace EduSafe.Common.Enums
         Actual365,
         [Description("Act/Act-ISDA")]
         ActualActual,
+
+        [Description("Leg-Dependent")]
+        Swap,
     }
 }

@@ -1,11 +1,11 @@
-﻿using System.Data;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EduSafe.Common.Curves;
 using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;
+using EduSafe.Core.BusinessLogic.Scenarios;
 using EduSafe.Core.BusinessLogic.Vectors;
 using EduSafe.IO.Excel;
 
@@ -83,31 +83,7 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.StudentEnrollment
 
         public static ExcelFileWriter CreateExcelOutput(List<EnrollmentStateArray> enrollmentStateTimeSeries)
         {
-            var listOfTimeSeriesEntries = 
-                enrollmentStateTimeSeries.Select((enrollmentStateArray, i) =>
-                    {
-                        return new StudentEnrollmentStateTimeSeriesEntry
-                        {
-                            Period = i,
-
-                            Enrolled = enrollmentStateArray.GetTotalState(StudentEnrollmentState.Enrolled),
-                            DroppedOut = enrollmentStateArray.GetTotalState(StudentEnrollmentState.DroppedOut),
-                            Graduated = enrollmentStateArray.GetTotalState(StudentEnrollmentState.Graduated),
-                            Employed = enrollmentStateArray.GetTotalState(StudentEnrollmentState.GraduatedEmployed),
-                            EalyHire = enrollmentStateArray.GetTotalState(StudentEnrollmentState.EarlyHire),
-                            Unemployed = enrollmentStateArray.GetTotalState(StudentEnrollmentState.GraduatedUnemployed),
-                            GradSchool = enrollmentStateArray.GetTotalState(StudentEnrollmentState.GraduateSchool),
-
-                            DeltaEnrolled = enrollmentStateArray[StudentEnrollmentState.Enrolled],
-                            DeltaDroppedOut = enrollmentStateArray[StudentEnrollmentState.DroppedOut],
-                            DeltaGraduated = enrollmentStateArray[StudentEnrollmentState.Graduated],
-                            DeltaEmployed = enrollmentStateArray[StudentEnrollmentState.GraduatedEmployed],
-                            DeltaEalyHire = enrollmentStateArray[StudentEnrollmentState.EarlyHire],
-                            DeltaUnemployed = enrollmentStateArray[StudentEnrollmentState.GraduatedUnemployed],
-                            DeltaGradSchool = enrollmentStateArray[StudentEnrollmentState.GraduateSchool],
-                        };
-                    }
-                );
+            var listOfTimeSeriesEntries = PremiumComputationEngine.CreateTimeSeriesEntries(enrollmentStateTimeSeries);
 
             var excelFileWriter = new ExcelFileWriter(openFileOnSave: true);
             excelFileWriter.AddWorksheetForListOfData(listOfTimeSeriesEntries.ToList(), "Enrollment Model");

@@ -14,11 +14,11 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
         public List<PremiumCalculationCashFlow> CalculatedCashFlows { get; protected set; }
         public DataTable ServicingCostsDataTable { get; protected set; }
 
-        protected PremiumCalculationModelInput _PremiumCalculationModelInput { get; }
+        public PremiumCalculationModelInput PremiumCalculationModelInput { get; }
 
         public PremiumCalculation(PremiumCalculationModelInput premiumCalculationModelInput)
         {
-            _PremiumCalculationModelInput = premiumCalculationModelInput;
+            PremiumCalculationModelInput = premiumCalculationModelInput;
         }
 
         public abstract double CalculatePremium(
@@ -27,7 +27,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
 
         protected double CalculateDiscountFactor(int monthlyPeriod)
         {
-            var discountRateCurve = _PremiumCalculationModelInput.DiscountRateCurve;
+            var discountRateCurve = PremiumCalculationModelInput.DiscountRateCurve;
             if (discountRateCurve != null)
             {
                 var dayCountConvention = discountRateCurve.DayCountConvention;

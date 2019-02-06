@@ -16,7 +16,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
 
         public override double CalculatePremium(List<EnrollmentStateArray> enrollmentStateTimeSeries, ServicingCostsModel servicingCostsModel)
         {
-            _analyticalFormulaNumerator = (-1) * _PremiumCalculationModelInput.PreviouslyPaidInPremiums;
+            _analyticalFormulaNumerator = (-1) * PremiumCalculationModelInput.PreviouslyPaidInPremiums;
             _analyticalFormulaDenominator = 0.0;
 
             ServicingCostsDataTable = servicingCostsModel.CalculateServicingCosts(enrollmentStateTimeSeries);
@@ -48,7 +48,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             var currentPeriodCashFlow  = base.CalculateCashFlow(enrollmentStateArray, premiumAmountGuess, monthlyPeriod);
             var analyticalPremiumCashFlow = new AnalyticalPremiumCalculationCashFlow(currentPeriodCashFlow);
 
-            var previouslyPaidInPremiums = _PremiumCalculationModelInput.PreviouslyPaidInPremiums;
+            var previouslyPaidInPremiums = PremiumCalculationModelInput.PreviouslyPaidInPremiums;
             if (previouslyPaidInPremiums > 0.0)
                 AdjustCashFlowForPaidInPremiums(analyticalPremiumCashFlow, enrollmentStateArray, previouslyPaidInPremiums, monthlyPeriod);
 
@@ -64,9 +64,9 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             double previouslyPaidInPremiums,
             int monthlyPeriod)
         {
-            var dropOutCoverage = _PremiumCalculationModelInput.DropOutOptionCoveragePercentage.GetValueOrDefault(0.0);
-            var gradSchoolCoverage = _PremiumCalculationModelInput.GradSchoolOptionCoveragePercentage.GetValueOrDefault(0.0);
-            var earlyHireCoverage = _PremiumCalculationModelInput.EarlyHireOptionCoveragePercentage.GetValueOrDefault(0.0);
+            var dropOutCoverage = PremiumCalculationModelInput.DropOutOptionCoveragePercentage.GetValueOrDefault(0.0);
+            var gradSchoolCoverage = PremiumCalculationModelInput.GradSchoolOptionCoveragePercentage.GetValueOrDefault(0.0);
+            var earlyHireCoverage = PremiumCalculationModelInput.EarlyHireOptionCoveragePercentage.GetValueOrDefault(0.0);
 
             var dropOutFraction = enrollmentStateArray[StudentEnrollmentState.DroppedOut];
             var gradSchoolFraction = enrollmentStateArray[StudentEnrollmentState.GraduateSchool];

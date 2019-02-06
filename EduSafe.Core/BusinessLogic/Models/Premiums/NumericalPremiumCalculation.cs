@@ -68,8 +68,8 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
                 Period = 0,
                 DiscountFactor = 1.0,
 
-                Premium = _PremiumCalculationModelInput.PreviouslyPaidInPremiums,
-                ProbabilityAdjustedPremium = _PremiumCalculationModelInput.PreviouslyPaidInPremiums,
+                Premium = PremiumCalculationModelInput.PreviouslyPaidInPremiums,
+                ProbabilityAdjustedPremium = PremiumCalculationModelInput.PreviouslyPaidInPremiums,
             };
 
             return initialPeriodCashFlow;
@@ -82,11 +82,11 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             var discountFactor = CalculateDiscountFactor(monthlyPeriod);
             var costsAndFees = servicingCosts.Field<double>(Constants.TotalIdentifier);
 
-            var dropOutCoverage = _PremiumCalculationModelInput.DropOutOptionCoveragePercentage.GetValueOrDefault(0.0);
-            var gradSchoolCoverage = _PremiumCalculationModelInput.GradSchoolOptionCoveragePercentage.GetValueOrDefault(0.0);
-            var earlyHireCoverage = _PremiumCalculationModelInput.EarlyHireOptionCoveragePercentage.GetValueOrDefault(0.0);
+            var dropOutCoverage = PremiumCalculationModelInput.DropOutOptionCoveragePercentage.GetValueOrDefault(0.0);
+            var gradSchoolCoverage = PremiumCalculationModelInput.GradSchoolOptionCoveragePercentage.GetValueOrDefault(0.0);
+            var earlyHireCoverage = PremiumCalculationModelInput.EarlyHireOptionCoveragePercentage.GetValueOrDefault(0.0);
 
-            var unemploymentCoverage = _PremiumCalculationModelInput.IncomeCoverageAmount;
+            var unemploymentCoverage = PremiumCalculationModelInput.IncomeCoverageAmount;
 
             var enrollmentFraction = enrollmentStateArray.GetTotalState(StudentEnrollmentState.Enrolled);
             var dropOutFraction = enrollmentStateArray[StudentEnrollmentState.DroppedOut];
@@ -94,7 +94,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             var earlyHireFraction = enrollmentStateArray[StudentEnrollmentState.EarlyHire];
             var unemploymentFraction = enrollmentStateArray[StudentEnrollmentState.GraduatedUnemployed];
 
-            var previouslyPaidInPremiums = _PremiumCalculationModelInput.PreviouslyPaidInPremiums;
+            var previouslyPaidInPremiums = PremiumCalculationModelInput.PreviouslyPaidInPremiums;
             var probabilityAdjustedPremium = premiumAmountGuess * enrollmentFraction;
             var totalPremiumsPaidIn = (monthlyPeriod * premiumAmountGuess) + previouslyPaidInPremiums;
 

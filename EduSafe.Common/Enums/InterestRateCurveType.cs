@@ -29,7 +29,7 @@ namespace EduSafe.Common.Enums
 
         [Description("CMT-1M")]
         Treasury1Mo,
-        [Description("CMT-3M")]
+        [Description("CMT-2M")]
         Treasury2Mo,
         [Description("CMT-3M")]
         Treasury3Mo,

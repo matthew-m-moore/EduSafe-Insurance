@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EduSafe.Common.Enums;
 
 namespace EduSafe.Core.Repositories.Excel.Converters
@@ -11,7 +7,12 @@ namespace EduSafe.Core.Repositories.Excel.Converters
     {
         public static InterestRateCurveType ConvertStringToInterestRateCurveType(string interestRateCurveTypeText)
         {
-            throw new NotImplementedException();
+            if (Enum.TryParse(interestRateCurveTypeText, out InterestRateCurveType interestRateCurveType))
+                return interestRateCurveType;
+
+            var exceptionText = string.Format("The interest rate curve type '{0}' is not yet supported.",
+                interestRateCurveTypeText);
+            throw new NotSupportedException(exceptionText);
         }
     }
 }

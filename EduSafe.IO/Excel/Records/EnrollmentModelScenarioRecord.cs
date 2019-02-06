@@ -13,7 +13,8 @@
         public int TotalMonths { get; set; }
 
         public double PaidIn { get; set; }
-        public double Income { get; set; }
+        public double AnnualIncome { get; set; }
+        public int CoverageMonths { get; set; }
 
         public double EarlyHireOptionRatio { get; set; }
         public double DropOutOptionRatio { get; set; }

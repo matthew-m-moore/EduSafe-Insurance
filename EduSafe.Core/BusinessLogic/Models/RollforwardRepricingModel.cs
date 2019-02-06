@@ -11,15 +11,16 @@ namespace EduSafe.Core.BusinessLogic.Models
         public int? ScenarioId { get; set; }
         public string ScenarioName { get; set; }
 
-        private EnrollmentModel _enrollmentModel;
-        private ServicingCostsModel _servicingCostsModel;
+        public EnrollmentModel EnrollmentModel { get; }
+        public ServicingCostsModel ServicingCostsModel { get; }
+
         private StudentEnrollmentState _baseEnrollmentState;
 
         public RollForwardRepricingModel(EnrollmentModel enrollmentModel, ServicingCostsModel servicingCostsModel, 
             StudentEnrollmentState baseEnrollmentState = StudentEnrollmentState.Enrolled)
         {
-            _enrollmentModel = enrollmentModel;
-            _servicingCostsModel = servicingCostsModel;
+            EnrollmentModel = enrollmentModel;
+            ServicingCostsModel = servicingCostsModel;
             _baseEnrollmentState = baseEnrollmentState;
         }
 
@@ -29,9 +30,9 @@ namespace EduSafe.Core.BusinessLogic.Models
         /// </summary>
         public List<EnrollmentStateArray> RollForwardEnrollmentStates(int numberOfPeriodsToRollForward)
         {
-            if (!_enrollmentModel.IsParameterized) _enrollmentModel.ParameterizeModel();
+            if (!EnrollmentModel.IsParameterized) EnrollmentModel.ParameterizeModel();
 
-            var enrollmentStateTimeSeries = _enrollmentModel.EnrollmentStateTimeSeries;
+            var enrollmentStateTimeSeries = EnrollmentModel.EnrollmentStateTimeSeries;
             if (numberOfPeriodsToRollForward == 0) return enrollmentStateTimeSeries;
 
             var baseEnrollmentStateArray = enrollmentStateTimeSeries[numberOfPeriodsToRollForward];
@@ -68,10 +69,10 @@ namespace EduSafe.Core.BusinessLogic.Models
         /// </summary>
         public ServicingCostsModel RollForwardServicingCosts(int numberOfPeriodsToRollForward, bool isStudentNew = false)
         {
-            if (numberOfPeriodsToRollForward == 0) return _servicingCostsModel;
+            if (numberOfPeriodsToRollForward == 0) return ServicingCostsModel;
 
             var listOfCostsOrFees = new List<CostOrFee>();
-            foreach (var costOrFee in _servicingCostsModel.CostsOrFees)
+            foreach (var costOrFee in ServicingCostsModel.CostsOrFees)
             {
                 var rollForwardCostOrFee = costOrFee.Copy();
 
@@ -92,7 +93,7 @@ namespace EduSafe.Core.BusinessLogic.Models
                 listOfCostsOrFees.Add(rollForwardCostOrFee);
             }
 
-            var remainingPeriodsToProject = _servicingCostsModel.NumberOfMonthlyPeriodsToProject - numberOfPeriodsToRollForward;
+            var remainingPeriodsToProject = ServicingCostsModel.NumberOfMonthlyPeriodsToProject - numberOfPeriodsToRollForward;
 
             var rollForwardServicingCostsModel = new ServicingCostsModel(listOfCostsOrFees, remainingPeriodsToProject);
             return rollForwardServicingCostsModel;

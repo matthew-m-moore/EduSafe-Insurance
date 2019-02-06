@@ -14,14 +14,14 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
     {
         public bool IsParameterized = false;
 
+        public StudentEnrollmentModelInput StudentEnrollmentModelInput { get; }
         public List<EnrollmentStateArray> EnrollmentStateTimeSeries { get; private set; }
-
-        private StudentEnrollmentModelInput _studentEnrollmentModelInput;       
+          
         private MultiplicativeVector _flatMultiplicativeVector;     
 
         public EnrollmentModel(StudentEnrollmentModelInput studentEnrollmentModelInput)
         {
-            _studentEnrollmentModelInput = studentEnrollmentModelInput;
+            StudentEnrollmentModelInput = studentEnrollmentModelInput;
             _flatMultiplicativeVector = new MultiplicativeVector(new DataCurve<double>(1.0));
         }
 
@@ -36,12 +36,12 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
 
         private void ParameterizeDropOutRate()
         {
-            var dropOutTarget = _studentEnrollmentModelInput.EnrollmentTargetsArray[StudentEnrollmentState.DroppedOut];
+            var dropOutTarget = StudentEnrollmentModelInput.EnrollmentTargetsArray[StudentEnrollmentState.DroppedOut];
             if (dropOutTarget != null)
             {
                 var targetValue = dropOutTarget.TargetValue;
                 var dropOutRateParameterizer = new DropOutRateParameterizer(
-                    _studentEnrollmentModelInput,            
+                    StudentEnrollmentModelInput,            
                     _flatMultiplicativeVector);
 
                 NumericalSearchUtility.NewtonRaphsonWithBisection(
@@ -60,7 +60,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
 
         private void ParameterizePostGraduationRates()
         {
-            _studentEnrollmentModelInput
+            StudentEnrollmentModelInput
                 .PostGraduationTargetStates.ToList()
                 .ForEach(ParameterizePostGraduationRate);
         }
@@ -69,11 +69,11 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
         {
             var postGraduationRateParameterizer = new PostGraduationParameterizer(
                     EnrollmentStateTimeSeries,
-                    _studentEnrollmentModelInput,
+                    StudentEnrollmentModelInput,
                     _flatMultiplicativeVector,
                     postGraduationState);
 
-            var postGraduationTarget = _studentEnrollmentModelInput.EnrollmentTargetsArray[postGraduationState];
+            var postGraduationTarget = StudentEnrollmentModelInput.EnrollmentTargetsArray[postGraduationState];
             if (postGraduationTarget != null)
             {
                 var targetValue = postGraduationTarget.TargetValue;
@@ -97,10 +97,10 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
         {
             var earlyHireRateParameterizer = new EarlyHireRateParameterizer(
                 EnrollmentStateTimeSeries,
-                _studentEnrollmentModelInput,
+                StudentEnrollmentModelInput,
                 _flatMultiplicativeVector);
 
-            var earlyHireTarget = _studentEnrollmentModelInput.EnrollmentTargetsArray[StudentEnrollmentState.EarlyHire];
+            var earlyHireTarget = StudentEnrollmentModelInput.EnrollmentTargetsArray[StudentEnrollmentState.EarlyHire];
             if (earlyHireTarget != null)
             {
                 NumericalSearchUtility.BisectionWithNotANumber(

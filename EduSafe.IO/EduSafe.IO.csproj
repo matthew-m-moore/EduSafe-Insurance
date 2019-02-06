@@ -57,7 +57,9 @@
     <Compile Include="Excel\ExcelFileWriter.cs" />
     <Compile Include="Excel\ExcelFileReader.cs" />
     <Compile Include="Excel\Records\CostOrFeeRecord.cs" />
+    <Compile Include="Excel\Records\DayCountConventionRecord.cs" />
     <Compile Include="Excel\Records\EnrollmentModelScenarioRecord.cs" />
+    <Compile Include="Excel\Records\InterestRateTypeDetailRecord.cs" />
     <Compile Include="Excel\Records\TabDataTypeRecord.cs" />
     <Compile Include="Excel\Records\TestRecords\TestRecordA.cs" />
     <Compile Include="Excel\Records\TestRecords\TestRecordB.cs" />
