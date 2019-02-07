@@ -16,6 +16,8 @@ namespace EduSafe.Common
 
         public const int MonthsInOneYear = 12;
 
+        public const int PercentagePoints = 100;
+
         public const int ThreeHundredSixtyDaysInOneYear = 360;
         public const int ThreeHundredSixtyFiveDaysInOneYear = 365;
         public const int ThreeHundredSixtySixDaysInOneYear = 366;

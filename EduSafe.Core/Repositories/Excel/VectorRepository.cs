@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
-using EduSafe.Common.Curves;
 using EduSafe.Core.BusinessLogic.Containers.CompoundKeys;
 using EduSafe.Core.BusinessLogic.Vectors;
 using EduSafe.Core.Repositories.Excel.Converters;
@@ -20,10 +20,11 @@ namespace EduSafe.Core.Repositories.Excel
 
         public VectorRepository(string pathToExcelDataFile)
             : base(pathToExcelDataFile, _vectorsTab)
-        {
-            _ExcelDataRows = _ExcelFileReader.GetExcelDataRowsFromWorksheet(_vectorsTab);
-            _ColumnNumbersList = new List<int>();
-        }
+        { }
+
+        public VectorRepository(Stream fileStream)
+            : base(fileStream, _vectorsTab)
+        { }
 
         public Dictionary<VectorAssignmentEntry, Vector> GetVectorsDictionary()
         {
@@ -34,7 +35,7 @@ namespace EduSafe.Core.Repositories.Excel
             {
                 var vectorSetName = _vectorSetNames.Cell(columnNumber + 1).GetValue<string>();
                 var vectorStartState = _vectorStartStates.Cell(columnNumber + 1).GetValue<string>();
-                var vectorEndState = _vectorStartStates.Cell(columnNumber + 1).GetValue<string>();
+                var vectorEndState = _vectorEndStates.Cell(columnNumber + 1).GetValue<string>();
                 var vectorType = _vectorTypes.Cell(columnNumber + 1).GetValue<string>();
 
                 var enrollmentStartState = StudentEnrollmentStateConverter.ConvertStringToEnrollmentState(vectorStartState);

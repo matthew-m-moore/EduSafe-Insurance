@@ -112,16 +112,11 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.Premiums
             }
         }
 
-        private void CheckResults(EnrollmentModel studentEnrollmentModel, double premium)
-        {
-            Assert.AreEqual(82.35792486, premium, _precision);
-        }
-
         public static ExcelFileWriter CreateExcelOutput(
             List<EnrollmentStateArray> enrollmentStateTimeSeries,
             PremiumCalculation premiumCalculation,
             DataTable servicingCosts,
-            bool analyticalOutput)
+            bool analyticalOutput = true)
         {
             var excelFileWriter = ServicingCostsModelTests.CreateExcelOutput(enrollmentStateTimeSeries, servicingCosts);
 

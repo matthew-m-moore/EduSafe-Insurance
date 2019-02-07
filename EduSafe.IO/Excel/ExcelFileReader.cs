@@ -287,6 +287,7 @@ namespace EduSafe.IO.Excel
             var objectCreationFunction = _objectCreationFunctionsDictionary[dataType];
 
             var listOfSpecificallyTypedData = listOfExcelDataRows
+                .Where(r => !r.IsEmpty())
                 .Select(excelDataRow => CreateObject<T>(excelDataRow, excelHeadersRow, objectProperties, objectCreationFunction))
                 .Where(l => l != null)
                 .ToList();

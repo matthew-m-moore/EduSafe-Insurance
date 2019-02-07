@@ -13,7 +13,7 @@ namespace EduSafe.Core.Repositories.Excel.Converters
             var isPeriodicCostOrFee = costOrFeeRecord.FrequencyInMonths.HasValue;
             var isEventBasedCostOrFee = !string.IsNullOrWhiteSpace(costOrFeeRecord.DrivingEvent);
 
-            if (isEventBasedCostOrFee && isEventBasedCostOrFee)
+            if (isPeriodicCostOrFee && isEventBasedCostOrFee)
             {
                 var exceptionText = string.Format("ERROR: A cost or fee cannot be both event-based and " +
                     "periodic. Please check the cost or fee named: '{0}'.", costOrFeeName);

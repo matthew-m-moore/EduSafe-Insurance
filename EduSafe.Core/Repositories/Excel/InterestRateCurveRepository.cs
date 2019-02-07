@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
 using EduSafe.Common.Curves;
@@ -12,14 +13,9 @@ namespace EduSafe.Core.Repositories.Excel
     {
         private const string _discountRatesTab = "DiscountRates";
 
-        private List<IXLRangeRow> _excelDataRows;
-        private List<int> _columnNumbersList;
-
         private IXLRangeRow _interestRateCurveTypes;
         private IXLRangeRow _interestRateCurveDates;
         private IXLRangeRow _interestRateCurveSetNames;
-
-        private int _maxColumnCount;
 
         private InterestRateCurveTypeRepository _interestRateCurveTypeRepository;
         private DayCountConventionRepository _dayCountConventionRepository;
@@ -29,8 +25,13 @@ namespace EduSafe.Core.Repositories.Excel
         {
             _interestRateCurveTypeRepository = new InterestRateCurveTypeRepository();
             _dayCountConventionRepository = new DayCountConventionRepository();
-            _excelDataRows = _ExcelFileReader.GetExcelDataRowsFromWorksheet(_discountRatesTab);
-            _columnNumbersList = new List<int>();
+        }
+
+        public InterestRateCurveRepository(Stream fileStream)
+            : base(fileStream, _discountRatesTab)
+        {
+            _interestRateCurveTypeRepository = new InterestRateCurveTypeRepository();
+            _dayCountConventionRepository = new DayCountConventionRepository();
         }
 
         public Dictionary<string, Dictionary<InterestRateCurveType, InterestRateCurve>> GetInterestRateCurveSetDictionary()

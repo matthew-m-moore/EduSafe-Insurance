@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using EduSafe.Common;
 using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.Core.BusinessLogic.Containers.CompoundKeys;
@@ -46,29 +47,34 @@ namespace EduSafe.Core.Repositories.Excel.Converters
         {
             var enrollmentTargetsArray = new EnrollmentTargetsArray();
 
+            var fourYearGradTarget = enrollmentModelScenarioRecord.FourYearGradTarget / Constants.PercentagePoints;
+            var fiveYearGradTarget = enrollmentModelScenarioRecord.FiveYearGradTarget / Constants.PercentagePoints;
+            var sixYearGradTarget = enrollmentModelScenarioRecord.SixYearGradTarget / Constants.PercentagePoints;
+
+            var fourYearsInMonths = 4 * Constants.MonthsInOneYear;
+            var fiveYearsInMonths = 5 * Constants.MonthsInOneYear;
+            var sixYearsInMonths = 6 * Constants.MonthsInOneYear;
+
             var graduationState = StudentEnrollmentState.Graduated;
-            enrollmentTargetsArray[48, graduationState] =
-                new EnrollmentTarget(graduationState, enrollmentModelScenarioRecord.FourYearGradTarget, 48);
-            enrollmentTargetsArray[60, graduationState] =
-                new EnrollmentTarget(graduationState, enrollmentModelScenarioRecord.FiveYearGradTarget, 60);
-            enrollmentTargetsArray[72, graduationState] =
-                new EnrollmentTarget(graduationState, enrollmentModelScenarioRecord.SixYearGradTarget, 72);
+            enrollmentTargetsArray[fourYearsInMonths, graduationState] = new EnrollmentTarget(graduationState, fourYearGradTarget, fourYearsInMonths);
+            enrollmentTargetsArray[fiveYearsInMonths, graduationState] = new EnrollmentTarget(graduationState, fiveYearGradTarget, fiveYearsInMonths);
+            enrollmentTargetsArray[sixYearsInMonths, graduationState] = new EnrollmentTarget(graduationState, sixYearGradTarget, sixYearsInMonths);
 
             var dropOutState = StudentEnrollmentState.DroppedOut;
             var dropOutValue = 1.0 - enrollmentTargetsArray.TotalTarget(StudentEnrollmentState.Graduated);
             enrollmentTargetsArray[dropOutState] = new EnrollmentTarget(dropOutState, dropOutValue);
 
+            var totalHiredTarget = enrollmentModelScenarioRecord.HireTarget + enrollmentModelScenarioRecord.HireEarlyTarget;
+            var employeedState = StudentEnrollmentState.GraduatedEmployed;
+            enrollmentTargetsArray[employeedState] = new EnrollmentTarget(employeedState, totalHiredTarget / Constants.PercentagePoints);
+
             var gradSchoolState = StudentEnrollmentState.GraduateSchool;
             enrollmentTargetsArray[gradSchoolState] =
-                new EnrollmentTarget(gradSchoolState, enrollmentModelScenarioRecord.GradSchoolTarget);
-
-            var employeedState = StudentEnrollmentState.GraduatedEmployed;
-            enrollmentTargetsArray[employeedState] =
-                new EnrollmentTarget(employeedState, enrollmentModelScenarioRecord.HireTarget);
-
+                new EnrollmentTarget(gradSchoolState, enrollmentModelScenarioRecord.GradSchoolTarget / Constants.PercentagePoints);
+                       
             var earlyHireState = StudentEnrollmentState.EarlyHire;
             enrollmentTargetsArray[earlyHireState] =
-                new EnrollmentTarget(earlyHireState, enrollmentModelScenarioRecord.HireEarlyTarget);
+                new EnrollmentTarget(earlyHireState, enrollmentModelScenarioRecord.HireEarlyTarget / Constants.PercentagePoints);
 
             return enrollmentTargetsArray;
         }

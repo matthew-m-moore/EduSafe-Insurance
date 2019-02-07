@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,14 @@ namespace EduSafe.Core.Repositories
             _servicingCostsModelRepository = new ServicingCostsModelRepository(pathToExcelDataFile);
         }
 
+        public PremiumComputationRepository(Stream fileStream)
+            : base(fileStream)
+        {
+            _vectorRepository = new VectorRepository(fileStream);
+            _interestRateCurveRepository = new InterestRateCurveRepository(fileStream);
+            _servicingCostsModelRepository = new ServicingCostsModelRepository(fileStream);
+        }
+
         public Dictionary<int, PremiumComputationEngine> GetPremiumComputationScenarios()
         {
             var enrollmentModelScenarios = _ExcelFileReader
@@ -53,7 +62,10 @@ namespace EduSafe.Core.Repositories
                 var repricingModel = new RollForwardRepricingModel(enrollmentModel, servicingCostsModel);
                 var premiumComputationEngine = new PremiumComputationEngine(premiumCalculation, repricingModel, startingPeriod);
 
-                if (!scenariosDictionary.ContainsKey(enrollmentModelScenario.Id))
+                premiumComputationEngine.ScenarioId = enrollmentModelScenario.Id;
+                premiumComputationEngine.ScenarioName = enrollmentModelScenario.Scenario;
+
+                if (scenariosDictionary.ContainsKey(enrollmentModelScenario.Id))
                     throw new Exception("ERROR: Duplicate scenario Id, please check inputs. Scenario Id must be unique");
 
                 scenariosDictionary.Add(enrollmentModelScenario.Id, premiumComputationEngine);

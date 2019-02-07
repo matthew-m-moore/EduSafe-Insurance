@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using EduSafe.Core.BusinessLogic.Models;
 using EduSafe.Core.Repositories.Excel.Converters;
 using EduSafe.IO.Excel.Records;
@@ -11,6 +12,10 @@ namespace EduSafe.Core.Repositories.Excel
 
         public ServicingCostsModelRepository(string pathToExcelDataFile)
             : base(pathToExcelDataFile)
+        { }
+
+        public ServicingCostsModelRepository(Stream fileStream)
+            : base(fileStream)
         { }
 
         public ServicingCostsModel GetServicingCostsModel(int numberOfMonthlyPeriodsToProject)
