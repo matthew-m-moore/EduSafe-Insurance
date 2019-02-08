@@ -37,5 +37,26 @@ namespace EduSafe.Core.Tests.BusinessLogic.Scenarios
                 excelFileWriter.ExportWorkbook();
             }
         }
+
+        [TestMethod, Owner("Matthew Moore")]
+        public void PremiumComputationEngine_LoadSingleScenarioByIdFromExcel_CheckResults()
+        {
+            var premiumComputationRepository = new PremiumComputationRepository(_inputFileStream);
+            var premiumComputationScenario = premiumComputationRepository.GetPremiumComputationScenarioById(1);
+            var premiumComputationResult = premiumComputationScenario.ComputePremiumResult();
+
+            var premium = premiumComputationResult.CalculatedMonthlyPremium;
+            Assert.AreEqual(85.94250024, premium, _precision);
+
+            if (_outputExcel)
+            {
+                var excelFileWriter = PremiumCalculationTests.CreateExcelOutput(
+                    premiumComputationScenario.RepricingModel.EnrollmentModel.EnrollmentStateTimeSeries,
+                    premiumComputationScenario.PremiumCalculation,
+                    premiumComputationResult.ServicingCosts);
+
+                excelFileWriter.ExportWorkbook();
+            }
+        }
     }
 }

@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using EduSafe.IO.Excel.Records;
 using ClosedXML.Excel;
+using EduSafe.IO.Excel.Records;
 
 namespace EduSafe.IO.Excel
 {
@@ -140,9 +140,8 @@ namespace EduSafe.IO.Excel
 
             var excelWorksheet = _excelWorkbook.Worksheet(tabName);
 
-            IXLRangeRow headersRow;
             var dataHasOneRowOfHeaders = true;
-            var dataRows = GetExcelDataRowsFromWorksheet(excelWorksheet, dataHasOneRowOfHeaders, out headersRow);
+            var dataRows = GetExcelDataRowsFromWorksheet(excelWorksheet, dataHasOneRowOfHeaders, out ExcelHeadersRow headersRow);
 
             var listOfSpecificallyTypedData = ConvertTabDataToSpecificType<T>(dataRows, headersRow);
 
@@ -163,9 +162,8 @@ namespace EduSafe.IO.Excel
 
             var excelWorksheet = _excelWorkbook.Worksheet(tabName);
 
-            IXLRangeRow headersRow;
             var dataHasOneRowOfHeaders = false;
-            var dataTable = GetExcelDataTableFromWorksheet(excelWorksheet, dataHasOneRowOfHeaders, out headersRow);
+            var dataTable = GetExcelDataTableFromWorksheet(excelWorksheet, dataHasOneRowOfHeaders, out ExcelHeadersRow headersRow);
 
             // Note that this funny bit of code is important for cells with formulas, see below for explanation
             foreach (var cell in dataTable.Cells())
@@ -182,7 +180,7 @@ namespace EduSafe.IO.Excel
             dataTable.Transpose(XLTransposeOptions.MoveCells);
             var dataRows = dataTable.Rows().ToList();
 
-            headersRow = dataRows.First();
+            headersRow = new ExcelHeadersRow(dataRows.First());
             dataRows = dataRows.Skip(1).ToList();
             var listOfSpecificallyTypedData = ConvertTabDataToSpecificType<T>(dataRows, headersRow);
 
@@ -204,9 +202,8 @@ namespace EduSafe.IO.Excel
 
             var excelWorksheet = _excelWorkbook.Worksheet(tabName);
 
-            IXLRangeRow headersRow;
             var dataHasOneRowOfHeaders = false;
-            var dataRows = GetExcelDataRowsFromWorksheet(excelWorksheet, dataHasOneRowOfHeaders, out headersRow);
+            var dataRows = GetExcelDataRowsFromWorksheet(excelWorksheet, dataHasOneRowOfHeaders, out ExcelHeadersRow headersRow);
 
             // Note that the headers row out parameter is discarded, since these may not be the headers at all
             return dataRows;
@@ -214,9 +211,8 @@ namespace EduSafe.IO.Excel
 
         private IList GetDataFromSpecificTab(IXLWorksheet excelWorksheet, Type dataType)
         {
-            IXLRangeRow headersRow;
             var dataHasOneRowOfHeaders = true;
-            var dataRows = GetExcelDataRowsFromWorksheet(excelWorksheet, dataHasOneRowOfHeaders, out headersRow);
+            var dataRows = GetExcelDataRowsFromWorksheet(excelWorksheet, dataHasOneRowOfHeaders, out ExcelHeadersRow headersRow);
 
             // Note that, by default, "GetMethod()" only looks for public static methods
             var listOfData = GetType()
@@ -227,11 +223,11 @@ namespace EduSafe.IO.Excel
             return listOfData as IList;
         }
 
-        private IXLRange GetExcelDataTableFromWorksheet(IXLWorksheet excelWorksheet, bool dataHasOneRowOfHeaders, out IXLRangeRow excelHeadersRow)
+        private IXLRange GetExcelDataTableFromWorksheet(IXLWorksheet excelWorksheet, bool dataHasOneRowOfHeaders, out ExcelHeadersRow excelHeadersRow)
         {
             var firstPopulatedRow = excelWorksheet.FirstRowUsed();
             var headersRow = firstPopulatedRow.RowUsed();
-            excelHeadersRow = headersRow;
+            excelHeadersRow = new ExcelHeadersRow(headersRow);
 
             // In some cases, data may have multiple rows of headers, in which case returning the whole data table
             // would be easier to work with, rather than splicing out one odd line at the top
@@ -251,7 +247,7 @@ namespace EduSafe.IO.Excel
             return dataRange;
         }
 
-        private List<IXLRangeRow> GetExcelDataRowsFromWorksheet(IXLWorksheet excelWorksheet, bool dataHasOneRowOfHeaders, out IXLRangeRow excelHeadersRow)
+        private List<IXLRangeRow> GetExcelDataRowsFromWorksheet(IXLWorksheet excelWorksheet, bool dataHasOneRowOfHeaders, out ExcelHeadersRow excelHeadersRow)
         {
             var dataRange = GetExcelDataTableFromWorksheet(excelWorksheet, dataHasOneRowOfHeaders, out excelHeadersRow);
             if (dataRange == null) return new List<IXLRangeRow>();
@@ -277,7 +273,7 @@ namespace EduSafe.IO.Excel
 
         private List<T> ConvertTabDataToSpecificType<T>(
             List<IXLRangeRow> listOfExcelDataRows,
-            IXLRangeRow excelHeadersRow) where T : class, new()
+            ExcelHeadersRow excelHeadersRow) where T : class, new()
         {
             AssembleObjectCreationFunction<T>();
             AssembleDataTypeProperties<T>();
@@ -285,10 +281,15 @@ namespace EduSafe.IO.Excel
             var dataType = typeof(T);
             var objectProperties = _dataTypePropertiesDictionary[dataType];
             var objectCreationFunction = _objectCreationFunctionsDictionary[dataType];
+            var totalRowCountToLoad = listOfExcelDataRows.Count;
 
             var listOfSpecificallyTypedData = listOfExcelDataRows
                 .Where(r => !r.IsEmpty())
-                .Select(excelDataRow => CreateObject<T>(excelDataRow, excelHeadersRow, objectProperties, objectCreationFunction))
+                .Select((excelDataRow, rowNumber) => 
+                    {
+                        Console.WriteLine(string.Format("Loading Excel Row {0} of {1}...", rowNumber, totalRowCountToLoad));
+                        return CreateObject<T>(excelDataRow, excelHeadersRow, objectProperties, objectCreationFunction);
+                    })
                 .Where(l => l != null)
                 .ToList();
 
@@ -327,7 +328,7 @@ namespace EduSafe.IO.Excel
 
         private T CreateObject<T>(
             IXLRangeRow excelDataRow,
-            IXLRangeRow excelHeadersRow,
+            ExcelHeadersRow excelHeadersRow,
             Dictionary<string, PropertyInfo> objectProperties,
             Func<object> objectionCreationFunction) where T : class, new()
         {
@@ -338,8 +339,8 @@ namespace EduSafe.IO.Excel
                 if (cell.IsEmpty()) continue;
 
                 // Ignore the cells where the property name is not part of the target object data type
-                var relativeColumnNumber = cell.Address.ColumnNumber - excelHeadersRow.FirstCell().Address.ColumnNumber;
-                var propertyNameInHeader = excelHeadersRow.Cell(relativeColumnNumber + 1).GetValue<string>();
+                var relativeColumnNumber = cell.Address.ColumnNumber - excelHeadersRow.FirstCellUsedColumnNumber;
+                var propertyNameInHeader = excelHeadersRow[relativeColumnNumber];
                 if (!objectProperties.ContainsKey(propertyNameInHeader)) continue;
 
                 var propertyInfo = objectProperties[propertyNameInHeader];
@@ -362,12 +363,12 @@ namespace EduSafe.IO.Excel
             return newObject;
         }
 
-        private object HandleDateTimeCells(IXLCell cell, Type propertyType)
+        private static object HandleDateTimeCells(IXLCell cell, Type propertyType)
         {
             if (propertyType == typeof(DateTime) &&
                 cell.DataType != XLDataType.DateTime)
             {
-                // Use of DateTime here as a safe caste would not work, since it is a struct
+                // Use of DateTime here as a safe cast would not work, since it is a struct
                 var cellValueAsDateTime = cell.Value as DateTime?;
                 if (cellValueAsDateTime != null)
                 {
