@@ -101,11 +101,14 @@
     <TypeScriptCompile Include="e2e\src\app.po.ts" />
     <TypeScriptCompile Include="src\app\classes\modelInputEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\modelOutputEntry.ts" />
+    <TypeScriptCompile Include="src\app\classes\modelOutputHeaders.ts" />
     <TypeScriptCompile Include="src\app\classes\modelOutputSummary.ts" />
     <TypeScriptCompile Include="src\app\components\home.component.ts" />
     <TypeScriptCompile Include="src\app\components\model.component.ts" />
     <TypeScriptCompile Include="src\app\modules\routing.module.ts" />
-    <TypeScriptCompile Include="src\app\services\modelCalculationService.ts" />
+    <TypeScriptCompile Include="src\app\services\collegeData.service.ts" />
+    <TypeScriptCompile Include="src\app\services\collegeDataSearch.service.ts" />
+    <TypeScriptCompile Include="src\app\services\modelCalculation.service.ts" />
     <TypeScriptCompile Include="src\app\tests\app-root.component.spec.ts" />
     <TypeScriptCompile Include="src\app\components\app-root.component.ts" />
     <TypeScriptCompile Include="src\app\modules\app-root.module.ts" />

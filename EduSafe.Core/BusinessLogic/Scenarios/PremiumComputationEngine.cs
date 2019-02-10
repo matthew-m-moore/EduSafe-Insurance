@@ -31,10 +31,11 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
             IsPremiumComputed = false;
         }
 
-        public PremiumComputationResult ComputePremiumResult(int startingPeriod = 0, bool isNewStudent = true)
+        public PremiumComputationResult ComputePremiumResult(int? startingPeriod = null, bool isNewStudent = true)
         {
-            var enrollmentStateTimeSeries = RepricingModel.RollForwardEnrollmentStates(_startingPeriod ?? startingPeriod);
-            var servicingCosts = RepricingModel.RollForwardServicingCosts(_startingPeriod ?? startingPeriod, isNewStudent);
+            var rollForwardPeriod = startingPeriod ?? _startingPeriod.GetValueOrDefault(0);
+            var enrollmentStateTimeSeries = RepricingModel.RollForwardEnrollmentStates(rollForwardPeriod);
+            var servicingCosts = RepricingModel.RollForwardServicingCosts(rollForwardPeriod, isNewStudent);
 
             var premium = PremiumCalculation.CalculatePremium(enrollmentStateTimeSeries, servicingCosts);
             IsPremiumComputed = true;

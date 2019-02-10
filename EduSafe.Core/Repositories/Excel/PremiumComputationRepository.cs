@@ -66,6 +66,18 @@ namespace EduSafe.Core.Repositories
             return scenariosDictionary;
         }
 
+        public PremiumComputationEngine GetPremiumComputationScenario(EnrollmentModelScenarioRecord enrollmentModelScenarioRecord)
+        {
+            var premiumComputationEngine = LoadPremiumComputationScenario(enrollmentModelScenarioRecord);
+            return premiumComputationEngine;
+        }
+
+        public Dictionary<string, EnrollmentModelScenarioRecord> GetEnrollmentModelScenariosByName()
+        {
+            var scenariosDictionaryByName = _enrollmentModelScenarios.ToDictionary(s => s.Scenario, s => s);
+            return scenariosDictionaryByName;
+        }
+
         private PremiumComputationEngine LoadPremiumComputationScenario(EnrollmentModelScenarioRecord enrollmentModelScenario)
         {
             Console.WriteLine(string.Format("Loading scenario '{0}'...", enrollmentModelScenario.Scenario));

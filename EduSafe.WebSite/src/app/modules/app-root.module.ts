@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { RoutingModule } from '../modules/routing.module';
 
@@ -10,7 +11,10 @@ import { AppRootComponent } from '../components/app-root.component';
 import { HomeComponent } from '../components/home.component';
 import { ModelComponent } from '../components/model.component';
 
-import { ModelCalculationService} from '../services/modelCalculationService';
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { ModelCalculationService } from '../services/modelCalculation.service';
+import { CollegeDataService } from '../services/collegeData.service';
+import { CollegeDataSearchService } from '../services/collegeDataSearch.service';
 
 @NgModule({
   imports: [
@@ -18,7 +22,14 @@ import { ModelCalculationService} from '../services/modelCalculationService';
     CommonModule,
     FormsModule,
     HttpModule,
-    RoutingModule
+    HttpClientModule,
+    RoutingModule,
+    HttpClientInMemoryWebApiModule.forRoot(
+      CollegeDataService,
+      {
+        dataEncapsulation: false,
+        passThruUnknownUrl: true
+      })
   ],
   declarations: [
     AppRootComponent,
@@ -26,7 +37,8 @@ import { ModelCalculationService} from '../services/modelCalculationService';
     ModelComponent
   ],
   providers: [
-    ModelCalculationService
+    ModelCalculationService,
+    CollegeDataSearchService
   ],
   bootstrap: [
     AppRootComponent

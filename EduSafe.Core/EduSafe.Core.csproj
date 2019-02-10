@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\Containers\AnalyticalPremiumCalculationCashFlow.cs" />
+    <Compile Include="BusinessLogic\Containers\CollegeMajorData.cs" />
     <Compile Include="BusinessLogic\Containers\CompoundKeys\VectorAssignmentEntry.cs" />
     <Compile Include="BusinessLogic\Scenarios\PremiumComputationEngine.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumCalculationModelInput.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="BusinessLogic\Vectors\Vector.cs" />
     <Compile Include="Interfaces\IParameterizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\Excel\CollegeMajorDataRepository.cs" />
     <Compile Include="Repositories\Excel\Converters\CostOrFeeConverter.cs" />
     <Compile Include="Repositories\Excel\Converters\DayCountConventionConverter.cs" />
     <Compile Include="Repositories\Excel\Converters\EnrollmentModelConverter.cs" />

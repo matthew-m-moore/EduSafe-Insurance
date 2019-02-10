@@ -120,9 +120,7 @@ namespace EduSafe.Common.Utilities
         {
             var considerDays = false;
             var numberOfMonths = MonthsBetweenTwoDates(startDate, endDate, considerDays);
-
-            int startingDay; int endingDay;
-            var numberOfDays = DifferenceInDaysThirty360(startDate, endDate, out startingDay, out endingDay);
+            var numberOfDays = DifferenceInDaysThirty360(startDate, endDate, out int startingDay, out int endingDay);
 
             // If there is no difference in months, just count the difference in days
             if (numberOfMonths == 0)

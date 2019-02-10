@@ -1,6 +1,8 @@
+import { ModelOutputHeaders } from './modelOutputHeaders';
 import { ModelOutputEntry } from './modelOutputEntry';
 
 export class ModelOutputSummary {
   OutputTitle: string;
-  ModelOutputEntries: ModelOutputEntry[]
+  ModelOutputHeaders: ModelOutputHeaders;
+  ModelOutputEntries: ModelOutputEntry[];
 }

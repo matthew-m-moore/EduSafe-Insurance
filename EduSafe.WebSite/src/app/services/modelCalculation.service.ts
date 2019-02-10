@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Headers } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 
 import { ModelInputEntry } from '../classes/modelInputEntry';
 import { ModelOutputSummary } from '../classes/modelOutputSummary';
