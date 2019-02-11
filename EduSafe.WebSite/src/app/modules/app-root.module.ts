@@ -11,9 +11,7 @@ import { AppRootComponent } from '../components/app-root.component';
 import { HomeComponent } from '../components/home.component';
 import { ModelComponent } from '../components/model.component';
 
-import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { ModelCalculationService } from '../services/modelCalculation.service';
-import { CollegeDataService } from '../services/collegeData.service';
 import { CollegeDataSearchService } from '../services/collegeDataSearch.service';
 
 @NgModule({
@@ -23,13 +21,7 @@ import { CollegeDataSearchService } from '../services/collegeDataSearch.service'
     FormsModule,
     HttpModule,
     HttpClientModule,
-    RoutingModule,
-    HttpClientInMemoryWebApiModule.forRoot(
-      CollegeDataService,
-      {
-        dataEncapsulation: false,
-        passThruUnknownUrl: true
-      })
+    RoutingModule
   ],
   declarations: [
     AppRootComponent,

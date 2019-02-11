@@ -1,25 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Http } from '@angular/http';
+
+import { CollegeMajorData } from '../classes/collegeMajorData'
 
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 
 export class CollegeDataSearchService {
   collegesListInMemory: string[];
 
-  private collegesUrl = 'api/collegesList';
-  private collegeMajorsUrl = 'api/collegeMajors';
+  private collegesUrl = '//localhost:57097/api/search/colleges';
+  private collegeMajorsUrl = '//localhost:57097/api/search/collegeMajor';
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private http: Http) { }
 
-  searchColleges(searchText: string): Observable<string[]> {
-    return this.httpClient
-      .get<string[]>(`${this.collegesUrl}/?collegeName=${searchText}`).pipe();
+  searchColleges(collegeName: string): Observable<string[]> {
+    return this.http
+      .get(`${this.collegesUrl}/?collegeName=${collegeName}`).pipe(map(res => res.json()));
   }
 
-  searchCollegeMajors(searchText: string): Observable<string[]> {
-    return this.httpClient
-      .get<string[]>(`${this.collegeMajorsUrl}/?description=${searchText}`).pipe();
+  searchCollegeMajors(description: string): Observable<CollegeMajorData[]> {
+    return this.http
+      .get(`${this.collegeMajorsUrl}/?description=${description}`).pipe(map(res => res.json()));
   }
 }

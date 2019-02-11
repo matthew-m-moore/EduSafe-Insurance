@@ -76,7 +76,7 @@
     <Compile Include="BusinessLogic\Vectors\Vector.cs" />
     <Compile Include="Interfaces\IParameterizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\Excel\CollegeMajorDataRepository.cs" />
+    <Compile Include="Repositories\Excel\CollegeDataRepository.cs" />
     <Compile Include="Repositories\Excel\Converters\CostOrFeeConverter.cs" />
     <Compile Include="Repositories\Excel\Converters\DayCountConventionConverter.cs" />
     <Compile Include="Repositories\Excel\Converters\EnrollmentModelConverter.cs" />

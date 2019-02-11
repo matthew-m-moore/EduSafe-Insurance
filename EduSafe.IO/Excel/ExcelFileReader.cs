@@ -190,9 +190,9 @@ namespace EduSafe.IO.Excel
         /// <summary>
         /// Pulls the raw data rows from a tabe in the Excel workbook provide. Assumes that only
         /// one block of data exists in the tab, but does not make any assumptiongs about where the
-        /// headers of that data might be.
+        /// headers of that data might be unless a boolean option is provided.
         /// </summary>
-        public List<IXLRangeRow> GetExcelDataRowsFromWorksheet(string tabName)
+        public List<IXLRangeRow> GetExcelDataRowsFromWorksheet(string tabName, bool dataHasOneRowOfHeaders = false)
         {
             var doesWorkbookContainSpecifiedTab = _excelWorksheetTabNames.Contains(tabName);
             if (!doesWorkbookContainSpecifiedTab)
@@ -201,8 +201,6 @@ namespace EduSafe.IO.Excel
             }
 
             var excelWorksheet = _excelWorkbook.Worksheet(tabName);
-
-            var dataHasOneRowOfHeaders = false;
             var dataRows = GetExcelDataRowsFromWorksheet(excelWorksheet, dataHasOneRowOfHeaders, out ExcelHeadersRow headersRow);
 
             // Note that the headers row out parameter is discarded, since these may not be the headers at all

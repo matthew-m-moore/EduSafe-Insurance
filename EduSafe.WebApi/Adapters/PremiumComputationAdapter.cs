@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using EduSafe.Common.Utilities;
 using EduSafe.Core.Repositories;
-using EduSafe.Core.Repositories.Excel;
 using EduSafe.WebApi.Models;
 
 namespace EduSafe.WebApi.Adapters
@@ -12,7 +11,6 @@ namespace EduSafe.WebApi.Adapters
     internal class PremiumComputationAdapter
     {
         private const string _websiteScenarioDataFile = "EduSafe.WebApi.App_Data.EduSafe-Website-Scenario-Data.xlsx";
-        private const string _websiteCollegeMajorDataFile = "EduSafe.WebApi.App_Data.EduSafe-Website-College-Major-Data.xlsx";
 
         private const string _freshman = "Freshman Year";
         private const string _sophmore = "Sophmore Year";
@@ -25,22 +23,19 @@ namespace EduSafe.WebApi.Adapters
         private const string _forProfitCollege = "For-Profit College";
 
         private static Stream _websiteScenarioDataFileStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(_websiteScenarioDataFile);
-        private static Stream _websiteCollegeMajorDataFileStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(_websiteCollegeMajorDataFile);
         private readonly List<int> _incomeCoverageMonths = new List<int> { 3, 6, 12 };
 
         private PremiumComputationRepository _premiumComputationRepository;
-        private CollegeMajorDataRepository _collegeMajorDataRepository;
 
         internal PremiumComputationAdapter()
         {
             _premiumComputationRepository = new PremiumComputationRepository(_websiteScenarioDataFileStream);
-            _collegeMajorDataRepository = new CollegeMajorDataRepository(_websiteCollegeMajorDataFileStream);
         }
 
         internal ModelOutputSummary RunPremiumComputationScenarios(ModelInputEntry modelInputEntry)
         {
             var baseScenariosDictionary = _premiumComputationRepository.GetEnrollmentModelScenariosByName();
-            var collegeMajorDateDictionary = _collegeMajorDataRepository.CollegeMajorDataDictionary;
+            var collegeMajorDateDictionary = CollegeDataAdapter.CollegeMajorDataRepository.CollegeMajorDataDictionary;
 
             var schoolType = modelInputEntry.PublicOrPrivateSchool;
             var baseScenario = baseScenariosDictionary[schoolType];

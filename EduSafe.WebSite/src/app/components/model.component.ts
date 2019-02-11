@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { ModelInputEntry } from '../classes/modelInputEntry';
 import { ModelOutputSummary } from '../classes/modelOutputSummary';
+import { CollegeMajorData } from '../classes/collegeMajorData';
 
 import { ModelCalculationService } from '../services/modelCalculation.service';
 import { CollegeDataSearchService } from '../services/collegeDataSearch.service';
@@ -21,7 +22,7 @@ export class ModelComponent implements OnInit {
 
   collegeTypesList = [ 'Public School', 'Private School', 'For-Profit College'];
   collegesList: Observable<string[]>;
-  collegeMajorsList: Observable<string[]>;
+  collegeMajorsDataList: Observable<CollegeMajorData[]>;
 
   public isCalculated = false;
   private collegeSearchTerms = new Subject<string>();
@@ -46,8 +47,19 @@ export class ModelComponent implements OnInit {
     this.collegeMajorSearchTerms.next(searchText.toUpperCase());
   }
 
+  updateSchoolType() {
+    // It might make sense to look this up at some point, rather than leave it to the user
+  }
+
   updateIncomeCoverageAmount(collegeMajor) {
-    this.modelInputEntry.IncomeCoverageAmount = collegeMajor.medianIncome;
+    if (this.collegeMajorsDataList.subscribe(result =>
+        result.some(d => d.CollegeMajor === collegeMajor))) {
+
+      this.collegeMajorsDataList.subscribe(result => {
+          var collegeMajorData = result.find(d => d.CollegeMajor === collegeMajor);
+          this.modelInputEntry.IncomeCoverageAmount = collegeMajorData.MedianSalary;
+        });
+    }
   }
 
   submitForCalculation(): void {
@@ -75,7 +87,7 @@ export class ModelComponent implements OnInit {
       switchMap((searchText: string) =>
         this.collegeDataSearchService.searchColleges(searchText)));
 
-    this.collegeMajorsList = this.collegeMajorSearchTerms.pipe(
+    this.collegeMajorsDataList = this.collegeMajorSearchTerms.pipe(
       debounceTime(300),
       distinctUntilChanged(),
       switchMap((searchText: string) =>

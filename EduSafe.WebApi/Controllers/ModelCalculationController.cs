@@ -1,8 +1,7 @@
-﻿using EduSafe.WebApi.Adapters;
-using EduSafe.WebApi.Models;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Web.Http;
+using EduSafe.WebApi.Adapters;
+using EduSafe.WebApi.Models;
 
 namespace Dream.WebApp.Controllers
 {
@@ -30,12 +29,6 @@ namespace Dream.WebApp.Controllers
         [HttpPut]
         public ModelOutputSummary Put(ModelInputEntry modelInputEntry)
         {
-            //var modelOutputSummary = new ModelOutputSummary
-            //{
-            //    OutputTitle = "The Model Calculation Submission Works",
-            //    ModelOutputEntries = _modelOutputEntries
-            //};
-
             var premiumComputationAdapter = new PremiumComputationAdapter();
             var modelOutputSummary = premiumComputationAdapter.RunPremiumComputationScenarios(modelInputEntry);
 

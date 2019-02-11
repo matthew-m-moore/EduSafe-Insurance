@@ -2,12 +2,13 @@
 {{ modelOutputSummary.OutputTitle }}
 <div *ngIf="!isCalculated">
   <label>Select the name of your college. </label>
-  <input [(ngModel)] ="modelInputEntry.CollegeName"
-         #searchBox (keyup)="searchCollege(searchBox.value)"
+  <input [(ngModel)]="modelInputEntry.CollegeName"
+         #collegesSearchBox (keyup)="searchCollege(collegesSearchBox.value)"
+         (ngModelChange)="updateSchoolType($event)"
          placeholder="(Type to auto-complete...)" />
   <div>
     <div *ngFor="let college of collegesList | async">
-      {{ college.collegeName }}
+      {{ college }}
     </div>
   </div>
   <br clear="all" />
@@ -22,13 +23,13 @@
   <br clear="all" />
 
   <label>What is or will be your major? </label>
-  <input [(ngModel)] ="modelInputEntry.CollegeMajor"
-         #searchBox (keyup)="searchCollegeMajor(searchBox.value)"
+  <input [(ngModel)]="modelInputEntry.CollegeMajor"
+         #collegeMajorSearchBox (keyup)="searchCollegeMajor(collegeMajorSearchBox.value)"
          (ngModelChange)="updateIncomeCoverageAmount($event)"
          placeholder="(Type to auto-complete...)" />
   <div>
-    <div *ngFor="let collegeMajor of collegeMajorsList | async">
-      {{ collegeMajor.description }}
+    <div *ngFor="let collegeMajorData of collegeMajorsDataList | async">
+      {{ collegeMajorData.CollegeMajor }}
     </div>
   </div>
   <br clear="all" />
@@ -50,7 +51,7 @@
   <button type="button" (click)="submitForCalculation()">Find Out Your Monthly Payment</button>
 </div>
 <div *ngIf="isCalculated">
-  <table>
+  <table align="center">
     <thead>
       <tr>
         <td>{{modelOutputSummary.ModelOutputHeaders.CoverageMonths}}</td>

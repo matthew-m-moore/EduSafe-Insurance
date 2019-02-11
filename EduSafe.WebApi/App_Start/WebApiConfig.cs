@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using EduSafe.WebApi.Adapters;
+using System.Web.Http;
 using System.Web.Http.Cors;
 
 namespace EduSafe.WebApi
@@ -10,6 +11,8 @@ namespace EduSafe.WebApi
             var cors = new EnableCorsAttribute("*", "*", "*");
             config.EnableCors();
             config.MapHttpAttributeRoutes();
+
+            CollegeDataAdapter.LoadDataRepository();
         }
     }
 }
