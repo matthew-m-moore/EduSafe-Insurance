@@ -75,6 +75,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <EmbeddedResource Include="Resources\Dropout-Rate-Test-Scenarios-Single.xlsx" />
+    <EmbeddedResource Include="Resources\EduSafe-Website-For-Profit-Scenario-Testing-Small.xlsx" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
