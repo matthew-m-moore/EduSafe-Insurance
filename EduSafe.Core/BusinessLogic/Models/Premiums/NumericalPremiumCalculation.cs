@@ -26,8 +26,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             var targetValue = 0.0;
             var premium = NumericalSearchUtility.NewtonRaphsonWithBisection(
                     CalculateCashFlows,
-                    targetValue,
-                    floorValue: 0.0);
+                    targetValue);
 
             SetCalculatedCashFlows();
             return premium;

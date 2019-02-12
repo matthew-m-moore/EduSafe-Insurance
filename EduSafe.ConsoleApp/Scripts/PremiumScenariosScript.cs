@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using EduSafe.ConsoleApp.Interfaces;
 using EduSafe.Core.BusinessLogic.Containers;
+using EduSafe.Core.BusinessLogic.Scenarios;
 using EduSafe.Core.Repositories;
 using EduSafe.IO.Excel;
 
@@ -73,7 +74,7 @@ namespace EduSafe.ConsoleApp.Scripts
             }
         }
 
-        private void RunAllScenarios(Dictionary<int, Core.BusinessLogic.Scenarios.PremiumComputationEngine> premiumComputationScenarios)
+        private void RunAllScenarios(Dictionary<int, PremiumComputationEngine> premiumComputationScenarios)
         {
             var listOfPremiumScenariosOutput = new List<PremiumScenariosOutput>();
             foreach (var premiumComputationScenario in premiumComputationScenarios)
@@ -107,6 +108,8 @@ namespace EduSafe.ConsoleApp.Scripts
         {
             var premiumComputationScenario = premiumComputationRepository.GetPremiumComputationScenarioById(scenarioId);
             var premiumComputationResult = premiumComputationScenario.ComputePremiumResult();
+            var premiumNumericalComputationScenario = premiumComputationRepository.GetPremiumComputationScenarioById(scenarioId, true);
+            var premiumNumericalComputationResult = premiumNumericalComputationScenario.ComputePremiumResult();
             Console.WriteLine(string.Format("Scenario Completed: {0}", premiumComputationResult.ScenarioName));
 
             Console.WriteLine("Preparing results...");
@@ -128,7 +131,8 @@ namespace EduSafe.ConsoleApp.Scripts
             excelFileWriter.AddWorksheetForListOfData(new List<PremiumScenarioSummary> { premiumScenarioSummary }, "Summary");
             excelFileWriter.AddWorksheetForListOfData(premiumComputationResult.EnrollmentStateTimeSeries, "Enrollment Model");
             excelFileWriter.AddWorksheetForDataTable(premiumComputationResult.ServicingCosts, "Servicing Costs");
-            excelFileWriter.AddWorksheetForListOfData(analyticalPremiumCalculationCashFlows, "Cash Flows");
+            excelFileWriter.AddWorksheetForListOfData(analyticalPremiumCalculationCashFlows, "Analytical Cash Flows");
+            excelFileWriter.AddWorksheetForListOfData(premiumNumericalComputationResult.PremiumCalculationCashFlows, "Numerical Cash Flows");
             excelFileWriter.ExportWorkbook(openFileOnSave: true);
             Console.WriteLine("Run Scenario Id #" + scenarioId + " Complete.");
         }

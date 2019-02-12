@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using EduSafe.Common;
 using EduSafe.Common.Utilities;
+using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.Core.Repositories;
+using EduSafe.IO.Excel.Records;
 using EduSafe.WebApi.Models;
 
 namespace EduSafe.WebApi.Adapters
@@ -39,14 +43,7 @@ namespace EduSafe.WebApi.Adapters
 
             var schoolType = modelInputEntry.PublicOrPrivateSchool;
             var baseScenario = baseScenariosDictionary[schoolType];
-
-            baseScenario.AnnualIncome = modelInputEntry.IncomeCoverageAmount;
-            baseScenario.UnemploymentTarget = collegeMajorDateDictionary[modelInputEntry.CollegeMajor].UnemploymentRate;
-
-            if (schoolType == _privateSchool)
-                baseScenario.UnemploymentTarget = collegeMajorDateDictionary[modelInputEntry.CollegeMajor].LowEndUnemploymentRate;
-            if (schoolType == _forProfitCollege)
-                baseScenario.UnemploymentTarget = collegeMajorDateDictionary[modelInputEntry.CollegeMajor].HighEndUnemploymentRate;
+            baseScenario = AdjustBaseScenario(collegeMajorDateDictionary, baseScenario, modelInputEntry, schoolType);
 
             var startDate = modelInputEntry.CollegeStartDate;
             var endDate = modelInputEntry.ExpectedGraduationDate;
@@ -89,6 +86,32 @@ namespace EduSafe.WebApi.Adapters
 
             modelOutputSummary.OutputTitle = "Results Computed Successfully!";
             return modelOutputSummary;
+        }
+
+        private EnrollmentModelScenarioRecord AdjustBaseScenario(
+            ConcurrentDictionary<string, CollegeMajorData> collegeMajorDateDictionary,
+            EnrollmentModelScenarioRecord baseScenario,
+            ModelInputEntry modelInputEntry, 
+            string schoolType)
+        {
+            baseScenario.AnnualIncome = modelInputEntry.IncomeCoverageAmount;
+            baseScenario.UnemploymentTarget = collegeMajorDateDictionary[modelInputEntry.CollegeMajor].UnemploymentRate;
+
+            if (schoolType == _privateSchool)
+                baseScenario.UnemploymentTarget = collegeMajorDateDictionary[modelInputEntry.CollegeMajor].LowEndUnemploymentRate;
+            if (schoolType == _forProfitCollege)
+                baseScenario.UnemploymentTarget = collegeMajorDateDictionary[modelInputEntry.CollegeMajor].HighEndUnemploymentRate;
+
+            baseScenario.UnemploymentTarget *= Constants.PercentagePoints;
+
+            var derivedUnemploymentTarget = Constants.PercentagePoints -
+                (baseScenario.DropOutTarget + baseScenario.GradSchoolTarget + baseScenario.HireEarlyTarget);
+            baseScenario.UnemploymentTarget = Math.Min(baseScenario.UnemploymentTarget, derivedUnemploymentTarget);
+
+            baseScenario.HireTarget = Constants.PercentagePoints -
+                (baseScenario.DropOutTarget + baseScenario.GradSchoolTarget + baseScenario.HireEarlyTarget + baseScenario.UnemploymentTarget);
+
+            return baseScenario;
         }
 
         private List<int> DetermineRollForwardPeriods(DateTime startDate, DateTime endDate, out ModelOutputHeaders modelOutputHeaders)

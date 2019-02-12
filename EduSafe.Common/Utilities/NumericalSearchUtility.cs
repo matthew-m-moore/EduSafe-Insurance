@@ -29,17 +29,14 @@ namespace EduSafe.Common.Utilities
             // Adjust the function by the target value, so that we can search for a value equal to zero
             Func<double, double> numericalSearchFunction = (x => functionToSearch(x) - searchTargetValue);
 
-            double highEndOfSearchBracket;
-            double lowEndOfSearchBracket;
-
             var canFindSearchBracket = FindSearchBracket(
                 numericalSearchFunction,
                 DoesFunctionCrossZero,
                 targetPrecision,
                 floorValue,
                 ceilingValue,
-                out lowEndOfSearchBracket,
-                out highEndOfSearchBracket);
+                out double lowEndOfSearchBracket,
+                out double highEndOfSearchBracket);
 
             // Return Not-a-Number and move on if no bracket can be found
             if (!canFindSearchBracket) return double.NaN;

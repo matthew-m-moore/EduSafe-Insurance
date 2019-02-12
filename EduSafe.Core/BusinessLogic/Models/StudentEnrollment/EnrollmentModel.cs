@@ -17,7 +17,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
         public StudentEnrollmentModelInput StudentEnrollmentModelInput { get; }
         public List<EnrollmentStateArray> EnrollmentStateTimeSeries { get; private set; }
           
-        private MultiplicativeVector _flatMultiplicativeVector;     
+        private readonly MultiplicativeVector _flatMultiplicativeVector;     
 
         public EnrollmentModel(StudentEnrollmentModelInput studentEnrollmentModelInput)
         {
@@ -44,12 +44,13 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
                     StudentEnrollmentModelInput,            
                     _flatMultiplicativeVector);
 
-                NumericalSearchUtility.NewtonRaphsonWithBisection(
+                var resultRate = NumericalSearchUtility.NewtonRaphsonWithBisection(
                     dropOutRateParameterizer.Parameterize,
                     targetValue,
                     floorValue: 0.0,
                     ceilingValue: 1.0);
 
+                dropOutRateParameterizer.Parameterize(resultRate);
                 EnrollmentStateTimeSeries = dropOutRateParameterizer.EnrollmentStateTimeSeries;
             }
             else
@@ -78,11 +79,13 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
             {
                 var targetValue = postGraduationTarget.TargetValue;
                 
-                NumericalSearchUtility.NewtonRaphsonWithBisection(
+                var resultRate = NumericalSearchUtility.NewtonRaphsonWithBisection(
                     postGraduationRateParameterizer.Parameterize,
                     targetValue,
                     floorValue: 0.0,
                     ceilingValue: 1.0);
+
+                postGraduationRateParameterizer.Parameterize(resultRate);
             }
             else
             {
@@ -112,11 +115,13 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
                 {
                     var targetValue = earlyHireTarget.TargetValue;
 
-                    NumericalSearchUtility.NewtonRaphsonWithBisection(
+                    var resultRate = NumericalSearchUtility.NewtonRaphsonWithBisection(
                         earlyHireRateParameterizer.Parameterize,
                         targetValue,
                         floorValue: 0.0,
                         ceilingValue: ceilingValue);
+
+                    earlyHireRateParameterizer.Parameterize(resultRate);
                 }
                 else
                 {

@@ -40,22 +40,22 @@ namespace EduSafe.Core.Repositories
             Initialize(vectorRepository, interestRateCurveRepository);
         }
 
-        public PremiumComputationEngine GetPremiumComputationScenarioById(int scenarioId)
+        public PremiumComputationEngine GetPremiumComputationScenarioById(int scenarioId, bool useNumericalComputation = false)
         {
             var enrollmentModelScenario = _enrollmentModelScenarios.SingleOrDefault(e => e.Id == scenarioId);
             if (enrollmentModelScenario == null)
                 throw new Exception(string.Format("ERROR: No scenario found for Id #: {0}.", scenarioId));
 
-            var premiumComputationEngine = LoadPremiumComputationScenario(enrollmentModelScenario);
+            var premiumComputationEngine = LoadPremiumComputationScenario(enrollmentModelScenario, useNumericalComputation);
             return premiumComputationEngine;
         }
 
-        public Dictionary<int, PremiumComputationEngine> GetPremiumComputationScenarios()
+        public Dictionary<int, PremiumComputationEngine> GetPremiumComputationScenarios(bool useNumericalComputation = false)
         {
             var scenariosDictionary = new Dictionary<int, PremiumComputationEngine>();
             foreach (var enrollmentModelScenario in _enrollmentModelScenarios)
             {
-                var premiumComputationEngine = LoadPremiumComputationScenario(enrollmentModelScenario);
+                var premiumComputationEngine = LoadPremiumComputationScenario(enrollmentModelScenario, useNumericalComputation);
 
                 if (scenariosDictionary.ContainsKey(enrollmentModelScenario.Id))
                     throw new Exception("ERROR: Duplicate scenario Id, please check inputs. Scenario Id must be unique");
@@ -66,9 +66,10 @@ namespace EduSafe.Core.Repositories
             return scenariosDictionary;
         }
 
-        public PremiumComputationEngine GetPremiumComputationScenario(EnrollmentModelScenarioRecord enrollmentModelScenarioRecord)
+        public PremiumComputationEngine GetPremiumComputationScenario(EnrollmentModelScenarioRecord enrollmentModelScenarioRecord,
+            bool useNumericalComputation = false)
         {
-            var premiumComputationEngine = LoadPremiumComputationScenario(enrollmentModelScenarioRecord);
+            var premiumComputationEngine = LoadPremiumComputationScenario(enrollmentModelScenarioRecord, useNumericalComputation);
             return premiumComputationEngine;
         }
 
@@ -78,7 +79,7 @@ namespace EduSafe.Core.Repositories
             return scenariosDictionaryByName;
         }
 
-        private PremiumComputationEngine LoadPremiumComputationScenario(EnrollmentModelScenarioRecord enrollmentModelScenario)
+        private PremiumComputationEngine LoadPremiumComputationScenario(EnrollmentModelScenarioRecord enrollmentModelScenario, bool useNumericalComputation)
         {
             Console.WriteLine(string.Format("Loading scenario '{0}'...", enrollmentModelScenario.Scenario));
 
@@ -86,8 +87,9 @@ namespace EduSafe.Core.Repositories
                 .ConvertEnrollmentModelScenarioToEnrollmentModelInput(enrollmentModelScenario);
             var servicingCostsModel = _servicingCostsModelRepository
                 .GetServicingCostsModel(enrollmentModelScenario.TotalMonths);
-            var premiumCalculation = _premiumCalculationConverter
-                .GetAnalyticalPremiumCalculation(enrollmentModelScenario);
+            var premiumCalculation = useNumericalComputation 
+                ? _premiumCalculationConverter.GetNumericalPremiumCalculation(enrollmentModelScenario)
+                : _premiumCalculationConverter.GetAnalyticalPremiumCalculation(enrollmentModelScenario);
 
             var startingPeriod = enrollmentModelScenario.StartPeriod - 1;
             var repricingModel = new RollForwardRepricingModel(enrollmentModel, servicingCostsModel);
