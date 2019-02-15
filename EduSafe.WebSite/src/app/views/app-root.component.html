@@ -5,7 +5,9 @@
   <router-outlet></router-outlet>
   <div *ngIf="!calculateIsClicked">
     <edusafe-home></edusafe-home>
-    <button type="button" (click)="revealModelInputs()">Calculate Your Coverage</button>
+    <button type="button" class="btn btn-primary" (click)="revealModelInputs()">
+      Calculate Your Coverage
+    </button>
   </div>
   <div *ngIf="calculateIsClicked">
     <edusafe-model></edusafe-model>

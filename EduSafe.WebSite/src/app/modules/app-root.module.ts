@@ -5,11 +5,16 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+
 import { RoutingModule } from '../modules/routing.module';
 
 import { AppRootComponent } from '../components/app-root.component';
 import { HomeComponent } from '../components/home.component';
 import { ModelComponent } from '../components/model.component';
+import { ModelOuputComponent } from '../components/output.component';
 
 import { ModelCalculationService } from '../services/modelCalculation.service';
 import { CollegeDataSearchService } from '../services/collegeDataSearch.service';
@@ -21,12 +26,16 @@ import { CollegeDataSearchService } from '../services/collegeDataSearch.service'
     FormsModule,
     HttpModule,
     HttpClientModule,
-    RoutingModule
+    TypeaheadModule.forRoot(),
+    BsDatepickerModule.forRoot(),
+    ButtonsModule.forRoot(),
+    RoutingModule  
   ],
   declarations: [
     AppRootComponent,
     HomeComponent,
-    ModelComponent
+    ModelComponent,
+    ModelOuputComponent
   ],
   providers: [
     ModelCalculationService,

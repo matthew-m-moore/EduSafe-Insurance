@@ -1,76 +1,66 @@
-<body>[ Model Goes Here ]</body>
 {{ modelOutputSummary.OutputTitle }}
 <div *ngIf="!isCalculated">
-  <label>Select the name of your college. </label>
-  <input [(ngModel)]="modelInputEntry.CollegeName"
-         #collegesSearchBox (keyup)="searchCollege(collegesSearchBox.value)"
-         (ngModelChange)="updateSchoolType($event)"
-         placeholder="(Type to auto-complete...)" />
-  <div>
-    <div *ngFor="let college of collegesList | async">
-      {{ college }}
-    </div>
-  </div>
-  <br clear="all" />
+  <form>
+    <input [(ngModel)]="modelInputEntry.CollegeName"
+           [typeahead]="collegesList"
+           #collegesSearchBox (keyup)="searchCollege(collegesSearchBox.value)"
+           (ngModelChange)="checkIfPaymentCanBeCalculated()"
+           name="collegeName"
+           class="form-control"
+           placeholder="What college do you or will you attend?" />
+    <br clear="all" />
 
-  <label>What kind of school do you or will you attend? </label>
-  <select [(ngModel)]="modelInputEntry.PublicOrPrivateSchool"
-          placeholder="(Select from options...)">
-    <option *ngFor="let collegeType of collegeTypesList" [ngValue]="collegeType">
-      {{ collegeType }}
-    </option>
-  </select>
-  <br clear="all" />
+    <select required (change)="updateSchoolType($event.target.value)"
+            class="form-control">
+      <option disabled selected hidden>What kind of school do you or will you attend?</option>
+      <option *ngFor="let collegeType of collegeTypesList" [ngValue]="collegeType">
+        {{ collegeType }}
+      </option>
+    </select>
+    <br clear="all" />
 
-  <label>What is or will be your major? </label>
-  <input [(ngModel)]="modelInputEntry.CollegeMajor"
-         #collegeMajorSearchBox (keyup)="searchCollegeMajor(collegeMajorSearchBox.value)"
-         (ngModelChange)="updateIncomeCoverageAmount($event)"
-         placeholder="(Type to auto-complete...)" />
-  <div>
-    <div *ngFor="let collegeMajorData of collegeMajorsDataList | async">
-      {{ collegeMajorData.CollegeMajor }}
-    </div>
-  </div>
-  <br clear="all" />
+    <input [(ngModel)]="modelInputEntry.CollegeMajor"
+           [typeahead]="collegeMajorsList"
+           #collegeMajorSearchBox (keyup)="searchCollegeMajor(collegeMajorSearchBox.value)"
+           (ngModelChange)="updateIncomeCoverageAmount($event); checkIfPaymentCanBeCalculated()"
+           name="collegeMajor"
+           class="form-control"
+           placeholder="What is or will be your major?" />
+    <br clear="all" />
 
-  <label>Approximately when did you start college? </label>
-  <input type="date" [(ngModel)]="modelInputEntry.CollegeStartDate" />
-  <br clear="all" />
+    <input type="text"
+           [(ngModel)]="modelInputEntry.CollegeStartDate"
+           (ngModelChange)="checkIfPaymentCanBeCalculated()"
+           bsDatepicker
+           [bsConfig]="datepickerConfig"
+           name="startDate"
+           class="form-control"
+           placeholder="Approximately when did you or will you start college?" />
+    <br clear="all" />
 
-  <label>What is your expected graduation date? </label>
-  <input type="date" [(ngModel)]="modelInputEntry.ExpectedGraduationDate" />
-  <br clear="all" />
+    <input type="text"
+           [(ngModel)]="modelInputEntry.ExpectedGraduationDate"
+           (ngModelChange)="checkIfPaymentCanBeCalculated()"
+           bsDatepicker
+           [bsConfig]="datepickerConfig"
+           name="graduationDate"
+           class="form-control"
+           placeholder="What is your expected graduation date?" />
+    <br clear="all" />
 
-  <label>How much would you like to be covered? </label>
-  <input [(ngModel)]="modelInputEntry.IncomeCoverageAmount"
-         placeholder="(Enter annual coverage amount)" />
-  <br clear="all" />
+    <input [(ngModel)]="modelInputEntry.IncomeCoverageAmount"
+           (ngModelChange)="checkIfPaymentCanBeCalculated()"
+           name="incomeAmount"
+           class="form-control"
+           placeholder="How much would you like to be covered annually?" />
+    <br clear="all" />
 
-  <br clear="all" />
-  <button type="button" (click)="submitForCalculation()">Find Out Your Monthly Payment</button>
+    <br clear="all" />
+    <button type="button" class="btn btn-primary"
+            (click)="submitForCalculation()"
+            [disabled]="!canPaymentBeCalculated">Find Out Your Monthly Payment</button>
+  </form>
 </div>
 <div *ngIf="isCalculated">
-  <table align="center">
-    <thead>
-      <tr>
-        <td>{{modelOutputSummary.ModelOutputHeaders.CoverageMonths}}</td>
-        <td>{{modelOutputSummary.ModelOutputHeaders.YearOneName}}</td>
-        <td>{{modelOutputSummary.ModelOutputHeaders.YearTwoName}}</td>
-        <td>{{modelOutputSummary.ModelOutputHeaders.YearThreeName}}</td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let modelOutputEntry of modelOutputSummary.ModelOutputEntries">
-        <td>{{modelOutputEntry.MonthsOfSalaryCoverage}}</td>
-        <td>{{modelOutputEntry.YearOneMonthlyPremiumAmount}}</td>
-        <td>{{modelOutputEntry.YearTwoMonthlyPremiumAmount}}</td>
-        <td>{{modelOutputEntry.YearThreeMonthlyPremiumAmount}}</td>
-      </tr>
-    </tbody>
-  </table>
-  <br clear="all" />
-  <button type="button" (click)="revealModelInputsAgain()">Want to Calculate Your Payment Again?</button>
-  <br clear="all" />
-  <button type="button" (click)="revealModelInputsAgain()">Email Me My Monthly Payment Results</button>
+  <edusafe-output></edusafe-output>
 </div>

@@ -1,0 +1,27 @@
+<div class="table-responsive">
+  <table align="center" class="table">
+    <thead>
+      <tr>
+        <td><b>{{ modelOutputSummary.ModelOutputHeaders.CoverageMonths }}</b></td>
+        <td><b>{{ modelOutputSummary.ModelOutputHeaders.YearOneName }}</b></td>
+        <td><b>{{ modelOutputSummary.ModelOutputHeaders.YearTwoName }}</b></td>
+        <td><b>{{ modelOutputSummary.ModelOutputHeaders.YearThreeName }}</b></td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let modelOutputEntry of modelOutputSummary.ModelOutputEntries">
+        <td>{{ modelOutputEntry.MonthsOfSalaryCoverage }}</td>
+        <td>${{ modelOutputEntry.YearOneMonthlyPremiumAmount | number: '1.0-0' }}</td>
+        <td>${{ modelOutputEntry.YearTwoMonthlyPremiumAmount | number: '1.0-0' }}</td>
+        <td>${{ modelOutputEntry.YearThreeMonthlyPremiumAmount | number: '1.0-0' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<br clear="all" />
+<button type="button" class="btn btn-primary"
+        (click)="revealModelInputsAgain()">Want to Calculate Your Payment Again?</button>
+<br clear="all" />
+<br clear="all" />
+<button type="button" class="btn btn-info"
+        (click)="revealModelInputsAgain()">Email Me My Monthly Payment Results</button>

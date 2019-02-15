@@ -4,6 +4,7 @@ import { Routes } from '@angular/router';
 
 import { HomeComponent } from '../components/home.component';
 import { ModelComponent } from '../components/model.component';
+import { ModelOuputComponent } from '../components/output.component';
 
 const appRoutes: Routes = [
   {
@@ -13,6 +14,10 @@ const appRoutes: Routes = [
   {
     path: 'edusafe-model',
     component: ModelComponent
+  },
+  {
+    path: 'edusafe-output',
+    component: ModelOuputComponent
   },
 ];
 

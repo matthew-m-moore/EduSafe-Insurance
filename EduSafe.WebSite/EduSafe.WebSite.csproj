@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="e2e\protractor.conf.js" />
+    <Content Include="src\app\styles\output.component.css" />
     <Content Include="src\assets\EduSafe_0_Logo.png" />
     <Content Include="src\assets\EduSafe_1_Comic.png" />
     <Content Include="src\assets\EduSafe_2_Comic.png" />
@@ -106,6 +107,7 @@
     <TypeScriptCompile Include="src\app\classes\modelOutputSummary.ts" />
     <TypeScriptCompile Include="src\app\components\home.component.ts" />
     <TypeScriptCompile Include="src\app\components\model.component.ts" />
+    <TypeScriptCompile Include="src\app\components\output.component.ts" />
     <TypeScriptCompile Include="src\app\modules\routing.module.ts" />
     <TypeScriptCompile Include="src\app\services\collegeDataSearch.service.ts" />
     <TypeScriptCompile Include="src\app\services\modelCalculation.service.ts" />
@@ -132,6 +134,7 @@
     <Content Include="tslint.json" />
     <Content Include="src\app\styles\home.component.css" />
     <Content Include="web.config" />
+    <Content Include="src\app\views\output.component.html" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
