@@ -7,7 +7,8 @@ import { Component } from '@angular/core';
 })
 
 export class AppRootComponent {
-  headerText = 'EduSafe - Securing Your Future';
+  titleText = 'Edu$afe';
+  subtitleText = '[ Securing Your Future ]';
 
   public calculateIsClicked = false;
 

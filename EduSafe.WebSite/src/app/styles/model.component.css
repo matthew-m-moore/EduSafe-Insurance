@@ -1,2 +1,7 @@
-﻿body {
+input {
+  margin-top: 1em;
+}
+
+select {
+  margin-top: 1em;
 }

@@ -1,7 +1,13 @@
 <div style="text-align:center">
-  <h1>
-    {{ headerText }}
-  </h1>
+  <div class="row row-bordered">
+    <div class="col-md-6 text-left" id="titleHeader">
+      <h1>{{ titleText }}</h1>
+    </div>
+    <div class="col-md-6 text-right" id="subtitleHeader">
+      <h3>{{ subtitleText }}</h3>
+    </div>
+  </div>
+  <div class="col-sm-12" id="headerBorder"></div>
   <router-outlet></router-outlet>
   <div *ngIf="!calculateIsClicked">
     <edusafe-home></edusafe-home>
