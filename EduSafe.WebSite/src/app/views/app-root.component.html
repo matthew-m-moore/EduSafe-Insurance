@@ -1,10 +1,17 @@
 <div style="text-align:center">
-  <div class="row row-bordered">
-    <div class="col-md-6 text-left" id="titleHeader">
+  <div class="row" style="margin: auto">
+    <div class="col-md-4 text-md-left text-center" id="titleHeader">
       <h1>{{ titleText }}</h1>
-    </div>
-    <div class="col-md-6 text-right" id="subtitleHeader">
       <h3>{{ subtitleText }}</h3>
+    </div>
+    <div class="col-md-8 text-md-right text-center" id="navigationHeader">
+      <ul class="navigation">
+        <li (click)="revealHomePage()">[ home ]</li>
+        <li (click)="revealModelInputs()">[ calc ]</li>
+        <li>[ login ]</li>
+        <li>[ contact ]</li>
+        <li>[ pay ]</li>
+      </ul>
     </div>
   </div>
   <div class="col-sm-12" id="headerBorder"></div>

@@ -12,6 +12,10 @@ export class AppRootComponent {
 
   public calculateIsClicked = false;
 
+  revealHomePage(): void {
+    this.calculateIsClicked = false;
+  }
+
   revealModelInputs(): void {
     this.calculateIsClicked = true;
   }
