@@ -40,7 +40,8 @@ h3 {
     }
 
 button {
-  margin: 1em;
+  margin-top: 1em;
+  margin-bottom: 2em;
 }
 
 #headerBorder {
@@ -58,6 +59,16 @@ button {
   background-color: #e8f7f8;
   margin: 0;
   padding: 0;
+}
+
+#footerContent {
+  background-color: #403f3f;
+  color: #aac3de;
+  font-size: 70%;
+  margin: 0;
+  padding: 2em;
+  padding-bottom: 20em;
+  flex-grow: 4;
 }
 
 @media only screen and (max-width: 767px) {
@@ -111,5 +122,15 @@ button {
     background-color: #c9ffde;
     margin: 0;
     padding: 0;  
+  }
+
+  #footerContent {
+    background-color: #403f3f;
+    color: #aac3de;
+    font-size: 50%;
+    margin: 0;
+    padding: 2em;
+    padding-bottom: 20em;
+    flex-grow: 4;
   }
 }

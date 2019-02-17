@@ -3,12 +3,13 @@ import { Http, Headers } from '@angular/http';
 
 import { ModelInputEntry } from '../classes/modelInputEntry';
 import { ModelOutputSummary } from '../classes/modelOutputSummary';
+import { Environment } from '../classes/environment';
 
 @Injectable()
 
 export class ModelCalculationService {
-  private webApiUrlGet = '//localhost:57097/api/calculate';
-  private webApiUrlPut = '//localhost:57097/api/calculate/premiums';
+  private webApiUrlGet = Environment.BaseApiUrl + '/api/calculate';
+  private webApiUrlPut = Environment.BaseApiUrl + '/api/calculate/premiums';
   private headers = new Headers({ 'Content-Type': 'application/json' });
 
   constructor(private http: Http) { }

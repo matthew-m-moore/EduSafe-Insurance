@@ -1,65 +1,83 @@
-{{ modelOutputSummary.OutputTitle }}
 <div *ngIf="!isCalculated">
   <form>
-    <input [(ngModel)]="modelInputEntry.CollegeName"
-           [typeahead]="collegesList"
-           #collegesSearchBox (keyup)="searchCollege(collegesSearchBox.value)"
-           (ngModelChange)="checkIfPaymentCanBeCalculated()"
-           name="collegeName"
-           class="form-control"
-           placeholder="What college do you or will you attend?" />
-    <br clear="all" />
+    <div class="form-group">
+      <label for="collegeNameField">What college do you or will you attend?</label>
+      <input [(ngModel)]="modelInputEntry.CollegeName"
+             [typeahead]="collegesList"
+             #collegesSearchBox (keyup)="searchCollege(collegesSearchBox.value)"
+             (ngModelChange)="checkIfPaymentCanBeCalculated()"
+             id="collegeNameField"
+             name="collegeName"
+             class="form-control"
+             placeholder="College Name" />
+    </div>
 
-    <select required (change)="updateSchoolType($event.target.value)"
-            class="form-control">
-      <option disabled selected hidden>What kind of school do you or will you attend?</option>
-      <option *ngFor="let collegeType of collegeTypesList" [ngValue]="collegeType">
-        {{ collegeType }}
-      </option>
-    </select>
-    <br clear="all" />
+    <div class="form-group">
+      <label for="schoolTypeField">What kind of school do you or will you attend?</label>
+      <select required (change)="updateSchoolType($event.target.value)"
+              id="schoolTypeField"
+              class="form-control">
+        <option class="defaultSelect" disabled selected hidden>Please Select</option>
+        <option *ngFor="let collegeType of collegeTypesList" [ngValue]="collegeType">
+          {{ collegeType }}
+        </option>
+      </select>
+    </div>
 
-    <input [(ngModel)]="modelInputEntry.CollegeMajor"
-           [typeahead]="collegeMajorsList"
-           #collegeMajorSearchBox (keyup)="searchCollegeMajor(collegeMajorSearchBox.value)"
-           (ngModelChange)="updateIncomeCoverageAmount($event); checkIfPaymentCanBeCalculated()"
-           name="collegeMajor"
-           class="form-control"
-           placeholder="What is or will be your major?" />
-    <br clear="all" />
+    <div class="form-group">
+      <label for="collegeMajorField">What is or will be your major?</label>
+      <input [(ngModel)]="modelInputEntry.CollegeMajor"
+             [typeahead]="collegeMajorsList"
+             #collegeMajorSearchBox (keyup)="searchCollegeMajor(collegeMajorSearchBox.value)"
+             (ngModelChange)="updateIncomeCoverageAmount($event); checkIfPaymentCanBeCalculated()"
+             id="collegeMajorField"
+             name="collegeMajor"
+             class="form-control"
+             placeholder="College Major" />
+    </div>
 
-    <input type="text"
-           [(ngModel)]="modelInputEntry.CollegeStartDate"
-           (ngModelChange)="checkIfPaymentCanBeCalculated()"
-           bsDatepicker
-           [bsConfig]="datepickerConfig"
-           name="startDate"
-           class="form-control"
-           placeholder="Approximately when did you or will you start college?" />
-    <br clear="all" />
+    <div class="form-group">
+      <label for="startDateField">Approximately when did you or will you start college?</label>
+      <input type="text"
+             [(ngModel)]="modelInputEntry.CollegeStartDate"
+             (ngModelChange)="checkIfPaymentCanBeCalculated()"
+             bsDatepicker
+             [bsConfig]="datepickerConfig"
+             id="startDateField"
+             name="startDate"
+             class="form-control"
+             placeholder="Start Date" />
+    </div>
 
-    <input type="text"
-           [(ngModel)]="modelInputEntry.ExpectedGraduationDate"
-           (ngModelChange)="checkIfPaymentCanBeCalculated()"
-           bsDatepicker
-           [bsConfig]="datepickerConfig"
-           name="graduationDate"
-           class="form-control"
-           placeholder="What is your expected graduation date?" />
-    <br clear="all" />
+    <div class="form-group">
+      <label for="gradDateField">What is your expected graduation date?</label>
+      <input type="text"
+             [(ngModel)]="modelInputEntry.ExpectedGraduationDate"
+             (ngModelChange)="checkIfPaymentCanBeCalculated()"
+             bsDatepicker
+             [bsConfig]="datepickerConfig"
+             id="gradDateField"
+             name="graduationDate"
+             class="form-control"
+             placeholder="Grad Date" />
+    </div>
 
-    <input [(ngModel)]="modelInputEntry.IncomeCoverageAmount"
-           (ngModelChange)="checkIfPaymentCanBeCalculated()"
-           name="incomeAmount"
-           class="form-control"
-           placeholder="How much would you like to be covered annually?" />
-    <br clear="all" />
-
-    <br clear="all" />
+    <div class="form-group">
+      <label for="incomeAmountField">How much would you like to be covered annually?</label>
+      <input type="number"
+             [(ngModel)]="modelInputEntry.IncomeCoverageAmount"
+             (ngModelChange)="checkIfPaymentCanBeCalculated()"
+             id="incomeAmountField"
+             name="incomeAmount"
+             class="form-control"
+             placeholder="Choose Major for Median" />
+    </div>
+  </form>
     <button type="button" class="btn btn-primary"
             (click)="submitForCalculation()"
-            [disabled]="!canPaymentBeCalculated">Find Out Your Monthly Payment</button>
-  </form>
+            [disabled]="!canPaymentBeCalculated">
+      Find Out Your Monthly Payment
+    </button>
 </div>
 <div *ngIf="isCalculated">
   <edusafe-output></edusafe-output>

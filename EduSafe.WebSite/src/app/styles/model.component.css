@@ -1,7 +1,29 @@
-input {
-  margin-top: 1em;
+form {
+  text-align: left;
+  margin-top: 2em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 }
 
-select {
+label{
+  font-weight: bold;
+  font-size: 0.8em;
+  color: #000000;
+}
+
+button {
   margin-top: 1em;
+  margin-bottom: 2em;
+}
+
+.defaultSelect {
+  color: GrayText;
+}
+
+@media only screen and (max-width: 600px) {
+  form {
+    margin-top: 1em;
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+  }
 }

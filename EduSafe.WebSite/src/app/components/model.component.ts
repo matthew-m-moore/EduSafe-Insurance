@@ -8,6 +8,7 @@ import { CollegeMajorData } from '../classes/collegeMajorData';
 
 import { ModelCalculationService } from '../services/modelCalculation.service';
 import { CollegeDataSearchService } from '../services/collegeDataSearch.service';
+import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
 
 import { Subject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
@@ -21,6 +22,7 @@ import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operato
 export class ModelComponent implements OnInit {
   @Input() modelInputEntry: ModelInputEntry;
   modelOutputSummary: ModelOutputSummary;
+  ipAddress: Observable<string>;
 
   datepickerConfig: Partial<BsDatepickerConfig>;
   datepickerMinMode: BsDatepickerViewMode = 'month';
@@ -40,6 +42,7 @@ export class ModelComponent implements OnInit {
   constructor(
     private modelCalculationService: ModelCalculationService,
     private collegeDataSearchService: CollegeDataSearchService,
+    private ipAddressCaptureService: IpAddressCaptureService,
   ) { }
 
   searchCollege(searchText: string): void {
@@ -82,6 +85,7 @@ export class ModelComponent implements OnInit {
   }
 
   submitForCalculation(): void {
+    this.ipAddress = this.ipAddressCaptureService.getIpAddress();
     this.modelCalculationService.calcModelOutput(this.modelInputEntry)
       .then(modelCalculationOutput => {
         this.modelOutputSummary = modelCalculationOutput;

@@ -18,6 +18,7 @@ import { ModelOuputComponent } from '../components/output.component';
 
 import { ModelCalculationService } from '../services/modelCalculation.service';
 import { CollegeDataSearchService } from '../services/collegeDataSearch.service';
+import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
 
 @NgModule({
   imports: [
@@ -39,7 +40,8 @@ import { CollegeDataSearchService } from '../services/collegeDataSearch.service'
   ],
   providers: [
     ModelCalculationService,
-    CollegeDataSearchService
+    CollegeDataSearchService,
+    IpAddressCaptureService
   ],
   bootstrap: [
     AppRootComponent

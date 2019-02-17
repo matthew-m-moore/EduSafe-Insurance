@@ -23,8 +23,10 @@ namespace EduSafe.WebApi.Adapters
         private const string _5thYear = "5th Year";
         private const string _6thYear = "6th Year";
 
+        private const string _otherMajor = "Other";
+
         private const string _privateSchool = "Private School";
-        private const string _forProfitCollege = "For-Profit College";
+        private const string _forProfitCollege = "For-Profit College";   
 
         private static Stream _websiteScenarioDataFileStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(_websiteScenarioDataFile);
         private readonly List<int> _incomeCoverageMonths = new List<int> { 3, 6, 12 };
@@ -52,6 +54,9 @@ namespace EduSafe.WebApi.Adapters
             var modelOutputSummary = new ModelOutputSummary
             {
                 ModelOutputHeaders = modelOutputHeaders,
+                DropOutCoveragePercentage = (int)(baseScenario.DropOutOptionRatio * Constants.PercentagePoints),
+                GradSchoolCoveragePercentage = (int)(baseScenario.GradSchoolOptionRatio * Constants.PercentagePoints),
+                EarlyHireCoveragePercentage = (int)(baseScenario.EarlyHireOptionRatio * Constants.PercentagePoints),
                 ModelOutputEntries = new List<ModelOutputEntry>()
             };
 
@@ -95,13 +100,19 @@ namespace EduSafe.WebApi.Adapters
             string schoolType)
         {
             baseScenario.AnnualIncome = modelInputEntry.IncomeCoverageAmount;
-            baseScenario.UnemploymentTarget = collegeMajorDateDictionary[modelInputEntry.CollegeMajor].UnemploymentRate;
+
+            // Let the user type in whatever major they want, even if we don't have it
+            var collegeMajorData = collegeMajorDateDictionary[_otherMajor];
+            if (collegeMajorDateDictionary.ContainsKey(modelInputEntry.CollegeMajor))
+                collegeMajorData = collegeMajorDateDictionary[modelInputEntry.CollegeMajor];
+
+            baseScenario.UnemploymentTarget = collegeMajorData.UnemploymentRate;
 
             if (schoolType == _privateSchool)
-                baseScenario.UnemploymentTarget = collegeMajorDateDictionary[modelInputEntry.CollegeMajor].LowEndUnemploymentRate;
+                baseScenario.UnemploymentTarget = collegeMajorData.LowEndUnemploymentRate;
             if (schoolType == _forProfitCollege)
-                baseScenario.UnemploymentTarget = collegeMajorDateDictionary[modelInputEntry.CollegeMajor].HighEndUnemploymentRate;
-
+                baseScenario.UnemploymentTarget = collegeMajorData.HighEndUnemploymentRate;
+            
             baseScenario.UnemploymentTarget *= Constants.PercentagePoints;
 
             var derivedUnemploymentTarget = Constants.PercentagePoints -
