@@ -25,4 +25,17 @@ export class IpAddressCaptureService {
         return ipVar;
       }));
   }
+
+  getIpAddressPromise(): Promise<string> {
+    return this.http.get(this.ipAddressCaptureUrl)
+      .toPromise()
+      .then(res => {
+        let ipVar = res.text();
+        let num = ipVar.indexOf(":");
+        let num2 = ipVar.indexOf("\"});");
+        ipVar = ipVar.slice(num + 2, num2);
+        console.log('ipVar -- ', ipVar);
+        return ipVar;
+      });
+  }
 }

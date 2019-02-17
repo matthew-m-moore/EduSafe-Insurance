@@ -11,12 +11,12 @@ import { Observable } from 'rxjs';
 })
 
 export class AppRootComponent {
-  ipAddress: Observable<string>;
 
   titleText = 'Edu$afe';
   subtitleText = '[ Securing Your Future ]';
 
   public calculateIsClicked = false;
+  public ipAddress = "";
 
   constructor(
     private ipAddressCaptureService: IpAddressCaptureService
@@ -28,6 +28,9 @@ export class AppRootComponent {
 
   revealModelInputs(): void {
     this.calculateIsClicked = true;
-    this.ipAddress = this.ipAddressCaptureService.getIpAddress();
+    this.ipAddressCaptureService.getIpAddressPromise()
+      .then(ipAddressPromise => {
+        this.ipAddress = ipAddressPromise;
+      });
   }
 }
