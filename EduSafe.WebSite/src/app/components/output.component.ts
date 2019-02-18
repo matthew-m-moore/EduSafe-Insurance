@@ -17,6 +17,7 @@ export class ModelOuputComponent implements OnInit {
 
   revealModelInputsAgain(): void {
     this.modelComponent.isCalculated = false;
+    window.scroll(0, 0);
   }
 
   ngOnInit(): void {

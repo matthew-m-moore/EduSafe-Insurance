@@ -17,12 +17,11 @@ export class IpAddressCaptureService {
   getIpAddress(): Observable<string> {
     return this.http.get(this.ipAddressCaptureUrl).pipe(
       map(res => {
-        let ipVar = res.text();
-        let num = ipVar.indexOf(":");
-        let num2 = ipVar.indexOf("\"});");
-        ipVar = ipVar.slice(num + 2, num2);
-        console.log('ipVar -- ', ipVar);
-        return ipVar;
+        let responseText = res.text();
+        let leftBoundary = responseText.indexOf(":");
+        let rightBoundary = responseText.indexOf("\"});");
+        var ipAddress = responseText.slice(leftBoundary + 2, rightBoundary);
+        return ipAddress;
       }));
   }
 
@@ -30,12 +29,11 @@ export class IpAddressCaptureService {
     return this.http.get(this.ipAddressCaptureUrl)
       .toPromise()
       .then(res => {
-        let ipVar = res.text();
-        let num = ipVar.indexOf(":");
-        let num2 = ipVar.indexOf("\"});");
-        ipVar = ipVar.slice(num + 2, num2);
-        console.log('ipVar -- ', ipVar);
-        return ipVar;
+        let responseText = res.text();
+        let leftBoundary = responseText.indexOf(":");
+        let rightBoundary = responseText.indexOf("\"});");
+        var ipAddress = responseText.slice(leftBoundary + 2, rightBoundary);
+        return ipAddress;
       });
   }
 }

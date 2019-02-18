@@ -2,13 +2,14 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { BsDatepickerConfig, BsDatepickerViewMode } from 'ngx-bootstrap/datepicker';
 
+import { AppRootComponent } from '../components/app-root.component';
+
 import { ModelInputEntry } from '../classes/modelInputEntry';
 import { ModelOutputSummary } from '../classes/modelOutputSummary';
 import { CollegeMajorData } from '../classes/collegeMajorData';
 
 import { ModelCalculationService } from '../services/modelCalculation.service';
 import { CollegeDataSearchService } from '../services/collegeDataSearch.service';
-import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
 
 import { Subject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
@@ -40,9 +41,9 @@ export class ModelComponent implements OnInit {
   private collegeMajorSearchTerms = new Subject<string>();
 
   constructor(
+    private appRootComponent: AppRootComponent,
     private modelCalculationService: ModelCalculationService,
-    private collegeDataSearchService: CollegeDataSearchService,
-    private ipAddressCaptureService: IpAddressCaptureService,
+    private collegeDataSearchService: CollegeDataSearchService
   ) { }
 
   searchCollege(searchText: string): void {
@@ -85,16 +86,19 @@ export class ModelComponent implements OnInit {
   }
 
   submitForCalculation(): void {
-    this.ipAddress = this.ipAddressCaptureService.getIpAddress();
     this.modelCalculationService.calcModelOutput(this.modelInputEntry)
       .then(modelCalculationOutput => {
         this.modelOutputSummary = modelCalculationOutput;
         this.isCalculated = true;
       })
+
+    window.scroll(0, 0);
   }
 
   ngOnInit(): void {
     this.modelInputEntry = new ModelInputEntry();
+    this.modelInputEntry.IpAddress = this.appRootComponent.ipAddress;
+
     this.modelCalculationService.getModelOutput()
       .then(modelCalculationOuput => {
         this.modelOutputSummary = modelCalculationOuput;
