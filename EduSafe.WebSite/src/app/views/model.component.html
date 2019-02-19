@@ -73,11 +73,11 @@
              placeholder="Choose Major for Median" />
     </div>
   </form>
-    <button type="button" class="btn btn-primary"
-            (click)="submitForCalculation()"
-            [disabled]="!canPaymentBeCalculated">
-      Find Out Your Monthly Payment
-    </button>
+  <button type="button" class="btn btn-primary"
+          (click)="submitForCalculation()"
+          [disabled]="!canPaymentBeCalculated">
+    Find Out Your Monthly Payment
+  </button>
 </div>
 <div *ngIf="isCalculated">
   <edusafe-output></edusafe-output>

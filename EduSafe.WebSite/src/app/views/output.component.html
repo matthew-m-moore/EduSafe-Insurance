@@ -35,5 +35,6 @@
 </div>
 <div>
   <button type="button" class="btn btn-info" style="margin-bottom: 2em;"
-          (click)="revealModelInputsAgain()">Email Me My Monthly Payment Results</button>
+          (click)="sendResultsEmail()"
+          [disabled]="isEmailSent">Email Me My Monthly Payment Results</button>
 </div>

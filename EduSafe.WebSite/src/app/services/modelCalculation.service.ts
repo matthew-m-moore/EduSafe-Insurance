@@ -3,26 +3,26 @@ import { Http, Headers } from '@angular/http';
 
 import { ModelInputEntry } from '../classes/modelInputEntry';
 import { ModelOutputSummary } from '../classes/modelOutputSummary';
-import { Environment } from '../classes/environment';
+import { EnvironmentSettings } from '../classes/environmentSettings';
 
 @Injectable()
 
 export class ModelCalculationService {
-  private webApiUrlGet = Environment.BaseApiUrl + '/api/calculate';
-  private webApiUrlPut = Environment.BaseApiUrl + '/api/calculate/premiums';
+  private modelApiTestUrl = EnvironmentSettings.BaseApiUrl + '/api/calculate';
+  private modelCalculationUrl = EnvironmentSettings.BaseApiUrl + '/api/calculate/premiums';
   private headers = new Headers({ 'Content-Type': 'application/json' });
 
   constructor(private http: Http) { }
 
   getModelOutput(): Promise<ModelOutputSummary> {
-    return this.http.get(this.webApiUrlGet)
+    return this.http.get(this.modelApiTestUrl)
       .toPromise()
       .then(response => response.json() as ModelOutputSummary)
       .catch(this.reportError);
   }
 
   calcModelOutput(modelInputEntry: ModelInputEntry): Promise<ModelOutputSummary> {
-    return this.http.put(this.webApiUrlPut, JSON.stringify(modelInputEntry), { headers: this.headers })
+    return this.http.put(this.modelCalculationUrl, JSON.stringify(modelInputEntry), { headers: this.headers })
       .toPromise()
       .then(response => response.json() as ModelOutputSummary)
       .catch(this.reportError);

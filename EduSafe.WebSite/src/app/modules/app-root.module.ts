@@ -15,10 +15,12 @@ import { AppRootComponent } from '../components/app-root.component';
 import { HomeComponent } from '../components/home.component';
 import { ModelComponent } from '../components/model.component';
 import { ModelOuputComponent } from '../components/output.component';
+import { ContactComponent } from '../components/contact.component';
 
 import { ModelCalculationService } from '../services/modelCalculation.service';
 import { CollegeDataSearchService } from '../services/collegeDataSearch.service';
 import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
+import { SendEmailService } from '../services/sendEmail.Service';
 
 @NgModule({
   imports: [
@@ -36,12 +38,14 @@ import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
     AppRootComponent,
     HomeComponent,
     ModelComponent,
-    ModelOuputComponent
+    ModelOuputComponent,
+    ContactComponent
   ],
   providers: [
     ModelCalculationService,
     CollegeDataSearchService,
-    IpAddressCaptureService
+    IpAddressCaptureService,
+    SendEmailService
   ],
   bootstrap: [
     AppRootComponent

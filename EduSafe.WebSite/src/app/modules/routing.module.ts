@@ -5,6 +5,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from '../components/home.component';
 import { ModelComponent } from '../components/model.component';
 import { ModelOuputComponent } from '../components/output.component';
+import { ContactComponent } from '../components/contact.component';
 
 const appRoutes: Routes = [
   {
@@ -18,6 +19,10 @@ const appRoutes: Routes = [
   {
     path: 'edusafe-output',
     component: ModelOuputComponent
+  },
+  {
+    path: 'edusafe-contact',
+    component: ContactComponent
   },
 ];
 

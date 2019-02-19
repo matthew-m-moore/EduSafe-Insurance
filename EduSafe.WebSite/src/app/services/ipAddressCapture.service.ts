@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { Environment } from '../classes/environment';
+import { EnvironmentSettings } from '../classes/environmentSettings';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { map } from 'rxjs/operators';
 
 export class IpAddressCaptureService {
 
-  private ipAddressCaptureUrl = Environment.IpAddressCaptureUrl + '?format=jsonp&callback=JSONP_CALLBACK';
+  private ipAddressCaptureUrl = EnvironmentSettings.IpAddressCaptureUrl + '?format=jsonp&callback=JSONP_CALLBACK';
 
   constructor(private http: Http) { }
 

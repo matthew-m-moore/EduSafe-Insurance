@@ -14,6 +14,7 @@ export class AppRootComponent {
   subtitleText = 'Securing Your Future';
 
   public calculateIsClicked = false;
+  public contactIsClicked = false;
   public ipAddress = "";
 
   constructor(
@@ -22,11 +23,24 @@ export class AppRootComponent {
 
   revealHomePage(): void {
     this.calculateIsClicked = false;
+    this.contactIsClicked = false;
     window.scroll(0, 0);
   }
 
   revealModelInputs(): void {
     this.calculateIsClicked = true;
+    this.contactIsClicked = false;
+    window.scroll(0, 0);
+
+    this.ipAddressCaptureService.getIpAddressPromise()
+      .then(ipAddressPromise => {
+        this.ipAddress = ipAddressPromise;
+      });
+  }
+
+  revealContactPage(): void {
+    this.contactIsClicked = true;
+    this.calculateIsClicked = false;
     window.scroll(0, 0);
 
     this.ipAddressCaptureService.getIpAddressPromise()

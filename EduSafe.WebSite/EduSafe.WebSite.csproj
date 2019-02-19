@@ -76,7 +76,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="e2e\protractor.conf.js" />
+    <Content Include="src\app\styles\contact.component.css" />
     <Content Include="src\app\styles\output.component.css" />
+    <Content Include="src\app\views\contact.component.html" />
     <Content Include="src\assets\EduSafe_0_Logo.png" />
     <Content Include="src\assets\EduSafe_1_Comic.png" />
     <Content Include="src\assets\EduSafe_2_Comic.png" />
@@ -101,11 +103,14 @@
     <TypeScriptCompile Include="e2e\src\app.e2e-spec.ts" />
     <TypeScriptCompile Include="e2e\src\app.po.ts" />
     <TypeScriptCompile Include="src\app\classes\collegeMajorData.ts" />
-    <TypeScriptCompile Include="src\app\classes\environment.ts" />
+    <TypeScriptCompile Include="src\app\classes\environmentSettings.ts" />
+    <TypeScriptCompile Include="src\app\classes\inquiryEmailEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\modelInputEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\modelOutputEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\modelOutputHeaders.ts" />
     <TypeScriptCompile Include="src\app\classes\modelOutputSummary.ts" />
+    <TypeScriptCompile Include="src\app\classes\resultsEmailEntry.ts" />
+    <TypeScriptCompile Include="src\app\components\contact.component.ts" />
     <TypeScriptCompile Include="src\app\components\home.component.ts" />
     <TypeScriptCompile Include="src\app\components\model.component.ts" />
     <TypeScriptCompile Include="src\app\components\output.component.ts" />
@@ -113,6 +118,7 @@
     <TypeScriptCompile Include="src\app\services\collegeDataSearch.service.ts" />
     <TypeScriptCompile Include="src\app\services\ipAddressCapture.service.ts" />
     <TypeScriptCompile Include="src\app\services\modelCalculation.service.ts" />
+    <TypeScriptCompile Include="src\app\services\sendEmail.Service.ts" />
     <TypeScriptCompile Include="src\app\tests\app-root.component.spec.ts" />
     <TypeScriptCompile Include="src\app\components\app-root.component.ts" />
     <TypeScriptCompile Include="src\app\modules\app-root.module.ts" />

@@ -4,7 +4,8 @@
     <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>ConvertToBlackWhiteScript "C:\Users\Matthew M\Google Drive\Edu%24afe\Presentations\Edu%24afe Comic Panels\Edu%24afe - Stressed-Out Graduate Comic - No Color Raw.PNG"</StartArguments>
+    <StartArguments>
+    </StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <StartArguments>PremiumScenariosScript "C:\Users\Matthew M\Desktop\Dropout-Rate-Test-Scenarios.xlsx"</StartArguments>

@@ -9,25 +9,28 @@
         <li (click)="revealHomePage()"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;home</li>
         <li (click)="revealModelInputs()"><i class="fa fa-calculator" aria-hidden="true"></i>&nbsp;calc</li>
         <li><i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;login</li>
-        <li><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;contact</li>
+        <li (click)="revealContactPage()"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;contact</li>
         <li><i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp;pay</li>
       </ul>
     </div>
-    </div>
-    <router-outlet></router-outlet>
-    <div *ngIf="!calculateIsClicked">
-      <edusafe-home></edusafe-home>
-      <button type="button" class="btn btn-primary" (click)="revealModelInputs()">
-        Calculate Your Coverage
-      </button>
-    </div>
-    <div *ngIf="calculateIsClicked">
-      <edusafe-model></edusafe-model>
-    </div>
-    <div id="footerContent">
-      &copy; 2018-2019, Edu$afe, Inc.
-      <br clear="all">
-      <br clear="all">
-      Estimates produced on this website are for guidance and illustrative purposes only; these estimates do not represent actionable quotes for coverage. Insurance coverage can only be provided under a proper certificate of authority by a valid NAIC insurance producer. All coverage is subject to comprehensive underwriting, and thus not all who apply for coverage may be eligible. Claims are not payable until fully verified. For detailed questions or concerns, legal or otherwise, please send correspondence to <u>inquiries@edusafe.company</u>.
-    </div>
   </div>
+  <router-outlet></router-outlet>
+  <div *ngIf="!calculateIsClicked && !contactIsClicked">
+    <edusafe-home></edusafe-home>
+    <button type="button" class="btn btn-primary" (click)="revealModelInputs()">
+      Calculate Your Coverage
+    </button>
+  </div>
+  <div *ngIf="calculateIsClicked && !contactIsClicked">
+    <edusafe-model></edusafe-model>
+  </div>
+  <div *ngIf="contactIsClicked && !calculateIsClicked">
+    <edusafe-contact></edusafe-contact>
+  </div>
+  <div id="footerContent">
+    &copy; 2018-2019, Edu$afe, Inc.
+    <br clear="all">
+    <br clear="all">
+    Estimates produced on this website are for guidance and illustrative purposes only; these estimates do not represent actionable quotes for coverage. Insurance coverage can only be provided under a proper certificate of authority by a valid NAIC insurance producer. All coverage is subject to comprehensive underwriting, and thus not all who apply for coverage may be eligible. Claims are not payable until fully verified. For detailed questions or concerns, legal or otherwise, please send correspondence to <u>inquiries@edusafe.company</u>.
+  </div>
+</div>
