@@ -6,7 +6,7 @@
       <Value Profile="(Default)">smtp.gmail.com</Value>
     </Setting>
     <Setting Name="EmailTimeout" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">20000</Value>
+      <Value Profile="(Default)">10000</Value>
     </Setting>
     <Setting Name="EmailUser" Type="System.String" Scope="Application">
       <Value Profile="(Default)">administrator@edusafe.company</Value>

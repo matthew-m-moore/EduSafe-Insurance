@@ -13,6 +13,7 @@
         public int TotalMonths { get; set; }
 
         public double PaidIn { get; set; }
+        public double Margin { get; set; }
         public double AnnualIncome { get; set; }
         public int CoverageMonths { get; set; }
 

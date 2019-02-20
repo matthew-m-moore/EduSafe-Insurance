@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Linq;
+using System.Web.Http;
 using EduSafe.IO.Email;
 using EduSafe.WebApi.Models;
 
@@ -9,6 +10,10 @@ namespace EduSafe.WebApi.Controllers
     {
         private const string _contactFrom = "Contact Email From: ";
         private const string _yourResults = "Your Monthly Premium Calculation Results from Edu$afe";
+        private const string _contactUs = "Please don't hesitate to contact us at inquiries@edusafe.company if you have any questions.";
+
+        private const string _buttonStart = "<button ";
+        private const string _buttonEnd = "</button>";
 
         // POST: api/email/contact
         [Route("contact")]
@@ -36,8 +41,20 @@ namespace EduSafe.WebApi.Controllers
             var recipientAddress = resultsEmailEntry.RecipientAddress;
             var emailBody = resultsEmailEntry.ResultsPageHtml;
 
+            var clipStartIndex = emailBody.IndexOf(_buttonStart);
+            var clipEndIndex = emailBody.LastIndexOf(_buttonEnd);
+
+            var startOfEmailBody = new string(emailBody.Take(clipStartIndex).ToArray());
+            var endOfEmailBody = new string(emailBody.Skip(clipEndIndex).ToArray());
+
+            // This gobbledeguk inserts our email into the plce of the buttons, left-aligns the table,
+            // and also makes the remaining text appear below the table.
+            var editedEmailBody = startOfEmailBody + _contactUs + endOfEmailBody;
+            editedEmailBody = editedEmailBody.Replace("align=\"center\"", "align=\"left\"");
+            editedEmailBody = editedEmailBody.Replace("Worried", "<br><br><br><br><br><br>Worried");
+
             var emailSender = new EmailSender();
-            var emailCreator = new EmailCreator(_yourResults, emailBody, recipientAddress);
+            var emailCreator = new EmailCreator(_yourResults, editedEmailBody, recipientAddress);
             emailSender.Send(emailCreator);
             return true;
         }

@@ -25,16 +25,53 @@
     <ul>
       <li>{{ modelOutputSummary.DropOutCoveragePercentage }}% of all payments returned if you drop-out of school, for any reason</li>
       <li>{{ modelOutputSummary.GradSchoolCoveragePercentage }}% of all payments returned if you continue on to graduate school</li>
-      <li>{{ modelOutputSummary.EarlyHireCoveragePercentage }}% of all payments returned if line up a job before you graduate</li>
+      <li>{{ modelOutputSummary.EarlyHireCoveragePercentage }}% of all payments returned if you line up a job before you graduate</li>
     </ul>
   </div>
 </div>
+<div *ngIf="isEmailSent">
+  <br clear="all" />
+  {{ modalMessage }}
+  <br clear="all" />
+</div>
 <div>
   <button type="button" class="btn btn-primary"
-          (click)="revealModelInputsAgain()">Want to Calculate Your Payment Again?</button>
+          (click)="revealModelInputsAgain()">
+    Want to Calculate Your Payment Again?
+  </button>
 </div>
 <div>
   <button type="button" class="btn btn-info" style="margin-bottom: 2em;"
-          (click)="sendResultsEmail()"
-          [disabled]="isEmailSent">Email Me My Monthly Payment Results</button>
+          (click)="openConfirmationModal(provideEmailTemplate)"
+          [disabled]="isEmailSent">
+    Email Me My Monthly Payment Results
+  </button>
+
+  <ng-template #provideEmailTemplate>
+    <div class="modal-body text-center">
+      <div class="form-group">
+        <label for="recipientAddressField"><b>Email Address:</b></label>
+        <input [(ngModel)]="resultsEmailEntry.RecipientAddress"
+               id="recipientAddressField"
+               name="recipientAddress"
+               class="form-control"
+               placeholder="Email Address" />
+      </div>
+
+      <div class="form-group">
+        <label for="recipientNameField"><b>Name (Optional):</b></label>
+        <input [(ngModel)]="resultsEmailEntry.RecipientName"
+               id="recipientNameField"
+               name="recipientName"
+               class="form-control"
+               placeholder="Name" />
+      </div>
+      <button type="button" class="btn btn-info" (click)="confirmSendEmail()">
+        Send Email
+      </button>
+      <button type="button" class="btn btn-default" (click)="declineSendEmail()">
+        Cancel
+      </button>
+    </div>
+  </ng-template>
 </div>

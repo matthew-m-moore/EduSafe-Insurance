@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
 
@@ -8,8 +8,7 @@ import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
   styleUrls: ['../styles/app-root.component.css']
 })
 
-export class AppRootComponent {
-
+export class AppRootComponent implements OnInit {
   titleText = 'Edu$afe';
   subtitleText = 'Securing Your Future';
 
@@ -31,18 +30,15 @@ export class AppRootComponent {
     this.calculateIsClicked = true;
     this.contactIsClicked = false;
     window.scroll(0, 0);
-
-    this.ipAddressCaptureService.getIpAddressPromise()
-      .then(ipAddressPromise => {
-        this.ipAddress = ipAddressPromise;
-      });
   }
 
   revealContactPage(): void {
     this.contactIsClicked = true;
     this.calculateIsClicked = false;
     window.scroll(0, 0);
+  }
 
+  ngOnInit(): void {
     this.ipAddressCaptureService.getIpAddressPromise()
       .then(ipAddressPromise => {
         this.ipAddress = ipAddressPromise;

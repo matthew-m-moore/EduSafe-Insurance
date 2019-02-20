@@ -1,4 +1,6 @@
-import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, ElementRef, TemplateRef } from '@angular/core';
+
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal'
 
 import { ModelComponent } from '../components/model.component';
 
@@ -14,14 +16,17 @@ import { SendEmailService } from '../services/sendEmail.Service';
 })
 
 export class ModelOuputComponent implements OnInit, AfterViewInit {
+  @Input() resultsEmailEntry: ResultsEmailEntry;
   modelOutputSummary: ModelOutputSummary;
-  resultsHtml: string;
+  modalReference: BsModalRef;
+  modalMessage: string;
 
   public isEmailSent = false;
 
   constructor(
     private modelComponent: ModelComponent,
     private elementRef: ElementRef,
+    private modalService: BsModalService,
     private sendEmailService: SendEmailService
   ) { }
 
@@ -31,22 +36,35 @@ export class ModelOuputComponent implements OnInit, AfterViewInit {
     window.scroll(0, 0);
   }
 
-  sendResultsEmail(): void {
-    var resultsEmailEntry = new ResultsEmailEntry();
-    resultsEmailEntry.ModelInputEntry = this.modelComponent.modelInputEntry;
-    resultsEmailEntry.ModelOutputSummary = this.modelOutputSummary;
-    resultsEmailEntry.ResultsPageHtml = this.resultsHtml;
-    // I need a modal to capture the user's email address for their results
+  openConfirmationModal(provideEmailTemplate: TemplateRef<any>) {
+    this.modalReference = this.modalService.show(provideEmailTemplate, { class: 'modal-sm' });
+  }
 
-    this.sendEmailService.sendResultsEmail(resultsEmailEntry)
+  confirmSendEmail(): void {
+    this.sendResultsEmail();
+    this.modalMessage = "Results Email Sent";
+    this.modalReference.hide();
+  }
+
+  declineSendEmail(): void {
+    this.modalMessage = "Results Email Declined";
+    this.modalReference.hide();
+  }
+
+  sendResultsEmail(): void {
+    this.sendEmailService.sendResultsEmail(this.resultsEmailEntry)
       .then(emailSuccess => this.isEmailSent = emailSuccess);
   }
 
   ngAfterViewInit() {
-    this.resultsHtml = this.elementRef.nativeElement.innerHTML;
+    this.resultsEmailEntry.ResultsPageHtml = this.elementRef.nativeElement.innerHTML;
   }
 
   ngOnInit(): void {
     this.modelOutputSummary = this.modelComponent.modelOutputSummary;
+
+    this.resultsEmailEntry = new ResultsEmailEntry();
+    this.resultsEmailEntry.ModelInputEntry = this.modelComponent.modelInputEntry;
+    this.resultsEmailEntry.ModelOutputSummary = this.modelOutputSummary;
   }
 }

@@ -10,6 +10,7 @@ namespace EduSafe.Core.BusinessLogic.Containers
         public int? ScenarioId { get; set; }
         public string ScenarioName { get; set; }
 
+        public double PremiumMargin { get; }
         public double AnnualIncomeCoverageAmount { get; }
         public int MonthsOfIncomeCoverage { get; }
 
@@ -32,7 +33,8 @@ namespace EduSafe.Core.BusinessLogic.Containers
             InterestRateCurve discountRateCurve,
             double? dropOutOptionCoveragePercentage = null,
             double? gradSchoolOptionCoveragePercentage = null,
-            double? earlyHireOptionCoveragePercentage = null)
+            double? earlyHireOptionCoveragePercentage = null,
+            double premiumMargin = 0.0)
         {
             if (monthsOfIncomeCoverage <= 0)
                 throw new Exception("ERROR: Months of income coverage must be greater than zero.");
@@ -40,6 +42,7 @@ namespace EduSafe.Core.BusinessLogic.Containers
             AnnualIncomeCoverageAmount = annualIncomeCoverageAmount;
             MonthsOfIncomeCoverage = monthsOfIncomeCoverage;
             DiscountRateCurve = discountRateCurve;
+            PremiumMargin = premiumMargin;
 
             DropOutOptionCoveragePercentage = dropOutOptionCoveragePercentage;
             GradSchoolOptionCoveragePercentage = gradSchoolOptionCoveragePercentage;

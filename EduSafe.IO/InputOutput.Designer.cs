@@ -34,7 +34,7 @@ namespace EduSafe.IO {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
         public int EmailTimeout {
             get {
                 return ((int)(this["EmailTimeout"]));

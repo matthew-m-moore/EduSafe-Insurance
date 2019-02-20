@@ -8,6 +8,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { ModalModule } from 'ngx-bootstrap/modal';
+
 
 import { RoutingModule } from '../modules/routing.module';
 
@@ -32,6 +34,7 @@ import { SendEmailService } from '../services/sendEmail.Service';
     TypeaheadModule.forRoot(),
     BsDatepickerModule.forRoot(),
     ButtonsModule.forRoot(),
+    ModalModule.forRoot(),
     RoutingModule  
   ],
   declarations: [
