@@ -2,15 +2,15 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'WebSi
 	BEGIN
 		CREATE TABLE WebSiteInquiryAnswersToQuestions
 		(
-			ID int IDENTITY(1,1)
-			, IPAddressId int
-			, CollegeNameId int
-			, CollegeTypeId int
-			, MajorId int
-			, CollegeStartDate datetime
-			, GraduationDate datetime
-			, AnnualCoverage float
-			, CreatedOn datetime
-			, CreatedBy varchar(25)
+			Id int IDENTITY(1,1)
+			, IpAddressId int not null
+			, CollegeNameId int not null
+			, CollegeTypeId int not null
+			, MajorId int not null
+			, CollegeStartDate datetime not null
+			, GraduationDate datetime not null
+			, AnnualCoverage float not null
+			, CreatedOn datetime not null
+			, CreatedBy varchar(25) not null
 		)
 	END

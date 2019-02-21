@@ -7,6 +7,7 @@ GO
 CREATE PROCEDURE SP_InsertWebSiteInquiryEmailAddress
 	@EmaiLAddress varchar(250)
 	, @IpAddress varchar(250)
+	, @ContactName varchar(250)
 	, @OptOut bit
 
 AS
@@ -15,6 +16,7 @@ INSERT INTO WebSiteInquiryEmailAddress
 (
 	EmailAddress
 	, IpAddress
+	, ContactName
 	, OptOut
 	, CreatedOn
 	, CreatedBy
@@ -23,6 +25,7 @@ VALUES
 (
 	@EmailAddress
 	, @IpAddress
+	, @ContactName
 	, @OptOut
 	, GETDATE()
 	, USER
