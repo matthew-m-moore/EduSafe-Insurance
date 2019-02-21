@@ -26,9 +26,8 @@ IF (SELECT ID FROM WebSiteInquiryCollegeType WHERE CollegeType = @CollegeType) i
 SET @CollegeTypeId = (SELECT ID FROM WebSiteInquiryCollegeType WHERE CollegeType = @CollegeType);
 
 DECLARE @IpAddressId int
-IF (SELECT ID FROM WebSiteInquiryIpAddress WHERE IpAddress = @IpAddress) is null
 	EXEC  SP_InsertWebSiteInquiryIpAddress @IpAddress;
-SET @IpAddressId = (SELECT ID FROM WebSiteInquiryIpAddress WHERE IpAddress = @IpAddress);
+SET @IpAddressId = (SELECT MAX(ID) as ID FROM WebSiteInquiryIpAddress WHERE IpAddress = @IpAddress);
 
 DECLARE @MajorId int
 IF (SELECT ID FROM WebSiteInquiryMajor WHERE Major = @Major) is null
