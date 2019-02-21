@@ -45,13 +45,16 @@ namespace EduSafe.WebApi.Controllers
             var clipEndIndex = emailBody.LastIndexOf(_buttonEnd);
 
             var startOfEmailBody = new string(emailBody.Take(clipStartIndex).ToArray());
-            var endOfEmailBody = new string(emailBody.Skip(clipEndIndex).ToArray());
+            var endOfEmailBody = new string(emailBody.Skip(clipEndIndex + _buttonEnd.Length).ToArray());
 
             // This gobbledeguk inserts our email into the plce of the buttons, left-aligns the table,
             // and also makes the remaining text appear below the table.
             var editedEmailBody = startOfEmailBody + _contactUs + endOfEmailBody;
             editedEmailBody = editedEmailBody.Replace("align=\"center\"", "align=\"left\"");
-            editedEmailBody = editedEmailBody.Replace("Worried", "<br><br><br><br><br><br>Worried");
+            editedEmailBody = editedEmailBody.Replace(
+                "<i _ngcontent-c5=\"\"><u _ngcontent-c5=\"\">Example</u>:</i>",
+                "<br><br><br><br><br><br><div><i _ngcontent-c5=\"\"><u _ngcontent-c5=\"\">Example</u>:</i>");
+            editedEmailBody += "</div>";
 
             var emailSender = new EmailSender();
             var emailCreator = new EmailCreator(_yourResults, editedEmailBody, recipientAddress);

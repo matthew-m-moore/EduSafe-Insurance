@@ -36,6 +36,7 @@ export class ModelComponent implements OnInit {
   collegeMajorsDataList: Observable<CollegeMajorData[]>;
 
   public isCalculated = false;
+  public isCalculating = false;
   public canPaymentBeCalculated = false;
   private collegeSearchTerms = new Subject<string>();
   private collegeMajorSearchTerms = new Subject<string>();
@@ -86,13 +87,14 @@ export class ModelComponent implements OnInit {
   }
 
   submitForCalculation(): void {
+    this.isCalculating = true;
     this.modelCalculationService.calcModelOutput(this.modelInputEntry)
       .then(modelCalculationOutput => {
         this.modelOutputSummary = modelCalculationOutput;
+        this.isCalculating = false;
         this.isCalculated = true;
+        window.scroll(0, 0);
       })
-
-    window.scroll(0, 0);
   }
 
   ngOnInit(): void {

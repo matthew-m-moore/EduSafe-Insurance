@@ -49,6 +49,11 @@
     <label class="form-check-label"
            for="emailCopyOptionField">Receive a copy of your email to us?</label>
   </div>
+  <div *ngIf="isSending" class="row justify-content-center" id="sendingProgressBar">
+    <div class="col-md-6 text-left">
+      <progressbar [value]="100" [animate]="true" [striped]="true">Sending...</progressbar>
+    </div>
+  </div>
   <div *ngIf="isEmailSent">
     <br clear="all" />
     Your email was sent. We are happy to hear from you!

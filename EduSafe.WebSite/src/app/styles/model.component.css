@@ -20,10 +20,19 @@ button {
   color: GrayText;
 }
 
+#calculatingProgressBar {
+  margin: 0.5em;
+}
+
 @media only screen and (max-width: 600px) {
   form {
     margin-top: 1em;
     margin-left: 0.3em;
     margin-right: 0.3em;
+  }
+
+  #calculatingProgressBar {
+    margin: 0.5em;
+    font-size: 80%;
   }
 }

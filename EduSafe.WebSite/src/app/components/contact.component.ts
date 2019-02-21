@@ -16,6 +16,7 @@ export class ContactComponent implements OnInit {
   @Input() inquiryEmailEntry: InquiryEmailEntry;
 
   public isEmailSent = false;
+  public isSending = false;
 
   constructor(
     private appRootComponent: AppRootComponent,
@@ -23,8 +24,12 @@ export class ContactComponent implements OnInit {
   ) { }
 
   sendInquiryEmail(): void {
+    this.isSending = true;
     this.sendEmailService.sendInquiryEmail(this.inquiryEmailEntry)
-      .then(emailSuccess => this.isEmailSent = emailSuccess);
+      .then(emailSuccess => {
+        this.isEmailSent = emailSuccess;
+        this.isSending = false;
+      });
   }
 
   ngOnInit(): void {
