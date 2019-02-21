@@ -85,7 +85,6 @@
     <Folder Include="Database\Contexts\" />
     <Folder Include="Database\Entities\" />
     <Folder Include="Database\Mappings\" />
-    <Folder Include="Database\SQL\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
