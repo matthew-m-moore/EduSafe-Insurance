@@ -5,7 +5,7 @@ form {
   margin-right: 0.5em;
 }
 
-label{
+label {
   font-weight: bold;
   font-size: 0.8em;
   color: #000000;
@@ -16,11 +16,7 @@ button {
   margin-bottom: 2em;
 }
 
-.defaultSelect {
-  color: GrayText;
-}
-
-#calculatingProgressBar {
+#sendingProgressBar {
   margin: 0.5em;
 }
 
@@ -31,7 +27,7 @@ button {
     margin-right: 0.3em;
   }
 
-  #calculatingProgressBar {
+  #sendingProgressBar {
     margin: 0.5em;
     font-size: 80%;
   }

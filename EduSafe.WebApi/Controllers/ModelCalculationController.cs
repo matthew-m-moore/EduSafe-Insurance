@@ -13,7 +13,7 @@ namespace Dream.WebApp.Controllers
         // GET: api/calculate
         [Route("")]
         [HttpGet]
-        public ModelOutputSummary Get()
+        public ModelOutputSummary CheckApiTest()
         {
             var modelOutputSummary = new ModelOutputSummary
             {
@@ -27,7 +27,7 @@ namespace Dream.WebApp.Controllers
         // PUT: api/calculate/premiums
         [Route("premiums")]
         [HttpPut]
-        public ModelOutputSummary Put(ModelInputEntry modelInputEntry)
+        public ModelOutputSummary CalculatePremiums(ModelInputEntry modelInputEntry)
         {
             var premiumComputationAdapter = new PremiumComputationAdapter();
             var modelOutputSummary = premiumComputationAdapter.RunPremiumComputationScenarios(modelInputEntry);

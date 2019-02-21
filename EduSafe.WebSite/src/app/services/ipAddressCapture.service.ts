@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { Environment } from '../classes/environment';
+import { EnvironmentSettings } from '../classes/environmentSettings';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,19 +10,18 @@ import { map } from 'rxjs/operators';
 
 export class IpAddressCaptureService {
 
-  private ipAddressCaptureUrl = Environment.IpAddressCaptureUrl + '?format=jsonp&callback=JSONP_CALLBACK';
+  private ipAddressCaptureUrl = EnvironmentSettings.IpAddressCaptureUrl + '?format=jsonp&callback=JSONP_CALLBACK';
 
   constructor(private http: Http) { }
 
   getIpAddress(): Observable<string> {
     return this.http.get(this.ipAddressCaptureUrl).pipe(
       map(res => {
-        let ipVar = res.text();
-        let num = ipVar.indexOf(":");
-        let num2 = ipVar.indexOf("\"});");
-        ipVar = ipVar.slice(num + 2, num2);
-        console.log('ipVar -- ', ipVar);
-        return ipVar;
+        let responseText = res.text();
+        let leftBoundary = responseText.indexOf(":");
+        let rightBoundary = responseText.indexOf("\"});");
+        var ipAddress = responseText.slice(leftBoundary + 2, rightBoundary);
+        return ipAddress;
       }));
   }
 
@@ -30,12 +29,11 @@ export class IpAddressCaptureService {
     return this.http.get(this.ipAddressCaptureUrl)
       .toPromise()
       .then(res => {
-        let ipVar = res.text();
-        let num = ipVar.indexOf(":");
-        let num2 = ipVar.indexOf("\"});");
-        ipVar = ipVar.slice(num + 2, num2);
-        console.log('ipVar -- ', ipVar);
-        return ipVar;
+        let responseText = res.text();
+        let leftBoundary = responseText.indexOf(":");
+        let rightBoundary = responseText.indexOf("\"});");
+        var ipAddress = responseText.slice(leftBoundary + 2, rightBoundary);
+        return ipAddress;
       });
   }
 }

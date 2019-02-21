@@ -1,8 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
-
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,12 +8,12 @@ import { Observable } from 'rxjs';
   styleUrls: ['../styles/app-root.component.css']
 })
 
-export class AppRootComponent {
-
+export class AppRootComponent implements OnInit {
   titleText = 'Edu$afe';
-  subtitleText = '[ Securing Your Future ]';
+  subtitleText = 'Securing Your Future';
 
   public calculateIsClicked = false;
+  public contactIsClicked = false;
   public ipAddress = "";
 
   constructor(
@@ -24,10 +22,23 @@ export class AppRootComponent {
 
   revealHomePage(): void {
     this.calculateIsClicked = false;
+    this.contactIsClicked = false;
+    window.scroll(0, 0);
   }
 
   revealModelInputs(): void {
     this.calculateIsClicked = true;
+    this.contactIsClicked = false;
+    window.scroll(0, 0);
+  }
+
+  revealContactPage(): void {
+    this.contactIsClicked = true;
+    this.calculateIsClicked = false;
+    window.scroll(0, 0);
+  }
+
+  ngOnInit(): void {
     this.ipAddressCaptureService.getIpAddressPromise()
       .then(ipAddressPromise => {
         this.ipAddress = ipAddressPromise;

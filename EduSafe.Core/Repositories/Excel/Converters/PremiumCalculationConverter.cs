@@ -54,6 +54,7 @@ namespace EduSafe.Core.Repositories.Excel.Converters
             var dropOutCoverageOption = enrollmentModelScenarioRecord.DropOutOptionRatio;
             var gradSchoolCoverageOption = enrollmentModelScenarioRecord.GradSchoolOptionRatio;
             var earlyHireCoverageOption = enrollmentModelScenarioRecord.EarlyHireOptionRatio;
+            var premiumMargin = enrollmentModelScenarioRecord.Margin;
 
             var premiumCalculationModelInput =
                 new PremiumCalculationModelInput(
@@ -62,7 +63,8 @@ namespace EduSafe.Core.Repositories.Excel.Converters
                     discountFactorCurve,
                     dropOutCoverageOption,
                     gradSchoolCoverageOption,
-                    earlyHireCoverageOption);
+                    earlyHireCoverageOption,
+                    premiumMargin);
 
             return premiumCalculationModelInput;
         }

@@ -10,9 +10,23 @@ button {
   margin: 0.5em;
 }
 
+#sendingResultsProgressBar {
+  margin: 0.5em;
+}
+
 @media only screen and (max-width: 600px) {
   table {
     margin-top: 1.5em;
     font-size: 90%;
+  }
+
+  #policyDetailsContent {
+    margin: 0.5em;
+    font-size: 80%;
+  }
+
+  #sendingResultsProgressBar {
+    margin: 0.5em;
+    font-size: 80%;
   }
 }

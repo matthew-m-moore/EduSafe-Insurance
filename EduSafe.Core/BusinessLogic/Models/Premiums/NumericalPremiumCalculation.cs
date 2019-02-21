@@ -29,6 +29,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
                     targetValue);
 
             SetCalculatedCashFlows();
+            premium *= (1.0 + PremiumCalculationModelInput.PremiumMargin);
             return premium;
         }
 

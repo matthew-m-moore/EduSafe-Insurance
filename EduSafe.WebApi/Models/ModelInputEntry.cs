@@ -4,6 +4,7 @@ namespace EduSafe.WebApi.Models
 {
     public class ModelInputEntry
     {
+        public string IpAddress { get; set; }
         public string CollegeName { get; set; }
         public string PublicOrPrivateSchool { get; set; }
         public string CollegeMajor { get; set; }
