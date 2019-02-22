@@ -3,10 +3,11 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'WebSi
 
 		CREATE TABLE WebSiteInquiryEmailAddress
 		(
-			ID int IDENTITY(1,1)
+			Id int IDENTITY(1,1)
 			, EmailAddress varchar(250) 
-			, IPAddress varchar(250)
-			, OptOut bit
+			, IpAddress varchar(250)
+			, ContactName varchar(250)
+			, OptOut bit			
 			, CreatedOn datetime
 			, CreatedBy varchar(25)
 		)

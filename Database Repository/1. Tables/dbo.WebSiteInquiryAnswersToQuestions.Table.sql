@@ -2,8 +2,8 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'WebSi
 	BEGIN
 		CREATE TABLE WebSiteInquiryAnswersToQuestions
 		(
-			ID int IDENTITY(1,1)
-			, IPAddressId int
+			Id int IDENTITY(1,1)
+			, IpAddressId int
 			, CollegeNameId int
 			, CollegeTypeId int
 			, MajorId int
