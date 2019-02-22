@@ -8,6 +8,7 @@ import { ModelOutputSummary } from '../classes/modelOutputSummary';
 import { ModelOutputEntry } from '../classes/modelOutputEntry';
 import { ResultsEmailEntry } from '../classes/resultsEmailEntry';
 
+import { ActivityCaptureService } from '../services/activityCapture.service';
 import { SendEmailService } from '../services/sendEmail.Service';
 
 @Component({
@@ -31,7 +32,8 @@ export class ModelOuputComponent implements OnInit, AfterViewInit {
     private modelComponent: ModelComponent,
     private elementRef: ElementRef,
     private modalService: BsModalService,
-    private sendEmailService: SendEmailService
+    private sendEmailService: SendEmailService,
+    private activityCaptureService: ActivityCaptureService
   ) { }
 
   revealModelInputsAgain(): void {
@@ -64,6 +66,7 @@ export class ModelOuputComponent implements OnInit, AfterViewInit {
       });
     
     this.modalMessage = "Results Email Sent";
+    this.activityCaptureService.captureResultsEmailActivity(this.resultsEmailEntry);
   }
 
   ngAfterViewInit() {

@@ -8,6 +8,7 @@ import { ModelInputEntry } from '../classes/modelInputEntry';
 import { ModelOutputSummary } from '../classes/modelOutputSummary';
 import { CollegeMajorData } from '../classes/collegeMajorData';
 
+import { ActivityCaptureService } from '../services/activityCapture.service';
 import { ModelCalculationService } from '../services/modelCalculation.service';
 import { CollegeDataSearchService } from '../services/collegeDataSearch.service';
 
@@ -43,6 +44,7 @@ export class ModelComponent implements OnInit {
 
   constructor(
     private appRootComponent: AppRootComponent,
+    private activityCaptureService: ActivityCaptureService,
     private modelCalculationService: ModelCalculationService,
     private collegeDataSearchService: CollegeDataSearchService
   ) { }
@@ -95,16 +97,13 @@ export class ModelComponent implements OnInit {
         this.isCalculated = true;
         window.scroll(0, 0);
       })
+
+    this.activityCaptureService.captureCalculationActivity(this.modelInputEntry);
   }
 
   ngOnInit(): void {
     this.modelInputEntry = new ModelInputEntry();
     this.modelInputEntry.IpAddress = this.appRootComponent.ipAddress;
-
-    this.modelCalculationService.getModelOutput()
-      .then(modelCalculationOuput => {
-        this.modelOutputSummary = modelCalculationOuput;
-      });
 
     this.datepickerConfig = Object.assign({}, {
       minMode: this.datepickerMinMode,

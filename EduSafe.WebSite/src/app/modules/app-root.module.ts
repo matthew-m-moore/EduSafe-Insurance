@@ -19,6 +19,7 @@ import { ModelComponent } from '../components/model.component';
 import { ModelOuputComponent } from '../components/output.component';
 import { ContactComponent } from '../components/contact.component';
 
+import { ActivityCaptureService } from '../services/activityCapture.service';
 import { ModelCalculationService } from '../services/modelCalculation.service';
 import { CollegeDataSearchService } from '../services/collegeDataSearch.service';
 import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
@@ -46,6 +47,7 @@ import { SendEmailService } from '../services/sendEmail.Service';
     ContactComponent
   ],
   providers: [
+    ActivityCaptureService,
     ModelCalculationService,
     CollegeDataSearchService,
     IpAddressCaptureService,
