@@ -85,5 +85,50 @@ namespace EduSafe.IO {
                 return ((string)(this["EmailReceiver"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("EduSafeDB")]
+        public string WebsiteInquiryDatabaseName {
+            get {
+                return ((string)(this["WebsiteInquiryDatabaseName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("edusafe.database.windows.net")]
+        public string WebsiteInquiryServerName {
+            get {
+                return ((string)(this["WebsiteInquiryServerName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("EduSafeAdmin")]
+        public string WebsiteInquiryUserName {
+            get {
+                return ((string)(this["WebsiteInquiryUserName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Master123")]
+        public string WebsiteInquiryPassword {
+            get {
+                return ((string)(this["WebsiteInquiryPassword"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1433")]
+        public string WebsiteInquiryPort {
+            get {
+                return ((string)(this["WebsiteInquiryPort"]));
+            }
+        }
     }
 }

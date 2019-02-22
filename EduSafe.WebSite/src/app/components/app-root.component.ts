@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ActivityInputEntry } from '../classes/activityInputEntry';
+
+import { ActivityCaptureService } from '../services/activityCapture.service';
 import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
 
 @Component({
@@ -9,6 +12,8 @@ import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
 })
 
 export class AppRootComponent implements OnInit {
+  activityInputEntry: ActivityInputEntry;
+
   titleText = 'Edu$afe';
   subtitleText = 'Securing Your Future';
 
@@ -17,6 +22,7 @@ export class AppRootComponent implements OnInit {
   public ipAddress = "";
 
   constructor(
+    private activityCaptureService: ActivityCaptureService,
     private ipAddressCaptureService: IpAddressCaptureService
   ) { }
 
@@ -39,9 +45,12 @@ export class AppRootComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.activityInputEntry = new ActivityInputEntry();
     this.ipAddressCaptureService.getIpAddressPromise()
       .then(ipAddressPromise => {
         this.ipAddress = ipAddressPromise;
-      });
+        this.activityInputEntry.IpAddress = this.ipAddress;
+        this.activityCaptureService.captureIpAddress(this.activityInputEntry);
+      });  
   }
 }

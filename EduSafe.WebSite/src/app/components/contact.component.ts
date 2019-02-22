@@ -4,6 +4,7 @@ import { AppRootComponent } from '../components/app-root.component';
 
 import { InquiryEmailEntry } from '../classes/inquiryEmailEntry';
 
+import { ActivityCaptureService } from '../services/activityCapture.service';
 import { SendEmailService } from '../services/sendEmail.Service';
 
 @Component({
@@ -20,7 +21,8 @@ export class ContactComponent implements OnInit {
 
   constructor(
     private appRootComponent: AppRootComponent,
-    private sendEmailService: SendEmailService
+    private sendEmailService: SendEmailService,
+    private activityCaptureService: ActivityCaptureService
   ) { }
 
   sendInquiryEmail(): void {
@@ -30,6 +32,8 @@ export class ContactComponent implements OnInit {
         this.isEmailSent = emailSuccess;
         this.isSending = false;
       });
+
+    this.activityCaptureService.captureInquiryEmailActivity(this.inquiryEmailEntry);
   }
 
   ngOnInit(): void {

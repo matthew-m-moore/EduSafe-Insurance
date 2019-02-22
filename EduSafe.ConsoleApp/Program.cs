@@ -1,6 +1,7 @@
 ﻿using System;
 using EduSafe.Common.Utilities;
 using EduSafe.ConsoleApp.Components;
+using EduSafe.IO.Database;
 
 namespace EduSafe.ConsoleApp
 {
@@ -19,6 +20,8 @@ namespace EduSafe.ConsoleApp
         {
             _windowHandle = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
             Console.Title = ConsoleTitle;
+
+            DatabaseConnectionSettings.SetDatabaseContextConnectionsDictionary(DatabaseContextSettings.DatabaseContextConnectionsDictionary);
 
             // If no arguments are supplied to the console application, enter the main wait loop
             if (args.Length < 1)

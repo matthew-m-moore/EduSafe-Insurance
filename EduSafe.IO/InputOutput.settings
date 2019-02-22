@@ -23,5 +23,20 @@
     <Setting Name="EmailReceiver" Type="System.String" Scope="Application">
       <Value Profile="(Default)">inquiries@edusafe.company</Value>
     </Setting>
+    <Setting Name="WebsiteInquiryDatabaseName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">EduSafeDB</Value>
+    </Setting>
+    <Setting Name="WebsiteInquiryServerName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">edusafe.database.windows.net</Value>
+    </Setting>
+    <Setting Name="WebsiteInquiryUserName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">EduSafeAdmin</Value>
+    </Setting>
+    <Setting Name="WebsiteInquiryPassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Master123</Value>
+    </Setting>
+    <Setting Name="WebsiteInquiryPort" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">1433</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
