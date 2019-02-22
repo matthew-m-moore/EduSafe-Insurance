@@ -12,11 +12,6 @@ BEGIN
 	ADD CONSTRAINT UC_CollegeType UNIQUE (CollegeType)
 END
 
-IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'UC_EmailAddress' and type = 'UQ') 
-BEGIN
-	ALTER TABLE WebSiteInquiryEmailAddress
-	ADD CONSTRAINT UC_EmailAddress UNIQUE (EmailAddress)
-END
 
 IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'UC_Major' and type = 'UQ') 
 BEGIN
