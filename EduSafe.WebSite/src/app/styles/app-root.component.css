@@ -52,6 +52,14 @@ button {
   -webkit-animation-iteration-count: 1;
   -webkit-transform-origin: 50% 50%;
   -webkit-animation-fill-mode: forwards;
+  -moz-animation: animationFrames ease 1s;
+  -moz-animation-iteration-count: 1;
+  -moz-transform-origin: 50% 50%;
+  -moz-animation-fill-mode: forwards;
+  -o-animation: animationFrames ease 1s;
+  -o-animation-iteration-count: 1;
+  -o-transform-origin: 50% 50%;
+  -o-animation-fill-mode: forwards;
 }
 
 #headerBorder {
@@ -165,3 +173,28 @@ button {
     transform: translate(0, 0);
   }
 }
+
+@-moz-keyframes animationFrames {
+  0% {
+    opacity: 0;
+    transform: translate(0, -2em);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@-o-keyframes animationFrames {
+  0% {
+    opacity: 0;
+    transform: translate(0, -2em);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+

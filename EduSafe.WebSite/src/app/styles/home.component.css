@@ -24,6 +24,12 @@
   -webkit-animation: animationFramesLeft ease 1.5s;
   -webkit-animation-iteration-count: 1;
   -webkit-transform-origin: 50% 50%;
+  -moz-animation: animationFramesLeft ease 1.5s;
+  -moz-animation-iteration-count: 1;
+  -moz-transform-origin: 50% 50%;
+  -o-animation: animationFramesLeft ease 1.5s;
+  -o-animation-iteration-count: 1;
+  -o-transform-origin: 50% 50%;
 }
 
 .slide-in-right {
@@ -33,6 +39,12 @@
   -webkit-animation: animationFramesRight ease 1.5s;
   -webkit-animation-iteration-count: 1;
   -webkit-transform-origin: 50% 50%;
+  -moz-animation: animationFramesRight ease 1.5s;
+  -moz-animation-iteration-count: 1;
+  -moz-transform-origin: 50% 50%;
+  -o-animation: animationFramesRight ease 1.5s;
+  -o-animation-iteration-count: 1;
+  -o-transform-origin: 50% 50%;
 }
 
 @media only screen and (max-width: 600px) {
@@ -72,6 +84,26 @@
   }
 }
 
+@-moz-keyframes animationFramesLeft {
+  0% {
+    transform: translate(-100%, 0);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@-o-keyframes animationFramesLeft {
+  0% {
+    transform: translate(-100%, 0);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
 @keyframes animationFramesRight {
   0% {
     transform: translate(100%, 0);
@@ -83,6 +115,26 @@
 }
 
 @-webkit-keyframes animationFramesRight {
+  0% {
+    transform: translate(100%, 0);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@-moz-keyframes animationFramesRight {
+  0% {
+    transform: translate(100%, 0);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@-o-keyframes animationFramesRight {
   0% {
     transform: translate(100%, 0);
   }
