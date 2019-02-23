@@ -188,6 +188,7 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\EduSafe-WebApi - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EduSafe.Common\EduSafe.Common.csproj">
