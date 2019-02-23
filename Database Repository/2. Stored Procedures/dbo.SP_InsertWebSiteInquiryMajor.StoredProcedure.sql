@@ -22,3 +22,4 @@ VALUES
 	, USER
 )
 
+SELECT Id = MAX(Id) FROM WebSiteInquiryMajor

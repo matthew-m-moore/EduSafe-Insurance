@@ -12,5 +12,6 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'WebSi
 			, AnnualCoverage float not null
 			, CreatedOn datetime not null
 			, CreatedBy varchar(25) not null
+			CONSTRAINT PK_AnswersToQuestions PRIMARY KEY (Id)
 		)
 	END

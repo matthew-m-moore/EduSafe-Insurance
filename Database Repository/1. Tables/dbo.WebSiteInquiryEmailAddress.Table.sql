@@ -10,6 +10,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'WebSi
 			, OptOut bit null
 			, CreatedOn datetime not null
 			, CreatedBy varchar(25) not null
+			CONSTRAINT PK_EmailAddress PRIMARY KEY (Id)
 		)
 
 	END
