@@ -4,9 +4,9 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'WebSi
 		CREATE TABLE WebSiteInquiryCollegeName
 		(
 			Id int IDENTITY(1,1) 
-			, CollegeName varchar(250)
-			, CreatedOn datetime
-			, CreatedBy varchar(25)
+			, CollegeName varchar(250) not null
+			, CreatedOn datetime not null
+			, CreatedBy varchar(25) not null
 			CONSTRAINT PK_CollegeName PRIMARY KEY (Id)
 		)
 	

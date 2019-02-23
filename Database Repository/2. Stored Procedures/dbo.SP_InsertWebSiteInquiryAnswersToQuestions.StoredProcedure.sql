@@ -16,30 +16,30 @@ CREATE PROCEDURE SP_InsertWebSiteInquiryAnswersToQuestions
 AS
 
 DECLARE @CollegeNameId int
-IF (SELECT Id FROM WebSiteInquiryCollegeName WHERE CollegeName = @CollegeName) is null
-	INSERT INTO WebSiteInquiryCollegeName VALUES (@CollegeName, GETDATE(), USER); 
-SET @CollegeNameId = (SELECT Id FROM WebSiteInquiryCollegeName WHERE CollegeName = @CollegeName);
+IF (SELECT ID FROM WebSiteInquiryCollegeName WHERE CollegeName = @CollegeName) is null
+	EXEC  SP_InsertWebSiteInquiryCollegeName @CollegeName;
+SET @CollegeNameId = (SELECT ID FROM WebSiteInquiryCollegeName WHERE CollegeName = @CollegeName);
 
 DECLARE @CollegeTypeId int
-IF (SELECT Id FROM WebSiteInquiryCollegeType WHERE CollegeType = @CollegeType) is null
-	INSERT INTO WebSiteInquiryCollegeType VALUES (@CollegeType, GETDATE(), USER);
-SET @CollegeTypeId = (SELECT Id FROM WebSiteInquiryCollegeType WHERE CollegeType = @CollegeType);
+IF (SELECT ID FROM WebSiteInquiryCollegeType WHERE CollegeType = @CollegeType) is null
+	EXEC  SP_InsertWebSiteInquiryCollegeType @CollegeType;
+SET @CollegeTypeId = (SELECT ID FROM WebSiteInquiryCollegeType WHERE CollegeType = @CollegeType);
 
 DECLARE @IpAddressId int
-	INSERT INTO WebSiteInquiryIpAddress VALUES (@IpAddress, GETDATE(), USER);
-SET @IpAddressId = (SELECT MAX(Id) as Id FROM WebSiteInquiryIpAddress WHERE IpAddress = @IpAddress);
+	EXEC  SP_InsertWebSiteInquiryIpAddress @IpAddress;
+SET @IpAddressId = (SELECT MAX(ID) as ID FROM WebSiteInquiryIpAddress WHERE IpAddress = @IpAddress);
 
 DECLARE @MajorId int
-IF (SELECT Id FROM WebSiteInquiryMajor WHERE Major = @Major) is null
-	INSERT INTO WebSiteInquiryMajor VALUES (@Major, GETDATE(), USER);
-SET @MajorId = (SELECT Id FROM WebSiteInquiryMajor WHERE Major = @Major);
+IF (SELECT ID FROM WebSiteInquiryMajor WHERE Major = @Major) is null
+	EXEC  SP_InsertWebSiteInquiryIpAddress @IpAddress;
+SET @MajorId = (SELECT ID FROM WebSiteInquiryMajor WHERE Major = @Major);
 
 DECLARE @AnswersId int
 IF (
-	SELECT Id
+	SELECT ID
 	FROM WebSiteInquiryAnswersToQuestions 
 	WHERE 
-			IpAddressId = @IpAddressId
+			IPAddressId = @IpAddressId
 		and CollegeNameId = @CollegeNameId
 		and CollegeTypeId = @CollegeTypeId
 		and MajorId	= @MajorId 
@@ -47,7 +47,7 @@ IF (
 
 	INSERT INTO WebSiteInquiryAnswersToQuestions 
 	(
-		IpAddressId 
+		IPAddressId 
 		, CollegeNameId 
 		, CollegeTypeId
 		, MajorId
@@ -68,14 +68,7 @@ IF (
 		, @GraduationDate
 		, @AnnualCoverage
 		, GETDATE()
-		, USER	
+		, USER
+		
 	);
-
-	SELECT   
-	 Id     = MAX(Id)  
-	 , IpAddressId = @IpAddressId  
-	 , CollegeNameId = @CollegeNameId  
-	 , CollegeTypeId = @CollegeTypeId  
-	 , MajorId  = @MajorId  
-	FROM WebSiteInquiryAnswersToQuestions
 GO
