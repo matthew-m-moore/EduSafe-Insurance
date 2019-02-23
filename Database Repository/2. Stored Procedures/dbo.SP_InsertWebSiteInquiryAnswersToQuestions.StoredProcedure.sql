@@ -25,8 +25,8 @@ IF (SELECT Id FROM WebSiteInquiryCollegeType WHERE CollegeType = @CollegeType) i
 	INSERT INTO WebSiteInquiryCollegeType VALUES (@CollegeType, GETDATE(), USER);
 SET @CollegeTypeId = (SELECT Id FROM WebSiteInquiryCollegeType WHERE CollegeType = @CollegeType);  
   
+INSERT INTO WebSiteInquiryIpAddress VALUES (@IpAddress, GETDATE(), USER)
 DECLARE @IpAddressId int  
-	INSERT INTO WebSiteInquiryIpAddress VALUES (@IpAddress, GETDATE(), USER);
 SET @IpAddressId = (SELECT MAX(Id) as Id FROM WebSiteInquiryIpAddress WHERE IpAddress = @IpAddress);  
   
 DECLARE @MajorId int  
@@ -71,7 +71,6 @@ IF (
 		, USER
 		
 	);
-GO
 
 SELECT   
 	Id     = MAX(Id)  
