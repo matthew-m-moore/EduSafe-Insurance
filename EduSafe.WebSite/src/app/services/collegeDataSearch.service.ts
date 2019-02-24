@@ -14,6 +14,7 @@ export class CollegeDataSearchService {
 
   private collegesUrl = EnvironmentSettings.BaseApiUrl + '/api/search/colleges';
   private collegeMajorsUrl = EnvironmentSettings.BaseApiUrl + '/api/search/collegeMajor';
+  private collegeMajorsDataUrl = EnvironmentSettings.BaseApiUrl + '/api/search/collegeMajors';
 
   constructor(private http: Http) { }
 
@@ -22,8 +23,14 @@ export class CollegeDataSearchService {
       .get(`${this.collegesUrl}/?collegeName=${collegeName}`).pipe(map(res => res.json()));
   }
 
-  searchCollegeMajors(description: string): Observable<CollegeMajorData[]> {
+  searchCollegeMajors(description: string): Observable<string[]> {
     return this.http
       .get(`${this.collegeMajorsUrl}/?description=${description}`).pipe(map(res => res.json()));
+  }
+
+  getCollegeMajorsData(): Promise<CollegeMajorData[]> {
+    return this.http.get(this.collegeMajorsDataUrl)
+      .toPromise()
+      .then(response => response.json() as CollegeMajorData[]);
   }
 }

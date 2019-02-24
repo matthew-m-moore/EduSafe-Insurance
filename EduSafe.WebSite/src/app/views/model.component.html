@@ -5,7 +5,7 @@
       <input [(ngModel)]="modelInputEntry.CollegeName"
              [typeahead]="collegesList"
              #collegesSearchBox (keyup)="searchCollege(collegesSearchBox.value)"
-             (ngModelChange)="checkIfPaymentCanBeCalculated()"
+             (blur)="checkIfPaymentCanBeCalculated()"
              id="collegeNameField"
              name="collegeName"
              class="form-control"
@@ -14,7 +14,7 @@
 
     <div class="form-group">
       <label for="schoolTypeField">What kind of school do you or will you attend?</label>
-      <select required (change)="updateSchoolType($event.target.value)"
+      <select required (change)="updateSchoolType($event.target.value); checkIfPaymentCanBeCalculated()"
               id="schoolTypeField"
               class="form-control">
         <option class="defaultSelect" disabled selected hidden>Please Select</option>
@@ -29,7 +29,8 @@
       <input [(ngModel)]="modelInputEntry.CollegeMajor"
              [typeahead]="collegeMajorsList"
              #collegeMajorSearchBox (keyup)="searchCollegeMajor(collegeMajorSearchBox.value)"
-             (ngModelChange)="updateIncomeCoverageAmount($event); checkIfPaymentCanBeCalculated()"
+             (ngModelChange)="updateIncomeCoverageAmount($event)"
+             (blur)="checkIfPaymentCanBeCalculated()"
              id="collegeMajorField"
              name="collegeMajor"
              class="form-control"

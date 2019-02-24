@@ -34,7 +34,7 @@ export class ModelComponent implements OnInit {
   collegeTypesList = [ 'Public School', 'Private School', 'For-Profit College'];
   collegesList: Observable<string[]>;
   collegeMajorsList: Observable<string[]>;
-  collegeMajorsDataList: Observable<CollegeMajorData[]>;
+  collegeMajorsDataList: CollegeMajorData[] = [];
 
   public isCalculated = false;
   public isCalculating = false;
@@ -70,15 +70,13 @@ export class ModelComponent implements OnInit {
   }
 
   updateIncomeCoverageAmount(collegeMajor): void {
-    this.collegeMajorsDataList.subscribe(result => {
-      if (result.some(d => d.CollegeMajor === collegeMajor)) {
-        var collegeMajorData = result.find(d => d.CollegeMajor === collegeMajor);
-        this.modelInputEntry.IncomeCoverageAmount = collegeMajorData.MedianSalary;
-      }
-      else {
-        this.modelInputEntry.IncomeCoverageAmount = this.defaultMedianSalary;
-      }
-    });
+    var collegeMajorData = this.collegeMajorsDataList.find(d => d.CollegeMajor === collegeMajor);
+    if (collegeMajorData) {
+      this.modelInputEntry.IncomeCoverageAmount = collegeMajorData.MedianSalary;
+    }
+    else {
+      this.modelInputEntry.IncomeCoverageAmount = this.defaultMedianSalary;
+    }
   }
 
   checkIfPaymentCanBeCalculated(): void {
@@ -119,14 +117,13 @@ export class ModelComponent implements OnInit {
       switchMap((searchText: string) =>
         this.collegeDataSearchService.searchColleges(searchText)));
 
-    this.collegeMajorsDataList = this.collegeMajorSearchTerms.pipe(
+    this.collegeMajorsList = this.collegeMajorSearchTerms.pipe(
       debounceTime(300),
       distinctUntilChanged(),
       switchMap((searchText: string) =>
         this.collegeDataSearchService.searchCollegeMajors(searchText)));
 
-    this.collegeMajorsList = this.collegeMajorsDataList.pipe(
-      map(result => result.map(
-        collegeMajorData => collegeMajorData.CollegeMajor)));
+    this.collegeDataSearchService.getCollegeMajorsData()
+      .then(collegeMajorsData => { this.collegeMajorsDataList = collegeMajorsData; });
   }
 }

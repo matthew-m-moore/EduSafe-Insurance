@@ -25,15 +25,26 @@ namespace EduSafe.WebApi.Controllers
         // GET: api/search/collegeMajor?description={description}
         [Route("collegeMajor")]
         [HttpGet]
-        public List<CollegeMajorData> SearchCollegeMajors([FromUri]string description)
+        public List<string> SearchCollegeMajors([FromUri]string description)
         {
-            if (string.IsNullOrWhiteSpace(description)) return new List<CollegeMajorData>();
+            if (string.IsNullOrWhiteSpace(description)) return new List<string>();
 
             var collegeMajorsDictionary = CollegeDataAdapter.CollegeMajorDataRepository.CollegeMajorDataDictionary;
-            var matchingCollegeMajors = collegeMajorsDictionary
-                .Where(kvp => kvp.Key.ToUpper().Contains(description)).Select(kvp => kvp.Value).ToList();
+            var matchingCollegeMajors = collegeMajorsDictionary.Keys
+                .Where(k => k.ToUpper().Contains(description)).ToList();
 
             return matchingCollegeMajors;
+        }
+
+        // GET: api/search/collegeMajors
+        [Route("collegeMajors")]
+        [HttpGet]
+        public List<CollegeMajorData> GetCollegeMajors()
+        {
+            var collegeMajorsDictionary = CollegeDataAdapter.CollegeMajorDataRepository.CollegeMajorDataDictionary;
+            var collegeMajors = collegeMajorsDictionary.Values.ToList();
+
+            return collegeMajors;
         }
     }
 }
