@@ -39,6 +39,7 @@ export class ModelComponent implements OnInit {
   public isCalculated = false;
   public isCalculating = false;
   public canPaymentBeCalculated = false;
+  private defaultMedianSalary = 50000;
   private collegeSearchTerms = new Subject<string>();
   private collegeMajorSearchTerms = new Subject<string>();
 
@@ -69,14 +70,15 @@ export class ModelComponent implements OnInit {
   }
 
   updateIncomeCoverageAmount(collegeMajor): void {
-    if (this.collegeMajorsDataList.subscribe(result =>
-        result.some(d => d.CollegeMajor === collegeMajor))) {
-
-      this.collegeMajorsDataList.subscribe(result => {
-          var collegeMajorData = result.find(d => d.CollegeMajor === collegeMajor);
-          this.modelInputEntry.IncomeCoverageAmount = collegeMajorData.MedianSalary;
-        });
-    }
+    this.collegeMajorsDataList.subscribe(result => {
+      if (result.some(d => d.CollegeMajor === collegeMajor)) {
+        var collegeMajorData = result.find(d => d.CollegeMajor === collegeMajor);
+        this.modelInputEntry.IncomeCoverageAmount = collegeMajorData.MedianSalary;
+      }
+      else {
+        this.modelInputEntry.IncomeCoverageAmount = this.defaultMedianSalary;
+      }
+    });
   }
 
   checkIfPaymentCanBeCalculated(): void {
