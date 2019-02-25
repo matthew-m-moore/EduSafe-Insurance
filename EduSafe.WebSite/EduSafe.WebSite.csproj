@@ -93,6 +93,7 @@
     <Content Include="src\assets\EduSafe_Icon.ico" />
     <Content Include="src\assets\EduSafe_Icon.png" />
     <Content Include="src\browserslist" />
+    <Content Include="src\edusafe-sitemap.xml" />
     <Content Include="src\tsconfig.app.json" />
     <Content Include="src\tsconfig.spec.json" />
     <Content Include="src\tslint.json" />
