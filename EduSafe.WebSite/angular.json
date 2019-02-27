@@ -21,7 +21,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/edusafe-sitemap.xml"
+              "src/edusafe-sitemap.xml",
+              "src/web.config"
             ],
             "styles": [
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",

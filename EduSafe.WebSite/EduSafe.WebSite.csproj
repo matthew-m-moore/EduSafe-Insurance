@@ -150,12 +150,12 @@
     <Content Include="tsconfig.json" />
     <Content Include="tslint.json" />
     <Content Include="src\app\styles\home.component.css" />
-    <Content Include="web.config" />
+    <Content Include="src\web.config" />
     <Content Include="src\app\views\output.component.html" />
-    <None Include="web.Debug.config">
+    <None Include="src\web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
-    <None Include="web.Release.config">
+    <None Include="src\web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
