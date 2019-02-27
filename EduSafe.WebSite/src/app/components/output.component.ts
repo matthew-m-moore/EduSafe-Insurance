@@ -75,8 +75,10 @@ export class ModelOuputComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.modelOutputSummary = this.modelComponent.modelOutputSummary;
-    this.modelOutputEntry = this.modelComponent.modelOutputSummary.ModelOutputEntries[0];
-    this.modelOuputCoverage = this.modelComponent.modelInputEntry.IncomeCoverageAmount / this.modelOutputEntry.MonthsOfSalaryCoverage;
+    this.modelOutputEntry = this.modelComponent.modelOutputSummary.ModelOutputEntries[2];
+
+    var portionOfOneYear = this.modelOutputEntry.MonthsOfSalaryCoverage / 12;
+    this.modelOuputCoverage = this.modelComponent.modelInputEntry.IncomeCoverageAmount * portionOfOneYear;
 
     this.resultsEmailEntry = new ResultsEmailEntry();
     this.resultsEmailEntry.ModelInputEntry = this.modelComponent.modelInputEntry;

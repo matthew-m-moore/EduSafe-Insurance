@@ -53,7 +53,7 @@ namespace EduSafe.WebApi.Controllers
             editedEmailBody = editedEmailBody.Replace("align=\"center\"", "align=\"left\"");
             editedEmailBody = editedEmailBody.Replace(
                 "<i _ngcontent-c5=\"\"><u _ngcontent-c5=\"\">Example</u>:</i>",
-                "<br><br><br><br><br><br><div><i _ngcontent-c5=\"\"><u _ngcontent-c5=\"\">Example</u>:</i>");
+                "<br><br><br><br><br><br><br><br><div><i _ngcontent-c5=\"\"><u _ngcontent-c5=\"\">Example</u>:</i>");
             editedEmailBody += "</div>";
 
             var emailSender = new EmailSender();

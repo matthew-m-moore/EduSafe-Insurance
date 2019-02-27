@@ -29,7 +29,7 @@ namespace EduSafe.WebApi.Adapters
         private const string _forProfitCollege = "For-Profit College";   
 
         private static Stream _websiteScenarioDataFileStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(_websiteScenarioDataFile);
-        private readonly List<int> _incomeCoverageMonths = new List<int> { 3, 6, 12 };
+        private readonly List<int> _incomeCoverageMonths = new List<int> { 1, 2, 3, 6, 12 };
 
         private PremiumComputationRepository _premiumComputationRepository;
 
