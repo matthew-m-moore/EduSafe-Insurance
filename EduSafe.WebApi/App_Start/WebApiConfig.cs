@@ -14,6 +14,7 @@ namespace EduSafe.WebApi
             config.MapHttpAttributeRoutes();
 
             CollegeDataAdapter.LoadDataRepository();
+            ArticlesLoadingAdapter.LoadArticleRecords();
             DatabaseConnectionSettings.SetDatabaseContextConnectionsDictionary(DatabaseContextSettings.DatabaseContextConnectionsDictionary);
         }
     }

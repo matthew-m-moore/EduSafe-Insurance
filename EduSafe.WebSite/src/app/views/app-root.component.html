@@ -6,26 +6,24 @@
     </div>
     <div class="col-md-8 text-md-right text-center" id="navigationHeader">
       <ul class="navigation">
-        <li (click)="revealHomePage()"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;home</li>
-        <li (click)="revealModelInputs()"><i class="fa fa-calculator" aria-hidden="true"></i>&nbsp;calc</li>
+        <li routerLink="/edusafe-home" routerLinkActive="active" (click)="changeFirstLandingStatus()">
+          <i class="fa fa-home" aria-hidden="true"></i>&nbsp;home</li>
+        <li routerLink="/edusafe-model" routerLinkActive="active">
+          <i class="fa fa-calculator" aria-hidden="true"></i>&nbsp;calc</li>
+        <li routerLink="/edusafe-news" routerLinkActive="active">
+          <i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp;news</li>
+        <li routerLink="/edusafe-contact" routerLinkActive="active">
+          <i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;contact</li>
         <li><i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;login</li>
-        <li (click)="revealContactPage()"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;contact</li>
         <li><i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp;pay</li>
       </ul>
     </div>
   </div>
-  <router-outlet></router-outlet>
-  <div *ngIf="!calculateIsClicked && !contactIsClicked">
+  <div *ngIf="isFirstLandingOnPage">
     <edusafe-home></edusafe-home>
-    <button type="button" class="btn btn-primary" (click)="revealModelInputs()">
-      Calculate Your Coverage
-    </button>
   </div>
-  <div *ngIf="calculateIsClicked && !contactIsClicked">
-    <edusafe-model></edusafe-model>
-  </div>
-  <div *ngIf="contactIsClicked && !calculateIsClicked">
-    <edusafe-contact></edusafe-contact>
+  <div [@routeAnimations]="prepareRoute(outlet)">
+    <router-outlet #outlet="outlet"></router-outlet>
   </div>
   <div id="footerContent">
     &copy; 2018-2019, Edu$afe, Inc.

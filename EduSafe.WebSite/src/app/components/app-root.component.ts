@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 import { ActivityInputEntry } from '../classes/activityInputEntry';
+import { ArticleInformationEntry } from '../classes/articleInformationEntry';
 
 import { ActivityCaptureService } from '../services/activityCapture.service';
+import { ArticleInformationService } from '../services/articleInformation.service';
 import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
 
 @Component({
@@ -13,35 +16,26 @@ import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
 
 export class AppRootComponent implements OnInit {
   activityInputEntry: ActivityInputEntry;
+  articlesList: ArticleInformationEntry[] = [];
 
   titleText = 'Edu$afe';
   subtitleText = 'Securing Your Future';
 
-  public calculateIsClicked = false;
-  public contactIsClicked = false;
+  public isFirstLandingOnPage = true;
   public ipAddress = "";
 
   constructor(
     private activityCaptureService: ActivityCaptureService,
+    private articleInformationService: ArticleInformationService,
     private ipAddressCaptureService: IpAddressCaptureService
   ) { }
 
-  revealHomePage(): void {
-    this.calculateIsClicked = false;
-    this.contactIsClicked = false;
-    window.scroll(0, 0);
+  changeFirstLandingStatus(): void {
+    this.isFirstLandingOnPage = false;
   }
 
-  revealModelInputs(): void {
-    this.calculateIsClicked = true;
-    this.contactIsClicked = false;
-    window.scroll(0, 0);
-  }
-
-  revealContactPage(): void {
-    this.contactIsClicked = true;
-    this.calculateIsClicked = false;
-    window.scroll(0, 0);
+  prepareRoute(outlet: RouterOutlet) {
+    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
   }
 
   ngOnInit(): void {
@@ -51,6 +45,11 @@ export class AppRootComponent implements OnInit {
         this.ipAddress = ipAddressPromise;
         this.activityInputEntry.IpAddress = this.ipAddress;
         this.activityCaptureService.captureIpAddress(this.activityInputEntry);
-      });  
+      });
+
+    this.articleInformationService.getArticleInformationEntries()
+      .then(articleInformationEntries => {
+        this.articlesList = articleInformationEntries;
+      });
   }
 }

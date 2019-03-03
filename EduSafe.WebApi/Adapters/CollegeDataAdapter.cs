@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Reflection;
-using System.Web;
 using EduSafe.Core.Repositories.Excel;
 
 namespace EduSafe.WebApi.Adapters

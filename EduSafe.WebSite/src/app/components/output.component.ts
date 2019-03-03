@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, AfterViewInit, ElementRef, TemplateRef } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal'
 
@@ -33,12 +34,14 @@ export class ModelOuputComponent implements OnInit, AfterViewInit {
     private elementRef: ElementRef,
     private modalService: BsModalService,
     private sendEmailService: SendEmailService,
-    private activityCaptureService: ActivityCaptureService
+    private activityCaptureService: ActivityCaptureService,
+    private router: Router
   ) { }
 
   revealModelInputsAgain(): void {
-    this.modelComponent.isCalculated = false;
     this.isResultsEmailSent = false;
+    let routingUrl = ['/edusafe-model'];
+    this.router.navigate(routingUrl);
     window.scroll(0, 0);
   }
 

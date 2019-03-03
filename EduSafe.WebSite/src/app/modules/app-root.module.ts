@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -11,23 +12,26 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar'
 
-import { RoutingModule } from '../modules/routing.module';
+import { AppRoutingModule } from '../modules/routing.module';
 
 import { AppRootComponent } from '../components/app-root.component';
 import { HomeComponent } from '../components/home.component';
 import { ModelComponent } from '../components/model.component';
 import { ModelOuputComponent } from '../components/output.component';
 import { ContactComponent } from '../components/contact.component';
+import { ArticlesComponent } from '../components/articles.component';
 
 import { ActivityCaptureService } from '../services/activityCapture.service';
 import { ModelCalculationService } from '../services/modelCalculation.service';
 import { CollegeDataSearchService } from '../services/collegeDataSearch.service';
+import { ArticleInformationService } from '../services/articleInformation.service';
 import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
 import { SendEmailService } from '../services/sendEmail.Service';
 
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     CommonModule,
     FormsModule,
     HttpModule,
@@ -37,19 +41,21 @@ import { SendEmailService } from '../services/sendEmail.Service';
     ButtonsModule.forRoot(),
     ModalModule.forRoot(),
     ProgressbarModule.forRoot(),
-    RoutingModule  
+    AppRoutingModule  
   ],
   declarations: [
     AppRootComponent,
     HomeComponent,
     ModelComponent,
     ModelOuputComponent,
-    ContactComponent
+    ContactComponent,
+    ArticlesComponent
   ],
   providers: [
     ActivityCaptureService,
     ModelCalculationService,
     CollegeDataSearchService,
+    ArticleInformationService,
     IpAddressCaptureService,
     SendEmailService
   ],

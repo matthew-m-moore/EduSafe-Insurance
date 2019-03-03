@@ -102,6 +102,7 @@ export class ModelComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.appRootComponent.isFirstLandingOnPage = false;
     this.modelInputEntry = new ModelInputEntry();
     this.modelInputEntry.IpAddress = this.appRootComponent.ipAddress;
 

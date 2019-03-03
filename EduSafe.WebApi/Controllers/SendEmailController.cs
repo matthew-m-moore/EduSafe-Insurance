@@ -47,7 +47,7 @@ namespace EduSafe.WebApi.Controllers
             var startOfEmailBody = new string(emailBody.Take(clipStartIndex).ToArray());
             var endOfEmailBody = new string(emailBody.Skip(clipEndIndex + _buttonEnd.Length).ToArray());
 
-            // This gobbledeguk inserts our email into the plce of the buttons, left-aligns the table,
+            // This gobbledeguk inserts our email in place of the buttons, left-aligns the table,
             // and also makes the remaining text appear below the table.
             var editedEmailBody = startOfEmailBody + _contactUs + endOfEmailBody;
             editedEmailBody = editedEmailBody.Replace("align=\"center\"", "align=\"left\"");
