@@ -125,12 +125,14 @@
     <TypeScriptCompile Include="src\app\components\home.component.ts" />
     <TypeScriptCompile Include="src\app\components\model.component.ts" />
     <TypeScriptCompile Include="src\app\components\output.component.ts" />
+    <TypeScriptCompile Include="src\app\directives\animateOnScroll.directive.ts" />
     <TypeScriptCompile Include="src\app\modules\routing.module.ts" />
     <TypeScriptCompile Include="src\app\services\activityCapture.service.ts" />
     <TypeScriptCompile Include="src\app\services\articleInformation.service.ts" />
     <TypeScriptCompile Include="src\app\services\collegeDataSearch.service.ts" />
     <TypeScriptCompile Include="src\app\services\ipAddressCapture.service.ts" />
     <TypeScriptCompile Include="src\app\services\modelCalculation.service.ts" />
+    <TypeScriptCompile Include="src\app\services\scrollInformation.service.ts" />
     <TypeScriptCompile Include="src\app\services\sendEmail.Service.ts" />
     <TypeScriptCompile Include="src\app\components\app-root.component.ts" />
     <TypeScriptCompile Include="src\app\modules\app-root.module.ts" />

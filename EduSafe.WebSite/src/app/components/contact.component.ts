@@ -37,7 +37,6 @@ export class ContactComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.appRootComponent.isFirstLandingOnPage = false;
     this.inquiryEmailEntry = new InquiryEmailEntry();
     this.inquiryEmailEntry.IpAddress = this.appRootComponent.ipAddress;
   }

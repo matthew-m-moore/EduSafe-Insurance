@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 
 import { ActivityInputEntry } from '../classes/activityInputEntry';
 import { ArticleInformationEntry } from '../classes/articleInformationEntry';
@@ -21,7 +20,6 @@ export class AppRootComponent implements OnInit {
   titleText = 'Edu$afe';
   subtitleText = 'Securing Your Future';
 
-  public isFirstLandingOnPage = true;
   public ipAddress = "";
 
   constructor(
@@ -29,14 +27,6 @@ export class AppRootComponent implements OnInit {
     private articleInformationService: ArticleInformationService,
     private ipAddressCaptureService: IpAddressCaptureService
   ) { }
-
-  changeFirstLandingStatus(): void {
-    this.isFirstLandingOnPage = false;
-  }
-
-  prepareRoute(outlet: RouterOutlet) {
-    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
-  }
 
   ngOnInit(): void {
     this.activityInputEntry = new ActivityInputEntry();

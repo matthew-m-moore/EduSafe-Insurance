@@ -21,11 +21,14 @@ import { ModelOuputComponent } from '../components/output.component';
 import { ContactComponent } from '../components/contact.component';
 import { ArticlesComponent } from '../components/articles.component';
 
+import { AnimateOnScrollDirective } from '../directives/animateOnScroll.directive';
+
 import { ActivityCaptureService } from '../services/activityCapture.service';
 import { ModelCalculationService } from '../services/modelCalculation.service';
 import { CollegeDataSearchService } from '../services/collegeDataSearch.service';
 import { ArticleInformationService } from '../services/articleInformation.service';
 import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
+import { ScrollInformationService } from '../services/scrollInformation.service';
 import { SendEmailService } from '../services/sendEmail.Service';
 
 @NgModule({
@@ -49,7 +52,8 @@ import { SendEmailService } from '../services/sendEmail.Service';
     ModelComponent,
     ModelOuputComponent,
     ContactComponent,
-    ArticlesComponent
+    ArticlesComponent,
+    AnimateOnScrollDirective
   ],
   providers: [
     ActivityCaptureService,
@@ -57,6 +61,7 @@ import { SendEmailService } from '../services/sendEmail.Service';
     CollegeDataSearchService,
     ArticleInformationService,
     IpAddressCaptureService,
+    ScrollInformationService,
     SendEmailService
   ],
   bootstrap: [

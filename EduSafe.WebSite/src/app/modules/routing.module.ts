@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, NavigationEnd, Routes, Router, ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,12 +10,11 @@ import { ContactComponent } from '../components/contact.component';
 import { ArticlesComponent } from '../components/articles.component';
 
 import { filter, mergeMap, map } from 'rxjs/operators';
-import { AppRootComponent } from '../components/app-root.component';
 
 const appRoutes: Routes = [
   {
     path: '',
-    component: AppRootComponent,
+    component: HomeComponent,
     data: {
       title: 'Edu$afe, Securing Your Future',
       metaDescription: 'Edu$afe provides unemployment insurance for new college graduates. Importantly, Edu$afe offers income protection for those burdened with student loans.'
@@ -71,8 +70,6 @@ const appRoutes: Routes = [
   exports: [RouterModule]
 })
 
-// export const RoutingModule: ModuleWithProviders = RouterModule.forRoot(appRoutes);
-
 export class AppRoutingModule {
 
   constructor(
@@ -81,24 +78,18 @@ export class AppRoutingModule {
     private titleService: Title,
     private metaService: Meta
   ) {
-    //Boilerplate code to filter out only important router events and to pull out data object field from each route
     this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      map(() => this.activatedRoute),
-      map(route => {
-        while (route.firstChild) route = route.firstChild;
-        return route;
-      }),
-      filter(route => route.outlet === 'primary'),
-      //Data fields are merged so we can use them directly to take title and metaDescription for each route from them
-      mergeMap(route => route.data)
+        filter(event => event instanceof NavigationEnd),
+        map(() => this.activatedRoute),
+        map(route => {
+          while (route.firstChild) route = route.firstChild;
+          return route;
+        }),
+        filter(route => route.outlet === 'primary'),
+        mergeMap(route => route.data)
       )
-      //Real action starts there
       .subscribe((event) => {
-        //Changing title
         this.titleService.setTitle(event['title']);
-
-        //Changing meta with name="description"
         var tag = { name: 'description', content: event['metaDescription'] };
         let attributeSelector: string = 'name="description"';
         this.metaService.removeTag(attributeSelector);

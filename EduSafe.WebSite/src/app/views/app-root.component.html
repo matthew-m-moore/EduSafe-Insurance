@@ -6,7 +6,7 @@
     </div>
     <div class="col-md-8 text-md-right text-center" id="navigationHeader">
       <ul class="navigation">
-        <li routerLink="/edusafe-home" routerLinkActive="active" (click)="changeFirstLandingStatus()">
+        <li routerLink="/edusafe-home" routerLinkActive="active">
           <i class="fa fa-home" aria-hidden="true"></i>&nbsp;home</li>
         <li routerLink="/edusafe-model" routerLinkActive="active">
           <i class="fa fa-calculator" aria-hidden="true"></i>&nbsp;calc</li>
@@ -19,12 +19,7 @@
       </ul>
     </div>
   </div>
-  <div *ngIf="isFirstLandingOnPage">
-    <edusafe-home></edusafe-home>
-  </div>
-  <div [@routeAnimations]="prepareRoute(outlet)">
-    <router-outlet #outlet="outlet"></router-outlet>
-  </div>
+  <router-outlet></router-outlet>
   <div id="footerContent">
     &copy; 2018-2019, Edu$afe, Inc.
     <br clear="all">

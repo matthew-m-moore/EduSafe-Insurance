@@ -36,8 +36,6 @@ export class ArticlesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.appRootComponent.isFirstLandingOnPage = false;
-
     if (this.appRootComponent.articlesList.length > 0)
       this.articlesList = this.appRootComponent.articlesList;
     else {

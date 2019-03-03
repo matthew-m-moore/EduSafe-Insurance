@@ -40,8 +40,7 @@ export class ModelOuputComponent implements OnInit, AfterViewInit {
 
   revealModelInputsAgain(): void {
     this.isResultsEmailSent = false;
-    let routingUrl = ['/edusafe-model'];
-    this.router.navigate(routingUrl);
+    this.modelComponent.isCalculated = false;
     window.scroll(0, 0);
   }
 
