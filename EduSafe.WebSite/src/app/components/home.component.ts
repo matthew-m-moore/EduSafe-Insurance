@@ -16,4 +16,10 @@ export class HomeComponent {
     this.router.navigate(routingUrl);
     window.scroll(0, 0);
   }
+
+  goToContactUs(): void {
+    let routingUrl = ['/edusafe-contact'];
+    this.router.navigate(routingUrl);
+    window.scroll(0, 0);
+  }
 }
