@@ -8,6 +8,6 @@
     </StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <StartArguments>PremiumScenariosScript "C:\Users\Matthew M\Desktop\Dropout-Rate-Test-Scenarios.xlsx"</StartArguments>
+    <StartArguments>PremiumScenariosScript "C:\Users\Matthew M\Desktop\Dropout-Rate-Test-Scenarios-Single-With-Margin.xlsx"</StartArguments>
   </PropertyGroup>
 </Project>

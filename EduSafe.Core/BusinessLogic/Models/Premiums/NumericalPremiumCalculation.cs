@@ -29,7 +29,6 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
                     targetValue);
 
             SetCalculatedCashFlows();
-            premium *= (1.0 + PremiumCalculationModelInput.PremiumMargin);
             return premium;
         }
 
@@ -96,7 +95,8 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
 
             var previouslyPaidInPremiums = PremiumCalculationModelInput.PreviouslyPaidInPremiums;
             var probabilityAdjustedPremium = premiumAmountGuess * enrollmentFraction;
-            var totalPremiumsPaidIn = (monthlyPeriod * premiumAmountGuess) + previouslyPaidInPremiums;
+            var probabilityAdjustedEquity = probabilityAdjustedPremium * PremiumCalculationModelInput.PremiumMargin;
+            var totalPremiumsPaidIn = (monthlyPeriod * premiumAmountGuess) + previouslyPaidInPremiums;         
 
             var currentPeriodCashFlow = new PremiumCalculationCashFlow
             {
@@ -105,6 +105,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
 
                 Premium = premiumAmountGuess,
                 ProbabilityAdjustedPremium = probabilityAdjustedPremium,
+                ProbabilityAdjustedEquity = probabilityAdjustedEquity,
                 ProbabilityAdjustedCostsAndFees = servicingCosts.Field<double>(Constants.TotalIdentifier),
 
                 ProbabilityAdjustedDropOutClaims = dropOutCoverage * dropOutFraction * totalPremiumsPaidIn,
