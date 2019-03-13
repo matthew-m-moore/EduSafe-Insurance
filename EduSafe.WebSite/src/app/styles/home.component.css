@@ -5,6 +5,10 @@
   margin-bottom: 1em;
 }
 
+#detailsContent {
+  margin: 0.5em;
+}
+
 button {
   margin-top: 1em;
   margin-bottom: 2em;
@@ -32,6 +36,10 @@ button {
   padding-bottom: 1em;
   padding-left: 0.2em;
   padding-right: 0.2em;
+}
+
+.lowerImage {
+  width: 40%;
 }
 
 .slide-in-left {
@@ -72,12 +80,21 @@ button {
     margin-bottom: 0.8em;
   }
 
+  #detailsContent {
+    margin: 0.5em;
+    font-size: 80%;
+  }
+
   .homeContent {
     font-family: "Arial Black", Gadget, sans-serif;
     font-size: 100%;
     font-weight: bold;
     color: #197ce9;
     background-color: #c9ffde;
+  }
+
+  .lowerImage {
+    width: 75%;
   }
 
   .subTitleContent {

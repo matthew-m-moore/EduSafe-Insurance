@@ -27,6 +27,6 @@
             ProbabilityAdjustedEarlyHireClaims;
 
         public double DiscountedTotalNumerator => (TotalCostsAndUnemploymentClaims + TotalPaidInPremiumAdjustments) * DiscountFactor;
-        public double DiscountedTotalDenominator => (ProbabilityAdjustedPremium - TotalPremiumBasedClaims) * DiscountFactor;
+        public double DiscountedTotalDenominator => (ProbabilityAdjustedPremium - TotalPremiumBasedClaims - ProbabilityAdjustedEquity) * DiscountFactor;
     }
 }

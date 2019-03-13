@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AppRootComponent } from '../components/app-root.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'edusafe-home',
@@ -9,11 +9,17 @@ import { AppRootComponent } from '../components/app-root.component';
 
 export class HomeComponent {
 
-  constructor(private appRootComponent: AppRootComponent) { }
+  constructor(private router: Router) { }
 
   revealModelInputs(): void {
-    this.appRootComponent.calculateIsClicked = true;
-    this.appRootComponent.contactIsClicked = false;
+    let routingUrl = ['/edusafe-model'];
+    this.router.navigate(routingUrl);
+    window.scroll(0, 0);
+  }
+
+  goToContactUs(): void {
+    let routingUrl = ['/edusafe-contact'];
+    this.router.navigate(routingUrl);
     window.scroll(0, 0);
   }
 }

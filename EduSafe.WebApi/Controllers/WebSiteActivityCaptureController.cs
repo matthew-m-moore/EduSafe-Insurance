@@ -8,7 +8,7 @@ namespace EduSafe.WebApi.Controllers
     [RoutePrefix("api/activity")]
     public class WebSiteActivityCaptureController : ApiController
     {
-        // POST: api/activity/{ipAddress}
+        // POST: api/activity/record
         [Route("record")]
         [HttpPost]
         public bool RecordIpAddress(ActivityInputEntry activityInputEntry)

@@ -1,0 +1,12 @@
+<br clear="all" />
+<div [@listStagger]="articlesList.length">
+  <div *ngFor="let article of articlesList" class="row justify-content-center">
+    <div class="col-md-8 text-left articleEntry">
+      <h2><b><a href="{{ article.UrlAddress }}">{{ article.Title }}</a></b></h2>
+      <h4>({{ article.Date | date:'shortDate' }})</h4><i>{{ article.Description }}</i>
+    </div>
+    <!--<div class="col-md-4" id="headerBorder"></div>-->
+  </div>
+</div>
+<br clear="all" />
+

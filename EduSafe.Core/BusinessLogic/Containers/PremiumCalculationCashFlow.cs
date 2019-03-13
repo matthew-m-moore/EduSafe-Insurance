@@ -8,6 +8,7 @@
 
         public double Premium { get; set; }
         public double ProbabilityAdjustedPremium { get; set; }
+        public double ProbabilityAdjustedEquity { get; set; }
 
         public double ProbabilityAdjustedCostsAndFees { get; set; }
         public double ProbabilityAdjustedDropOutClaims { get; set; }
@@ -22,7 +23,7 @@
             ProbabilityAdjustedEarlyHireClaims +
             ProbabilityAdjustedUnemploymentClaims;
 
-        public double TotalCashFlow => ProbabilityAdjustedPremium - TotalCostsAndClaims;
+        public double TotalCashFlow => ProbabilityAdjustedPremium - TotalCostsAndClaims - ProbabilityAdjustedEquity;
         public double DiscountedCashFlow => TotalCashFlow * DiscountFactor;
 
         public PremiumCalculationCashFlow() { }
@@ -34,6 +35,7 @@
 
             Premium = premiumCalculationCashFlow.Premium;
             ProbabilityAdjustedPremium = premiumCalculationCashFlow.ProbabilityAdjustedPremium;
+            ProbabilityAdjustedEquity = premiumCalculationCashFlow.ProbabilityAdjustedEquity;
 
             ProbabilityAdjustedCostsAndFees = premiumCalculationCashFlow.ProbabilityAdjustedCostsAndFees;
             ProbabilityAdjustedDropOutClaims = premiumCalculationCashFlow.ProbabilityAdjustedDropOutClaims;

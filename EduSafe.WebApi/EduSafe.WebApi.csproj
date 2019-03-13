@@ -153,9 +153,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\ArticlesLoadingAdapter.cs" />
     <Compile Include="Adapters\CollegeDataAdapter.cs" />
     <Compile Include="Adapters\PremiumComputationAdapter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AriticlesLoadingController.cs" />
     <Compile Include="Controllers\CollegeDataSearchController.cs" />
     <Compile Include="Controllers\ModelCalculationController.cs" />
     <Compile Include="Controllers\SendEmailController.cs" />
@@ -164,6 +166,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ActivityInputEntry.cs" />
+    <Compile Include="Models\ArticleInformationEntry.cs" />
     <Compile Include="Models\InquiryEmailEntry.cs" />
     <Compile Include="Models\ModelInputEntry.cs" />
     <Compile Include="Models\ModelOutputEntry.cs" />
@@ -187,6 +190,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="App_Data\EduSafe-Website-Posted-Articles.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\EduSafe-WebApi - Web Deploy.pubxml" />
   </ItemGroup>

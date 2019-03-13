@@ -4,28 +4,32 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<url>
-  <loc>http://edusafe.company/</loc>
-  <lastmod>2019-02-25T06:00:44+00:00</lastmod>
-</url>
-<url>
-  <loc>https://edusafe.company/</loc>
-  <lastmod>2019-02-25T06:00:44+00:00</lastmod>
-</url>
-<url>
-  <loc>http://www.edusafe.company/</loc>
-  <lastmod>2019-02-25T06:00:44+00:00</lastmod>
-</url>
-<url>
-  <loc>https://www.edusafe.company/</loc>
-  <lastmod>2019-02-25T06:00:44+00:00</lastmod>
-</url>
-<url>
-  <loc>http://edusafe.azurewebsites.net/</loc>
-  <lastmod>2019-02-25T06:00:44+00:00</lastmod>
-</url>
-<url>
-  <loc>https://edusafe.azurewebsites.net/</loc>
-  <lastmod>2019-02-25T06:00:44+00:00</lastmod>
-</url>
+  <url>
+    <loc>https://edusafe.company/</loc>
+    <lastmod>2019-03-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://edusafe.company/edusafe-home</loc>
+    <lastmod>2019-03-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://edusafe.company/edusafe-model</loc>
+    <lastmod>2019-03-11</lastmod>
+    <changefreq>yearly</changefreq>
+  </url>
+  <url>
+    <loc>https://edusafe.company/edusafe-news</loc>
+    <lastmod>2019-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://edusafe.company/edusafe-contact</loc>
+    <lastmod>2019-03-03</lastmod>
+    <changefreq>yearly</changefreq>
+  </url>
 </urlset>

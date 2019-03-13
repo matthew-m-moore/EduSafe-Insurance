@@ -1,6 +1,6 @@
 form {
   text-align: left;
-  margin-top: 2em;
+  margin-top: 1em;
   margin-left: 0.5em;
   margin-right: 0.5em;
 }
@@ -16,6 +16,13 @@ button {
   margin-bottom: 2em;
 }
 
+.privacy {
+  font-weight: lighter;
+  color: #197ce9;
+  margin-top: 1em;
+  margin-bottom: 0;
+}
+
 .defaultSelect {
   color: GrayText;
 }
@@ -26,9 +33,17 @@ button {
 
 @media only screen and (max-width: 600px) {
   form {
-    margin-top: 1em;
+    margin-top: 0.5em;
     margin-left: 0.3em;
     margin-right: 0.3em;
+  }
+
+  .privacy {
+    font-size: 0.9em;
+    margin-top: 1em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    margin-bottom: 0;
   }
 
   #calculatingProgressBar {
