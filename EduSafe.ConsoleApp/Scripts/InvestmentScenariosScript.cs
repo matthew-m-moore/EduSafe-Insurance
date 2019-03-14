@@ -18,11 +18,11 @@ namespace EduSafe.ConsoleApp.Scripts
         private const double RateSixMonth = 2.51;
         private const double RateOneYear = 2.55;
 
-        private const double PortionCash = .20;
-        private const double Portion1M = .20;
-        private const double Portion3M = .20;
-        private const double Portion6M = .20;
-        private const double Portion1Y = .20;
+        private const double PortionCash = .50;
+        private const double Portion1M = .50;
+        private const double Portion3M = .00;
+        private const double Portion6M = .00;
+        private const double Portion1Y = .00;
         
 
         public List<string> GetArgumentsList()
@@ -69,6 +69,15 @@ namespace EduSafe.ConsoleApp.Scripts
 
             var totalPL = finalCashFlow + profitFrom3M + profitFrom6M + profitFrom1Y;
 
+
+
+            Console.WriteLine("Writing to Excel...");
+            var excelFileWriter = new ExcelFileWriter();
+            excelFileWriter.AddWorksheetForListOfData(createInputs, "Inputs");
+            excelFileWriter.AddWorksheetForListOfData(totalPremiumRemaining, "Premium Cash Flows");
+            excelFileWriter.AddWorksheetForListOfData(reinvestmentCashFlows, "Reinvestment Cash Flows");
+            excelFileWriter.ExportWorkbook(openFileOnSave: true);
+
         }
 
         private PremiumComputationResult RunSpecificScenarioById
@@ -93,8 +102,7 @@ namespace EduSafe.ConsoleApp.Scripts
 
                 output.Period = period;
 
-                 var begBalance = period == 0 ? cashflow.TotalPremiumUsedForReinvestment :
-                    outputList.Where(x => x.Period == period - 1).Select(x => x.EndingCashFlow).First();
+                var begBalance = period == 0 ? cashflow.TotalPremiumUsedForReinvestment : cashflow.TotalPremiumUsedForReinvestment + outputList[period - 1].EndingCashFlow;
 
                 output.BeginningCashFlow = begBalance;
 
@@ -120,14 +128,11 @@ namespace EduSafe.ConsoleApp.Scripts
                 output.InterestFromSixMonth = interest6M;
                 output.InterestFromOneYear = interest1Y;
 
-                var cashFlowReturningFromThreeMonth = period < 3 ? 0 :
-                    outputList.Where(x => x.Period < period - 3).Select(x => x.PortionInThreeMonth).First();
+                var cashFlowReturningFromThreeMonth = period < 3 ? 0 : outputList[period - 2].PortionInThreeMonth;
 
-                var cashFlowReturningFromSixMonth = period < 6 ? 0 :
-                    outputList.Where(x => x.Period < period - 6).Select(x => x.PortionInSixMonth).First();
+                var cashFlowReturningFromSixMonth = period < 6 ? 0 : outputList[period - 5].PortionInSixMonth;
 
-                var cashFlowReturningFromOneYear = period < 12 ? 0 :
-                    outputList.Where(x => x.Period < period - 12).Select(x => x.PortionInOneYear).First();
+                var cashFlowReturningFromOneYear = period < 12 ? 0 : outputList[period - 11].PortionInOneYear;
 
                 output.CashFlowReturningFromThreeMonth = cashFlowReturningFromThreeMonth;
                 output.CashFlowReturningFromSixMonth = cashFlowReturningFromSixMonth;
@@ -142,7 +147,7 @@ namespace EduSafe.ConsoleApp.Scripts
 
                 var totalInterestEarned = interest1M + interest3M + interest6M + interest1Y;
 
-                output.EndingCashFlow = totalReturningCash + totalInterestEarned;
+                output.EndingCashFlow = period == 0 ? 0 : totalReturningCash + totalInterestEarned;
 
                 outputList.Add(output);
                
@@ -178,23 +183,31 @@ namespace EduSafe.ConsoleApp.Scripts
             (List<ReinvestmentModelInputs> reinvestmentModelInputs)
         {
             var outputList = new List<ReinvestmentModelTotalPremiumRemaining>();
-            var numerator = reinvestmentModelInputs.Select(x => x.CostsOperational).Sum();
-            var denominator = reinvestmentModelInputs.Select(x => x.TotalPremiums).Sum();
 
-            var factorForOperationalCosts = numerator / denominator;
+            // See Edu$afe Model v10 
+            //var numerator = reinvestmentModelInputs.Sum(x => x.CostsOperational);
+            //var denominator = reinvestmentModelInputs.Where(x => x.Period > 0).Sum(x => x.Premium);
+            //var factorForOperationalCosts = numerator / denominator;
 
             foreach(var cashFlow in reinvestmentModelInputs)
             {
                 var output = new ReinvestmentModelTotalPremiumRemaining();
                 var period = cashFlow.Period;
+                output.Period = period;
+
+                // See Edu$afe Model v11
+                var premium = cashFlow.Premium;
+                var costOperational = cashFlow.CostsOperational;
+                var factorForOperationalCosts = costOperational / premium;
+                output.FactorForOperationalCosts = factorForOperationalCosts;
 
                 var nonOperationalCashFlow = cashFlow.NonOperationalOutFlows;
                 output.NonOperationalOutFlows = nonOperationalCashFlow;
 
-                var totalPremiumUseForOps = factorForOperationalCosts * cashFlow.TotalPremiums;
+                var totalPremiumUseForOps = factorForOperationalCosts * premium;
                 output.TotalPremiumUsedForOperations = totalPremiumUseForOps;
 
-                output.TotalPremiumUsedForReinvestment = totalPremiumUseForOps - nonOperationalCashFlow;
+                output.TotalPremiumUsedForReinvestment = period == 0 ? 0 : premium - totalPremiumUseForOps - nonOperationalCashFlow;
 
                 outputList.Add(output);
             }
@@ -205,6 +218,9 @@ namespace EduSafe.ConsoleApp.Scripts
         private class ReinvestmentModelTotalPremiumRemaining
         {
             public int Period { get; set; }
+
+            // OperationalCost/ Premium
+            public double FactorForOperationalCosts { get; set; }
 
             public double NonOperationalOutFlows { get; set; }
 
@@ -227,48 +243,54 @@ namespace EduSafe.ConsoleApp.Scripts
                 var input = new ReinvestmentModelInputs();
                 var period = cashFlow.Period;
 
-                if (period == 72) continue;
-                else
-                {
-                    var enrollmentFactor = premiumComputationResult.EnrollmentStateTimeSeries[period].Enrolled;
+                var enrollmentFactor = premiumComputationResult.EnrollmentStateTimeSeries[period].Enrolled;
 
-                    input.Period = period;
-                    input.EnrollmentFactor = enrollmentFactor;
+                input.Period = period;
+                input.EnrollmentFactor = enrollmentFactor;
 
-                    var costBackground = premiumComputationResult.ServicingCosts.Rows[period]["Background Check Fee"];
-                    var costCredit = premiumComputationResult.ServicingCosts.Rows[period]["Credit Score Fee"];
-                    var costTranscripts = premiumComputationResult.ServicingCosts.Rows[period]["Transcripts Fee"];
-                    var costServicing = premiumComputationResult.ServicingCosts.Rows[period]["Servicing Fee"];
-                    input.CostsOperational =
-                        Convert.ToDouble(costBackground)
-                        + Convert.ToDouble(costCredit)
-                        + Convert.ToDouble(costTranscripts)
-                        + Convert.ToDouble(costServicing);
 
-                    var costDropOut = premiumComputationResult.ServicingCosts.Rows[period]["Drop Out Verification Fee"];
-                    var costGradSchool = premiumComputationResult.ServicingCosts.Rows[period]["Grad School Verification Fee"];
-                    var costEarlyHire = premiumComputationResult.ServicingCosts.Rows[period]["Early Hire Rate Verification Fee"];
-                    var costUnemployment = premiumComputationResult.ServicingCosts.Rows[period]["Unemployment Verification Fee"];
-                    input.CostsEvents =
-                        Convert.ToDouble(costDropOut)
-                        + Convert.ToDouble(costGradSchool)
-                        + Convert.ToDouble(costEarlyHire)
-                        + Convert.ToDouble(costUnemployment);
+                var costBackground = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Background Check Fee"];
+                var costCredit = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Credit Score Fee"];
+                var costTranscripts = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Transcripts Fee"];
+                var costServicing = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Servicing Fee"];
+                input.CostsOperational =
+                    Convert.ToDouble(costBackground)
+                    + Convert.ToDouble(costCredit)
+                    + Convert.ToDouble(costTranscripts)
+                    + Convert.ToDouble(costServicing);
 
-                    input.CostsTotal = input.CostsOperational + input.CostsEvents;
+                var costDropOut = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Drop Out Verification Fee"];
+                var costGradSchool = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Grad School Verification Fee"];
+                var costEarlyHire = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Early Hire Rate Verification Fee"];
+                var costUnemployment = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Unemployment Verification Fee"];
+                input.CostsEvents =
+                    Convert.ToDouble(costDropOut)
+                    + Convert.ToDouble(costGradSchool)
+                    + Convert.ToDouble(costEarlyHire)
+                    + Convert.ToDouble(costUnemployment);
 
-                    var claimDropOut = cashFlow.ProbabilityAdjustedDropOutClaims;
-                    var claimGradSchool = cashFlow.ProbabilityAdjustedGradSchoolClaims;
-                    var claimEarlyHire = cashFlow.ProbabilityAdjustedEarlyHireClaims;
-                    var claimUnemployment = cashFlow.ProbabilityAdjustedUnemploymentClaims;
-                    input.ClaimOutflows = claimDropOut + claimGradSchool + claimEarlyHire + claimUnemployment;
+                input.CostsTotal = input.CostsOperational + input.CostsEvents;
 
-                    input.NonOperationalOutFlows = input.CostsEvents + input.ClaimOutflows;
+                var claimDropOut = cashFlow.ProbabilityAdjustedDropOutClaims;
+                var claimGradSchool = cashFlow.ProbabilityAdjustedGradSchoolClaims;
+                var claimEarlyHire = cashFlow.ProbabilityAdjustedEarlyHireClaims;
+                var claimUnemployment = cashFlow.ProbabilityAdjustedUnemploymentClaims;
+                input.ClaimOutflows = claimDropOut + claimGradSchool + claimEarlyHire + claimUnemployment;
 
-                    input.TotalPremiums = premiumComputationResult.CalculatedMonthlyPremium * enrollmentFactor;
+                input.NonOperationalOutFlows = input.CostsEvents + input.ClaimOutflows;
 
-                    inputList.Add(input);
-                }
+                var marginAdjustedPremium = 
+                    premiumComputationResult
+                    .PremiumCalculationCashFlows
+                    .Where(x => x.Period == period)
+                    .Select(x => x.ProbabilityAdjustedEquity)
+                    .First();
+
+                input.MarginAdjustedPremium = marginAdjustedPremium * enrollmentFactor;
+                input.Premium = premiumComputationResult.CalculatedMonthlyPremium * enrollmentFactor ;
+                    
+                inputList.Add(input);
+                
             }
 
             return inputList;
@@ -292,7 +314,9 @@ namespace EduSafe.ConsoleApp.Scripts
             // CostsEvets + ClaimOutFlows
             public double NonOperationalOutFlows { get; set; }
 
-            public double TotalPremiums { get; set; }
+            public double Premium { get; set; }
+
+            public double MarginAdjustedPremium { get; set; }
         }
     }
 }
