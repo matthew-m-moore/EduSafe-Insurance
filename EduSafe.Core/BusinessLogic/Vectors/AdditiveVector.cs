@@ -9,6 +9,12 @@ namespace EduSafe.Core.BusinessLogic.Vectors
         public AdditiveVector(DataCurve<double> values) : base(values)
         { }
 
+        public override Vector Copy()
+        {
+            var copyOfValues = new DataCurve<double>(_VectorValues.ToList());
+            return new AdditiveVector(copyOfValues);
+        }
+
         public override double ApplyVector(int index, double suppliedValue)
         {
             var adjustedValue = suppliedValue + _VectorValues[index];

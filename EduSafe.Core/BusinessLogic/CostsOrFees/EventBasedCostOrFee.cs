@@ -17,17 +17,9 @@ namespace EduSafe.Core.BusinessLogic.CostsOrFees
             EventStateForCostOrFee = eventStateForCostOrFee;
         }
 
-        public override double CalculateAmount(int monthlyPeriod, List<EnrollmentStateArray> enrollmentStateTimeSeries)
-        {
-            var currentPeriodStateArray = enrollmentStateTimeSeries[monthlyPeriod];
-            var eventStateDeltaAmount = currentPeriodStateArray[EventStateForCostOrFee];
-
-            if (eventStateDeltaAmount <= 0.0) return 0.0;
-
-            var amount = eventStateDeltaAmount * BaseAmount;
-            return amount;
-        }
-
+        /// <summary>
+        /// Returns a deep, member-wise copy of the object.
+        /// </summary>
         public override CostOrFee Copy()
         {
             var eventBasedCostOrFee = new EventBasedCostOrFee(
@@ -37,6 +29,17 @@ namespace EduSafe.Core.BusinessLogic.CostsOrFees
 
             eventBasedCostOrFee.SetStartingPeriod(StartingPeriodOfCostOrFee);
             return eventBasedCostOrFee;
+        }
+
+        public override double CalculateAmount(int monthlyPeriod, List<EnrollmentStateArray> enrollmentStateTimeSeries)
+        {
+            var currentPeriodStateArray = enrollmentStateTimeSeries[monthlyPeriod];
+            var eventStateDeltaAmount = currentPeriodStateArray[EventStateForCostOrFee];
+
+            if (eventStateDeltaAmount <= 0.0) return 0.0;
+
+            var amount = eventStateDeltaAmount * BaseAmount;
+            return amount;
         }
     }
 }

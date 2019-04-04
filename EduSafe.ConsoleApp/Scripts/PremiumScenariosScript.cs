@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using EduSafe.ConsoleApp.Interfaces;
-using EduSafe.Core.BusinessLogic.Containers;
+using EduSafe.Core.BusinessLogic.Containers.CashFlows;
 using EduSafe.Core.BusinessLogic.Scenarios;
 using EduSafe.Core.Repositories;
 using EduSafe.IO.Excel;

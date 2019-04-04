@@ -25,6 +25,15 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
             _flatMultiplicativeVector = new MultiplicativeVector(new DataCurve<double>(1.0));
         }
 
+        /// <summary>
+        /// Returns a deep, member-wise copy of the object.
+        /// </summary>
+        public EnrollmentModel Copy()
+        {
+            var copyOfStudentEnrollmentModelInput = StudentEnrollmentModelInput.Copy();
+            return new EnrollmentModel(copyOfStudentEnrollmentModelInput);
+        }
+
         public void ParameterizeModel()
         {
             ParameterizeDropOutRate();

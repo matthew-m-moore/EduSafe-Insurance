@@ -5,6 +5,7 @@ using EduSafe.Common;
 using EduSafe.Common.Enums;
 using EduSafe.Common.Utilities;
 using EduSafe.Core.BusinessLogic.Containers;
+using EduSafe.Core.BusinessLogic.Containers.CashFlows;
 using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;
 
 namespace EduSafe.Core.BusinessLogic.Models.Premiums
@@ -20,6 +21,8 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
         {
             PremiumCalculationModelInput = premiumCalculationModelInput;
         }
+
+        public abstract PremiumCalculation Copy();
 
         public abstract double CalculatePremium(
             List<EnrollmentStateArray> enrollmentStateTimeSeries, 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using EduSafe.Core.BusinessLogic.Containers.CashFlows;
 using EduSafe.Core.BusinessLogic.Models;
 
 namespace EduSafe.Core.BusinessLogic.Containers

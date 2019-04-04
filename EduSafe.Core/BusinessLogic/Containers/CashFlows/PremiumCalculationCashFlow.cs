@@ -1,9 +1,7 @@
-﻿namespace EduSafe.Core.BusinessLogic.Containers
+﻿namespace EduSafe.Core.BusinessLogic.Containers.CashFlows
 {
-    public class PremiumCalculationCashFlow
+    public class PremiumCalculationCashFlow : CashFlow
     {
-        public int Period { get; set; }
-
         public double DiscountFactor { get; set; }
 
         public double Premium { get; set; }
@@ -42,6 +40,40 @@
             ProbabilityAdjustedGradSchoolClaims = premiumCalculationCashFlow.ProbabilityAdjustedGradSchoolClaims;
             ProbabilityAdjustedEarlyHireClaims = premiumCalculationCashFlow.ProbabilityAdjustedEarlyHireClaims;
             ProbabilityAdjustedUnemploymentClaims = premiumCalculationCashFlow.ProbabilityAdjustedUnemploymentClaims;
+        }
+
+        public override CashFlow Copy()
+        {
+            return new PremiumCalculationCashFlow(this);
+        }
+
+        public override void Scale(double scaleFactor)
+        {
+            Premium *= scaleFactor;
+            ProbabilityAdjustedPremium *= scaleFactor;
+            ProbabilityAdjustedEquity *= scaleFactor;
+
+            ProbabilityAdjustedCostsAndFees *= scaleFactor;
+            ProbabilityAdjustedDropOutClaims *= scaleFactor;
+            ProbabilityAdjustedGradSchoolClaims *= scaleFactor;
+            ProbabilityAdjustedEarlyHireClaims *= scaleFactor;
+            ProbabilityAdjustedUnemploymentClaims *= scaleFactor;
+        }
+
+        public override void Aggregate(CashFlow cashFlow)
+        {
+            if (cashFlow is PremiumCalculationCashFlow premiumCalculationCashFlow)
+            {
+                Premium += premiumCalculationCashFlow.Premium;
+                ProbabilityAdjustedPremium += premiumCalculationCashFlow.ProbabilityAdjustedPremium;
+                ProbabilityAdjustedEquity += premiumCalculationCashFlow.ProbabilityAdjustedEquity;
+
+                ProbabilityAdjustedCostsAndFees += premiumCalculationCashFlow.ProbabilityAdjustedCostsAndFees;
+                ProbabilityAdjustedDropOutClaims += premiumCalculationCashFlow.ProbabilityAdjustedDropOutClaims;
+                ProbabilityAdjustedGradSchoolClaims += premiumCalculationCashFlow.ProbabilityAdjustedGradSchoolClaims;
+                ProbabilityAdjustedEarlyHireClaims += premiumCalculationCashFlow.ProbabilityAdjustedEarlyHireClaims;
+                ProbabilityAdjustedUnemploymentClaims += premiumCalculationCashFlow.ProbabilityAdjustedUnemploymentClaims;
+            }
         }
     }
 }

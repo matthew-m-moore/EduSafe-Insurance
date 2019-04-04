@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using EduSafe.Common.Enums;
 
 namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
@@ -15,6 +16,22 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
                 new Dictionary<StudentEnrollmentState, 
                     Dictionary<StudentEnrollmentState, 
                     Dictionary<int, EnrollmentTransition>>>();
+        }
+
+        /// <summary>
+        /// Returns a deep, member-wise copy of the object.
+        /// </summary>
+        public EnrollmentTransitionsArray Copy()
+        {
+            var copyOfEnrollmentTransitionArray = _enrollmentTransitionArray
+                .ToDictionary(kvp1 => kvp1.Key, kvp1 => kvp1.Value
+                .ToDictionary(kvp2 => kvp2.Key, kvp2 => kvp2.Value
+                .ToDictionary(kvp3 => kvp3.Key, kvp3 => kvp3.Value.Copy())));
+
+            return new EnrollmentTransitionsArray()
+            {
+                _enrollmentTransitionArray = copyOfEnrollmentTransitionArray
+            };
         }
 
         public EnrollmentTransition this

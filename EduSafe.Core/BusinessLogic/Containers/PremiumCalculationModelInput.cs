@@ -51,6 +51,33 @@ namespace EduSafe.Core.BusinessLogic.Containers
             SetCompoundingConvention();
         }
 
+        /// <summary>
+        /// Returns a deep, member-wise copy of the object.
+        /// </summary>
+        public PremiumCalculationModelInput Copy()
+        {
+            var copyOfDiscountRateCurve = DiscountRateCurve.Copy();
+
+            var copyOfDropOutOptionCoveragePercentage = DropOutOptionCoveragePercentage.HasValue
+                ? new double? (DropOutOptionCoveragePercentage.Value)
+                : null;
+            var copyOfGradSchoolOptionCoveragePercentage = GradSchoolOptionCoveragePercentage.HasValue
+                ? new double?(GradSchoolOptionCoveragePercentage.Value)
+                : null;
+            var copyOfEarlyHireOptionCoveragePercentage = EarlyHireOptionCoveragePercentage.HasValue
+                ? new double?(EarlyHireOptionCoveragePercentage.Value)
+                : null;
+
+            return new PremiumCalculationModelInput(
+                AnnualIncomeCoverageAmount,
+                MonthsOfIncomeCoverage,
+                copyOfDiscountRateCurve,
+                copyOfDropOutOptionCoveragePercentage,
+                copyOfGradSchoolOptionCoveragePercentage,
+                copyOfEarlyHireOptionCoveragePercentage,
+                PremiumMargin);
+        }
+
         public void SetCompoundingConvention(CompoundingConvention compoundingConvention = CompoundingConvention.Monthly)
         {
             CompoundingConvention = compoundingConvention;

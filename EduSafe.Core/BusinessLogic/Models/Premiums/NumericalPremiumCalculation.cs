@@ -5,6 +5,7 @@ using EduSafe.Common;
 using EduSafe.Common.Enums;
 using EduSafe.Common.Utilities;
 using EduSafe.Core.BusinessLogic.Containers;
+using EduSafe.Core.BusinessLogic.Containers.CashFlows;
 using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;
 
 namespace EduSafe.Core.BusinessLogic.Models.Premiums
@@ -17,6 +18,15 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
         public NumericalPremiumCalculation(PremiumCalculationModelInput premiumCalculationModelInput)
             : base (premiumCalculationModelInput)
         { }
+
+        /// <summary>
+        /// Returns a deep, member-wise copy of the object.
+        /// </summary>
+        public override PremiumCalculation Copy()
+        {
+            var copyOfPremiumCalculationModelInput = PremiumCalculationModelInput.Copy();
+            return new NumericalPremiumCalculation(copyOfPremiumCalculationModelInput);
+        }
 
         public override double CalculatePremium(List<EnrollmentStateArray> enrollmentStateTimeSeries, ServicingCostsModel servicingCostsModel)
         {

@@ -12,6 +12,8 @@ namespace EduSafe.Core.BusinessLogic.Vectors
             _VectorValues = values;
         }
 
+        public abstract Vector Copy();
+
         public double this[int index]
         {
             get { return _VectorValues[index]; }

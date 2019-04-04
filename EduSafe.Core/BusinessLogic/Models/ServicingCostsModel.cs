@@ -20,6 +20,15 @@ namespace EduSafe.Core.BusinessLogic.Models
         }
 
         /// <summary>
+        /// Returns a deep, member-wise copy of the object.
+        /// </summary>
+        public ServicingCostsModel Copy()
+        {
+            var copyOfCostsOrFees = CostsOrFees.Select(c => c.Copy()).ToList();
+            return new ServicingCostsModel(copyOfCostsOrFees, NumberOfMonthlyPeriodsToProject);
+        }
+
+        /// <summary>
         /// Returns a data table of the servicing costs projected out to the specified number of monthly periods.
         /// </summary>
         public DataTable CalculateServicingCosts(List<EnrollmentStateArray> enrollmentStateTimeSeries)

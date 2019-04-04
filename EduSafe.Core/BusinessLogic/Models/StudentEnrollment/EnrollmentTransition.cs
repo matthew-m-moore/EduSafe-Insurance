@@ -24,6 +24,23 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
             MonthlyPeriod = monthlyPeriod;
         }
 
+        /// <summary>
+        /// Returns a deep, member-wise copy of the object.
+        /// </summary>
+        public EnrollmentTransition Copy()
+        {
+            var copyOfShapingVector = ShapingVector.Copy();
+
+            return new EnrollmentTransition(
+                StartEnrollmentState,
+                EndEnrollmentState,
+                copyOfShapingVector,
+                MonthlyPeriod)
+            {
+                BaseTransitionRate = BaseTransitionRate
+            };
+        }
+
         public double GetTransitionRate()
         {
             var transitionRate = ShapingVector.ApplyVector(MonthlyPeriod, BaseTransitionRate);

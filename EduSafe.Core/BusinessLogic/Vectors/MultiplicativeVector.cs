@@ -9,6 +9,12 @@ namespace EduSafe.Core.BusinessLogic.Vectors
         public MultiplicativeVector(DataCurve<double> values) : base(values)
         { }
 
+        public override Vector Copy()
+        {
+            var copyOfValues = new DataCurve<double>(_VectorValues.ToList());
+            return new MultiplicativeVector(copyOfValues);
+        }
+
         public override double ApplyVector(int index, double suppliedValue)
         {
             var adjustedValue = suppliedValue * _VectorValues[index];

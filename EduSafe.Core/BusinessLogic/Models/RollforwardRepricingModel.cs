@@ -22,6 +22,20 @@ namespace EduSafe.Core.BusinessLogic.Models
         }
 
         /// <summary>
+        /// Returns a deep, member-wise copy of the object.
+        /// </summary>
+        public RollForwardRepricingModel Copy()
+        {
+            var copyOfEnrollmentModel = EnrollmentModel.Copy();
+            var copyOfServicingCostsModel = ServicingCostsModel.Copy();
+
+            return new RollForwardRepricingModel(
+                copyOfEnrollmentModel,
+                copyOfServicingCostsModel,
+                _baseEnrollmentState);
+        }
+
+        /// <summary>
         /// Rolls forward the student enrollment model the given number of integer periods provided.
         /// Only affects the ouput of the enrollment model, does not affect the initial object.
         /// </summary>

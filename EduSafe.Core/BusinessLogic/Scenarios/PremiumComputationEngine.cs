@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Containers;
@@ -29,6 +30,21 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
             RepricingModel = repricingModel;
             _startingPeriod = startingPeriod ?? _startingPeriod;
             IsPremiumComputed = false;
+        }
+
+        /// <summary>
+        /// Returns a deep, member-wise copy of the object.
+        /// </summary>
+        public PremiumComputationEngine Copy()
+        {
+            var copyOfPremiumCalculation = PremiumCalculation.Copy();
+            var copyOfRepricingModel = RepricingModel.Copy();
+            var copyOfStartingPeriod = _startingPeriod.HasValue ? new int?(_startingPeriod.Value) : null;
+
+            return new PremiumComputationEngine(
+                copyOfPremiumCalculation,
+                copyOfRepricingModel,
+                copyOfStartingPeriod);
         }
 
         public PremiumComputationResult ComputePremiumResult(int? startingPeriod = null, bool isNewStudent = true)

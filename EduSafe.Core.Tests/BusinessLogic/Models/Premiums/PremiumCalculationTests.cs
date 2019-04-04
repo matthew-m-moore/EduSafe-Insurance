@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EduSafe.Common.Curves;
 using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Containers;
+using EduSafe.Core.BusinessLogic.Containers.CashFlows;
 using EduSafe.Core.BusinessLogic.Models;
 using EduSafe.Core.BusinessLogic.Models.Premiums;
 using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;

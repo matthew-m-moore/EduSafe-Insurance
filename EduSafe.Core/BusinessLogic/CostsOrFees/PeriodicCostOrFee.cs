@@ -28,6 +28,21 @@ namespace EduSafe.Core.BusinessLogic.CostsOrFees
             }
         }
 
+        /// <summary>
+        /// Returns a deep, member-wise copy of the object.
+        /// </summary>
+        public override CostOrFee Copy()
+        {
+            var paymentConvention = (PaymentConvention)FrequencyInMonths;
+            var periodicCostOrFee = new PeriodicCostOrFee(
+                paymentConvention,
+                Description,
+                BaseAmount);
+
+            periodicCostOrFee.SetStartingPeriod(StartingPeriodOfCostOrFee);
+            return periodicCostOrFee;
+        }
+
         public void SetBaseStateForAdjustment(StudentEnrollmentState enrollmentState)
         {
             BaseStateForAdjustment = enrollmentState;
@@ -46,18 +61,6 @@ namespace EduSafe.Core.BusinessLogic.CostsOrFees
             var amount = startingEnrollmentAmount * BaseAmount;
 
             return amount;
-        }
-
-        public override CostOrFee Copy()
-        {
-            var paymentConvention = (PaymentConvention)FrequencyInMonths;
-            var periodicCostOrFee = new PeriodicCostOrFee(
-                paymentConvention,
-                Description,
-                BaseAmount);
-
-            periodicCostOrFee.SetStartingPeriod(StartingPeriodOfCostOrFee);
-            return periodicCostOrFee;
         }
     }
 }

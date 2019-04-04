@@ -14,6 +14,21 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
             _enrollmentTargetsArray = new Dictionary<int, Dictionary<StudentEnrollmentState, EnrollmentTarget>>();
         }
 
+        /// <summary>
+        /// Returns a deep, member-wise copy of the object.
+        /// </summary>
+        public EnrollmentTargetsArray Copy()
+        {
+            var copyOfEnrollmentTargetsArray = _enrollmentTargetsArray
+                .ToDictionary(kvp1 => kvp1.Key, kvp1 => kvp1.Value
+                .ToDictionary(kvp2 => kvp2.Key, kvp2 => kvp2.Value.Copy()));
+
+            return new EnrollmentTargetsArray()
+            {
+                _enrollmentTargetsArray = copyOfEnrollmentTargetsArray
+            };
+        }
+
         public double TotalTarget(StudentEnrollmentState enrollmentState)
         {
             // Note that the null key is used to indicate the total target over all projected months

@@ -35,6 +35,25 @@ namespace EduSafe.Core.BusinessLogic.Containers
             EarlyHireStartingMonth = earlyHireStartingMonth;
         }
 
+        /// <summary>
+        /// Returns a deep, member-wise copy of the object.
+        /// </summary>
+        public StudentEnrollmentModelInput Copy()
+        {
+            var copyOfEnrollmentTargetsArray = EnrollmentTargetsArray.Copy();
+            var copyOfTransitionRatesArray = TransitionRatesArray.Copy();
+            var copyOfPostGraduationTargetStates = new HashSet<StudentEnrollmentState>(PostGraduationTargetStates.ToList());
+
+            return new StudentEnrollmentModelInput(
+                copyOfEnrollmentTargetsArray,
+                copyOfTransitionRatesArray,
+                NumberOfMonthlyPeriodsToProject,
+                EarlyHireStartingMonth)
+            {
+                PostGraduationTargetStates = copyOfPostGraduationTargetStates
+            };
+        }
+
         public void AddPostGraduationTargetState(StudentEnrollmentState postGraduationEnrollmentState)
         {           
             if (Constants.PostGraduationEnrollmentStates.Contains(postGraduationEnrollmentState))

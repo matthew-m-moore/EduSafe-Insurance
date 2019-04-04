@@ -30,5 +30,18 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
             double targetValue) : 
                 this(targetEnrollmentState, targetValue, null)
         { }
+
+        /// <summary>
+        /// Returns a deep, member-wise copy of the object.
+        /// </summary>
+        public EnrollmentTarget Copy()
+        {
+            var copyOfTargetMonth = TargetMonth.HasValue ? new int?(TargetMonth.Value) : null;
+
+            return new EnrollmentTarget(
+                TargetEnrollmentState,
+                TargetValue,
+                copyOfTargetMonth);
+        }
     }
 }
