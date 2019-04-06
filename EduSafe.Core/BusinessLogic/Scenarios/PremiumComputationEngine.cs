@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Containers;
+using EduSafe.Core.BusinessLogic.Containers.TimeSeries;
 using EduSafe.Core.BusinessLogic.Models;
 using EduSafe.Core.BusinessLogic.Models.Premiums;
 using EduSafe.Core.BusinessLogic.Models.StudentEnrollment;
@@ -60,10 +60,6 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
             {
                 ScenarioId = ScenarioId,
                 ScenarioName = ScenarioName,
-
-                PremiumCalculationModelInput = PremiumCalculation.PremiumCalculationModelInput,
-                EnrollmentModelInput = RepricingModel.EnrollmentModel.StudentEnrollmentModelInput,
-                ServicingCostsModel = RepricingModel.ServicingCostsModel,
 
                 ServicingCosts = PremiumCalculation.ServicingCostsDataTable,
                 PremiumCalculationCashFlows = PremiumCalculation.CalculatedCashFlows,

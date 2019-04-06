@@ -116,7 +116,7 @@ namespace EduSafe.ConsoleApp.Scripts
             var analyticalPremiumCalculationCashFlows =
                 premiumComputationResult.PremiumCalculationCashFlows.Select(c => (AnalyticalPremiumCalculationCashFlow)c).ToList();
 
-            var totalPaidInPremiums = premiumComputationResult.PremiumCalculationModelInput.PreviouslyPaidInPremiums;
+            var totalPaidInPremiums = premiumComputationScenario.PremiumCalculation.PremiumCalculationModelInput.PreviouslyPaidInPremiums;
             var premiumScenarioSummary = new PremiumScenarioSummary
             {
                 ScenarioId = premiumComputationResult.ScenarioId.GetValueOrDefault(),

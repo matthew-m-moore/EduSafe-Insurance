@@ -7,7 +7,7 @@
 
         public CashFlow() { StudentCount = 1.0; }
 
-        public CashFlow(CashFlow cashFlow)
+        protected CashFlow(CashFlow cashFlow)
         {
             Period = cashFlow.Period;
             StudentCount = cashFlow.StudentCount;

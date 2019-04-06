@@ -50,6 +50,7 @@
     <Compile Include="Enums\Month.cs" />
     <Compile Include="Enums\PaymentConvention.cs" />
     <Compile Include="Enums\StudentEnrollmentState.cs" />
+    <Compile Include="ExtensionMethods\DataRowExtensions.cs" />
     <Compile Include="ExtensionMethods\DictionaryExtensions.cs" />
     <Compile Include="ExtensionMethods\EnumExtensions.cs" />
     <Compile Include="ExtensionMethods\ListExtensions.cs" />

@@ -27,8 +27,8 @@
         public PremiumCalculationCashFlow() { }
 
         protected PremiumCalculationCashFlow(PremiumCalculationCashFlow premiumCalculationCashFlow)
+            : base(premiumCalculationCashFlow)
         {
-            Period = premiumCalculationCashFlow.Period;
             DiscountFactor = premiumCalculationCashFlow.DiscountFactor;
 
             Premium = premiumCalculationCashFlow.Premium;
@@ -49,6 +49,8 @@
 
         public override void Scale(double scaleFactor)
         {
+            StudentCount *= scaleFactor;
+
             Premium *= scaleFactor;
             ProbabilityAdjustedPremium *= scaleFactor;
             ProbabilityAdjustedEquity *= scaleFactor;
@@ -64,6 +66,8 @@
         {
             if (cashFlow is PremiumCalculationCashFlow premiumCalculationCashFlow)
             {
+                StudentCount += premiumCalculationCashFlow.StudentCount;
+
                 Premium += premiumCalculationCashFlow.Premium;
                 ProbabilityAdjustedPremium += premiumCalculationCashFlow.ProbabilityAdjustedPremium;
                 ProbabilityAdjustedEquity += premiumCalculationCashFlow.ProbabilityAdjustedEquity;

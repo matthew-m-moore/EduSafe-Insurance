@@ -26,7 +26,7 @@
         public double DiscountedTotalDenominator => (ProbabilityAdjustedPremium - TotalPremiumBasedClaims - ProbabilityAdjustedEquity) * DiscountFactor;
 
         public AnalyticalPremiumCalculationCashFlow(PremiumCalculationCashFlow premiumCalculationCashFlow)
-            : base (premiumCalculationCashFlow)
+            : base(premiumCalculationCashFlow)
         { }
 
         private AnalyticalPremiumCalculationCashFlow(AnalyticalPremiumCalculationCashFlow analyticalPremiumCalculationCashFlow)

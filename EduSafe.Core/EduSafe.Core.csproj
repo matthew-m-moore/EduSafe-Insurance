@@ -46,16 +46,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\Aggregation\CashFlowAggregator.cs" />
+    <Compile Include="BusinessLogic\Aggregation\DataTableAggregator.cs" />
+    <Compile Include="BusinessLogic\Aggregation\TimeSeriesAggregator.cs" />
     <Compile Include="BusinessLogic\Containers\CashFlows\AnalyticalPremiumCalculationCashFlow.cs" />
     <Compile Include="BusinessLogic\Containers\CashFlows\CashFlow.cs" />
     <Compile Include="BusinessLogic\Containers\CollegeMajorData.cs" />
     <Compile Include="BusinessLogic\Containers\CompoundKeys\VectorAssignmentEntry.cs" />
+    <Compile Include="BusinessLogic\Containers\PremiumComputationForecastingInput.cs" />
+    <Compile Include="BusinessLogic\Containers\TimeSeries\ForecastedEnrollmentTimeSeriesEntry.cs" />
+    <Compile Include="BusinessLogic\Containers\TimeSeries\TimeSeriesEntry.cs" />
     <Compile Include="BusinessLogic\Scenarios\PremiumComputationEngine.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumCalculationModelInput.cs" />
     <Compile Include="BusinessLogic\Containers\CashFlows\PremiumCalculationCashFlow.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumComputationResult.cs" />
     <Compile Include="BusinessLogic\Containers\StudentEnrollmentModelInput.cs" />
-    <Compile Include="BusinessLogic\Containers\StudentEnrollmentStateTimeSeriesEntry.cs" />
+    <Compile Include="BusinessLogic\Containers\TimeSeries\StudentEnrollmentStateTimeSeriesEntry.cs" />
     <Compile Include="BusinessLogic\Models\RollForwardRepricingModel.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentStateArray.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\EnrollmentTarget.cs" />
@@ -73,6 +78,7 @@
     <Compile Include="BusinessLogic\Models\StudentEnrollment\Parameterization\DropOutRateParameterizer.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\Parameterization\EarlyHireRateParameterizer.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\Parameterization\PostGraduationParameterizer.cs" />
+    <Compile Include="BusinessLogic\Scenarios\PremiumComputationForecastingEngine.cs" />
     <Compile Include="BusinessLogic\Scenarios\PremiumComputationScenariosEngine.cs" />
     <Compile Include="BusinessLogic\Scenarios\ScenarioLogic\EnrollmentModelRateShockScenario.cs" />
     <Compile Include="BusinessLogic\Scenarios\ScenarioLogic\InterestRateShockScenario.cs" />
