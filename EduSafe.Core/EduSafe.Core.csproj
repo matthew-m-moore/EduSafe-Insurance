@@ -53,6 +53,7 @@
     <Compile Include="BusinessLogic\Containers\CollegeMajorData.cs" />
     <Compile Include="BusinessLogic\Containers\CompoundKeys\VectorAssignmentEntry.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumComputationForecastingInput.cs" />
+    <Compile Include="BusinessLogic\Containers\ReinvestmentOptionsParameters.cs" />
     <Compile Include="BusinessLogic\Containers\TimeSeries\ForecastedEnrollmentTimeSeriesEntry.cs" />
     <Compile Include="BusinessLogic\Containers\TimeSeries\TimeSeriesEntry.cs" />
     <Compile Include="BusinessLogic\Scenarios\PremiumComputationEngine.cs" />
@@ -98,12 +99,14 @@
     <Compile Include="Repositories\Excel\Converters\InterestRateCurveTypeConverter.cs" />
     <Compile Include="Repositories\Excel\Converters\PaymentConventionConverter.cs" />
     <Compile Include="Repositories\Excel\Converters\PremiumCalculationConverter.cs" />
+    <Compile Include="Repositories\Excel\Converters\ReinvestmentOptionsParametersConverter.cs" />
     <Compile Include="Repositories\Excel\Converters\StudentEnrollmentStateConverter.cs" />
     <Compile Include="Repositories\Excel\Converters\VectorConverter.cs" />
     <Compile Include="Repositories\Excel\DayCountConventionRepository.cs" />
     <Compile Include="Repositories\Excel\ExcelDataRepository.cs" />
     <Compile Include="Repositories\Excel\InterestRateCurveRepository.cs" />
     <Compile Include="Repositories\Excel\InterestRateCurveTypeRepository.cs" />
+    <Compile Include="Repositories\Excel\ReinvestmentOptionsRepository.cs" />
     <Compile Include="Repositories\Excel\ValuesArrayExcelDataRepository.cs" />
     <Compile Include="Repositories\Excel\ServicingCostsModelRepository.cs" />
     <Compile Include="Repositories\Excel\PremiumComputationRepository.cs" />
