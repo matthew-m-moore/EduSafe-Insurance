@@ -4,7 +4,7 @@
     <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>InvestmentScenariosScript "C:\Users\Dar Vadar\Desktop\EduSafe\ExcelInputs.xlsx"</StartArguments>
+    <StartArguments>PremiumScenariosScript "C:\Users\Dar Vadar\Desktop\EduSafe\ExcelInputs - Public and Private.xlsx"</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <StartArguments>PremiumScenariosScript "C:\Users\Matthew M\Desktop\Dropout-Rate-Test-Scenarios-Single-With-Margin.xlsx"</StartArguments>

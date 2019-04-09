@@ -14,8 +14,6 @@ namespace EduSafe.ConsoleApp.Scripts
 {
     public class InvestmentScenariosScript : IScript
     {
-        private const string _runAllCommand = "All";
-        private const string _exitCommand = "Exit";
         private const int _premiuimScenario = 1;
         private const int _numberOfReinvestmentScenario = 5;
 
@@ -52,7 +50,6 @@ namespace EduSafe.ConsoleApp.Scripts
             Console.WriteLine("Reinvestment Parameters have Loaded");
 
             RunAllReinvestmentScenarios(reinvestmentOptionsRepository, reinvestmentModelInputs, _numberOfReinvestmentScenario);
-
         }
 
         private void RunAllReinvestmentScenarios(
@@ -61,6 +58,7 @@ namespace EduSafe.ConsoleApp.Scripts
             int NumberOfReinvestmentScenario)
         {
             var listOfScenarioPnL = new List<ReinvestmentModelPnLObject>();
+            var listOfScenarioBeginningCashFlows = new List<ReinvestmentScenarioCashFlowOutputObject>();
 
             Console.WriteLine("Writing to Excel...");
             var excelFileWriter = new ExcelFileWriter();
@@ -73,8 +71,6 @@ namespace EduSafe.ConsoleApp.Scripts
                 var reinvestmentCashFlows = GetReinvestmentCashFlows(totalPremiumRemaining, reinvestmentOptionsParameters);
                 var reinvestmentModelPnL = GetReinvestmentModelPnL(reinvestmentCashFlows);
 
-                var reinvestmentModelBeginningCashFlows = GetReinvestmentModelBeginningCashFlows(i, reinvestmentCashFlows);
-
                 var scenarioPnL = new ReinvestmentModelPnLObject
                 {
                     ScenarioId = i,
@@ -86,28 +82,38 @@ namespace EduSafe.ConsoleApp.Scripts
                 };
                 listOfScenarioPnL.Add(scenarioPnL);
 
-                var scenarioBeginningCashFlow = reinvestmentModelBeginningCashFlows.BeginningCashFlow;
+                var reinvestmentModelBeginningCashFlows = GetReinvestmentModelBeginningCashFlows(i, reinvestmentCashFlows);
 
-                //doesnt work for some reason
-                //excelFileWriter.AddWorksheetForListOfData(scenarioBeginningCashFlow, "Beginning Cash Flows_" + i);
+                excelFileWriter.AddWorksheetForListOfData(reinvestmentModelBeginningCashFlows, "Beginning Cash Flows_"+i);
             }
+
             excelFileWriter.AddWorksheetForListOfData(listOfScenarioPnL, "PnL");
             excelFileWriter.ExportWorkbook(openFileOnSave: true);
         }
 
-        private ReinvestmentScenarioCashFlowOutputObject GetReinvestmentModelBeginningCashFlows
+        private List<ReinvestmentScenarioCashFlowOutputObject> GetReinvestmentModelBeginningCashFlows
             (int scenarioId, List<ReinvestmentModelResultsObject> reinvestmentModelResults)
         {
-            return new ReinvestmentScenarioCashFlowOutputObject
+            var listOfCashFlows = new List<ReinvestmentScenarioCashFlowOutputObject>();
+
+            foreach(var item in reinvestmentModelResults)
             {
-                BeginningCashFlow = reinvestmentModelResults.Select(x => x.BeginningCashFlow).ToList()
-            };
+
+                var cashFlow = new ReinvestmentScenarioCashFlowOutputObject
+                {
+                    Period = item.Period,
+                    BeginningCashFlow = item.BeginningCashFlow
+                };
+
+                listOfCashFlows.Add(cashFlow);
+            }
+            return listOfCashFlows;
         }
 
         private class ReinvestmentScenarioCashFlowOutputObject
         {
-            public int ScenarioId { get; set; }
-            public List<double> BeginningCashFlow { get; set; }
+            public int Period { get; set; }
+            public double BeginningCashFlow { get; set; }
         }
 
         private ReinvestmentModelPnLObject GetReinvestmentModelPnL (List<ReinvestmentModelResultsObject> reinvestmentCashFlows)
