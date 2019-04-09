@@ -12,9 +12,10 @@ namespace EduSafe.Common.Utilities
     public static class DataTableUtility
     {
         /// <summary>
-        /// Converts a list of enumerable of data into a DataTable object for ease of export.
+        /// Converts a list of enumerable of an object with properties into a DataTable object for ease of export.
+        /// Note, fields of the object are ignored, only properties are considered.
         /// </summary>
-        public static DataTable ConvertListToDataTable<T>(IEnumerable<T> data)
+        public static DataTable ConvertListToDataTable<T>(IEnumerable<T> data) where T : class
         {
             var dataProperties = typeof(T).GetProperties().ToList();
 

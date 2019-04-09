@@ -74,7 +74,7 @@ namespace EduSafe.IO.Excel
         /// <summary>
         /// Adds a tab containing of a generic list of data to the internal workbook of the ExcelFileWriter.
         /// </summary>
-        public void AddWorksheetForListOfData<T>(List<T> genericListOfData, string worksheetName = "ListOfData")
+        public void AddWorksheetForListOfData<T>(List<T> genericListOfData, string worksheetName = "ListOfData") where T : class
         {
             var dataTable = DataTableUtility.ConvertListToDataTable(genericListOfData);
             AddWorksheetForDataTable(dataTable, worksheetName);
