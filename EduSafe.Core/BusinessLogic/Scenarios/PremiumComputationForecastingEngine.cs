@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using EduSafe.Common;
 using EduSafe.Core.BusinessLogic.Aggregation;
@@ -30,6 +31,8 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
         {
             PremiumComputationForecastingInput = premiumComputationForecastingInput;
 
+            _forecastingScenariosBaseResultsDictionary = new Dictionary<string, PremiumComputationResult>();
+
             _forecastingCashFlowsListOfLists = new List<List<PremiumCalculationCashFlow>>();
             _forecastingTimeSeriesListOfLists = new List<List<StudentEnrollmentStateTimeSeriesEntry>>();
             _forecastingDataTableList = new List<DataTable>();
@@ -41,6 +44,7 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
         /// </summary>
         public void RunForecast()
         {
+            Console.WriteLine("Setting up base results for forecast...");
             SetupBaseResultsDictionaryAndProcessExistingEnrollees();
 
             var monthlyPeriodsToForecast = PremiumComputationForecastingInput.MonthlyPeriodsToForecast;
@@ -54,6 +58,9 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
 
                 for (var monthlyPeriod = 0; monthlyPeriod < monthlyPeriodsToForecast; monthlyPeriod++)
                 {
+                    Console.WriteLine(string.Format("Forecasting for '{0}', period {1} of {2}...", 
+                        scenarioName, monthlyPeriod, monthlyPeriodsToForecast));
+
                     var enrollmentCountProjection = forecastedEnrollmentsProjection.EnrollmentCountProjections[scenarioName][monthlyPeriod];
 
                     if (enrollmentCountProjection <= 0) continue;

@@ -101,8 +101,9 @@ namespace EduSafe.Core.Repositories
 
             var enrollmentModel = _enrollmentModelConverter
                 .ConvertEnrollmentModelScenarioToEnrollmentModelInput(enrollmentModelScenario);
-            var servicingCostsModel = _servicingCostsModelRepository
-                .GetServicingCostsModel(enrollmentModelScenario.TotalMonths);
+
+            var servicingCostsModel = _servicingCostsModelRepository.GetServicingCostsModel(enrollmentModelScenario);
+
             var premiumCalculation = useNumericalComputation 
                 ? _premiumCalculationConverter.GetNumericalPremiumCalculation(enrollmentModelScenario)
                 : _premiumCalculationConverter.GetAnalyticalPremiumCalculation(enrollmentModelScenario);

@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string Scenario { get; set; }
         public string VectorSetName { get; set; }
+        public string CostModelName { get; set; }
         public string RateCurveSet { get; set; }
         public string DiscountCurve { get; set; }
 

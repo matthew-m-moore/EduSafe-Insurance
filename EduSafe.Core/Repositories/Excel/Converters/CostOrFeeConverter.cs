@@ -6,7 +6,7 @@ namespace EduSafe.Core.Repositories.Excel.Converters
 {
     public class CostOrFeeConverter
     {
-        public static CostOrFee ConvertCostOrFeeRecordToCostOrFee(CostOrFeeRecord costOrFeeRecord)
+        public static CostOrFee ConvertToCostOrFee(CostOrFeeRecord costOrFeeRecord)
         {
             var costOrFeeName = costOrFeeRecord.CostOrFeeName;
             var baseAmount = costOrFeeRecord.Amount;

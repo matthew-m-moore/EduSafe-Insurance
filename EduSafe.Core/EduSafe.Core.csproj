@@ -118,7 +118,7 @@
     <Compile Include="Repositories\Excel\ForecastedFirstYearPercentageRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BusinessLogic\Forecasting\" />
+    <Folder Include="BusinessLogic\Investments\" />
     <Folder Include="Repositories\Database\Converters\" />
     <Folder Include="Savers\" />
   </ItemGroup>

@@ -63,6 +63,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\ConvertToBlackWhiteScript.cs" />
+    <Compile Include="Scripts\ForecastingScenariosScript.cs" />
     <Compile Include="Scripts\PremiumScenariosScript.cs" />
     <Compile Include="Scripts\InvestmentScenariosScript.cs" />
     <Compile Include="Scripts\SampleScript.cs" />
