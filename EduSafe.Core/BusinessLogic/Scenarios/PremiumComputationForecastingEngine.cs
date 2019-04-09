@@ -54,8 +54,8 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
                         PremiumComputationForecastingInput.ScenarioNames.Contains(scenarioName))
                     {
                         var overlayScenarioLogic = forecastedOverlayScenarios[monthlyPeriod][scenarioName];
-                        var premiumComputationScenario = PremiumComputationForecastingInput.GetForecastingScenario(scenarioName);
-                        var overlayComputationScenario = overlayScenarioLogic.ApplyScenarioLogic(premiumComputationScenario);
+                        var copyOfPremiumComputationScenario = PremiumComputationForecastingInput.GetForecastingScenario(scenarioName).Copy();
+                        var overlayComputationScenario = overlayScenarioLogic.ApplyScenarioLogic(copyOfPremiumComputationScenario);
                         var overlayScenarioResult = overlayComputationScenario.ComputePremiumResult();
 
                         // Then, I need to do something with the overlay scenario result to affect the base scenario result...
