@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EduSafe.ConsoleApp.Interfaces;
 using EduSafe.Core.BusinessLogic.Containers;
-using EduSafe.Core.BusinessLogic.CostsOrFees;
 using EduSafe.Core.Repositories;
 using EduSafe.Core.Repositories.Excel;
 using EduSafe.IO.Excel;
@@ -49,7 +46,7 @@ namespace EduSafe.ConsoleApp.Scripts
             Console.WriteLine("Reinvestment Parameters have Loaded");
 
             RunSpecificReinvestmentScenarioById(reinvestmentOptionsRepository, runPremiumScenario, 1);
-            //RunAllReinvestmentScenarios(reinvestmentOptionsRepository, runPremiumScenario, _numberOfReinvestmentScenario);
+            RunAllReinvestmentScenarios(reinvestmentOptionsRepository, runPremiumScenario, _numberOfReinvestmentScenario);
         }
 
         private void RunSpecificReinvestmentScenarioById(
@@ -58,13 +55,11 @@ namespace EduSafe.ConsoleApp.Scripts
             int scenarioId)
         {
             var reinvestmentOptionsParameters = reinvestmentOptionsRepository.GetReinvestmentOptionsParametersFromId(scenarioId);
-            var totalPremiumRemaining = GetPremiumAvailableForReinvestment(premiumComputationResult);
-            var reinvestmentCashFlows = GetReinvestmentCashFlows(totalPremiumRemaining, reinvestmentOptionsParameters);
+            var reinvestmentCashFlows = GetReinvestmentCashFlows(premiumComputationResult, reinvestmentOptionsParameters);
             var reinvestmentModlPnL = new ReinvestmentModelPnLObject();
 
             Console.WriteLine("Writing to Excel...");
             var excelFileWriter = new ExcelFileWriter();
-            excelFileWriter.AddWorksheetForListOfData(totalPremiumRemaining, "Premium Cash Flows");
             excelFileWriter.AddWorksheetForListOfData(reinvestmentCashFlows, "Reinvestment Cash Flows");
             excelFileWriter.ExportWorkbook(openFileOnSave: true);
         }
@@ -83,9 +78,8 @@ namespace EduSafe.ConsoleApp.Scripts
             for (int i = 1; i <= NumberOfReinvestmentScenario; i++)
             {
                 var reinvestmentOptionsParameters = reinvestmentOptionsRepository.GetReinvestmentOptionsParametersFromId(i);
-                var totalPremiumRemaining = GetPremiumAvailableForReinvestment(premiumComputationResults);
 
-                var reinvestmentCashFlows = GetReinvestmentCashFlows(totalPremiumRemaining, reinvestmentOptionsParameters);
+                var reinvestmentCashFlows = GetReinvestmentCashFlows(premiumComputationResults, reinvestmentOptionsParameters);
                 var reinvestmentModelPnL = GetReinvestmentModelPnL(reinvestmentCashFlows);
 
                 var scenarioPnL = new ReinvestmentModelPnLObject
@@ -163,12 +157,12 @@ namespace EduSafe.ConsoleApp.Scripts
         }
 
         private List<ReinvestmentModelResultsObject> GetReinvestmentCashFlows
-            (List<ReinvestmentModelInputsObject> reinvestmentModelInputsObjects,
+            (PremiumComputationResult premiumComputationResult,
             ReinvestmentOptionsParameters reinvestmentOptionsParameters)
         {
             var outputList = new List<ReinvestmentModelResultsObject>();
 
-            foreach(var cashflow in reinvestmentModelInputsObjects)
+            foreach(var cashflow in premiumComputationResult.PremiumCalculationCashFlows)
             {
                 var output = new ReinvestmentModelResultsObject();
                 var period = cashflow.Period;
@@ -239,26 +233,6 @@ namespace EduSafe.ConsoleApp.Scripts
             return outputList;
         }
 
-        private List<ReinvestmentModelInputsObject> GetPremiumAvailableForReinvestment(PremiumComputationResult premiumComputationResult)
-        {
-            var inputList = new List<ReinvestmentModelInputsObject>();
-            
-            foreach (var cashFlow in premiumComputationResult.PremiumCalculationCashFlows)
-            {
-                var input = new ReinvestmentModelInputsObject
-                {
-                    Period = cashFlow.Period,
-                    PremiumAvailableForReinvestment = cashFlow.PremiumAvailableForReinvestment,
-                    TotalCostsAndClaims = cashFlow.TotalCostsAndClaims,
-                    TotalClaims = cashFlow.TotalClaims
-                };
-                inputList.Add(input);
-                
-            }
-
-            return inputList;
-        }
-
         private class ReinvestmentScenarioCashFlowOutputObject
         {
             public int Period { get; set; }
@@ -296,18 +270,6 @@ namespace EduSafe.ConsoleApp.Scripts
             public double CashFlowReturningFromThreeMonth { get; set; }
             public double CashFlowReturningFromSixMonth { get; set; }
             public double CashFlowReturningFromOneYear { get; set; }
-        }
-
-        private class ReinvestmentModelInputsObject
-        {
-            public int Period { get; set; }
-
-            public double PremiumAvailableForReinvestment { get; set; }
-
-            public double TotalCostsAndClaims { get; set; }
-
-            public double TotalClaims { get; set; }
-
         }
     }
 }
