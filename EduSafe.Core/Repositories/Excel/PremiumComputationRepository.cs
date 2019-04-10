@@ -66,6 +66,22 @@ namespace EduSafe.Core.Repositories
             return scenariosDictionary;
         }
 
+        public Dictionary<string, PremiumComputationEngine> GetPremiumComputationScenariosByName(bool useNumericalComputation = false)
+        {
+            var scenariosDictionary = new Dictionary<string, PremiumComputationEngine>();
+            foreach (var enrollmentModelScenario in _enrollmentModelScenarios)
+            {
+                var premiumComputationEngine = LoadPremiumComputationScenario(enrollmentModelScenario, useNumericalComputation);
+
+                if (scenariosDictionary.ContainsKey(enrollmentModelScenario.Scenario))
+                    throw new Exception("ERROR: Duplicate scenario name, please check inputs. Scenario name must be unique");
+
+                scenariosDictionary.Add(enrollmentModelScenario.Scenario, premiumComputationEngine);
+            }
+
+            return scenariosDictionary;
+        }
+
         public PremiumComputationEngine GetPremiumComputationScenario(EnrollmentModelScenarioRecord enrollmentModelScenarioRecord,
             bool useNumericalComputation = false)
         {

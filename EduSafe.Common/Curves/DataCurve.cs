@@ -13,6 +13,8 @@ namespace EduSafe.Common.Curves
     {
         private List<T> _itemsList;
 
+        public int Count => _itemsList.Count;
+
         public DataCurve()
         {
             _itemsList = new List<T>();

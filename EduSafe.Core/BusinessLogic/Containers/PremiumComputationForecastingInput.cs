@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using EduSafe.Core.BusinessLogic.Containers.TimeSeries;
 using EduSafe.Core.BusinessLogic.Scenarios;
 using EduSafe.Core.Interfaces;
@@ -9,23 +10,32 @@ namespace EduSafe.Core.BusinessLogic.Containers
     {
         private Dictionary<string, PremiumComputationEngine> _forecastingScenariosDictionary;
 
-        public List<ForecastedEnrollmentTimeSeriesEntry> ForecastedEnrollmentTimeSeriesEntries { get; }
-        public Dictionary<int, Dictionary<string, IScenario>> ForecastedTimeSeriesOverlayScenarios { get; }
-        public Dictionary<string, double> PercentageFirstTimeEnrolleeProjections { get; }
+        public string ForecastName { get; set; }
+        public int MonthlyPeriodsToForecast { get; }
+
+        public ForecastedEnrollmentsProjection ForecastedEnrollmentsProjection { get; }
+        public Dictionary<int, Dictionary<string, IScenario>> ForecastedOverlayScenarios { get; }
+        public Dictionary<string, double> PercentageFirstYearEnrolleeProjections { get; }
+
+        public bool ApplyFirstYearPercentGlobally =>
+            PercentageFirstYearEnrolleeProjections != null &&
+            PercentageFirstYearEnrolleeProjections.Any();
 
         public HashSet<string> ScenarioNames { get; private set; }
 
         public PremiumComputationForecastingInput(
+            int monthlyPeriodsToForecast,
             Dictionary<string, PremiumComputationEngine> forecastingScenariosDictionary,
-            List<ForecastedEnrollmentTimeSeriesEntry> forecastedEnrollmentTimeSeriesEntries,
-            Dictionary<int, Dictionary<string, IScenario>> forecastedTimeSeriesOverlayScenarios = null,
+            ForecastedEnrollmentsProjection forecastedEnrollmentsProjection,
+            Dictionary<int, Dictionary<string, IScenario>> forecastedOverlayScenarios = null,
             Dictionary<string, double> percentageFirstTimeEnrolleeProjections = null)
         {
             _forecastingScenariosDictionary = forecastingScenariosDictionary;
 
-            ForecastedEnrollmentTimeSeriesEntries = forecastedEnrollmentTimeSeriesEntries;
-            ForecastedTimeSeriesOverlayScenarios = forecastedTimeSeriesOverlayScenarios;
-            PercentageFirstTimeEnrolleeProjections = percentageFirstTimeEnrolleeProjections;
+            MonthlyPeriodsToForecast = monthlyPeriodsToForecast;
+            ForecastedEnrollmentsProjection = forecastedEnrollmentsProjection;
+            ForecastedOverlayScenarios = forecastedOverlayScenarios;
+            PercentageFirstYearEnrolleeProjections = percentageFirstTimeEnrolleeProjections;
 
             ScenarioNames = new HashSet<string>(_forecastingScenariosDictionary.Keys);
         }
