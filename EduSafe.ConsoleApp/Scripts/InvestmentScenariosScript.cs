@@ -15,7 +15,7 @@ namespace EduSafe.ConsoleApp.Scripts
     public class InvestmentScenariosScript : IScript
     {
         private const int _premiuimScenario = 1;
-        private const int _numberOfReinvestmentScenario = 5;
+        private const int _numberOfReinvestmentScenario = 1;
 
         public List<string> GetArgumentsList()
         {
@@ -46,15 +46,32 @@ namespace EduSafe.ConsoleApp.Scripts
 
             Console.WriteLine("Loading file and scenarios for Reinvestment Model");
             var reinvestmentOptionsRepository = new ReinvestmentOptionsRepository(pathToExcelFile);
-            var reinvestmentModelInputs = CreateInputsForReinvestmentModel(runPremiumScenario);
             Console.WriteLine("Reinvestment Parameters have Loaded");
 
-            RunAllReinvestmentScenarios(reinvestmentOptionsRepository, reinvestmentModelInputs, _numberOfReinvestmentScenario);
+            RunSpecificReinvestmentScenarioById(reinvestmentOptionsRepository, runPremiumScenario, 1);
+            //RunAllReinvestmentScenarios(reinvestmentOptionsRepository, runPremiumScenario, _numberOfReinvestmentScenario);
+        }
+
+        private void RunSpecificReinvestmentScenarioById(
+            ReinvestmentOptionsRepository reinvestmentOptionsRepository,
+            PremiumComputationResult premiumComputationResult,
+            int scenarioId)
+        {
+            var reinvestmentOptionsParameters = reinvestmentOptionsRepository.GetReinvestmentOptionsParametersFromId(scenarioId);
+            var totalPremiumRemaining = GetPremiumAvailableForReinvestment(premiumComputationResult);
+            var reinvestmentCashFlows = GetReinvestmentCashFlows(totalPremiumRemaining, reinvestmentOptionsParameters);
+            var reinvestmentModlPnL = new ReinvestmentModelPnLObject();
+
+            Console.WriteLine("Writing to Excel...");
+            var excelFileWriter = new ExcelFileWriter();
+            excelFileWriter.AddWorksheetForListOfData(totalPremiumRemaining, "Premium Cash Flows");
+            excelFileWriter.AddWorksheetForListOfData(reinvestmentCashFlows, "Reinvestment Cash Flows");
+            excelFileWriter.ExportWorkbook(openFileOnSave: true);
         }
 
         private void RunAllReinvestmentScenarios(
             ReinvestmentOptionsRepository reinvestmentOptionsRepository,
-            List<ReinvestmentModelInputsObject> reinvestmentModelInputs,
+            PremiumComputationResult premiumComputationResults,
             int NumberOfReinvestmentScenario)
         {
             var listOfScenarioPnL = new List<ReinvestmentModelPnLObject>();
@@ -66,7 +83,7 @@ namespace EduSafe.ConsoleApp.Scripts
             for (int i = 1; i <= NumberOfReinvestmentScenario; i++)
             {
                 var reinvestmentOptionsParameters = reinvestmentOptionsRepository.GetReinvestmentOptionsParametersFromId(i);
-                var totalPremiumRemaining = GetTotalPremiumRemaining(reinvestmentModelInputs);
+                var totalPremiumRemaining = GetPremiumAvailableForReinvestment(premiumComputationResults);
 
                 var reinvestmentCashFlows = GetReinvestmentCashFlows(totalPremiumRemaining, reinvestmentOptionsParameters);
                 var reinvestmentModelPnL = GetReinvestmentModelPnL(reinvestmentCashFlows);
@@ -110,12 +127,6 @@ namespace EduSafe.ConsoleApp.Scripts
             return listOfCashFlows;
         }
 
-        private class ReinvestmentScenarioCashFlowOutputObject
-        {
-            public int Period { get; set; }
-            public double BeginningCashFlow { get; set; }
-        }
-
         private ReinvestmentModelPnLObject GetReinvestmentModelPnL (List<ReinvestmentModelResultsObject> reinvestmentCashFlows)
         {
             var finalCashFlow = reinvestmentCashFlows.Select(x => x.EndingCashFlow).Last();
@@ -141,16 +152,6 @@ namespace EduSafe.ConsoleApp.Scripts
             };
         }
 
-        private class ReinvestmentModelPnLObject
-        {
-            public int ScenarioId { get; set; }
-            public double FinalCashFlow { get; set; }
-            public double ProfitFrom3M { get; set; }
-            public double ProfitFrom6M { get; set; }
-            public double ProfitFrom1Y { get; set; }
-            public double TotalPnL { get; set; }
-        }
-
         private PremiumComputationResult RunSpecificPremiumScenarioById
             (PremiumComputationRepository premiumComputationRepository, int scenarioId)
         {
@@ -162,12 +163,12 @@ namespace EduSafe.ConsoleApp.Scripts
         }
 
         private List<ReinvestmentModelResultsObject> GetReinvestmentCashFlows
-            (List<ReinvestmentModelTotalPremiumRemainingObject> reinvestmentModelTotalPremiumRemaining,
+            (List<ReinvestmentModelInputsObject> reinvestmentModelInputsObjects,
             ReinvestmentOptionsParameters reinvestmentOptionsParameters)
         {
             var outputList = new List<ReinvestmentModelResultsObject>();
 
-            foreach(var cashflow in reinvestmentModelTotalPremiumRemaining)
+            foreach(var cashflow in reinvestmentModelInputsObjects)
             {
                 var output = new ReinvestmentModelResultsObject();
                 var period = cashflow.Period;
@@ -185,7 +186,7 @@ namespace EduSafe.ConsoleApp.Scripts
 
                 output.Period = period;
 
-                var begBalance = period == 0 ? cashflow.TotalPremiumUsedForReinvestment : cashflow.TotalPremiumUsedForReinvestment + outputList[period - 1].EndingCashFlow;
+                var begBalance = period == 0 ? cashflow.PremiumAvailableForReinvestment : cashflow.PremiumAvailableForReinvestment + outputList[period - 1].EndingCashFlow;
 
                 output.BeginningCashFlow = begBalance;
 
@@ -232,11 +233,46 @@ namespace EduSafe.ConsoleApp.Scripts
 
                 output.EndingCashFlow = period == 0 ? 0 : totalReturningCash + totalInterestEarned;
 
-                outputList.Add(output);
-               
+                outputList.Add(output);   
             }
 
             return outputList;
+        }
+
+        private List<ReinvestmentModelInputsObject> GetPremiumAvailableForReinvestment(PremiumComputationResult premiumComputationResult)
+        {
+            var inputList = new List<ReinvestmentModelInputsObject>();
+            
+            foreach (var cashFlow in premiumComputationResult.PremiumCalculationCashFlows)
+            {
+                var input = new ReinvestmentModelInputsObject
+                {
+                    Period = cashFlow.Period,
+                    PremiumAvailableForReinvestment = cashFlow.PremiumAvailableForReinvestment,
+                    TotalCostsAndClaims = cashFlow.TotalCostsAndClaims,
+                    TotalClaims = cashFlow.TotalClaims
+                };
+                inputList.Add(input);
+                
+            }
+
+            return inputList;
+        }
+
+        private class ReinvestmentScenarioCashFlowOutputObject
+        {
+            public int Period { get; set; }
+            public double BeginningCashFlow { get; set; }
+        }
+
+        private class ReinvestmentModelPnLObject
+        {
+            public int ScenarioId { get; set; }
+            public double FinalCashFlow { get; set; }
+            public double ProfitFrom3M { get; set; }
+            public double ProfitFrom6M { get; set; }
+            public double ProfitFrom1Y { get; set; }
+            public double TotalPnL { get; set; }
         }
 
         private class ReinvestmentModelResultsObject
@@ -262,165 +298,16 @@ namespace EduSafe.ConsoleApp.Scripts
             public double CashFlowReturningFromOneYear { get; set; }
         }
 
-        private List<ReinvestmentModelTotalPremiumRemainingObject> GetTotalPremiumRemaining
-            (List<ReinvestmentModelInputsObject> reinvestmentModelInputs)
-        {
-            var outputList = new List<ReinvestmentModelTotalPremiumRemainingObject>();
-
-            // See Edu$afe Model v10 
-            //var numerator = reinvestmentModelInputs.Sum(x => x.CostsOperational);
-            //var denominator = reinvestmentModelInputs.Where(x => x.Period > 0).Sum(x => x.Premium);
-            //var factorForOperationalCosts = numerator / denominator;
-
-            foreach(var cashFlow in reinvestmentModelInputs)
-            {
-                var output = new ReinvestmentModelTotalPremiumRemainingObject();
-                var period = cashFlow.Period;
-                output.Period = period;
-
-                // See Edu$afe Model v11
-                var premium = cashFlow.Premium;
-                var costOperational = cashFlow.CostsOperational;
-                var factorForOperationalCosts = costOperational / premium;
-                output.FactorForOperationalCosts = factorForOperationalCosts;
-
-                var nonOperationalCashFlow = cashFlow.NonOperationalOutFlows;
-                output.NonOperationalOutFlows = nonOperationalCashFlow;
-
-                var totalPremiumUseForOps = factorForOperationalCosts * premium;
-                output.TotalPremiumUsedForOperations = totalPremiumUseForOps;
-
-                output.TotalPremiumUsedForReinvestment = period == 0 ? 0 : premium - totalPremiumUseForOps - nonOperationalCashFlow;
-
-                outputList.Add(output);
-            }
-
-            return outputList;
-        }
-
-        private class ReinvestmentModelTotalPremiumRemainingObject
-        {
-            public int Period { get; set; }
-
-            // OperationalCost/ Premium
-            public double FactorForOperationalCosts { get; set; }
-
-            public double NonOperationalOutFlows { get; set; }
-
-            // Premium * SUM(CostsOperational)/SUM(TotalPremiums)
-            public double TotalPremiumUsedForOperations { get; set; }
-
-            // TotalPremiums - TotalPremiumUsedForOperations - NonOperationalOutFlows
-            public double TotalPremiumUsedForReinvestment { get; set; }
-        }
-
-        private List<ReinvestmentModelInputsObject> CreateInputsForReinvestmentModel
-            (PremiumComputationResult premiumComputationResult)
-        {
-            var inputList = new List<ReinvestmentModelInputsObject>();
-
-
-            foreach (var cashFlow in premiumComputationResult.PremiumCalculationCashFlows)
-            {
-
-                var input = new ReinvestmentModelInputsObject();
-                var period = cashFlow.Period;
-
-                var enrollmentFactor = premiumComputationResult.EnrollmentStateTimeSeries[period].Enrolled;
-
-                input.Period = period;
-                input.EnrollmentFactor = enrollmentFactor;
-
-
-                var costBackground = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Background Check Fee"];
-                var costCredit = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Credit Score Fee"];
-                var costTranscripts = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Transcripts Fee"];
-                var costServicing = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Servicing Fee"];
-                input.CostsOperational =
-                    Convert.ToDouble(costBackground)
-                    + Convert.ToDouble(costCredit)
-                    + Convert.ToDouble(costTranscripts)
-                    + Convert.ToDouble(costServicing);
-
-                var costDropOut = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Drop Out Verification Fee"];
-                var costGradSchool = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Grad School Verification Fee"];
-                var costEarlyHire = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Early Hire Rate Verification Fee"];
-                var costUnemployment = period == 0 ? 0 : premiumComputationResult.ServicingCosts.Rows[period-1]["Unemployment Verification Fee"];
-                input.CostsEvents =
-                    Convert.ToDouble(costDropOut)
-                    + Convert.ToDouble(costGradSchool)
-                    + Convert.ToDouble(costEarlyHire)
-                    + Convert.ToDouble(costUnemployment);
-
-                input.CostsTotal = input.CostsOperational + input.CostsEvents;
-
-                var claimDropOut = cashFlow.ProbabilityAdjustedDropOutClaims;
-                var claimGradSchool = cashFlow.ProbabilityAdjustedGradSchoolClaims;
-                var claimEarlyHire = cashFlow.ProbabilityAdjustedEarlyHireClaims;
-                var claimUnemployment = cashFlow.ProbabilityAdjustedUnemploymentClaims;
-                input.ClaimOutflows = claimDropOut + claimGradSchool + claimEarlyHire + claimUnemployment;
-
-                input.NonOperationalOutFlows = input.CostsEvents + input.ClaimOutflows;
-
-                var marginAdjustedPremium = 
-                    premiumComputationResult
-                    .PremiumCalculationCashFlows
-                    .Where(x => x.Period == period)
-                    .Select(x => x.ProbabilityAdjustedEquity)
-                    .First();
-
-                input.MarginAdjustedPremium = marginAdjustedPremium * enrollmentFactor;
-                input.Premium = premiumComputationResult.CalculatedMonthlyPremium * enrollmentFactor ;
-                    
-                inputList.Add(input);
-                
-            }
-
-            return inputList;
-        }
-
         private class ReinvestmentModelInputsObject
         {
             public int Period { get; set; }
 
-            public double EnrollmentFactor { get; set; }
+            public double PremiumAvailableForReinvestment { get; set; }
 
-            public double CostsOperational { get; set; }
+            public double TotalCostsAndClaims { get; set; }
 
-            public double CostsEvents { get; set; }
+            public double TotalClaims { get; set; }
 
-            //CostsOperational + CostsEvents
-            public double CostsTotal { get; set; } 
-
-            public double ClaimOutflows { get; set; }
-
-            // CostsEvets + ClaimOutFlows
-            public double NonOperationalOutFlows { get; set; }
-
-            public double Premium { get; set; }
-
-            public double MarginAdjustedPremium { get; set; }
-        }
-
-        /// 
-        /// To get reinvestment cash flows for a specific scenario to debug
-        /// 
-        private void RunSpecificReinvestmentScenarioById(
-            ReinvestmentOptionsRepository reinvestmentOptionsRepository,
-            List<ReinvestmentModelInputsObject> reinvestmentModelInputs,
-            int scenarioId)
-        {
-            var reinvestmentOptionsParameters = reinvestmentOptionsRepository.GetReinvestmentOptionsParametersFromId(scenarioId);
-            var totalPremiumRemaining = GetTotalPremiumRemaining(reinvestmentModelInputs);
-            var reinvestmentCashFlows = GetReinvestmentCashFlows(totalPremiumRemaining, reinvestmentOptionsParameters);
-            var reinvestmentModlPnL = new ReinvestmentModelPnLObject();
-
-            Console.WriteLine("Writing to Excel...");
-            var excelFileWriter = new ExcelFileWriter();
-            excelFileWriter.AddWorksheetForListOfData(reinvestmentModelInputs, "Inputs");
-            excelFileWriter.AddWorksheetForListOfData(totalPremiumRemaining, "Premium Cash Flows");
-            excelFileWriter.AddWorksheetForListOfData(reinvestmentCashFlows, "Reinvestment Cash Flows");
-            excelFileWriter.ExportWorkbook(openFileOnSave: true);
         }
     }
 }
