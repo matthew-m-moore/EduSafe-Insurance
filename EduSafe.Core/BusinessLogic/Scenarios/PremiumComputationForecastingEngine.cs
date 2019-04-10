@@ -56,7 +56,7 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
             {
                 if (!_forecastingScenariosBaseResultsDictionary.ContainsKey(scenarioName)) continue;
 
-                for (var monthlyPeriod = 0; monthlyPeriod < monthlyPeriodsToForecast; monthlyPeriod++)
+                for (var monthlyPeriod = 0; monthlyPeriod <= monthlyPeriodsToForecast; monthlyPeriod++)
                 {
                     Console.WriteLine(string.Format("Forecasting for '{0}', period {1} of {2}...", 
                         scenarioName, monthlyPeriod, monthlyPeriodsToForecast));
@@ -157,6 +157,8 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
             double percentageFirstTimeEnrollees)
         {
             var percentageSeasonedEnrollees = 1.0 - percentageFirstTimeEnrollees;
+            if (percentageSeasonedEnrollees <= 0) return forecastingScenarioBaseResult;
+
             var copyOfPremiumComputationScenario = premiumComputationScenario.Copy();
             var forecastingScenarioSeasonedResult = copyOfPremiumComputationScenario.ComputePremiumResult(Constants.MonthsInOneYear);
 

@@ -21,13 +21,13 @@ namespace EduSafe.Core.BusinessLogic.Aggregation
                 if (!collectionOfDataRows.Any()) continue;
 
                 // This code creates a copy of the data rows prior to aggregation
-                var dataTableToAggregate = new DataTable();
+                var dataTableToAggregate = dataTable.Clone();
                 foreach (var dataRow in collectionOfDataRows) dataTableToAggregate.ImportRow(dataRow);
 
                 var countOfDataRowsToAdd = dataTableToAggregate.Rows.Count;
 
-                var startingPeriodOfAggregatedDataRows = 0;
-                var endingPeriodOfAggregatedDataRows = 0;
+                var startingPeriodOfAggregatedDataRows = 0d;
+                var endingPeriodOfAggregatedDataRows = 0d;
 
                 for (var dataRowCounter = 0; dataRowCounter < countOfDataRowsToAdd; dataRowCounter++)
                 {
@@ -35,7 +35,7 @@ namespace EduSafe.Core.BusinessLogic.Aggregation
                     if (dataRowCounter >= countOfDataRowsToAdd) break;
 
                     var dataRowToAggregate = dataTableToAggregate.Rows[dataRowCounter];
-                    var periodOfDataRowToAggregate = dataRowToAggregate.Field<int>(Constants.PeriodIdentifier);
+                    var periodOfDataRowToAggregate = dataRowToAggregate.Field<double>(Constants.PeriodIdentifier);
 
                     if (!listOfAggregatedDataRows.Any())
                     {
@@ -43,8 +43,8 @@ namespace EduSafe.Core.BusinessLogic.Aggregation
                         continue;
                     }
 
-                    startingPeriodOfAggregatedDataRows = listOfAggregatedDataRows.First().Field<int>(Constants.PeriodIdentifier);
-                    endingPeriodOfAggregatedDataRows = listOfAggregatedDataRows.Last().Field<int>(Constants.PeriodIdentifier);
+                    startingPeriodOfAggregatedDataRows = listOfAggregatedDataRows.First().Field<double>(Constants.PeriodIdentifier);
+                    endingPeriodOfAggregatedDataRows = listOfAggregatedDataRows.Last().Field<double>(Constants.PeriodIdentifier);
 
                     // For data rows that have "Period" before the existing that are aggregated, insert them in front
                     if (periodOfDataRowToAggregate < startingPeriodOfAggregatedDataRows)
@@ -60,15 +60,15 @@ namespace EduSafe.Core.BusinessLogic.Aggregation
                     {
                         var closestAggregatedDataRow = listOfAggregatedDataRows
                             .Select((d, i) => new { DataRow = d, Index = i })
-                            .First(o => o.DataRow.Field<int>(Constants.PeriodIdentifier) <= periodOfDataRowToAggregate);
+                            .Last(o => o.DataRow.Field<double>(Constants.PeriodIdentifier) <= periodOfDataRowToAggregate);
 
                         var indexOfClosestAggregatedDataRow = closestAggregatedDataRow.Index;
-                        var periodOfClosestAggregatedDataRow = closestAggregatedDataRow.DataRow.Field<int>(Constants.PeriodIdentifier);
+                        var periodOfClosestAggregatedDataRow = closestAggregatedDataRow.DataRow.Field<double>(Constants.PeriodIdentifier);
 
                         // If the "Period" is between the starting period and the next closest, insert it in between
-                        if (periodOfDataRowToAggregate < periodOfClosestAggregatedDataRow)
+                        if (periodOfDataRowToAggregate > periodOfClosestAggregatedDataRow)
                         {
-                            listOfAggregatedDataRows.Insert(indexOfClosestAggregatedDataRow, dataRowToAggregate);
+                            listOfAggregatedDataRows.Insert(indexOfClosestAggregatedDataRow + 1, dataRowToAggregate);
                         }
                         // Otherwise, aggregate at the matching "Period" number for those data rows
                         else

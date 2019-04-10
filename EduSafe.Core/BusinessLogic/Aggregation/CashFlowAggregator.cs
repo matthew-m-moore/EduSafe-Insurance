@@ -55,15 +55,15 @@ namespace EduSafe.Core.BusinessLogic.Aggregation
                     {
                         var closestAggregatedCashFlow = listOfAggregatedCashFlows
                             .Select((c, i) => new { CashFlow = c, Index = i })
-                            .First(o => o.CashFlow.Period <= periodOfCashFlowToAggregate);
+                            .Last(o => o.CashFlow.Period <= periodOfCashFlowToAggregate);
 
                         var indexOfClosestAggregatedCashFlow = closestAggregatedCashFlow.Index;
                         var periodOfClosestAggregatedCashFlow = closestAggregatedCashFlow.CashFlow.Period;
 
                         // If the "Period" is between the starting period and the next closest, insert it in between
-                        if (periodOfCashFlowToAggregate < periodOfClosestAggregatedCashFlow)
+                        if (periodOfCashFlowToAggregate > periodOfClosestAggregatedCashFlow)
                         {
-                            listOfAggregatedCashFlows.Insert(indexOfClosestAggregatedCashFlow, cashFlowToAggregate);
+                            listOfAggregatedCashFlows.Insert(indexOfClosestAggregatedCashFlow + 1, cashFlowToAggregate);
                         }
                         // Otherwise, aggregate the cash flow at the matching "Period" number
                         else

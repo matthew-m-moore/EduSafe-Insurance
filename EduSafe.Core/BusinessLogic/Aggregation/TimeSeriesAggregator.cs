@@ -54,15 +54,15 @@ namespace EduSafe.Core.BusinessLogic.Aggregation
                     {
                         var closestAggregatedTimeSeriesEntry = listOfAggregatedTimeSeriesEntries
                             .Select((c, i) => new { CashFlow = c, Index = i })
-                            .First(o => o.CashFlow.Period <= periodOfTimeSeriesEntryToAggregate);
+                            .Last(o => o.CashFlow.Period <= periodOfTimeSeriesEntryToAggregate);
 
                         var indexOfClosestAggregatedTimeSeriesEntry = closestAggregatedTimeSeriesEntry.Index;
                         var periodOfClosestAggregatedTimeSeriesEntry = closestAggregatedTimeSeriesEntry.CashFlow.Period;
 
                         // If the "Period" is between the starting period and the next closest, insert it in between
-                        if (periodOfTimeSeriesEntryToAggregate < periodOfClosestAggregatedTimeSeriesEntry)
+                        if (periodOfTimeSeriesEntryToAggregate > periodOfClosestAggregatedTimeSeriesEntry)
                         {
-                            listOfAggregatedTimeSeriesEntries.Insert(indexOfClosestAggregatedTimeSeriesEntry, timeSeriesEntryToAggregate);
+                            listOfAggregatedTimeSeriesEntries.Insert(indexOfClosestAggregatedTimeSeriesEntry + 1, timeSeriesEntryToAggregate);
                         }
                         // Otherwise, aggregate the time series entry at the matching "Period" number
                         else

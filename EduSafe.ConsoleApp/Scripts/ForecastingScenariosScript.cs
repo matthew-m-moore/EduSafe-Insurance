@@ -43,9 +43,9 @@ namespace EduSafe.ConsoleApp.Scripts
 
             Console.WriteLine("Writing to Excel...");
             var excelFileWriter = new ExcelFileWriter();
-            excelFileWriter.AddWorksheetForListOfData(forecastingEngine.ForecastedPremiumCalculationCashFlows);
-            excelFileWriter.AddWorksheetForDataTable(forecastingEngine.ForecastedServicingCosts);
-            excelFileWriter.AddWorksheetForListOfData(forecastingEngine.ForecastedEnrollmentTimeSeries);
+            excelFileWriter.AddWorksheetForListOfData(forecastingEngine.ForecastedPremiumCalculationCashFlows, "Numerical Cash Flows");
+            excelFileWriter.AddWorksheetForDataTable(forecastingEngine.ForecastedServicingCosts, "Servicing Costs");
+            excelFileWriter.AddWorksheetForListOfData(forecastingEngine.ForecastedEnrollmentTimeSeries, "Enrollment Model");
             excelFileWriter.ExportWorkbook(openFileOnSave: true);
             Console.WriteLine("Writing completed.");
         }

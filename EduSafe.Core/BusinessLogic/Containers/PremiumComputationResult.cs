@@ -44,12 +44,12 @@ namespace EduSafe.Core.BusinessLogic.Containers
             EnrollmentStateTimeSeries.ForEach(t => t.Period += incrementalTimeSeriesPeriodDifference);
 
             var dataRowsCollection = ServicingCosts.AsEnumerable();
-            var dataRowsCollectionStartingPeriod = dataRowsCollection.First().Field<int>(Constants.PeriodIdentifier);
+            var dataRowsCollectionStartingPeriod = dataRowsCollection.First().Field<double>(Constants.PeriodIdentifier);
             var incrementalDataRowPeriodDifference = adjustedStartingPeriod - dataRowsCollectionStartingPeriod;
             
             foreach (var dataRow in dataRowsCollection)
             {
-                var dataRowPeriodValue = dataRow.Field<int>(Constants.PeriodIdentifier);
+                var dataRowPeriodValue = dataRow.Field<double>(Constants.PeriodIdentifier);
                 dataRowPeriodValue += incrementalDataRowPeriodDifference;
                 dataRow[Constants.PeriodIdentifier] = dataRowPeriodValue;
             }

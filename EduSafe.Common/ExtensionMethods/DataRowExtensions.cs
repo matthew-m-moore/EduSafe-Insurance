@@ -22,7 +22,7 @@ namespace EduSafe.Common.ExtensionMethods
         };
 
         /// <summary>
-        /// Aggregates numeric values of two data rows with shared schema, and converts all values to double in doing so
+        /// Aggregates numeric values of two data rows with shared schema, and converts all values to double in doing so.
         /// </summary>
         public static void Aggregate(this DataRow aggregatedDataRow, DataRow dataRowToAggregate)
         {
@@ -30,16 +30,17 @@ namespace EduSafe.Common.ExtensionMethods
             {
                 var columnName = column.ColumnName;
                 if (columnName == Constants.PeriodIdentifier) continue;
-
-                var valueToAggregate = dataRowToAggregate[columnName];
+                
                 if (!aggregatedDataRow.Table.Columns.Contains(columnName))
                 {
-                    aggregatedDataRow[columnName] = valueToAggregate;
-                    continue;
+                    throw new Exception(string.Format("ERROR: Data table columns and schema must match to perform aggregation. "
+                        + "The column '{0}' was not found in a table.", columnName));
                 }
 
+                var valueToAggregate = dataRowToAggregate[columnName];
+                var aggregatedValue = aggregatedDataRow[columnName];
+
                 // If these values are not numeric types, skip the aggregation
-                var aggregatedValue = aggregatedDataRow[columnName];       
                 if (IsNumeric(valueToAggregate) && IsNumeric(aggregatedValue))
                 {
                     var totalAggregatedValue = (double)aggregatedValue + (double)valueToAggregate;
@@ -49,7 +50,7 @@ namespace EduSafe.Common.ExtensionMethods
         }
 
         /// <summary>
-        /// Scales numeric values of a data row, and converts all values to double in doing so
+        /// Scales numeric values of a data row, and converts all values to double in doing so.
         /// </summary>
         public static void Scale(this DataRow dataRowToScale, double scaleFactor)
         {

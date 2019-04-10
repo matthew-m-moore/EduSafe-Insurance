@@ -55,7 +55,7 @@ namespace EduSafe.Core.Repositories.Excel
         private void Initialize()
         {
             _forecastingParametersRecord = _ExcelFileReader
-                .GetDataFromSpecificTab<ForecastingParametersRecord>(_forecastingParametersTab).FirstOrDefault();
+                .GetTransposedDataFromSpecificTab<ForecastingParametersRecord>(_forecastingParametersTab).FirstOrDefault();
 
             if (_forecastingParametersTab != null) return;
 
