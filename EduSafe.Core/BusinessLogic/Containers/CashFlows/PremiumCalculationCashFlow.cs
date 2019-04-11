@@ -21,6 +21,14 @@
             ProbabilityAdjustedEarlyHireClaims +
             ProbabilityAdjustedUnemploymentClaims;
 
+        public double TotalClaims =>
+            ProbabilityAdjustedDropOutClaims +
+            ProbabilityAdjustedGradSchoolClaims +
+            ProbabilityAdjustedEarlyHireClaims +
+            ProbabilityAdjustedUnemploymentClaims;
+
+        public double PremiumAvailableForReinvestment => ProbabilityAdjustedPremium - TotalCostsAndClaims;
+
         public double TotalCashFlow => ProbabilityAdjustedPremium - TotalCostsAndClaims - ProbabilityAdjustedEquity;
         public double DiscountedCashFlow => TotalCashFlow * DiscountFactor;
 
