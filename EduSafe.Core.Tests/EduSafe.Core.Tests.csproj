@@ -65,6 +65,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\Aggregation\CashFlowAggregatorTests.cs" />
+    <Compile Include="BusinessLogic\Aggregation\DataTableAggregatorTests.cs" />
+    <Compile Include="BusinessLogic\Aggregation\TimeSeriesAggregatorTests.cs" />
     <Compile Include="BusinessLogic\Models\Premiums\PremiumCalculationTests.cs" />
     <Compile Include="BusinessLogic\Models\RollForwardRepricingModelTests.cs" />
     <Compile Include="BusinessLogic\Models\ServicingCostsModelTests.cs" />
