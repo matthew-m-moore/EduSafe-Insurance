@@ -53,9 +53,12 @@
     <Compile Include="BusinessLogic\Containers\CollegeMajorData.cs" />
     <Compile Include="BusinessLogic\Containers\CompoundKeys\VectorAssignmentEntry.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumComputationForecastingInput.cs" />
+    <Compile Include="BusinessLogic\Containers\ReinvestmentModelPnLResults.cs" />
+    <Compile Include="BusinessLogic\Containers\ReinvestmentModelResults.cs" />
     <Compile Include="BusinessLogic\Containers\ReinvestmentOptionsParameters.cs" />
     <Compile Include="BusinessLogic\Containers\ForecastedEnrollmentsProjection.cs" />
     <Compile Include="BusinessLogic\Containers\TimeSeries\TimeSeriesEntry.cs" />
+    <Compile Include="BusinessLogic\Models\ReinvestmentModel.cs" />
     <Compile Include="BusinessLogic\Scenarios\PremiumComputationEngine.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumCalculationModelInput.cs" />
     <Compile Include="BusinessLogic\Containers\CashFlows\PremiumCalculationCashFlow.cs" />

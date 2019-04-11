@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EduSafe.ConsoleApp.Interfaces;
 using EduSafe.Core.BusinessLogic.Containers;
+using EduSafe.Core.BusinessLogic.Models;
 using EduSafe.Core.Repositories;
 using EduSafe.Core.Repositories.Excel;
 using EduSafe.IO.Excel;
@@ -55,8 +56,9 @@ namespace EduSafe.ConsoleApp.Scripts
             int scenarioId)
         {
             var reinvestmentOptionsParameters = reinvestmentOptionsRepository.GetReinvestmentOptionsParametersFromId(scenarioId);
-            var reinvestmentCashFlows = GetReinvestmentCashFlows(premiumComputationResult, reinvestmentOptionsParameters);
-            var reinvestmentModlPnL = new ReinvestmentModelPnLObject();
+            var reinvestmentModel = new ReinvestmentModel(premiumComputationResult, reinvestmentOptionsParameters);
+            var reinvestmentCashFlows = reinvestmentModel.ReinvestmentModelCashFlows();
+            var reinvestmentModelPnL = reinvestmentModel.GetReinvestmentModelPnL(reinvestmentCashFlows);
 
             Console.WriteLine("Writing to Excel...");
             var excelFileWriter = new ExcelFileWriter();
@@ -78,9 +80,9 @@ namespace EduSafe.ConsoleApp.Scripts
             for (int i = 1; i <= NumberOfReinvestmentScenario; i++)
             {
                 var reinvestmentOptionsParameters = reinvestmentOptionsRepository.GetReinvestmentOptionsParametersFromId(i);
-
-                var reinvestmentCashFlows = GetReinvestmentCashFlows(premiumComputationResults, reinvestmentOptionsParameters);
-                var reinvestmentModelPnL = GetReinvestmentModelPnL(reinvestmentCashFlows);
+                var reinvestmentModel = new ReinvestmentModel(premiumComputationResults, reinvestmentOptionsParameters);
+                var reinvestmentCashFlows = reinvestmentModel.ReinvestmentModelCashFlows();
+                var reinvestmentModelPnL = reinvestmentModel.GetReinvestmentModelPnL(reinvestmentCashFlows);
 
                 var scenarioPnL = new ReinvestmentModelPnLObject
                 {
@@ -103,7 +105,7 @@ namespace EduSafe.ConsoleApp.Scripts
         }
 
         private List<ReinvestmentScenarioCashFlowOutputObject> GetReinvestmentModelBeginningCashFlows
-            (int scenarioId, List<ReinvestmentModelResultsObject> reinvestmentModelResults)
+            (int scenarioId, List<ReinvestmentModelResults> reinvestmentModelResults)
         {
             var listOfCashFlows = new List<ReinvestmentScenarioCashFlowOutputObject>();
 
@@ -121,29 +123,10 @@ namespace EduSafe.ConsoleApp.Scripts
             return listOfCashFlows;
         }
 
-        private ReinvestmentModelPnLObject GetReinvestmentModelPnL (List<ReinvestmentModelResultsObject> reinvestmentCashFlows)
+        private class ReinvestmentScenarioCashFlowOutputObject
         {
-            var finalCashFlow = reinvestmentCashFlows.Select(x => x.EndingCashFlow).Last();
-
-            var profitFrom3M = reinvestmentCashFlows.Sum(x => x.PortionInThreeMonth) -
-                reinvestmentCashFlows.Sum(x => x.CashFlowReturningFromThreeMonth);
-
-            var profitFrom6M = reinvestmentCashFlows.Sum(x => x.PortionInSixMonth) -
-                reinvestmentCashFlows.Sum(x => x.CashFlowReturningFromSixMonth);
-
-            var profitFrom1Y = reinvestmentCashFlows.Sum(x => x.PortionInOneYear) -
-                reinvestmentCashFlows.Sum(x => x.CashFlowReturningFromOneYear);
-
-            var totalPnL = finalCashFlow + profitFrom3M + profitFrom6M + profitFrom1Y;
-
-            return new ReinvestmentModelPnLObject
-            {
-                FinalCashFlow = finalCashFlow,
-                ProfitFrom3M = profitFrom3M,
-                ProfitFrom6M = profitFrom6M,
-                ProfitFrom1Y = profitFrom1Y,
-                TotalPnL = totalPnL
-            };
+            public int Period { get; set; }
+            public double BeginningCashFlow { get; set; }
         }
 
         private PremiumComputationResult RunSpecificPremiumScenarioById
@@ -154,122 +137,6 @@ namespace EduSafe.ConsoleApp.Scripts
             var premiumNumericalComputationScenario = premiumComputationRepository.GetPremiumComputationScenarioById(scenarioId, true);
 
             return premiumNumericalComputationScenario.ComputePremiumResult();
-        }
-
-        private List<ReinvestmentModelResultsObject> GetReinvestmentCashFlows
-            (PremiumComputationResult premiumComputationResult,
-            ReinvestmentOptionsParameters reinvestmentOptionsParameters)
-        {
-            var outputList = new List<ReinvestmentModelResultsObject>();
-
-            foreach(var cashflow in premiumComputationResult.PremiumCalculationCashFlows)
-            {
-                var output = new ReinvestmentModelResultsObject();
-                var period = cashflow.Period;
-
-                var RateOneMonth = reinvestmentOptionsParameters.OneMonthRate;
-                var RateThreeMonth = reinvestmentOptionsParameters.ThreeMonthRate;
-                var RateSixMonth = reinvestmentOptionsParameters.SixMonthRate;
-                var RateOneYear = reinvestmentOptionsParameters.TwelveMonthRate;
-
-                var PortionCash = reinvestmentOptionsParameters.PortionInCash;
-                var Portion1M = reinvestmentOptionsParameters.PortionIn1M;
-                var Portion3M = reinvestmentOptionsParameters.PortionIn3M;
-                var Portion6M = reinvestmentOptionsParameters.PortionIn6M;
-                var Portion1Y = reinvestmentOptionsParameters.PortionIn12M;
-
-                output.Period = period;
-
-                var begBalance = period == 0 ? cashflow.PremiumAvailableForReinvestment : cashflow.PremiumAvailableForReinvestment + outputList[period - 1].EndingCashFlow;
-
-                output.BeginningCashFlow = begBalance;
-
-                var portionCash = begBalance * PortionCash;
-                var portion1M = begBalance * Portion1M;
-                var portion3M = begBalance * Portion3M;
-                var portion6M = begBalance * Portion6M;
-                var portion1Y = begBalance * Portion1Y;
-
-                output.PortionInCash = portionCash;
-                output.PortionInOneMonth = portion1M;
-                output.PortionInThreeMonth = portion3M;
-                output.PortionInSixMonth = portion6M;
-                output.PortionInOneYear = portion1Y;
-
-                var interest1M = portion1M * RateOneMonth/1200;
-                var interest3M = portion3M * (Math.Pow((1 + RateThreeMonth/1200), 3) - 1);
-                var interest6M = portion6M * (Math.Pow((1 + RateSixMonth / 1200), 6) - 1);
-                var interest1Y = portion1Y * (Math.Pow((1 + RateOneYear / 1200), 12) - 1);
-
-                output.InterestFromOneMonth = interest1M;
-                output.InterestFromThreeMonth = interest3M;
-                output.InterestFromSixMonth = interest6M;
-                output.InterestFromOneYear = interest1Y;
-
-                var cashFlowReturningFromThreeMonth = period < 3 ? 0 : outputList[period - 2].PortionInThreeMonth;
-
-                var cashFlowReturningFromSixMonth = period < 6 ? 0 : outputList[period - 5].PortionInSixMonth;
-
-                var cashFlowReturningFromOneYear = period < 12 ? 0 : outputList[period - 11].PortionInOneYear;
-
-                output.CashFlowReturningFromThreeMonth = cashFlowReturningFromThreeMonth;
-                output.CashFlowReturningFromSixMonth = cashFlowReturningFromSixMonth;
-                output.CashFlowReturningFromOneYear = cashFlowReturningFromOneYear;
-
-                var totalReturningCash =
-                    portionCash +
-                    portion1M +
-                    cashFlowReturningFromThreeMonth +
-                    cashFlowReturningFromSixMonth +
-                    cashFlowReturningFromOneYear;
-
-                var totalInterestEarned = interest1M + interest3M + interest6M + interest1Y;
-
-                output.EndingCashFlow = period == 0 ? 0 : totalReturningCash + totalInterestEarned;
-
-                outputList.Add(output);   
-            }
-
-            return outputList;
-        }
-
-        private class ReinvestmentScenarioCashFlowOutputObject
-        {
-            public int Period { get; set; }
-            public double BeginningCashFlow { get; set; }
-        }
-
-        private class ReinvestmentModelPnLObject
-        {
-            public int ScenarioId { get; set; }
-            public double FinalCashFlow { get; set; }
-            public double ProfitFrom3M { get; set; }
-            public double ProfitFrom6M { get; set; }
-            public double ProfitFrom1Y { get; set; }
-            public double TotalPnL { get; set; }
-        }
-
-        private class ReinvestmentModelResultsObject
-        {
-            public int Period { get; set; }
-
-            public double BeginningCashFlow { get; set; }
-            public double EndingCashFlow { get; set; }
-
-            public double PortionInCash { get; set; }
-            public double PortionInOneMonth { get; set; }
-            public double PortionInThreeMonth { get; set; }
-            public double PortionInSixMonth { get; set; }
-            public double PortionInOneYear { get; set; }
-
-            public double InterestFromOneMonth { get; set; }
-            public double InterestFromThreeMonth { get; set; }
-            public double InterestFromSixMonth { get; set; }
-            public double InterestFromOneYear { get; set; }
-
-            public double CashFlowReturningFromThreeMonth { get; set; }
-            public double CashFlowReturningFromSixMonth { get; set; }
-            public double CashFlowReturningFromOneYear { get; set; }
         }
     }
 }
