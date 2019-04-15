@@ -15,7 +15,7 @@ namespace EduSafe.Core.Repositories.Excel
         private readonly ForecastedEnrollmentRepository _forecastedEnrollmentRepository;
         private readonly ForecastedFirstYearPercentageRepository _forecastedFirstYearPercentageRepository;
 
-        private ForecastingParametersRecord _forecastingParametersRecord;
+        public ForecastingParametersRecord ForecastingParametersRecord { get; private set; }
 
         public ForecastingRepository(string pathToExcelDataFile) 
             : base(pathToExcelDataFile)
@@ -47,14 +47,14 @@ namespace EduSafe.Core.Repositories.Excel
                 _forecastedEnrollmentRepository,
                 _forecastedFirstYearPercentageRepository);
 
-            var premiumComputationForecastingInput = premiumComputationForecastingInputConverter.Convert(_forecastingParametersRecord);
+            var premiumComputationForecastingInput = premiumComputationForecastingInputConverter.Convert(ForecastingParametersRecord);
 
             return new PremiumComputationForecastingEngine(premiumComputationForecastingInput);
         }
 
         private void Initialize()
         {
-            _forecastingParametersRecord = _ExcelFileReader
+            ForecastingParametersRecord = _ExcelFileReader
                 .GetTransposedDataFromSpecificTab<ForecastingParametersRecord>(_forecastingParametersTab).FirstOrDefault();
 
             if (_forecastingParametersTab != null) return;

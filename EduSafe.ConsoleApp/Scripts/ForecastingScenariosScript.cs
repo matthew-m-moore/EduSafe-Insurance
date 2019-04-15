@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EduSafe.ConsoleApp.Interfaces;
+using EduSafe.Core.BusinessLogic.Models.Investments;
 using EduSafe.Core.Repositories.Excel;
 using EduSafe.IO.Excel;
 
@@ -36,11 +37,25 @@ namespace EduSafe.ConsoleApp.Scripts
 
             Console.WriteLine("Running forecast...");
             forecastingEngine.RunForecast();
-            Console.WriteLine("Run completed.");
+            Console.WriteLine("Forecast completed.");
+
+            Console.WriteLine("Loading reinvestment options parameters...");
+            var reinvestmentOptionsRepository = new ReinvestmentOptionsRepository(pathToExcelFile);
+            var reinvestmentOptionsParameterSetId = forecastingRepository.ForecastingParametersRecord.ReinvestmentOptionsParameterSetId;
+            var reinvestmentOptionsParameters = reinvestmentOptionsRepository.GetReinvestmentOptionsParametersFromId(reinvestmentOptionsParameterSetId);
+
+            Console.WriteLine("Preparing reinvestment model results...");
+            var forecastedPremiumCalculationCashFlows = forecastingEngine.ForecastedPremiumCalculationCashFlows;
+            var reinvestmentModel = new ReinvestmentModel(forecastedPremiumCalculationCashFlows, reinvestmentOptionsParameters);
+
+            reinvestmentModel.GetReinvestmentModelProfitLoss();
+            var forecastedReinvestmentCashFlows = reinvestmentModel.ReinvestmentModelCashFlows;
+            Console.WriteLine("Reinvestment model completed.");
 
             Console.WriteLine("Writing to Excel...");
             var excelFileWriter = new ExcelFileWriter();
-            excelFileWriter.AddWorksheetForListOfData(forecastingEngine.ForecastedPremiumCalculationCashFlows, "Numerical Cash Flows");
+            excelFileWriter.AddWorksheetForListOfData(forecastedPremiumCalculationCashFlows, "Numerical Cash Flows");
+            excelFileWriter.AddWorksheetForListOfData(forecastedReinvestmentCashFlows, "Reinvestment Cash Flows");
             excelFileWriter.AddWorksheetForDataTable(forecastingEngine.ForecastedServicingCosts, "Servicing Costs");
             excelFileWriter.AddWorksheetForListOfData(forecastingEngine.ForecastedEnrollmentTimeSeries, "Enrollment Model");
             excelFileWriter.ExportWorkbook(openFileOnSave: true);

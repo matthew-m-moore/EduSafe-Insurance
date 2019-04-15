@@ -6,7 +6,7 @@
         public bool ApplyFirstYearPercentGlobally { get; set; }
         public bool IgnoreRollForwardOnRateCurves { get; set; }
         public int MonthlyPeriodsToForecast { get; set; }
-        public string ReinvestmentOptionsParameterSet { get; set; }
+        public int ReinvestmentOptionsParameterSetId { get; set; }
         public string ShockParameterSet { get; set; }
     }
 }
