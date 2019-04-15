@@ -26,6 +26,8 @@ namespace EduSafe.Core.BusinessLogic.Models.Investments
 
         public ReinvestmentModelProfitLossResult GetReinvestmentModelProfitLoss()
         {
+            ComputeReinvestmentModelCashFlows();
+
             var finalCashFlow = ReinvestmentModelCashFlows.Select(x => x.EndingCashFlow).Last();
 
             var profitFrom3M = ReinvestmentModelCashFlows.Sum(x => x.PortionInThreeMonth) -
