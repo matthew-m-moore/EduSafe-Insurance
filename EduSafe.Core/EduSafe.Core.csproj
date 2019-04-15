@@ -53,12 +53,12 @@
     <Compile Include="BusinessLogic\Containers\CollegeMajorData.cs" />
     <Compile Include="BusinessLogic\Containers\CompoundKeys\VectorAssignmentEntry.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumComputationForecastingInput.cs" />
-    <Compile Include="BusinessLogic\Containers\ReinvestmentModelPnLResults.cs" />
-    <Compile Include="BusinessLogic\Containers\ReinvestmentModelResults.cs" />
-    <Compile Include="BusinessLogic\Containers\ReinvestmentOptionsParameters.cs" />
+    <Compile Include="BusinessLogic\Investments\ReinvestmentModelProfitLossResult.cs" />
+    <Compile Include="BusinessLogic\Investments\ReinvestmentModelResultEntry.cs" />
+    <Compile Include="BusinessLogic\Investments\ReinvestmentOptionsParameters.cs" />
     <Compile Include="BusinessLogic\Containers\ForecastedEnrollmentsProjection.cs" />
     <Compile Include="BusinessLogic\Containers\TimeSeries\TimeSeriesEntry.cs" />
-    <Compile Include="BusinessLogic\Models\ReinvestmentModel.cs" />
+    <Compile Include="BusinessLogic\Investments\ReinvestmentModel.cs" />
     <Compile Include="BusinessLogic\Scenarios\PremiumComputationEngine.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumCalculationModelInput.cs" />
     <Compile Include="BusinessLogic\Containers\CashFlows\PremiumCalculationCashFlow.cs" />
@@ -121,7 +121,6 @@
     <Compile Include="Repositories\Excel\ForecastedFirstYearPercentageRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BusinessLogic\Investments\" />
     <Folder Include="Repositories\Database\Converters\" />
     <Folder Include="Savers\" />
   </ItemGroup>

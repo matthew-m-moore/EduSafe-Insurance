@@ -42,6 +42,15 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             return premium;
         }
 
+        public override void CalculateResultWithGivenPremium(List<EnrollmentStateArray> enrollmentStateTimeSeries, ServicingCostsModel servicingCostsModel, double premium)
+        {
+            ServicingCostsDataTable = servicingCostsModel.CalculateServicingCosts(enrollmentStateTimeSeries);
+            SetEnrollmentStateTimeSeries(enrollmentStateTimeSeries);
+
+            CalculateCashFlows(premium);
+            SetCalculatedCashFlows();
+        }
+
         protected void SetEnrollmentStateTimeSeries(List<EnrollmentStateArray> enrollmentStateTimeSeries)
         {
             _enrollmentStateTimeSeries = enrollmentStateTimeSeries;

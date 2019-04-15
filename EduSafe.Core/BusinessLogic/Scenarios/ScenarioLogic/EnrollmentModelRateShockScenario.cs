@@ -13,6 +13,7 @@ namespace EduSafe.Core.BusinessLogic.Scenarios.ScenarioLogic
 
         public bool IsNewStudent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int? RollForwardPeriod { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool AllowPremiumsToAdjust { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public PremiumComputationEngine ApplyScenarioLogic(PremiumComputationEngine basePremiumComputationEngine)
         {

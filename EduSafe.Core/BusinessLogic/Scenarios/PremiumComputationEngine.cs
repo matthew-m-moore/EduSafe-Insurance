@@ -20,15 +20,18 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
         public bool IsPremiumComputed { get; private set; }
 
         private int? _startingPeriod = null;
+        private double? _givenPremium = null;
 
         public PremiumComputationEngine(
             PremiumCalculation premiumCalculation,
             RollForwardRepricingModel repricingModel,
-            int? startingPeriod = null)
+            int? startingPeriod = null,
+            double? givenPremium = null)
         {
             PremiumCalculation = premiumCalculation;
             RepricingModel = repricingModel;
             _startingPeriod = startingPeriod ?? _startingPeriod;
+            _givenPremium = givenPremium ?? _givenPremium;
             IsPremiumComputed = false;
         }
 
@@ -40,21 +43,37 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
             var copyOfPremiumCalculation = PremiumCalculation.Copy();
             var copyOfRepricingModel = RepricingModel.Copy();
             var copyOfStartingPeriod = _startingPeriod.HasValue ? new int?(_startingPeriod.Value) : null;
+            var copyOfGivenPremium = _givenPremium.HasValue ? new double?(_givenPremium.Value) : null;
 
             return new PremiumComputationEngine(
                 copyOfPremiumCalculation,
                 copyOfRepricingModel,
-                copyOfStartingPeriod);
+                copyOfStartingPeriod,
+                copyOfGivenPremium);
         }
 
+        /// <summary>
+        /// Computes a premium result object with options to roll-forward the starting period of the student, and
+        /// treat the student as new or old. If a given premium was provided during creation of the object, it will be
+        /// used in place of solving for a premium.
+        /// </summary>
         public PremiumComputationResult ComputePremiumResult(int? startingPeriod = null, bool isNewStudent = true)
         {
             var rollForwardPeriod = startingPeriod ?? _startingPeriod.GetValueOrDefault(0);
             var enrollmentStateTimeSeries = RepricingModel.RollForwardEnrollmentStates(rollForwardPeriod);
             var servicingCosts = RepricingModel.RollForwardServicingCosts(rollForwardPeriod, isNewStudent);
 
-            var premium = PremiumCalculation.CalculatePremium(enrollmentStateTimeSeries, servicingCosts);
-            IsPremiumComputed = true;
+            double premium;
+            if (_givenPremium.HasValue)
+            {
+                PremiumCalculation.CalculateResultWithGivenPremium(enrollmentStateTimeSeries, servicingCosts, _givenPremium.Value);
+                premium = _givenPremium.Value;
+            }
+            else
+            {
+                premium = PremiumCalculation.CalculatePremium(enrollmentStateTimeSeries, servicingCosts);
+                IsPremiumComputed = true;
+            }
 
             var premiumComputationResult = new PremiumComputationResult
             {
@@ -70,6 +89,35 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
             return premiumComputationResult;
         }
 
+        /// <summary>
+        /// Computes a premium result object using the premium provided, and ignoring any premium given during the creation of
+        /// the object. There are options to roll-forward the starting period of the student, and treat the student as new or old.
+        /// </summary>
+        public PremiumComputationResult ComputeResultWithGivenPremium(double premium, int? startingPeriod = null, bool isNewStudent = true)
+        {
+            var rollForwardPeriod = startingPeriod ?? _startingPeriod.GetValueOrDefault(0);
+            var enrollmentStateTimeSeries = RepricingModel.RollForwardEnrollmentStates(rollForwardPeriod);
+            var servicingCosts = RepricingModel.RollForwardServicingCosts(rollForwardPeriod, isNewStudent);
+
+            PremiumCalculation.CalculateResultWithGivenPremium(enrollmentStateTimeSeries, servicingCosts, premium);
+
+            var premiumComputationResult = new PremiumComputationResult
+            {
+                ScenarioId = ScenarioId,
+                ScenarioName = ScenarioName,
+
+                ServicingCosts = PremiumCalculation.ServicingCostsDataTable,
+                PremiumCalculationCashFlows = PremiumCalculation.CalculatedCashFlows,
+                EnrollmentStateTimeSeries = CreateTimeSeriesEntries(enrollmentStateTimeSeries),
+                CalculatedMonthlyPremium = premium
+            };
+
+            return premiumComputationResult;
+        }
+
+        /// <summary>
+        /// Converts an enrollment state array list into a list of output-friendly time series entry objects.
+        /// </summary>
         public static List<StudentEnrollmentStateTimeSeriesEntry> CreateTimeSeriesEntries(List<EnrollmentStateArray> enrollmentStateTimeSeries)
         {
             var listOfTimeSeriesEntries =

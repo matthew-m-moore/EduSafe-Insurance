@@ -6,6 +6,7 @@ namespace EduSafe.Core.Interfaces
     {
         string ScenarioName { get; }
 
+        bool AllowPremiumsToAdjust { get; set; }
         bool IsNewStudent { get; set; }
         int? RollForwardPeriod { get; set; }
 

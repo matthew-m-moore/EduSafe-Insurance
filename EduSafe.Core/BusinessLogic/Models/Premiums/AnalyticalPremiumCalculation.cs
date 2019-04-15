@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.Core.BusinessLogic.Containers.CashFlows;
@@ -39,6 +40,12 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
 
             SetCalculatedCashFlows();
             return premium;
+        }
+
+        public override void CalculateResultWithGivenPremium(List<EnrollmentStateArray> enrollmentStateTimeSeries, ServicingCostsModel servicingCostsModel, double premium)
+        {
+            throw new Exception("ERROR: Cannot calculate cash flows with a given premium using the analytical premium calculation method. " +
+                "Use the numerical calculation method if a given premium was provided.");
         }
 
         protected override PremiumCalculationCashFlow CreateInitialCashFlow()

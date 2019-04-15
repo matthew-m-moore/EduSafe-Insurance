@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EduSafe.Core.BusinessLogic.Containers
+﻿namespace EduSafe.Core.BusinessLogic.Investments
 {
-    public class ReinvestmentModelResults
+    public class ReinvestmentModelResultEntry
     {
         public int Period { get; set; }
 

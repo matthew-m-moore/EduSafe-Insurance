@@ -108,9 +108,10 @@ namespace EduSafe.Core.Repositories
                 ? _premiumCalculationConverter.GetNumericalPremiumCalculation(enrollmentModelScenario)
                 : _premiumCalculationConverter.GetAnalyticalPremiumCalculation(enrollmentModelScenario);
 
+            var premium = enrollmentModelScenario.Premium;
             var startingPeriod = enrollmentModelScenario.StartPeriod - 1;
             var repricingModel = new RollForwardRepricingModel(enrollmentModel, servicingCostsModel);
-            var premiumComputationEngine = new PremiumComputationEngine(premiumCalculation, repricingModel, startingPeriod);
+            var premiumComputationEngine = new PremiumComputationEngine(premiumCalculation, repricingModel, startingPeriod, premium);
 
             premiumComputationEngine.ScenarioId = enrollmentModelScenario.Id;
             premiumComputationEngine.ScenarioName = enrollmentModelScenario.Scenario;

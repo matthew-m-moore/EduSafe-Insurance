@@ -28,6 +28,11 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             List<EnrollmentStateArray> enrollmentStateTimeSeries, 
             ServicingCostsModel servicingCostsModel);
 
+        public abstract void CalculateResultWithGivenPremium(
+            List<EnrollmentStateArray> enrollmentStateTimeSeries,
+            ServicingCostsModel servicingCostsModel,
+            double premium);
+
         protected double CalculateDiscountFactor(int monthlyPeriod)
         {
             var discountRateCurve = PremiumCalculationModelInput.DiscountRateCurve;

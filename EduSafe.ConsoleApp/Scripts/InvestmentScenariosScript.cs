@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using EduSafe.ConsoleApp.Interfaces;
 using EduSafe.Core.BusinessLogic.Containers;
-using EduSafe.Core.BusinessLogic.Models;
+using EduSafe.Core.BusinessLogic.Investments;
+using EduSafe.Core.BusinessLogic.Models.Investments;
 using EduSafe.Core.Repositories;
 using EduSafe.Core.Repositories.Excel;
 using EduSafe.IO.Excel;
@@ -57,11 +57,12 @@ namespace EduSafe.ConsoleApp.Scripts
         {
             var reinvestmentOptionsParameters = reinvestmentOptionsRepository.GetReinvestmentOptionsParametersFromId(scenarioId);
             var reinvestmentModel = new ReinvestmentModel(premiumComputationResult, reinvestmentOptionsParameters);
-            var reinvestmentCashFlows = reinvestmentModel.ReinvestmentModelCashFlows();
-            var reinvestmentModelPnL = reinvestmentModel.GetReinvestmentModelPnL(reinvestmentCashFlows);
+            reinvestmentModel.GetReinvestmentModelProfitLoss();
 
             Console.WriteLine("Writing to Excel...");
             var excelFileWriter = new ExcelFileWriter();
+
+            var reinvestmentCashFlows = reinvestmentModel.ReinvestmentModelCashFlows;
             excelFileWriter.AddWorksheetForListOfData(reinvestmentCashFlows, "Reinvestment Cash Flows");
             excelFileWriter.ExportWorkbook(openFileOnSave: true);
         }
@@ -71,7 +72,7 @@ namespace EduSafe.ConsoleApp.Scripts
             PremiumComputationResult premiumComputationResults,
             int NumberOfReinvestmentScenario)
         {
-            var listOfScenarioPnL = new List<ReinvestmentModelPnLObject>();
+            var listOfScenarioProfitLoss = new List<ReinvestmentModelProfitLossResult>();
             var listOfScenarioBeginningCashFlows = new List<ReinvestmentScenarioCashFlowOutputObject>();
 
             Console.WriteLine("Writing to Excel...");
@@ -81,31 +82,23 @@ namespace EduSafe.ConsoleApp.Scripts
             {
                 var reinvestmentOptionsParameters = reinvestmentOptionsRepository.GetReinvestmentOptionsParametersFromId(i);
                 var reinvestmentModel = new ReinvestmentModel(premiumComputationResults, reinvestmentOptionsParameters);
-                var reinvestmentCashFlows = reinvestmentModel.ReinvestmentModelCashFlows();
-                var reinvestmentModelPnL = reinvestmentModel.GetReinvestmentModelPnL(reinvestmentCashFlows);
+                var reinvestmentModelProfitLoss = reinvestmentModel.GetReinvestmentModelProfitLoss();
 
-                var scenarioPnL = new ReinvestmentModelPnLObject
-                {
-                    ScenarioId = i,
-                    FinalCashFlow = reinvestmentModelPnL.FinalCashFlow,
-                    ProfitFrom3M = reinvestmentModelPnL.ProfitFrom3M,
-                    ProfitFrom6M = reinvestmentModelPnL.ProfitFrom6M,
-                    ProfitFrom1Y = reinvestmentModelPnL.ProfitFrom1Y,
-                    TotalPnL = reinvestmentModelPnL.TotalPnL
-                };
-                listOfScenarioPnL.Add(scenarioPnL);
+                reinvestmentModelProfitLoss.ScenarioId = i;
+                listOfScenarioProfitLoss.Add(reinvestmentModelProfitLoss);
 
+                var reinvestmentCashFlows = reinvestmentModel.ReinvestmentModelCashFlows;
                 var reinvestmentModelBeginningCashFlows = GetReinvestmentModelBeginningCashFlows(i, reinvestmentCashFlows);
 
                 excelFileWriter.AddWorksheetForListOfData(reinvestmentModelBeginningCashFlows, "Beginning Cash Flows_"+i);
             }
 
-            excelFileWriter.AddWorksheetForListOfData(listOfScenarioPnL, "PnL");
+            excelFileWriter.AddWorksheetForListOfData(listOfScenarioProfitLoss, "ProfitLoss");
             excelFileWriter.ExportWorkbook(openFileOnSave: true);
         }
 
         private List<ReinvestmentScenarioCashFlowOutputObject> GetReinvestmentModelBeginningCashFlows
-            (int scenarioId, List<ReinvestmentModelResults> reinvestmentModelResults)
+            (int scenarioId, List<ReinvestmentModelResultEntry> reinvestmentModelResults)
         {
             var listOfCashFlows = new List<ReinvestmentScenarioCashFlowOutputObject>();
 
