@@ -22,6 +22,7 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
         private List<DataTable> _forecastingDataTableList;
 
         private bool _applyFirstYearPercentGlobally => PremiumComputationForecastingInput.ApplyFirstYearPercentGlobally;
+        private bool _ignoreRollForwardOnRateCurves => PremiumComputationForecastingInput.IgnoreRollForwardOnRateCurves;
 
         public PremiumComputationForecastingInput PremiumComputationForecastingInput { get; }
 
@@ -66,16 +67,25 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
                     var enrollmentCountProjection = forecastedEnrollmentsProjection.EnrollmentCountProjections[scenarioName][monthlyPeriod];
 
                     if (enrollmentCountProjection <= 0) continue;
-                    var copyOfBaseScenarioResult = _forecastingScenariosBaseResultsDictionary[scenarioName].Copy();
+
+                    // This section computes the base result, which may have to computed each period if roll-down on rate curves
+                    // is not ignored. Otherwise, it can be pulled from a precomputed dictionary.
+                    PremiumComputationResult forecastingScenarioBaseResult;
+                    if (!_ignoreRollForwardOnRateCurves && monthlyPeriod > 0)
+                    {
+                        forecastingScenarioBaseResult = ComputeBaseResultWithRateCurveRollForward(scenarioName, monthlyPeriod);
+                    }
+                    else
+                    {   forecastingScenarioBaseResult = _forecastingScenariosBaseResultsDictionary[scenarioName].Copy();    }
 
                     if (!_applyFirstYearPercentGlobally && forecastedFirstYearEnrollees.ContainsKey(scenarioName))
                     {
                         var premiumComputationScenario = PremiumComputationForecastingInput.GetForecastingScenario(scenarioName);
                         var percentageFirstTimeEnrollees = forecastedFirstYearEnrollees[scenarioName][monthlyPeriod];
 
-                        copyOfBaseScenarioResult = AdjustResultsForFirstTimeEnrollees(
+                        forecastingScenarioBaseResult = AdjustResultsForFirstTimeEnrollees(
                             premiumComputationScenario, 
-                            copyOfBaseScenarioResult, 
+                            forecastingScenarioBaseResult, 
                             percentageFirstTimeEnrollees);
                     }
 
@@ -85,20 +95,20 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
                     {
                         var overlayScenarioLogic = forecastedOverlayScenarios[monthlyPeriod][scenarioName];
 
-                        copyOfBaseScenarioResult = ApplyForecastedOverlayScenarios(
+                        forecastingScenarioBaseResult = ApplyForecastedOverlayScenarios(
                             forecastedFirstYearEnrollees,
-                            copyOfBaseScenarioResult,
+                            forecastingScenarioBaseResult,
                             overlayScenarioLogic,
                             scenarioName, 
                             monthlyPeriod);
                     }
 
-                    copyOfBaseScenarioResult.ScaleResults(enrollmentCountProjection);
-                    copyOfBaseScenarioResult.AdjustStartingPeriodOfResults(monthlyPeriod);
+                    forecastingScenarioBaseResult.ScaleResults(enrollmentCountProjection);
+                    forecastingScenarioBaseResult.AdjustStartingPeriodOfResults(monthlyPeriod);
 
-                    _forecastingCashFlowsListOfLists.Add(copyOfBaseScenarioResult.PremiumCalculationCashFlows);
-                    _forecastingTimeSeriesListOfLists.Add(copyOfBaseScenarioResult.EnrollmentStateTimeSeries);
-                    _forecastingDataTableList.Add(copyOfBaseScenarioResult.ServicingCosts);
+                    _forecastingCashFlowsListOfLists.Add(forecastingScenarioBaseResult.PremiumCalculationCashFlows);
+                    _forecastingTimeSeriesListOfLists.Add(forecastingScenarioBaseResult.EnrollmentStateTimeSeries);
+                    _forecastingDataTableList.Add(forecastingScenarioBaseResult.ServicingCosts);
                 }
             }
 
@@ -142,6 +152,27 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
                     _forecastingScenariosBaseResultsDictionary.Add(scenarioName, forecastingScenarioBaseResult);
                 }
             }
+        }
+
+        private PremiumComputationResult ComputeBaseResultWithRateCurveRollForward(string scenarioName, int monthlyPeriod)
+        {
+            var globalPercentageFirstTimeEnrollees = PremiumComputationForecastingInput.PercentageFirstYearEnrolleeProjections;
+            var premiumComputationScenario = PremiumComputationForecastingInput.GetForecastingScenario(scenarioName).Copy();
+
+            premiumComputationScenario.SetNumberOfForecastedPeriodsAhead(monthlyPeriod);
+            var forecastingScenarioBaseResult = premiumComputationScenario.ComputePremiumResult();
+
+            if (_applyFirstYearPercentGlobally && globalPercentageFirstTimeEnrollees.ContainsKey(scenarioName))
+            {
+                var percentageFirstTimeEnrollees = globalPercentageFirstTimeEnrollees[scenarioName];
+
+                forecastingScenarioBaseResult = AdjustResultsForFirstTimeEnrollees(
+                    premiumComputationScenario,
+                    forecastingScenarioBaseResult,
+                    percentageFirstTimeEnrollees);
+            }
+
+            return forecastingScenarioBaseResult;
         }
 
         private PremiumComputationResult ApplyForecastedOverlayScenarios(

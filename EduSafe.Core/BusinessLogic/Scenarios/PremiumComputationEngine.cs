@@ -45,6 +45,8 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
             var copyOfStartingPeriod = _startingPeriod.HasValue ? new int?(_startingPeriod.Value) : null;
             var copyOfGivenPremium = _givenPremium.HasValue ? new double?(_givenPremium.Value) : null;
 
+            copyOfPremiumCalculation.NumberOfForecastedPeriodsAhead = PremiumCalculation.NumberOfForecastedPeriodsAhead;
+
             return new PremiumComputationEngine(
                 copyOfPremiumCalculation,
                 copyOfRepricingModel,
@@ -113,6 +115,14 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
             };
 
             return premiumComputationResult;
+        }
+
+        /// <summary>
+        /// This is used to roll-forward down any time-dependent projections used in forecasting, such as interest rate curves.
+        /// </summary>
+        public void SetNumberOfForecastedPeriodsAhead(int monthlyPeriodOfForecasting)
+        {
+            PremiumCalculation.NumberOfForecastedPeriodsAhead = monthlyPeriodOfForecasting;
         }
 
         /// <summary>

@@ -17,6 +17,8 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
 
         public PremiumCalculationModelInput PremiumCalculationModelInput { get; }
 
+        public int NumberOfForecastedPeriodsAhead { get; set; }
+
         public PremiumCalculation(PremiumCalculationModelInput premiumCalculationModelInput)
         {
             PremiumCalculationModelInput = premiumCalculationModelInput;
@@ -40,7 +42,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             {
                 var dayCountConvention = discountRateCurve.DayCountConvention;
                 var timePeriodInYears = (double) monthlyPeriod / Constants.MonthsInOneYear;
-                var discountRate = discountRateCurve[monthlyPeriod];
+                var discountRate = discountRateCurve[monthlyPeriod + NumberOfForecastedPeriodsAhead];
 
                 var accrualFactor = MathUtility.CalculateInterestAccrualFactor(
                     dayCountConvention,    

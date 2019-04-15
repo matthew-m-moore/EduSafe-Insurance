@@ -37,7 +37,10 @@ namespace EduSafe.Core.Repositories.Excel.Converters
                     forecastingScenariosDictionary,
                     forecastedEnrollmentProjection,
                     forecastedOverlayScenarios,
-                    percentageFirstTimeEnrolleeProjections);
+                    percentageFirstTimeEnrolleeProjections)
+                {
+                    IgnoreRollForwardOnRateCurves = forecastingParametersRecord.IgnoreRollForwardOnRateCurves
+                };
             }
 
             _forecastedFirstYearPercentageRepository.PopulatePercentageFirstYearEnrolleeProjections(forecastedEnrollmentProjection);
@@ -46,7 +49,10 @@ namespace EduSafe.Core.Repositories.Excel.Converters
                 monthlyPeriodsToForecast,
                 forecastingScenariosDictionary,
                 forecastedEnrollmentProjection,
-                forecastedOverlayScenarios);
+                forecastedOverlayScenarios)
+            {
+                IgnoreRollForwardOnRateCurves = forecastingParametersRecord.IgnoreRollForwardOnRateCurves
+            };
         }
     }
 }

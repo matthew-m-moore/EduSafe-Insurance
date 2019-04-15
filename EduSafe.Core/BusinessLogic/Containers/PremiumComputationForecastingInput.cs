@@ -21,6 +21,8 @@ namespace EduSafe.Core.BusinessLogic.Containers
             PercentageFirstYearEnrolleeProjections != null &&
             PercentageFirstYearEnrolleeProjections.Any();
 
+        public bool IgnoreRollForwardOnRateCurves { get; set; }
+
         public HashSet<string> ScenarioNames { get; private set; }
 
         public PremiumComputationForecastingInput(
