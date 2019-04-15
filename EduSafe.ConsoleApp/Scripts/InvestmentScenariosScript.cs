@@ -56,7 +56,7 @@ namespace EduSafe.ConsoleApp.Scripts
             int scenarioId)
         {
             var reinvestmentOptionsParameters = reinvestmentOptionsRepository.GetReinvestmentOptionsParametersFromId(scenarioId);
-            var reinvestmentModel = new ReinvestmentModel(premiumComputationResult, reinvestmentOptionsParameters);
+            var reinvestmentModel = new ReinvestmentModel(premiumComputationResult.PremiumCalculationCashFlows, reinvestmentOptionsParameters);
             reinvestmentModel.GetReinvestmentModelProfitLoss();
 
             Console.WriteLine("Writing to Excel...");
@@ -81,7 +81,7 @@ namespace EduSafe.ConsoleApp.Scripts
             for (int i = 1; i <= NumberOfReinvestmentScenario; i++)
             {
                 var reinvestmentOptionsParameters = reinvestmentOptionsRepository.GetReinvestmentOptionsParametersFromId(i);
-                var reinvestmentModel = new ReinvestmentModel(premiumComputationResults, reinvestmentOptionsParameters);
+                var reinvestmentModel = new ReinvestmentModel(premiumComputationResults.PremiumCalculationCashFlows, reinvestmentOptionsParameters);
                 var reinvestmentModelProfitLoss = reinvestmentModel.GetReinvestmentModelProfitLoss();
 
                 reinvestmentModelProfitLoss.ScenarioId = i;

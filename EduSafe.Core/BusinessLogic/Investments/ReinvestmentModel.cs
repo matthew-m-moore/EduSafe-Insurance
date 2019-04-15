@@ -2,20 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using EduSafe.Core.BusinessLogic.Containers;
+using EduSafe.Core.BusinessLogic.Containers.CashFlows;
 using EduSafe.Core.BusinessLogic.Investments;
 
 namespace EduSafe.Core.BusinessLogic.Models.Investments
 {
     public class ReinvestmentModel
     {
-        private PremiumComputationResult _premiumComputationResult;
+        private List<PremiumCalculationCashFlow> _premiumCalculationCashFlows;
         private ReinvestmentOptionsParameters _reinvestmentOptionsParameters;
 
         public List<ReinvestmentModelResultEntry> ReinvestmentModelCashFlows { get; private set; }
 
-        public ReinvestmentModel(PremiumComputationResult premiumComputationResult, ReinvestmentOptionsParameters reinvestmentOptionsParameters)
+        public ReinvestmentModel(List<PremiumCalculationCashFlow> premiumCalculationCashFlows, ReinvestmentOptionsParameters reinvestmentOptionsParameters)
         {
-            _premiumComputationResult = premiumComputationResult;
+            if (premiumCalculationCashFlows.Any(c => c is AnalyticalPremiumCalculationCashFlow))
+                throw new Exception("ERROR: The reinvestment model only works properly when premium computations use a numerical calculation method. " +
+                    "At least one of the cash flows provided was determined using an analytical calcultion method.");
+
+            _premiumCalculationCashFlows = premiumCalculationCashFlows;
             _reinvestmentOptionsParameters = reinvestmentOptionsParameters;
         }
 
@@ -48,7 +53,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Investments
         {
             var listOfReinvestmentModelResultEntries = new List<ReinvestmentModelResultEntry>();
 
-            foreach (var cashflow in _premiumComputationResult.PremiumCalculationCashFlows)
+            foreach (var cashflow in _premiumCalculationCashFlows)
             {
                 var reinvestmentModelResultEntry = new ReinvestmentModelResultEntry();
                 var period = cashflow.Period;
@@ -66,15 +71,17 @@ namespace EduSafe.Core.BusinessLogic.Models.Investments
 
                 reinvestmentModelResultEntry.Period = period;
 
-                var begBalance = period == 0 ? cashflow.PremiumAvailableForReinvestment : cashflow.PremiumAvailableForReinvestment + listOfReinvestmentModelResultEntries[period - 1].EndingCashFlow;
+                var beginningBalance = period == 0 
+                    ? cashflow.PremiumAvailableForReinvestment 
+                    : cashflow.PremiumAvailableForReinvestment + listOfReinvestmentModelResultEntries[period - 1].EndingCashFlow;
 
-                reinvestmentModelResultEntry.BeginningCashFlow = begBalance;
+                reinvestmentModelResultEntry.BeginningCashFlow = beginningBalance;
 
-                var portionCash = begBalance * PortionCash;
-                var portion1M = begBalance * Portion1M;
-                var portion3M = begBalance * Portion3M;
-                var portion6M = begBalance * Portion6M;
-                var portion1Y = begBalance * Portion1Y;
+                var portionCash = beginningBalance * PortionCash;
+                var portion1M = beginningBalance * Portion1M;
+                var portion3M = beginningBalance * Portion3M;
+                var portion6M = beginningBalance * Portion6M;
+                var portion1Y = beginningBalance * Portion1Y;
 
                 reinvestmentModelResultEntry.PortionInCash = portionCash;
                 reinvestmentModelResultEntry.PortionInOneMonth = portion1M;
