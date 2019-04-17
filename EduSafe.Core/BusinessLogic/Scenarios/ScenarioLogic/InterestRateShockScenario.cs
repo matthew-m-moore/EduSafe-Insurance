@@ -1,4 +1,5 @@
-﻿using EduSafe.Core.Interfaces;
+﻿using EduSafe.Core.BusinessLogic.Scenarios.Shocks;
+using EduSafe.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +10,46 @@ namespace EduSafe.Core.BusinessLogic.Scenarios.ScenarioLogic
 {
     public class InterestRateShockScenario : IScenario
     {
-        public string ScenarioName => throw new NotImplementedException();
+        public string ScenarioName { get; set; }
 
-        public bool IsNewStudent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int? RollForwardPeriod { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool AllowPremiumsToAdjust { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool AllowPremiumsToAdjust { get; }
+        public bool IsNewStudent { get; }
+        public int? RollForwardPeriod { get; }
 
-        public PremiumComputationEngine ApplyScenarioLogic(PremiumComputationEngine basePremiumComputationEngine)
+        public ShockLogic ShockLogic { get; }
+
+        public InterestRateShockScenario(
+            ShockLogic shockLogic,
+            bool allowPremiumsToAdjust = false,
+            bool isNewStudent = true,
+            int? rollForwardPeriod = null)
         {
-            throw new NotImplementedException();
+            ShockLogic = shockLogic;
+
+            AllowPremiumsToAdjust = allowPremiumsToAdjust;
+            IsNewStudent = isNewStudent;
+            RollForwardPeriod = rollForwardPeriod;
+        }
+
+        public PremiumComputationEngine ApplyScenarioLogic(PremiumComputationEngine premiumComputationEngine)
+        {
+            //var interestRateCurve = premiumComputationEngine
+            //    .PremiumCalculation
+            //    .PremiumCalculationModelInput
+            //    .DiscountRateCurve;
+
+            //if (interestRateCurve == null) return premiumComputationEngine;
+
+            //var baseValue = interestRateCurve.;
+            //var shockedValue = interestRateCurve.RateCurve.Select(r => ShockLogic.ApplyShockValue(r)).ToList();
+
+            //premiumComputationEngine
+            //    .RepricingModel
+            //    .EnrollmentModel
+            //    .StudentEnrollmentModelInput
+            //    .EnrollmentTargetsArray[_monthlyPeriod, _enrollmentState].SetTargetValue(shockedValue);
+
+            return premiumComputationEngine;
         }
     }
 }

@@ -84,9 +84,13 @@
     <Compile Include="BusinessLogic\Models\StudentEnrollment\Parameterization\PostGraduationParameterizer.cs" />
     <Compile Include="BusinessLogic\Scenarios\PremiumComputationForecastingEngine.cs" />
     <Compile Include="BusinessLogic\Scenarios\PremiumComputationScenariosEngine.cs" />
-    <Compile Include="BusinessLogic\Scenarios\ScenarioLogic\EnrollmentModelRateShockScenario.cs" />
+    <Compile Include="BusinessLogic\Scenarios\Shocks\AdditiveShockLogic.cs" />
+    <Compile Include="BusinessLogic\Scenarios\ScenarioLogic\EnrollmentModelTargetShockScenario.cs" />
+    <Compile Include="BusinessLogic\Scenarios\ScenarioLogic\EnrollmentModelTransitionShockScenario.cs" />
     <Compile Include="BusinessLogic\Scenarios\ScenarioLogic\InterestRateShockScenario.cs" />
+    <Compile Include="BusinessLogic\Scenarios\Shocks\MultiplicativeShockLogic.cs" />
     <Compile Include="BusinessLogic\Scenarios\ScenarioLogic\ServicingCostsModelShockScenario.cs" />
+    <Compile Include="BusinessLogic\Scenarios\Shocks\ShockLogic.cs" />
     <Compile Include="BusinessLogic\Vectors\AdditiveVector.cs" />
     <Compile Include="BusinessLogic\Vectors\MultiplicativeVector.cs" />
     <Compile Include="BusinessLogic\Vectors\Vector.cs" />

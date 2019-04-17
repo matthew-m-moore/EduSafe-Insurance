@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EduSafe.Core.BusinessLogic.Scenarios.Shocks;
 using EduSafe.Core.Interfaces;
 
 namespace EduSafe.Core.BusinessLogic.Scenarios.ScenarioLogic
@@ -14,6 +15,10 @@ namespace EduSafe.Core.BusinessLogic.Scenarios.ScenarioLogic
         public bool IsNewStudent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int? RollForwardPeriod { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool AllowPremiumsToAdjust { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public ShockLogic ShockLogic => throw new NotImplementedException();
+
+        string IScenario.ScenarioName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public PremiumComputationEngine ApplyScenarioLogic(PremiumComputationEngine basePremiumComputationEngine)
         {

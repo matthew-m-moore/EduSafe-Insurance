@@ -13,7 +13,7 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
 
         public StudentEnrollmentState TargetEnrollmentState { get; }
         public int? TargetMonth { get; }
-        public double TargetValue { get; }
+        public double TargetValue { get; private set; }
 
         public EnrollmentTarget(
             StudentEnrollmentState targetEnrollmentState,
@@ -42,6 +42,11 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
                 TargetEnrollmentState,
                 TargetValue,
                 copyOfTargetMonth);
+        }
+
+        public void SetTargetValue(double targetValue)
+        {
+            TargetValue = targetValue;
         }
     }
 }
