@@ -1,10 +1,6 @@
-﻿using EduSafe.Core.BusinessLogic.Scenarios.Shocks;
+﻿using System.Linq;
+using EduSafe.Core.BusinessLogic.Scenarios.Shocks;
 using EduSafe.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EduSafe.Core.BusinessLogic.Scenarios.ScenarioLogic
 {
@@ -33,21 +29,18 @@ namespace EduSafe.Core.BusinessLogic.Scenarios.ScenarioLogic
 
         public PremiumComputationEngine ApplyScenarioLogic(PremiumComputationEngine premiumComputationEngine)
         {
-            //var interestRateCurve = premiumComputationEngine
-            //    .PremiumCalculation
-            //    .PremiumCalculationModelInput
-            //    .DiscountRateCurve;
+            var interestRateCurve = premiumComputationEngine
+                .PremiumCalculation
+                .PremiumCalculationModelInput
+                .DiscountRateCurve;
 
-            //if (interestRateCurve == null) return premiumComputationEngine;
+            if (interestRateCurve == null) return premiumComputationEngine;
 
-            //var baseValue = interestRateCurve.;
-            //var shockedValue = interestRateCurve.RateCurve.Select(r => ShockLogic.ApplyShockValue(r)).ToList();
+            var shockedRateCurve = interestRateCurve.RateCurve.Select(r => ShockLogic.ApplyShockValue(r)).ToList();
 
-            //premiumComputationEngine
-            //    .RepricingModel
-            //    .EnrollmentModel
-            //    .StudentEnrollmentModelInput
-            //    .EnrollmentTargetsArray[_monthlyPeriod, _enrollmentState].SetTargetValue(shockedValue);
+            premiumComputationEngine
+                .PremiumCalculation
+                .PremiumCalculationModelInput.SetDiscountRateCurve(shockedRateCurve);
 
             return premiumComputationEngine;
         }

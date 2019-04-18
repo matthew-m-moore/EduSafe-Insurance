@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using EduSafe.Common;
@@ -10,7 +11,7 @@ namespace EduSafe.Core.BusinessLogic.Models
 {
     public class ServicingCostsModel
     {
-        public List<CostOrFee> CostsOrFees { get; }
+        public List<CostOrFee> CostsOrFees { get; private set; }
         public int NumberOfMonthlyPeriodsToProject { get; }
 
         public ServicingCostsModel(List<CostOrFee> costsOrFees, int numberOfMonthlyPeriodsToProject)
@@ -60,6 +61,11 @@ namespace EduSafe.Core.BusinessLogic.Models
             }
 
             return servicingCostsDataTable;
+        }
+
+        public void SetCostsOrFees(List<CostOrFee> costsOrFees)
+        {
+            CostsOrFees = costsOrFees;
         }
     }
 }

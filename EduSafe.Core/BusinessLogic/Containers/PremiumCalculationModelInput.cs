@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using EduSafe.Common;
 using EduSafe.Common.Curves;
 using EduSafe.Common.Enums;
@@ -83,9 +84,14 @@ namespace EduSafe.Core.BusinessLogic.Containers
             CompoundingConvention = compoundingConvention;
         }
 
-        public void SetDiscountRateCurve(InterestRateCurve discountRateCurve)
+        public void SetDiscountRateCurve(List<double> discountRateCurve)
         {
-            DiscountRateCurve = discountRateCurve;
+            SetDiscountRateCurve(new DataCurve<double>(discountRateCurve));
+        }
+
+        public void SetDiscountRateCurve(DataCurve<double> discountRateCurve)
+        {
+            DiscountRateCurve.RateCurve = discountRateCurve;
         }
     }
 }

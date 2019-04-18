@@ -6,8 +6,8 @@ namespace EduSafe.Core.BusinessLogic.Scenarios.ScenarioLogic
 {
     public class EnrollmentModelTargetShockScenario : IScenario
     {
-        private int _monthlyPeriod;
-        private StudentEnrollmentState _enrollmentState;
+        private readonly int _monthlyPeriod;
+        private readonly StudentEnrollmentState _enrollmentState;
 
         public string ScenarioName { get; set; }
 
@@ -27,7 +27,9 @@ namespace EduSafe.Core.BusinessLogic.Scenarios.ScenarioLogic
             int? rollForwardPeriod = null)
         {
             ShockLogic = shockLogic;
+
             _enrollmentState = enrollmentState;
+            _monthlyPeriod = monthlyPeriod;
 
             AllowPremiumsToAdjust = allowPremiumsToAdjust;
             IsNewStudent = isNewStudent;

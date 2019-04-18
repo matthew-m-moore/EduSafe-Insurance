@@ -73,6 +73,28 @@ namespace EduSafe.Core.BusinessLogic.Models.StudentEnrollment
             }
         }
 
+        public List<EnrollmentTransition> this[StudentEnrollmentState startEnrollmentState, StudentEnrollmentState endEnrollmentState]
+        {
+            get
+            {
+                if (_enrollmentTransitionArray.ContainsKey(startEnrollmentState) &&
+                    _enrollmentTransitionArray[startEnrollmentState].ContainsKey(endEnrollmentState))
+                {
+                    return _enrollmentTransitionArray[startEnrollmentState][endEnrollmentState].Values.ToList();
+                }
+
+                return null;
+            }
+            set
+            {
+                foreach (var enrollmentTranstion in value)
+                {
+                    var monthlyPeriod = enrollmentTranstion.MonthlyPeriod;
+                    this[startEnrollmentState, endEnrollmentState, monthlyPeriod] = enrollmentTranstion;
+                }
+            }
+        }
+
         public EnrollmentTransition this[EnrollmentTransition studentEnrollmentTransition]
         {
             get
