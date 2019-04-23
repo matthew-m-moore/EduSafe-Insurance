@@ -22,9 +22,9 @@ namespace EduSafe.Core.BusinessLogic.Containers
 
         public InterestRateCurve DiscountRateCurve { get; private set; }
 
-        public double? DropOutOptionCoveragePercentage { get; }
-        public double? GradSchoolOptionCoveragePercentage { get; }
-        public double? EarlyHireOptionCoveragePercentage { get; }
+        public double? DropOutOptionCoveragePercentage { get; set; }
+        public double? GradSchoolOptionCoveragePercentage { get; set; }
+        public double? EarlyHireOptionCoveragePercentage { get; set; }
 
         public CompoundingConvention CompoundingConvention { get; private set; }
 

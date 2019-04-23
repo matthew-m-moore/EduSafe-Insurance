@@ -91,6 +91,7 @@
     <Compile Include="Excel\Records\ForecastingParametersRecord.cs" />
     <Compile Include="Excel\Records\InterestRateTypeDetailRecord.cs" />
     <Compile Include="Excel\Records\ReinvestmentOptionsInputRecord.cs" />
+    <Compile Include="Excel\Records\ShockParametersRecord.cs" />
     <Compile Include="Excel\Records\TabDataTypeRecord.cs" />
     <Compile Include="Excel\Records\TestRecords\TestRecordA.cs" />
     <Compile Include="Excel\Records\TestRecords\TestRecordB.cs" />

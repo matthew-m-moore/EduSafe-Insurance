@@ -14,6 +14,7 @@ namespace EduSafe.Core.Repositories.Excel
         private readonly PremiumComputationRepository _premiumComputationRepository;
         private readonly ForecastedEnrollmentRepository _forecastedEnrollmentRepository;
         private readonly ForecastedFirstYearPercentageRepository _forecastedFirstYearPercentageRepository;
+        private readonly ScenariosRepository _scenariosRepository;
 
         public ForecastingParametersRecord ForecastingParametersRecord { get; private set; }
 
@@ -25,6 +26,10 @@ namespace EduSafe.Core.Repositories.Excel
             _forecastedFirstYearPercentageRepository = new ForecastedFirstYearPercentageRepository(pathToExcelDataFile);
 
             Initialize();
+
+            // Note that there is order-dependency here, "Initialize()" must come before creating the scenarios repository
+            var selectedShockScenario = ForecastingParametersRecord.ShockParameterSet;
+            _scenariosRepository = new ScenariosRepository(pathToExcelDataFile, selectedShockScenario);
         }
 
         public ForecastingRepository(Stream fileStream) 
@@ -35,6 +40,10 @@ namespace EduSafe.Core.Repositories.Excel
             _forecastedFirstYearPercentageRepository = new ForecastedFirstYearPercentageRepository(fileStream);
 
             Initialize();
+
+            // Note that there is order-dependency here, "Initialize()" must come before creating the scenarios repository
+            var selectedShockScenario = ForecastingParametersRecord.ShockParameterSet;
+            _scenariosRepository = new ScenariosRepository(fileStream, selectedShockScenario);
         }
 
         /// <summary>
@@ -45,7 +54,8 @@ namespace EduSafe.Core.Repositories.Excel
             var premiumComputationForecastingInputConverter = new PremiumComputationForecastingInputConverter(
                 _premiumComputationRepository,
                 _forecastedEnrollmentRepository,
-                _forecastedFirstYearPercentageRepository);
+                _forecastedFirstYearPercentageRepository,
+                _scenariosRepository);
 
             var premiumComputationForecastingInput = premiumComputationForecastingInputConverter.Convert(ForecastingParametersRecord);
 
@@ -57,7 +67,7 @@ namespace EduSafe.Core.Repositories.Excel
             ForecastingParametersRecord = _ExcelFileReader
                 .GetTransposedDataFromSpecificTab<ForecastingParametersRecord>(_forecastingParametersTab).FirstOrDefault();
 
-            if (_forecastingParametersTab != null) return;
+            if (ForecastingParametersRecord != null) return;
 
             throw new Exception(string.Format("ERROR: No forecasting parameters recoreds were detected on the tab named '{0}'", 
                 _forecastingParametersTab));

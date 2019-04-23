@@ -14,7 +14,7 @@ namespace EduSafe.Core.BusinessLogic.Containers
         public int MonthlyPeriodsToForecast { get; }
 
         public ForecastedEnrollmentsProjection ForecastedEnrollmentsProjection { get; }
-        public Dictionary<int, Dictionary<string, IScenario>> ForecastedOverlayScenarios { get; }
+        public Dictionary<int, Dictionary<string, List<IScenario>>> ForecastedOverlayScenarios { get; }
         public Dictionary<string, double> PercentageFirstYearEnrolleeProjections { get; }
 
         public bool ApplyFirstYearPercentGlobally =>
@@ -29,7 +29,7 @@ namespace EduSafe.Core.BusinessLogic.Containers
             int monthlyPeriodsToForecast,
             Dictionary<string, PremiumComputationEngine> forecastingScenariosDictionary,
             ForecastedEnrollmentsProjection forecastedEnrollmentsProjection,
-            Dictionary<int, Dictionary<string, IScenario>> forecastedOverlayScenarios = null,
+            Dictionary<int, Dictionary<string, List<IScenario>>> forecastedOverlayScenarios = null,
             Dictionary<string, double> percentageFirstTimeEnrolleeProjections = null)
         {
             _forecastingScenariosDictionary = forecastingScenariosDictionary;

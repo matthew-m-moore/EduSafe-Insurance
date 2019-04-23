@@ -1,5 +1,6 @@
 ﻿using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.IO.Excel.Records;
+using System.Collections.Generic;
 
 namespace EduSafe.Core.Repositories.Excel.Converters
 {
@@ -8,24 +9,29 @@ namespace EduSafe.Core.Repositories.Excel.Converters
         private PremiumComputationRepository _premiumComputationRepository;
         private ForecastedEnrollmentRepository _forecastedEnrollmentRepository;
         private ForecastedFirstYearPercentageRepository _forecastedFirstYearPercentageRepository;
+        private ScenariosRepository _scenariosRepository;
 
         public PremiumComputationForecastingInputConverter(
             PremiumComputationRepository premiumComputationRepository,
             ForecastedEnrollmentRepository forecastedEnrollmentRepository,
-            ForecastedFirstYearPercentageRepository forecastedFirstYearPercentageRepository)
+            ForecastedFirstYearPercentageRepository forecastedFirstYearPercentageRepository,
+            ScenariosRepository scenariosRepository)
         {
             _premiumComputationRepository = premiumComputationRepository;
             _forecastedEnrollmentRepository = forecastedEnrollmentRepository;
             _forecastedFirstYearPercentageRepository = forecastedFirstYearPercentageRepository;
+            _scenariosRepository = scenariosRepository;
         }
 
         public PremiumComputationForecastingInput Convert(ForecastingParametersRecord forecastingParametersRecord)
         {
             var useNumericalComputation = true;
             var monthlyPeriodsToForecast = forecastingParametersRecord.MonthlyPeriodsToForecast;
+
             var forecastingScenariosDictionary = _premiumComputationRepository.GetPremiumComputationScenariosByName(useNumericalComputation);
             var forecastedEnrollmentProjection = _forecastedEnrollmentRepository.GetForecastedEnrollmentsProjection();
-            var forecastedOverlayScenarios = ForecastedOverlayScenariosConverter.ConvertForecastedOverlayScenarios();
+            var forecastedOverlayScenarios = _scenariosRepository
+                .CreateForecastedOverlayScenarios(monthlyPeriodsToForecast, new List<string>(forecastingScenariosDictionary.Keys));
 
             if (forecastingParametersRecord.ApplyFirstYearPercentGlobally)
             {

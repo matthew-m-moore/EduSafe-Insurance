@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using EduSafe.Common;
 using EduSafe.Common.Curves;
 using EduSafe.Core.BusinessLogic.Aggregation;
@@ -93,12 +94,12 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
                         forecastedOverlayScenarios[monthlyPeriod].ContainsKey(scenarioName) &&
                         PremiumComputationForecastingInput.ScenarioNames.Contains(scenarioName))
                     {
-                        var overlayScenarioLogic = forecastedOverlayScenarios[monthlyPeriod][scenarioName];
+                        var overlayScenarioLogicList = forecastedOverlayScenarios[monthlyPeriod][scenarioName];
 
                         forecastingScenarioBaseResult = ApplyForecastedOverlayScenarios(
                             forecastedFirstYearEnrollees,
                             forecastingScenarioBaseResult,
-                            overlayScenarioLogic,
+                            overlayScenarioLogicList,
                             scenarioName, 
                             monthlyPeriod);
                     }
@@ -178,16 +179,19 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
         private PremiumComputationResult ApplyForecastedOverlayScenarios(
             Dictionary<string, DataCurve<double>> forecastedFirstYearEnrollees,
             PremiumComputationResult forecastingScenarioBaseResult,
-            IScenario overlayScenarioLogic, 
+            List<IScenario> overlayScenarioLogicList, 
             string scenarioName, 
             int monthlyPeriod)
         {
-            var copyOfPremiumComputationScenario = PremiumComputationForecastingInput.GetForecastingScenario(scenarioName).Copy();
-            var overlayComputationScenario = overlayScenarioLogic.ApplyScenarioLogic(copyOfPremiumComputationScenario);
+            var overlayComputationScenario = PremiumComputationForecastingInput.GetForecastingScenario(scenarioName).Copy();
+
+            foreach (var overlayScenarioLogic in overlayScenarioLogicList)
+                overlayComputationScenario = overlayScenarioLogic.ApplyScenarioLogic(overlayComputationScenario);
 
             // The idea here is that the forecast assumes you must live with whatever premium was calculated in the base scenario
-            // for the life of the customer, which is the most conservative approach to take.
-            if (!overlayScenarioLogic.AllowPremiumsToAdjust)
+            // for the life of the customer, which is the most conservative approach to take. Note, that as long as any of the scenarios
+            // in the list disallow premiums to adjust, then it will not be allowed for the whole period.
+            if (overlayScenarioLogicList.Any(s => !s.AllowPremiumsToAdjust))
             {
                 var baseScenarioPremium = forecastingScenarioBaseResult.CalculatedMonthlyPremium;
                 var overlayScenarioResult = overlayComputationScenario.ComputeResultWithGivenPremium(baseScenarioPremium);

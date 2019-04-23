@@ -84,6 +84,7 @@
     <Compile Include="BusinessLogic\Models\StudentEnrollment\Parameterization\PostGraduationParameterizer.cs" />
     <Compile Include="BusinessLogic\Scenarios\PremiumComputationForecastingEngine.cs" />
     <Compile Include="BusinessLogic\Scenarios\PremiumComputationScenariosEngine.cs" />
+    <Compile Include="BusinessLogic\Scenarios\ScenarioLogic\OptionalityShockScenario.cs" />
     <Compile Include="BusinessLogic\Scenarios\Shocks\AdditiveShockLogic.cs" />
     <Compile Include="BusinessLogic\Scenarios\ScenarioLogic\EnrollmentModelTargetShockScenario.cs" />
     <Compile Include="BusinessLogic\Scenarios\ScenarioLogic\EnrollmentModelTransitionShockScenario.cs" />
@@ -109,6 +110,8 @@
     <Compile Include="Repositories\Excel\Converters\PremiumCalculationConverter.cs" />
     <Compile Include="Repositories\Excel\Converters\PremiumComputationForecastingInputConverter.cs" />
     <Compile Include="Repositories\Excel\Converters\ReinvestmentOptionsParametersConverter.cs" />
+    <Compile Include="Repositories\Excel\Converters\ScenarioLogicConverter.cs" />
+    <Compile Include="Repositories\Excel\Converters\ShockLogicConvertor.cs" />
     <Compile Include="Repositories\Excel\Converters\StudentEnrollmentStateConverter.cs" />
     <Compile Include="Repositories\Excel\Converters\VectorConverter.cs" />
     <Compile Include="Repositories\Excel\DayCountConventionRepository.cs" />
@@ -118,6 +121,7 @@
     <Compile Include="Repositories\Excel\InterestRateCurveRepository.cs" />
     <Compile Include="Repositories\Excel\InterestRateCurveTypeRepository.cs" />
     <Compile Include="Repositories\Excel\ReinvestmentOptionsRepository.cs" />
+    <Compile Include="Repositories\Excel\ScenariosRepository.cs" />
     <Compile Include="Repositories\Excel\ValuesArrayExcelDataRepository.cs" />
     <Compile Include="Repositories\Excel\ServicingCostsModelRepository.cs" />
     <Compile Include="Repositories\Excel\PremiumComputationRepository.cs" />
