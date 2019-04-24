@@ -8,7 +8,8 @@ namespace EduSafe.Core.Repositories.Excel.Converters
         private const string _enrolled = "Enrolled";
         private const string _dropOut = "DropOut";
         private const string _earlyHire = "EarlyHire";
-        private const string _gradSchool = "GradSchool";     
+        private const string _gradSchool = "GradSchool";
+        private const string _employed = "Employed";
         private const string _unemployed = "Unemployed";
 
         public static StudentEnrollmentState ConvertStringToEnrollmentState(string enrollmentStateText)
@@ -28,6 +29,9 @@ namespace EduSafe.Core.Repositories.Excel.Converters
 
                 case _gradSchool:
                     return StudentEnrollmentState.GraduateSchool;
+
+                case _employed:
+                    return StudentEnrollmentState.GraduatedEmployed;
 
                 case _unemployed:
                     return StudentEnrollmentState.GraduatedUnemployed;
