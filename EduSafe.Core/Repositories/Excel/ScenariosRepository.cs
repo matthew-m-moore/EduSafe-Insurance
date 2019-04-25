@@ -13,6 +13,7 @@ namespace EduSafe.Core.Repositories.Excel
         private const string _shockParametersTab = "ShockParameters";
 
         private List<ShockParametersRecord> _shockParametersRecords;
+        private bool _hasSelectedShockScenario;
 
         public string SelectedShockScenario { get; }
 
@@ -22,6 +23,7 @@ namespace EduSafe.Core.Repositories.Excel
                 .GetTransposedDataFromSpecificTab<ShockParametersRecord>(_shockParametersTab);
 
             SelectedShockScenario = selectedShockScenario;
+            _hasSelectedShockScenario = !string.IsNullOrWhiteSpace(SelectedShockScenario);
         }
 
         public ScenariosRepository(Stream fileStream, string selectedShockScenario = null) : base(fileStream)
@@ -30,6 +32,7 @@ namespace EduSafe.Core.Repositories.Excel
                 .GetTransposedDataFromSpecificTab<ShockParametersRecord>(_shockParametersTab);
 
             SelectedShockScenario = selectedShockScenario;
+            _hasSelectedShockScenario = !string.IsNullOrWhiteSpace(SelectedShockScenario);
         }
 
         /// <summary>
@@ -57,10 +60,11 @@ namespace EduSafe.Core.Repositories.Excel
             CreateForecastedOverlayScenarios(int monthlyPeriodsToForecast, List<string> scenarioNames)
         {
             var forecastedOverlayScenarioDictionary = new Dictionary<int, Dictionary<string, List<IScenario>>>();
+            if (!_hasSelectedShockScenario) return forecastedOverlayScenarioDictionary;
+
             foreach (var shockParametersRecord in _shockParametersRecords)
             {
-                if (!string.IsNullOrWhiteSpace(SelectedShockScenario) &&
-                    shockParametersRecord.ShockScenarioName != SelectedShockScenario) continue;
+                if (shockParametersRecord.ShockScenarioName != SelectedShockScenario) continue;
 
                 // The rationale behind creating the scenario here is that it saves memory, since duplicate scenario objects
                 // for multiple forecasting periods are all pointing back to the same reference.

@@ -17,6 +17,8 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
         private const string _existingEnrollees = "Existing Enrollee";
 
         private Dictionary<string, PremiumComputationResult> _forecastingScenariosBaseResultsDictionary;
+        private Dictionary<string, double> _forecastingScenariosBaseResultsPremiumDictionary;
+        private Dictionary<string, double?> _forecastingScenariosSeasonedResultsPremiumDictionary;
 
         private List<List<PremiumCalculationCashFlow>> _forecastingCashFlowsListOfLists;
         private List<List<StudentEnrollmentStateTimeSeriesEntry>> _forecastingTimeSeriesListOfLists;
@@ -36,6 +38,8 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
             PremiumComputationForecastingInput = premiumComputationForecastingInput;
 
             _forecastingScenariosBaseResultsDictionary = new Dictionary<string, PremiumComputationResult>();
+            _forecastingScenariosBaseResultsPremiumDictionary = new Dictionary<string, double>();
+            _forecastingScenariosSeasonedResultsPremiumDictionary = new Dictionary<string, double?>();
 
             _forecastingCashFlowsListOfLists = new List<List<PremiumCalculationCashFlow>>();
             _forecastingTimeSeriesListOfLists = new List<List<StudentEnrollmentStateTimeSeriesEntry>>();
@@ -72,22 +76,33 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
                     // This section computes the base result, which may have to computed each period if roll-down on rate curves
                     // is not ignored. Otherwise, it can be pulled from a precomputed dictionary.
                     PremiumComputationResult forecastingScenarioBaseResult;
+                    double forecastingScenarioBaseResultPremium; double? forecastingScenarioSeasonedResultPremium;
                     if (!_ignoreRollForwardOnRateCurves && monthlyPeriod > 0)
                     {
-                        forecastingScenarioBaseResult = ComputeBaseResultWithRateCurveRollForward(scenarioName, monthlyPeriod);
+                        var scenarioResultContainer = ComputeBaseResultWithRateCurveRollForward(scenarioName, monthlyPeriod);
+                        forecastingScenarioBaseResult = scenarioResultContainer.PremiumComputationResult;
+                        forecastingScenarioBaseResultPremium = scenarioResultContainer.BaseScenarioComputationResultPremium;
+                        forecastingScenarioSeasonedResultPremium = scenarioResultContainer.SeasonedScenarioComputationResultPremium;
                     }
                     else
-                    {   forecastingScenarioBaseResult = _forecastingScenariosBaseResultsDictionary[scenarioName].Copy();    }
+                    {
+                        forecastingScenarioBaseResult = _forecastingScenariosBaseResultsDictionary[scenarioName].Copy();
+                        forecastingScenarioBaseResultPremium = _forecastingScenariosBaseResultsPremiumDictionary[scenarioName];
+                        _forecastingScenariosSeasonedResultsPremiumDictionary.TryGetValue(scenarioName, out forecastingScenarioSeasonedResultPremium);
+                    }
 
                     if (!_applyFirstYearPercentGlobally && forecastedFirstYearEnrollees.ContainsKey(scenarioName))
                     {
                         var premiumComputationScenario = PremiumComputationForecastingInput.GetForecastingScenario(scenarioName);
                         var percentageFirstTimeEnrollees = forecastedFirstYearEnrollees[scenarioName][monthlyPeriod];
 
-                        forecastingScenarioBaseResult = AdjustResultsForFirstTimeEnrollees(
+                        var scenarioResultContainer = AdjustResultsForFirstTimeEnrollees(
                             premiumComputationScenario, 
                             forecastingScenarioBaseResult, 
                             percentageFirstTimeEnrollees);
+
+                        forecastingScenarioBaseResult = scenarioResultContainer.PremiumComputationResult;
+                        forecastingScenarioSeasonedResultPremium = scenarioResultContainer.SeasonedScenarioComputationResultPremium;
                     }
 
                     if (forecastedOverlayScenarios.ContainsKey(monthlyPeriod) &&
@@ -98,7 +113,8 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
 
                         forecastingScenarioBaseResult = ApplyForecastedOverlayScenarios(
                             forecastedFirstYearEnrollees,
-                            forecastingScenarioBaseResult,
+                            forecastingScenarioBaseResultPremium,
+                            forecastingScenarioSeasonedResultPremium,
                             overlayScenarioLogicList,
                             scenarioName, 
                             monthlyPeriod);
@@ -139,15 +155,20 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
                 else
                 {
                     var forecastingScenarioBaseResult = premiumComputationScenario.ComputePremiumResult();
+                    var forecastingScenarioBaseResultPremium = forecastingScenarioBaseResult.CalculatedMonthlyPremium;
+                    _forecastingScenariosBaseResultsPremiumDictionary.Add(scenarioName, forecastingScenarioBaseResultPremium);
 
                     if (_applyFirstYearPercentGlobally && globalPercentageFirstTimeEnrollees.ContainsKey(scenarioName))
                     {
                         var percentageFirstTimeEnrollees = globalPercentageFirstTimeEnrollees[scenarioName];
 
-                        forecastingScenarioBaseResult = AdjustResultsForFirstTimeEnrollees(
+                        var scenarioResultContainer = AdjustResultsForFirstTimeEnrollees(
                             premiumComputationScenario,
                             forecastingScenarioBaseResult,
-                            percentageFirstTimeEnrollees);
+                            percentageFirstTimeEnrollees,
+                            addSeasonedResultToBaseDictionary: true);
+
+                        forecastingScenarioBaseResult = scenarioResultContainer.PremiumComputationResult;
                     }
 
                     _forecastingScenariosBaseResultsDictionary.Add(scenarioName, forecastingScenarioBaseResult);
@@ -155,30 +176,41 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
             }
         }
 
-        private PremiumComputationResult ComputeBaseResultWithRateCurveRollForward(string scenarioName, int monthlyPeriod)
+        private ScenarioResultContainer ComputeBaseResultWithRateCurveRollForward(string scenarioName, int monthlyPeriod)
         {
             var globalPercentageFirstTimeEnrollees = PremiumComputationForecastingInput.PercentageFirstYearEnrolleeProjections;
             var premiumComputationScenario = PremiumComputationForecastingInput.GetForecastingScenario(scenarioName).Copy();
 
             premiumComputationScenario.SetNumberOfForecastedPeriodsAhead(monthlyPeriod);
             var forecastingScenarioBaseResult = premiumComputationScenario.ComputePremiumResult();
+            var forecastingScenarioBaseResultPremium = forecastingScenarioBaseResult.CalculatedMonthlyPremium;
 
+            double? forecastingScenarioSeasonedResultPremium = null;
             if (_applyFirstYearPercentGlobally && globalPercentageFirstTimeEnrollees.ContainsKey(scenarioName))
             {
                 var percentageFirstTimeEnrollees = globalPercentageFirstTimeEnrollees[scenarioName];
 
-                forecastingScenarioBaseResult = AdjustResultsForFirstTimeEnrollees(
+                var scenarioResultContainer = AdjustResultsForFirstTimeEnrollees(
                     premiumComputationScenario,
                     forecastingScenarioBaseResult,
                     percentageFirstTimeEnrollees);
+
+                forecastingScenarioBaseResult = scenarioResultContainer.PremiumComputationResult;
+                forecastingScenarioSeasonedResultPremium = scenarioResultContainer.SeasonedScenarioComputationResultPremium;
             }
 
-            return forecastingScenarioBaseResult;
+            return new ScenarioResultContainer
+            {
+                PremiumComputationResult = forecastingScenarioBaseResult,
+                BaseScenarioComputationResultPremium = forecastingScenarioBaseResultPremium,
+                SeasonedScenarioComputationResultPremium = forecastingScenarioSeasonedResultPremium,
+            };
         }
 
         private PremiumComputationResult ApplyForecastedOverlayScenarios(
             Dictionary<string, DataCurve<double>> forecastedFirstYearEnrollees,
-            PremiumComputationResult forecastingScenarioBaseResult,
+            double forecastingScenarioBaseResultPremium,
+            double? forecastingScenarioSeasonedResultPremium,
             List<IScenario> overlayScenarioLogicList, 
             string scenarioName, 
             int monthlyPeriod)
@@ -193,18 +225,19 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
             // in the list disallow premiums to adjust, then it will not be allowed for the whole period.
             if (overlayScenarioLogicList.Any(s => !s.AllowPremiumsToAdjust))
             {
-                var baseScenarioPremium = forecastingScenarioBaseResult.CalculatedMonthlyPremium;
-                var overlayScenarioResult = overlayComputationScenario.ComputeResultWithGivenPremium(baseScenarioPremium);
+                var overlayScenarioResult = overlayComputationScenario.ComputeResultWithGivenPremium(forecastingScenarioBaseResultPremium);
 
                 if (!_applyFirstYearPercentGlobally && forecastedFirstYearEnrollees.ContainsKey(scenarioName))
                 {
                     var percentageFirstTimeEnrollees = forecastedFirstYearEnrollees[scenarioName][monthlyPeriod];
 
-                    overlayScenarioResult = AdjustResultsForFirstTimeEnrollees(
+                    var scenarioResultContainer = AdjustResultsForFirstTimeEnrollees(
                         overlayComputationScenario,
                         overlayScenarioResult,
                         percentageFirstTimeEnrollees,
-                        baseScenarioPremium);
+                        forecastingScenarioSeasonedResultPremium);
+
+                    overlayScenarioResult = scenarioResultContainer.PremiumComputationResult;
                 }
 
                 return overlayScenarioResult;
@@ -219,36 +252,67 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
                 {
                     var percentageFirstTimeEnrollees = forecastedFirstYearEnrollees[scenarioName][monthlyPeriod];
 
-                    overlayScenarioResult = AdjustResultsForFirstTimeEnrollees(
+                    var scenarioResultContainer = AdjustResultsForFirstTimeEnrollees(
                         overlayComputationScenario,
                         overlayScenarioResult,
                         percentageFirstTimeEnrollees);
+
+                    overlayScenarioResult = scenarioResultContainer.PremiumComputationResult;
                 }
 
                 return overlayScenarioResult;
             }            
         }
 
-        private PremiumComputationResult AdjustResultsForFirstTimeEnrollees(
+        private ScenarioResultContainer AdjustResultsForFirstTimeEnrollees(
             PremiumComputationEngine premiumComputationScenario, 
             PremiumComputationResult forecastingScenarioBaseResult, 
             double percentageFirstTimeEnrollees,
-            double? calculatedMonthlyPremium = null)
+            double? calculatedSeasonedMonthlyPremium = null,
+            bool addSeasonedResultToBaseDictionary = false)
         {
+            var forecastingScenarioBaseResultPremium = forecastingScenarioBaseResult.CalculatedMonthlyPremium;
             var percentageSeasonedEnrollees = 1.0 - percentageFirstTimeEnrollees;
-            if (percentageSeasonedEnrollees <= 0) return forecastingScenarioBaseResult;
+            if (percentageSeasonedEnrollees <= 0)
+            {
+                return new ScenarioResultContainer
+                {
+                    PremiumComputationResult = forecastingScenarioBaseResult,
+                    BaseScenarioComputationResultPremium = forecastingScenarioBaseResultPremium,
+                    SeasonedScenarioComputationResultPremium = calculatedSeasonedMonthlyPremium,
+                };
+            }
 
             var copyOfPremiumComputationScenario = premiumComputationScenario.Copy();
-            var forecastingScenarioSeasonedResult = calculatedMonthlyPremium.HasValue 
-                ? copyOfPremiumComputationScenario.ComputeResultWithGivenPremium(calculatedMonthlyPremium.Value, Constants.MonthsInOneYear)
+            var forecastingScenarioSeasonedResult = calculatedSeasonedMonthlyPremium.HasValue 
+                ? copyOfPremiumComputationScenario.ComputeResultWithGivenPremium(calculatedSeasonedMonthlyPremium.Value, Constants.MonthsInOneYear)
                 : copyOfPremiumComputationScenario.ComputePremiumResult(Constants.MonthsInOneYear);
+
+            var forecastingScenarioSeasonedResultPremium = forecastingScenarioSeasonedResult.CalculatedMonthlyPremium;
+            if (addSeasonedResultToBaseDictionary)
+            {
+                var scenarioName = premiumComputationScenario.ScenarioName;
+                _forecastingScenariosSeasonedResultsPremiumDictionary.Add(scenarioName, forecastingScenarioSeasonedResultPremium);
+            }
 
             forecastingScenarioBaseResult.ScaleResults(percentageFirstTimeEnrollees);
             forecastingScenarioSeasonedResult.ScaleResults(percentageSeasonedEnrollees);
 
             forecastingScenarioBaseResult.AggregateResults(forecastingScenarioSeasonedResult);
 
-            return forecastingScenarioBaseResult;
+            return new ScenarioResultContainer
+            {
+                PremiumComputationResult = forecastingScenarioBaseResult,
+                BaseScenarioComputationResultPremium = forecastingScenarioBaseResultPremium,
+                SeasonedScenarioComputationResultPremium = forecastingScenarioSeasonedResultPremium,
+            };
+        }
+
+        private struct ScenarioResultContainer
+        {
+            public PremiumComputationResult PremiumComputationResult;
+            public double BaseScenarioComputationResultPremium;
+            public double? SeasonedScenarioComputationResultPremium;
         }
     }
 }
