@@ -216,6 +216,7 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
             int monthlyPeriod)
         {
             var overlayComputationScenario = PremiumComputationForecastingInput.GetForecastingScenario(scenarioName).Copy();
+            var globalPercentageFirstTimeEnrollees = PremiumComputationForecastingInput.PercentageFirstYearEnrolleeProjections;
 
             foreach (var overlayScenarioLogic in overlayScenarioLogicList)
                 overlayComputationScenario = overlayScenarioLogic.ApplyScenarioLogic(overlayComputationScenario);
@@ -239,6 +240,18 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
 
                     overlayScenarioResult = scenarioResultContainer.PremiumComputationResult;
                 }
+                else if (_applyFirstYearPercentGlobally && globalPercentageFirstTimeEnrollees.ContainsKey(scenarioName))
+                {
+                    var percentageFirstTimeEnrollees = globalPercentageFirstTimeEnrollees[scenarioName];
+
+                    var scenarioResultContainer = AdjustResultsForFirstTimeEnrollees(
+                        overlayComputationScenario,
+                        overlayScenarioResult,
+                        percentageFirstTimeEnrollees,
+                        forecastingScenarioSeasonedResultPremium);
+
+                    overlayScenarioResult = scenarioResultContainer.PremiumComputationResult;
+                }
 
                 return overlayScenarioResult;
             }
@@ -251,6 +264,17 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
                 if (!_applyFirstYearPercentGlobally && forecastedFirstYearEnrollees.ContainsKey(scenarioName))
                 {
                     var percentageFirstTimeEnrollees = forecastedFirstYearEnrollees[scenarioName][monthlyPeriod];
+
+                    var scenarioResultContainer = AdjustResultsForFirstTimeEnrollees(
+                        overlayComputationScenario,
+                        overlayScenarioResult,
+                        percentageFirstTimeEnrollees);
+
+                    overlayScenarioResult = scenarioResultContainer.PremiumComputationResult;
+                }
+                else if (_applyFirstYearPercentGlobally && globalPercentageFirstTimeEnrollees.ContainsKey(scenarioName))
+                {
+                    var percentageFirstTimeEnrollees = globalPercentageFirstTimeEnrollees[scenarioName];
 
                     var scenarioResultContainer = AdjustResultsForFirstTimeEnrollees(
                         overlayComputationScenario,

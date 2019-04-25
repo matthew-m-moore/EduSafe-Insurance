@@ -13,7 +13,8 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
     public class NumericalPremiumCalculation : PremiumCalculation
     {
         private List<PremiumCalculationCashFlow> _calculatedCashFlows;
-        private List<EnrollmentStateArray> _enrollmentStateTimeSeries;    
+        private List<EnrollmentStateArray> _enrollmentStateTimeSeries;
+        private const double _targetPrecision = 1e-12;
 
         public NumericalPremiumCalculation(PremiumCalculationModelInput premiumCalculationModelInput)
             : base (premiumCalculationModelInput)
@@ -36,7 +37,8 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             var targetValue = 0.0;
             var premium = NumericalSearchUtility.NewtonRaphsonWithBisection(
                     CalculateCashFlows,
-                    targetValue);
+                    targetValue,
+                    _targetPrecision);
 
             SetCalculatedCashFlows();
             return premium;
