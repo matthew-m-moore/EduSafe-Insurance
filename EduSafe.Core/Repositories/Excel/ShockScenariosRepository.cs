@@ -8,7 +8,7 @@ using EduSafe.IO.Excel.Records;
 
 namespace EduSafe.Core.Repositories.Excel
 {
-    public class ScenariosRepository : ExcelDataRepository
+    public class ShockScenariosRepository : ExcelDataRepository
     {
         private const string _shockParametersTab = "ShockParameters";
 
@@ -17,7 +17,7 @@ namespace EduSafe.Core.Repositories.Excel
 
         public string SelectedShockScenario { get; }
 
-        public ScenariosRepository(string pathToExcelFile, string selectedShockScenario = null) : base(pathToExcelFile)
+        public ShockScenariosRepository(string pathToExcelFile, string selectedShockScenario = null) : base(pathToExcelFile)
         {
             _shockParametersRecords = _ExcelFileReader
                 .GetTransposedDataFromSpecificTab<ShockParametersRecord>(_shockParametersTab);
@@ -26,7 +26,7 @@ namespace EduSafe.Core.Repositories.Excel
             _hasSelectedShockScenario = !string.IsNullOrWhiteSpace(SelectedShockScenario);
         }
 
-        public ScenariosRepository(Stream fileStream, string selectedShockScenario = null) : base(fileStream)
+        public ShockScenariosRepository(Stream fileStream, string selectedShockScenario = null) : base(fileStream)
         {
             _shockParametersRecords = _ExcelFileReader
                 .GetTransposedDataFromSpecificTab<ShockParametersRecord>(_shockParametersTab);
@@ -36,20 +36,21 @@ namespace EduSafe.Core.Repositories.Excel
         }
 
         /// <summary>
-        /// Retrieves a list of scenarios based on the shock parameters records provided.
+        /// Retrieves a dictionary of scenarios based on the shock parameters records provided.
         /// </summary>
-        public List<IScenario> RetrieveAllScenarios()
+        public Dictionary<string, List<IScenario>> RetrieveAllScenarios()
         {
-            var listOfScenarios = new List<IScenario>();
+            var dictionaryOfScenarios = new Dictionary<string, List<IScenario>>();
             foreach (var shockParametersRecord in _shockParametersRecords)
             {
-                if (!string.IsNullOrWhiteSpace(SelectedShockScenario) &&
-                    shockParametersRecord.ShockScenarioName != SelectedShockScenario) continue;
+                var shockScenarioName = shockParametersRecord.ShockScenarioName;
+                if (!dictionaryOfScenarios.ContainsKey(shockScenarioName))
+                    dictionaryOfScenarios.Add(shockScenarioName, new List<IScenario>());
 
-                AddScenarioToList(listOfScenarios, shockParametersRecord);
+                AddScenarioToList(dictionaryOfScenarios[shockScenarioName], shockParametersRecord);
             }
 
-            return listOfScenarios;
+            return dictionaryOfScenarios;
         }
 
         /// <summary>

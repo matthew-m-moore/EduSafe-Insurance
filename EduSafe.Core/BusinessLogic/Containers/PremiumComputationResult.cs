@@ -19,6 +19,8 @@ namespace EduSafe.Core.BusinessLogic.Containers
         public List<StudentEnrollmentStateTimeSeriesEntry> EnrollmentStateTimeSeries { get; set; }       
         public double CalculatedMonthlyPremium { get; set; }
 
+        public PremiumComputationResultSummary ResultSummary => new PremiumComputationResultSummary(this);
+
         public PremiumComputationResult Copy()
         {
             return new PremiumComputationResult

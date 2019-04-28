@@ -9,18 +9,18 @@ namespace EduSafe.Core.Repositories.Excel.Converters
         private PremiumComputationRepository _premiumComputationRepository;
         private ForecastedEnrollmentRepository _forecastedEnrollmentRepository;
         private ForecastedFirstYearPercentageRepository _forecastedFirstYearPercentageRepository;
-        private ScenariosRepository _scenariosRepository;
+        private ShockScenariosRepository _shockScenariosRepository;
 
         public PremiumComputationForecastingInputConverter(
             PremiumComputationRepository premiumComputationRepository,
             ForecastedEnrollmentRepository forecastedEnrollmentRepository,
             ForecastedFirstYearPercentageRepository forecastedFirstYearPercentageRepository,
-            ScenariosRepository scenariosRepository)
+            ShockScenariosRepository shockScenariosRepository)
         {
             _premiumComputationRepository = premiumComputationRepository;
             _forecastedEnrollmentRepository = forecastedEnrollmentRepository;
             _forecastedFirstYearPercentageRepository = forecastedFirstYearPercentageRepository;
-            _scenariosRepository = scenariosRepository;
+            _shockScenariosRepository = shockScenariosRepository;
         }
 
         public PremiumComputationForecastingInput Convert(ForecastingParametersRecord forecastingParametersRecord)
@@ -30,7 +30,7 @@ namespace EduSafe.Core.Repositories.Excel.Converters
 
             var forecastingScenariosDictionary = _premiumComputationRepository.GetPremiumComputationScenariosByName(useNumericalComputation);
             var forecastedEnrollmentProjection = _forecastedEnrollmentRepository.GetForecastedEnrollmentsProjection();
-            var forecastedOverlayScenarios = _scenariosRepository
+            var forecastedOverlayScenarios = _shockScenariosRepository
                 .CreateForecastedOverlayScenarios(monthlyPeriodsToForecast, new List<string>(forecastingScenariosDictionary.Keys));
 
             if (forecastingParametersRecord.ApplyFirstYearPercentGlobally)

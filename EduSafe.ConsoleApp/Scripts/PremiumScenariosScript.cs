@@ -6,6 +6,7 @@ using EduSafe.Core.BusinessLogic.Containers.CashFlows;
 using EduSafe.Core.BusinessLogic.Scenarios;
 using EduSafe.Core.Repositories;
 using EduSafe.IO.Excel;
+using EduSafe.Core.BusinessLogic.Containers;
 
 namespace EduSafe.ConsoleApp.Scripts
 {
@@ -19,6 +20,7 @@ namespace EduSafe.ConsoleApp.Scripts
             return new List<string>
             {
                 "[1] Enter path to the Excel file input",
+                "[2] Use numerical computation method (TRUE/FALSE)"
             };
         }
 
@@ -36,8 +38,9 @@ namespace EduSafe.ConsoleApp.Scripts
         {
             Console.WriteLine("Loading file and scenarios...");
             var pathToExcelFile = args[1];
+            var useNumericalComputationMethod = bool.Parse(args[2]);
             var premiumComputationRepository = new PremiumComputationRepository(pathToExcelFile);
-            var premiumComputationScenarios = premiumComputationRepository.GetPremiumComputationScenarios();
+            var premiumComputationScenarios = premiumComputationRepository.GetPremiumComputationScenarios(useNumericalComputationMethod);
             Console.WriteLine("Scenarios Loaded.");
             
 
@@ -76,18 +79,13 @@ namespace EduSafe.ConsoleApp.Scripts
 
         private void RunAllScenarios(Dictionary<int, PremiumComputationEngine> premiumComputationScenarios)
         {
-            var listOfPremiumScenariosOutput = new List<PremiumScenariosOutput>();
+            var listOfPremiumScenariosOutput = new List<PremiumComputationResultSummary>();
             foreach (var premiumComputationScenario in premiumComputationScenarios)
             {
                 Console.WriteLine(string.Format("Running scenario '{0}'...", premiumComputationScenario.Value.ScenarioName));
                 var premiumComputationResult = premiumComputationScenario.Value.ComputePremiumResult();
-                var premiumScenariosOutput = new PremiumScenariosOutput
-                {
-                    ScenarioId = premiumComputationScenario.Key,
-                    MonthlyPremium = premiumComputationResult.CalculatedMonthlyPremium
-                };
 
-                listOfPremiumScenariosOutput.Add(premiumScenariosOutput);
+                listOfPremiumScenariosOutput.Add(premiumComputationResult.ResultSummary);
                 Console.WriteLine("Scenario Finished.");
             }
 
@@ -96,12 +94,6 @@ namespace EduSafe.ConsoleApp.Scripts
             excelFileWriter.AddWorksheetForListOfData(listOfPremiumScenariosOutput, "Results");
             excelFileWriter.ExportWorkbook(openFileOnSave: true);
             Console.WriteLine("Run All Scenarios Complete.");
-        }
-
-        private class PremiumScenariosOutput
-        {
-            public int ScenarioId { get; set; }
-            public double MonthlyPremium { get; set; }
         }
 
         private void RunSpecificScenarioById(PremiumComputationRepository premiumComputationRepository, int scenarioId)

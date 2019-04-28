@@ -14,7 +14,7 @@ namespace EduSafe.Core.Repositories.Excel
         private readonly PremiumComputationRepository _premiumComputationRepository;
         private readonly ForecastedEnrollmentRepository _forecastedEnrollmentRepository;
         private readonly ForecastedFirstYearPercentageRepository _forecastedFirstYearPercentageRepository;
-        private readonly ScenariosRepository _scenariosRepository;
+        private readonly ShockScenariosRepository _shockScenariosRepository;
 
         public ForecastingParametersRecord ForecastingParametersRecord { get; private set; }
 
@@ -29,7 +29,7 @@ namespace EduSafe.Core.Repositories.Excel
 
             // Note that there is order-dependency here, "Initialize()" must come before creating the scenarios repository
             var selectedShockScenario = ForecastingParametersRecord.ShockParameterSet;
-            _scenariosRepository = new ScenariosRepository(pathToExcelDataFile, selectedShockScenario);
+            _shockScenariosRepository = new ShockScenariosRepository(pathToExcelDataFile, selectedShockScenario);
         }
 
         public ForecastingRepository(Stream fileStream) 
@@ -43,7 +43,7 @@ namespace EduSafe.Core.Repositories.Excel
 
             // Note that there is order-dependency here, "Initialize()" must come before creating the scenarios repository
             var selectedShockScenario = ForecastingParametersRecord.ShockParameterSet;
-            _scenariosRepository = new ScenariosRepository(fileStream, selectedShockScenario);
+            _shockScenariosRepository = new ShockScenariosRepository(fileStream, selectedShockScenario);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace EduSafe.Core.Repositories.Excel
                 _premiumComputationRepository,
                 _forecastedEnrollmentRepository,
                 _forecastedFirstYearPercentageRepository,
-                _scenariosRepository);
+                _shockScenariosRepository);
 
             var premiumComputationForecastingInput = premiumComputationForecastingInputConverter.Convert(ForecastingParametersRecord);
 

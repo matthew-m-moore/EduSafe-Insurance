@@ -67,6 +67,7 @@
     <Compile Include="Scripts\PremiumScenariosScript.cs" />
     <Compile Include="Scripts\InvestmentScenariosScript.cs" />
     <Compile Include="Scripts\SampleScript.cs" />
+    <Compile Include="Scripts\ShockScenariosScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

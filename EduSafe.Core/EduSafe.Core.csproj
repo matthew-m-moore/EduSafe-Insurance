@@ -53,6 +53,7 @@
     <Compile Include="BusinessLogic\Containers\CollegeMajorData.cs" />
     <Compile Include="BusinessLogic\Containers\CompoundKeys\VectorAssignmentEntry.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumComputationForecastingInput.cs" />
+    <Compile Include="BusinessLogic\Containers\PremiumComputationResultSummary.cs" />
     <Compile Include="BusinessLogic\Investments\ReinvestmentModelProfitLossResult.cs" />
     <Compile Include="BusinessLogic\Investments\ReinvestmentModelResultEntry.cs" />
     <Compile Include="BusinessLogic\Investments\ReinvestmentOptionsParameters.cs" />
@@ -83,7 +84,7 @@
     <Compile Include="BusinessLogic\Models\StudentEnrollment\Parameterization\EarlyHireRateParameterizer.cs" />
     <Compile Include="BusinessLogic\Models\StudentEnrollment\Parameterization\PostGraduationParameterizer.cs" />
     <Compile Include="BusinessLogic\Scenarios\PremiumComputationForecastingEngine.cs" />
-    <Compile Include="BusinessLogic\Scenarios\PremiumComputationScenariosEngine.cs" />
+    <Compile Include="BusinessLogic\Scenarios\PremiumComputationShocksEngine.cs" />
     <Compile Include="BusinessLogic\Scenarios\ScenarioLogic\OptionalityShockScenario.cs" />
     <Compile Include="BusinessLogic\Scenarios\Shocks\AdditiveShockLogic.cs" />
     <Compile Include="BusinessLogic\Scenarios\ScenarioLogic\EnrollmentModelTargetShockScenario.cs" />
@@ -121,7 +122,7 @@
     <Compile Include="Repositories\Excel\InterestRateCurveRepository.cs" />
     <Compile Include="Repositories\Excel\InterestRateCurveTypeRepository.cs" />
     <Compile Include="Repositories\Excel\ReinvestmentOptionsRepository.cs" />
-    <Compile Include="Repositories\Excel\ScenariosRepository.cs" />
+    <Compile Include="Repositories\Excel\ShockScenariosRepository.cs" />
     <Compile Include="Repositories\Excel\ValuesArrayExcelDataRepository.cs" />
     <Compile Include="Repositories\Excel\ServicingCostsModelRepository.cs" />
     <Compile Include="Repositories\Excel\PremiumComputationRepository.cs" />
