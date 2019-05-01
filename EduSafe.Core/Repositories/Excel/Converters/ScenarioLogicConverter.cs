@@ -119,7 +119,7 @@ namespace EduSafe.Core.Repositories.Excel.Converters
             var monthlyPeriod = shockParametersRecord.MonthlyTargetPeriod;
 
             var shockScenarioName = string.IsNullOrWhiteSpace(shockParametersRecord.ShockScenarioName)
-                ? _enrollmentTargetScenario.ToUpper() + ": "
+                ? _enrollmentTransitionScenario.ToUpper() + ": "
                     + startEnrollmentState + ", "
                     + endEnrollmentState + ", "
                     + (monthlyPeriod.HasValue ? "Period " + monthlyPeriod.Value : "All Periods") + ", "
@@ -139,7 +139,7 @@ namespace EduSafe.Core.Repositories.Excel.Converters
             var isSpecificCostOrFeeShock = !string.IsNullOrWhiteSpace(shockParametersRecord.SpecificCostOrFeeName);
 
             var shockScenarioName = string.IsNullOrWhiteSpace(shockParametersRecord.ShockScenarioName)
-                ? _interestRateScenario.ToUpper() + ": "
+                ? ServicingCostsScenario.ToUpper() + ": "
                     + (isSpecificCostOrFeeShock ? "'"+ shockParametersRecord.SpecificCostOrFeeName +"', " : string.Empty)
                     + shockParametersRecord.ShockLogicType + ", "
                     + shockParametersRecord.ShockValue

@@ -1,4 +1,5 @@
-﻿using EduSafe.Common.Enums;
+﻿using System;
+using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Scenarios.Shocks;
 using EduSafe.Core.Interfaces;
 
@@ -55,7 +56,38 @@ namespace EduSafe.Core.BusinessLogic.Scenarios.ScenarioLogic
                 .StudentEnrollmentModelInput
                 .EnrollmentTargetsArray[_monthlyPeriod, _enrollmentState].SetTargetValue(shockedValue);
 
+            if (_enrollmentState == StudentEnrollmentState.Graduated)
+                AdjustComplementaryTotalEnrollmentTarget(StudentEnrollmentState.DroppedOut, premiumComputationEngine, baseValue, shockedValue);
+
+            if (_enrollmentState == StudentEnrollmentState.DroppedOut)
+                AdjustComplementaryTotalEnrollmentTarget(StudentEnrollmentState.Graduated, premiumComputationEngine, baseValue, shockedValue);
+
             return premiumComputationEngine;
+        }
+
+        private void AdjustComplementaryTotalEnrollmentTarget(
+            StudentEnrollmentState complementaryEnrollmentState,
+            PremiumComputationEngine premiumComputationEngine, 
+            double baseValue, 
+            double shockedValue)
+        {
+            var incrementalChange = baseValue - shockedValue;
+
+            var unadjustedTarget = premiumComputationEngine
+                .RepricingModel
+                .EnrollmentModel
+                .StudentEnrollmentModelInput
+                .EnrollmentTargetsArray[complementaryEnrollmentState];
+
+            if (unadjustedTarget == null) return;
+
+            var adjustedTargetValue = unadjustedTarget.TargetValue + incrementalChange;
+
+            premiumComputationEngine
+                .RepricingModel
+                .EnrollmentModel
+                .StudentEnrollmentModelInput
+                .EnrollmentTargetsArray[complementaryEnrollmentState].SetTargetValue(adjustedTargetValue);
         }
     }
 }

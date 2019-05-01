@@ -6,6 +6,7 @@ namespace EduSafe.Core.Repositories.Excel.Converters
     public class StudentEnrollmentStateConverter
     {
         private const string _enrolled = "Enrolled";
+        private const string _graduated = "Graduated";
         private const string _dropOut = "DropOut";
         private const string _earlyHire = "EarlyHire";
         private const string _gradSchool = "GradSchool";
@@ -20,6 +21,9 @@ namespace EduSafe.Core.Repositories.Excel.Converters
             {
                 case _enrolled:
                     return StudentEnrollmentState.Enrolled;
+
+                case _graduated:
+                    return StudentEnrollmentState.Graduated;
 
                 case _dropOut:
                     return StudentEnrollmentState.DroppedOut;

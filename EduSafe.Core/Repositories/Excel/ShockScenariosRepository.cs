@@ -44,10 +44,18 @@ namespace EduSafe.Core.Repositories.Excel
             foreach (var shockParametersRecord in _shockParametersRecords)
             {
                 var shockScenarioName = shockParametersRecord.ShockScenarioName;
+
+                IScenario scenario = null;
+                if (string.IsNullOrWhiteSpace(shockScenarioName))
+                {
+                    scenario = ScenarioLogicConverter.ConvertToScenario(shockParametersRecord);
+                    shockScenarioName = scenario.ScenarioName;
+                }
+
                 if (!dictionaryOfScenarios.ContainsKey(shockScenarioName))
                     dictionaryOfScenarios.Add(shockScenarioName, new List<IScenario>());
 
-                AddScenarioToList(dictionaryOfScenarios[shockScenarioName], shockParametersRecord);
+                AddScenarioToList(dictionaryOfScenarios[shockScenarioName], shockParametersRecord, scenario);
             }
 
             return dictionaryOfScenarios;
