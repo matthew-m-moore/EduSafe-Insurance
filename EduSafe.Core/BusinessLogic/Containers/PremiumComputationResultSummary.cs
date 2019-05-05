@@ -27,6 +27,9 @@ namespace EduSafe.Core.BusinessLogic.Containers
 
         public double WeightedAverageLife { get; set; }
 
+        public double TotalLifetimeCosts { get; set; }
+        public double TotalLifetimeClaims { get; set; }
+
         public PremiumComputationResultSummary(PremiumComputationResult premiumComputationResult)
         {
             ScenarioId = premiumComputationResult.ScenarioId;
@@ -51,6 +54,9 @@ namespace EduSafe.Core.BusinessLogic.Containers
             TotalEmployed = premiumComputationResult.EnrollmentStateTimeSeries.Last().Employed;
 
             WeightedAverageLife = ComputeWeightedAverageLife(premiumComputationResult);
+
+            TotalLifetimeCosts = premiumComputationResult.PremiumCalculationCashFlows.Sum(c => c.ProbabilityAdjustedCostsAndFees);
+            TotalLifetimeClaims = premiumComputationResult.PremiumCalculationCashFlows.Sum(c => c.TotalClaims);
         }
 
         private double ComputeWeightedAverageLife(PremiumComputationResult premiumComputationResult)
