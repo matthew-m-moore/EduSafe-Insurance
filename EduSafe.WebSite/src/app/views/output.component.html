@@ -20,10 +20,9 @@
 </div>
 <div class="row justify-content-center" id="policyDetailsContent">
   <div class="col-md-8 text-left">
-    <i><u>Example</u>:</i> For "<b>Coverage Amount</b>" of {{ modelOutputEntry.AmountOfSalaryCoverage | number: '1.0-0' }},
-    a monthly premium of ${{ modelOutputEntry.YearOneMonthlyPremiumAmount | number: '1.0-0' }}
+    <i><u>Example</u>:</i> A monthly premium of ${{ modelOutputEntry.YearOneMonthlyPremiumAmount | number: '1.0-0' }}
     starting at the beginning of your <b>{{ modelOutputSummary.ModelOutputHeaders.YearOneName }}</b> covers
-    ${{ modelOutputEntry.AmountOfSalaryCoverage | number: '1.0-0' }} of income.<br /><br />
+    ${{ modelOutputEntry.AmountOfSalaryCoverage | number: '1.0-0' }} of income and/or debt payments, if you cannot find a job after graduating.<br /><br />
     Worried about your future plans besides finding employment with your new degree?<br /><br />
     Not a concern, this policy includes a repayment of a portion of all payments made under the following events:
     <ul>
