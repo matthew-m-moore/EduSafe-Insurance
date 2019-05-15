@@ -2,7 +2,7 @@
   <table align="center" class="table">
     <thead>
       <tr>
-        <td><b>{{ modelOutputSummary.ModelOutputHeaders.CoverageMonths }}</b></td>
+        <td><b>{{ modelOutputSummary.ModelOutputHeaders.CoverageAmount }}</b></td>
         <td><b>{{ modelOutputSummary.ModelOutputHeaders.YearOneName }}</b></td>
         <td><b>{{ modelOutputSummary.ModelOutputHeaders.YearTwoName }}</b></td>
         <td><b>{{ modelOutputSummary.ModelOutputHeaders.YearThreeName }}</b></td>
@@ -10,7 +10,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let modelOutputEntry of modelOutputSummary.ModelOutputEntries">
-        <td>{{ modelOutputEntry.MonthsOfSalaryCoverage }}</td>
+        <td>${{ modelOutputEntry.AmountOfSalaryCoverage | number: '1.0-0' }}</td>
         <td>${{ modelOutputEntry.YearOneMonthlyPremiumAmount | number: '1.0-0' }}</td>
         <td>${{ modelOutputEntry.YearTwoMonthlyPremiumAmount | number: '1.0-0' }}</td>
         <td>${{ modelOutputEntry.YearThreeMonthlyPremiumAmount | number: '1.0-0' }}</td>
@@ -20,12 +20,10 @@
 </div>
 <div class="row justify-content-center" id="policyDetailsContent">
   <div class="col-md-8 text-left">
-    <i><u>Example</u>:</i> For "<b>Coverage Months</b>" of {{ modelOutputEntry.MonthsOfSalaryCoverage }},
+    <i><u>Example</u>:</i> For "<b>Coverage Amount</b>" of {{ modelOutputEntry.AmountOfSalaryCoverage | number: '1.0-0' }},
     a monthly premium of ${{ modelOutputEntry.YearOneMonthlyPremiumAmount | number: '1.0-0' }}
     starting at the beginning of your <b>{{ modelOutputSummary.ModelOutputHeaders.YearOneName }}</b> covers
-    ${{ modelOuputCoverage | number: '1.0-0' }} of income
-    (annual income of ${{ resultsEmailEntry.ModelInputEntry.IncomeCoverageAmount | number: '1.0-0' }}
-    for {{ modelOutputEntry.MonthsOfSalaryCoverage }} months).<br /><br />
+    ${{ modelOutputEntry.AmountOfSalaryCoverage | number: '1.0-0' }} of income.<br /><br />
     Worried about your future plans besides finding employment with your new degree?<br /><br />
     Not a concern, this policy includes a repayment of a portion of all payments made under the following events:
     <ul>

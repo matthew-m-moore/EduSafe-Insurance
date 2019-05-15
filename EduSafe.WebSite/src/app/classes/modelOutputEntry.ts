@@ -1,5 +1,5 @@
 export class ModelOutputEntry {
-  MonthsOfSalaryCoverage: number
+  AmountOfSalaryCoverage: number
   YearOneMonthlyPremiumAmount: number;
   YearTwoMonthlyPremiumAmount: number;
   YearThreeMonthlyPremiumAmount: number;

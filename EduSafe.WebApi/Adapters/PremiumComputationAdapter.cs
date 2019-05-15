@@ -62,14 +62,16 @@ namespace EduSafe.WebApi.Adapters
 
             foreach (var numberOfCoverageMonths in _incomeCoverageMonths)
             {
-                var modelOutputEntry = new ModelOutputEntry { MonthsOfSalaryCoverage = numberOfCoverageMonths };
+                
                 baseScenario.CoverageMonths = numberOfCoverageMonths;
+                var premiumComputationScenario = _premiumComputationRepository.GetPremiumComputationScenario(baseScenario);
+                var incomeCoverageAmount = premiumComputationScenario.PremiumCalculation.PremiumCalculationModelInput.IncomeCoverageAmount;
+                var modelOutputEntry = new ModelOutputEntry { AmountOfSalaryCoverage = incomeCoverageAmount };
 
                 for (var year = 1; year <= 3; year++)
                 {
-                    var rollForwardPeriod = rollForwardPeriods[year - 1];
-                    var premiumComputationScenario = _premiumComputationRepository.GetPremiumComputationScenario(baseScenario);
-                    var premiumComputationResults = premiumComputationScenario.ComputePremiumResult(rollForwardPeriod);
+                    var rollForwardPeriod = rollForwardPeriods[year - 1];                  
+                    var premiumComputationResults = premiumComputationScenario.Copy().ComputePremiumResult(rollForwardPeriod);
                     var monthlyPremium = premiumComputationResults.CalculatedMonthlyPremium;
 
                     switch (year)

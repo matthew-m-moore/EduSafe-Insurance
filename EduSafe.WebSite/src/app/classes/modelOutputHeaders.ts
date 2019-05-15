@@ -1,5 +1,5 @@
 export class ModelOutputHeaders {
-  CoverageMonths: string
+  CoverageAmount: string
   YearOneName: string;
   YearTwoName: string;
   YearThreeName: string;

@@ -79,9 +79,6 @@ export class ModelOuputComponent implements OnInit, AfterViewInit {
     this.modelOutputSummary = this.modelComponent.modelOutputSummary;
     this.modelOutputEntry = this.modelComponent.modelOutputSummary.ModelOutputEntries[2];
 
-    var portionOfOneYear = this.modelOutputEntry.MonthsOfSalaryCoverage / 12;
-    this.modelOuputCoverage = this.modelComponent.modelInputEntry.IncomeCoverageAmount * portionOfOneYear;
-
     this.resultsEmailEntry = new ResultsEmailEntry();
     this.resultsEmailEntry.ModelInputEntry = this.modelComponent.modelInputEntry;
     this.resultsEmailEntry.ModelOutputSummary = this.modelOutputSummary;
