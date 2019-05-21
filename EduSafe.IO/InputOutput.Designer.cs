@@ -88,7 +88,7 @@ namespace EduSafe.IO {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("EduSafeDB")]
+        [global::System.Configuration.DefaultSettingValueAttribute("EdusafeWebAppDB")]
         public string WebsiteInquiryDatabaseName {
             get {
                 return ((string)(this["WebsiteInquiryDatabaseName"]));
