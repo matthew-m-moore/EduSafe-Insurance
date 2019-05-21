@@ -1,0 +1,8 @@
+IF EXISTS (SELECT * FROM sys.schemas WHERE NAME = 'cust') 
+BEGIN 
+	DROP SCHEMA cust
+END
+GO
+
+CREATE SCHEMA cust
+
