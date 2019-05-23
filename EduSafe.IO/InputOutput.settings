@@ -38,5 +38,26 @@
     <Setting Name="WebsiteInquiryPort" Type="System.String" Scope="Application">
       <Value Profile="(Default)">1433</Value>
     </Setting>
+    <Setting Name="IndividualCustomersDirectory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\Users\Matthew M\Google Drive\Edu$afe\Code\IndividualCustomers</Value>
+    </Setting>
+    <Setting Name="InstitutionalCustomersDirectory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\Users\Matthew M\Google Drive\Edu$afe\Code\InstitutionalCustomers</Value>
+    </Setting>
+    <Setting Name="ServicingDataDatabaseName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ServicingDataServerName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ServicingDataUserName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ServicingDataPassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ServicingDataPort" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

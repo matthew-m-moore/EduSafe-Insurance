@@ -159,19 +159,28 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AriticlesLoadingController.cs" />
     <Compile Include="Controllers\CollegeDataSearchController.cs" />
+    <Compile Include="Controllers\FileTransferController.cs" />
     <Compile Include="Controllers\ModelCalculationController.cs" />
     <Compile Include="Controllers\SendEmailController.cs" />
+    <Compile Include="Controllers\ServicingDataController.cs" />
     <Compile Include="Controllers\WebSiteActivityCaptureController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ActivityInputEntry.cs" />
     <Compile Include="Models\ArticleInformationEntry.cs" />
+    <Compile Include="Models\ClaimDocumentEntry.cs" />
+    <Compile Include="Models\ClaimPaymentEntry.cs" />
+    <Compile Include="Models\ClaimStatusEntry.cs" />
+    <Compile Include="Models\CustomerProfileEntry.cs" />
     <Compile Include="Models\InquiryEmailEntry.cs" />
+    <Compile Include="Models\InstitutionProfileEntry.cs" />
     <Compile Include="Models\ModelInputEntry.cs" />
     <Compile Include="Models\ModelOutputEntry.cs" />
     <Compile Include="Models\ModelOutputHeaders.cs" />
     <Compile Include="Models\ModelOutputSummary.cs" />
+    <Compile Include="Models\NotificationHistoryEntry.cs" />
+    <Compile Include="Models\PaymentHistoryEntry.cs" />
     <Compile Include="Models\ResultsEmailEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

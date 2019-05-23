@@ -62,6 +62,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\Contexts\ServicingDataContext.cs" />
     <Compile Include="Database\Contexts\WebSiteInquiryContext.cs" />
     <Compile Include="Database\DatabaseConnectionSettings.cs" />
     <Compile Include="Database\DatabaseContextRetriever.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Excel\Records\TabDataTypeRecord.cs" />
     <Compile Include="Excel\Records\TestRecords\TestRecordA.cs" />
     <Compile Include="Excel\Records\TestRecords\TestRecordB.cs" />
+    <Compile Include="Files\FileServerSettings.cs" />
     <Compile Include="InputOutput.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

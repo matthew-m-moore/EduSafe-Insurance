@@ -30,6 +30,21 @@ namespace EduSafe.IO.Database
                     UserID = InputOutput.Default.WebsiteInquiryUserName,
                     Password = InputOutput.Default.WebsiteInquiryPassword,
                 },
+
+                [typeof(ServicingDataContext)] = new SqlConnectionStringBuilder
+                {
+                    Encrypt = true,
+                    PersistSecurityInfo = false,
+                    MultipleActiveResultSets = false,
+                    TrustServerCertificate = false,
+
+                    ConnectTimeout = _databaseConnectionTimeoutInMilliseconds,
+
+                    DataSource = "tcp:" + InputOutput.Default.ServicingDataServerName + "," + InputOutput.Default.ServicingDataPort,
+                    InitialCatalog = InputOutput.Default.ServicingDataDatabaseName,
+                    UserID = InputOutput.Default.ServicingDataUserName,
+                    Password = InputOutput.Default.ServicingDataPassword,
+                },
             };
     }
 }

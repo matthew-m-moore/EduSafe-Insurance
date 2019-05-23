@@ -130,5 +130,68 @@ namespace EduSafe.IO {
                 return ((string)(this["WebsiteInquiryPort"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\Matthew M\\Google Drive\\Edu$afe\\Code\\IndividualCustomers")]
+        public string IndividualCustomersDirectory {
+            get {
+                return ((string)(this["IndividualCustomersDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\Matthew M\\Google Drive\\Edu$afe\\Code\\InstitutionalCustomers")]
+        public string InstitutionalCustomersDirectory {
+            get {
+                return ((string)(this["InstitutionalCustomersDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServicingDataDatabaseName {
+            get {
+                return ((string)(this["ServicingDataDatabaseName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServicingDataServerName {
+            get {
+                return ((string)(this["ServicingDataServerName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServicingDataUserName {
+            get {
+                return ((string)(this["ServicingDataUserName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServicingDataPassword {
+            get {
+                return ((string)(this["ServicingDataPassword"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ServicingDataPort {
+            get {
+                return ((string)(this["ServicingDataPort"]));
+            }
+        }
     }
 }
