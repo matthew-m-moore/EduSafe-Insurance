@@ -155,10 +155,12 @@
   <ItemGroup>
     <Compile Include="Adapters\ArticlesLoadingAdapter.cs" />
     <Compile Include="Adapters\CollegeDataAdapter.cs" />
+    <Compile Include="Adapters\FileTransferAdapter.cs" />
     <Compile Include="Adapters\PremiumComputationAdapter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AriticlesLoadingController.cs" />
     <Compile Include="Controllers\CollegeDataSearchController.cs" />
+    <Compile Include="Controllers\ExcelExportController.cs" />
     <Compile Include="Controllers\FileTransferController.cs" />
     <Compile Include="Controllers\ModelCalculationController.cs" />
     <Compile Include="Controllers\SendEmailController.cs" />
@@ -170,6 +172,7 @@
     <Compile Include="Models\ActivityInputEntry.cs" />
     <Compile Include="Models\ArticleInformationEntry.cs" />
     <Compile Include="Models\ClaimDocumentEntry.cs" />
+    <Compile Include="Models\ClaimOptionEntry.cs" />
     <Compile Include="Models\ClaimPaymentEntry.cs" />
     <Compile Include="Models\ClaimStatusEntry.cs" />
     <Compile Include="Models\CustomerProfileEntry.cs" />

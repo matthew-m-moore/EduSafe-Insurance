@@ -45,19 +45,19 @@
       <Value Profile="(Default)">C:\Users\Matthew M\Google Drive\Edu$afe\Code\InstitutionalCustomers</Value>
     </Setting>
     <Setting Name="ServicingDataDatabaseName" Type="System.String" Scope="Application">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">EdusafeServicingDB</Value>
     </Setting>
     <Setting Name="ServicingDataServerName" Type="System.String" Scope="Application">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">edusafe.database.windows.net</Value>
     </Setting>
     <Setting Name="ServicingDataUserName" Type="System.String" Scope="Application">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">EduSafeAdmin</Value>
     </Setting>
     <Setting Name="ServicingDataPassword" Type="System.String" Scope="Application">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Master123</Value>
     </Setting>
     <Setting Name="ServicingDataPort" Type="System.String" Scope="Application">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">1433</Value>
     </Setting>
   </Settings>
 </SettingsFile>

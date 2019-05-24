@@ -151,7 +151,7 @@ namespace EduSafe.IO {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("EdusafeServicingDB")]
         public string ServicingDataDatabaseName {
             get {
                 return ((string)(this["ServicingDataDatabaseName"]));
@@ -160,7 +160,7 @@ namespace EduSafe.IO {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("edusafe.database.windows.net")]
         public string ServicingDataServerName {
             get {
                 return ((string)(this["ServicingDataServerName"]));
@@ -169,7 +169,7 @@ namespace EduSafe.IO {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("EduSafeAdmin")]
         public string ServicingDataUserName {
             get {
                 return ((string)(this["ServicingDataUserName"]));
@@ -178,7 +178,7 @@ namespace EduSafe.IO {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Master123")]
         public string ServicingDataPassword {
             get {
                 return ((string)(this["ServicingDataPassword"]));
@@ -187,7 +187,7 @@ namespace EduSafe.IO {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1433")]
         public string ServicingDataPort {
             get {
                 return ((string)(this["ServicingDataPort"]));

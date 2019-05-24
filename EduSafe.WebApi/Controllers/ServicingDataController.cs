@@ -10,15 +10,17 @@ namespace EduSafe.WebApi.Controllers
     [RoutePrefix("api/servicing")]
     public class ServicingDataController : ApiController
     {
-        // GET: api/servicing/{customerIdentifier}/{fileName}
-        [Route("{customerIdentifier}")]
+        // GET: api/servicing/institution/{customerIdentifier}
+        [Route("institution/{customerIdentifier}")]
+        [HttpGet]
         public InstitutionProfileEntry GetInstitutionProfile(string customerIdentifier)
         {
             return new InstitutionProfileEntry();
         }
 
-        // GET: api/servicing/{customerIdentifier}/{fileName}
-        [Route("{customerIdentifier}")]
+        // GET: api/servicing/individual/{customerIdentifier}
+        [Route("individual/{customerIdentifier}")]
+        [HttpGet]
         public CustomerProfileEntry GetCustomerProfile(string customerIdentifier)
         {
             return new CustomerProfileEntry();

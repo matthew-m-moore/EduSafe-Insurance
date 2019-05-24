@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using EduSafe.IO.Files;
 using EduSafe.WebApi.Adapters;
 
 namespace EduSafe.WebApi.Controllers
@@ -53,10 +54,10 @@ namespace EduSafe.WebApi.Controllers
             }
         }
 
-        // GET: api/file/download/{customerIdentifier}/{fileName}
-        [Route("download/{customerIdentifier}/{fileName}")]
+        // GET: api/file/download/{customerIdentifier}/{fileType}/{fileName}
+        [Route("download/{customerIdentifier}/{fileType}/{fileName}")]
         [HttpGet]
-        public void DownloadFileFromServer(int customerIdentifier, string fileName)
+        public void DownloadFileFromServer(int customerIdentifier, string fileType, string fileName)
         {
             var response = HttpContext.Current.Response;
             response.ClearContent();
@@ -70,16 +71,6 @@ namespace EduSafe.WebApi.Controllers
 
             response.Flush();
             response.End();
-        }
-
-        // GET: api/file/list
-        [Route("list")]
-        [HttpGet]
-        // Probably don't need this to be an API, since it will be called internally on the server
-        public List<string> GetFileListOnServer(int customerIdentifier)
-        {
-            // Somehow use the user ID to find the appropriate directory folder and return a list of file names
-            return new List<string>();
         }
     }
 }

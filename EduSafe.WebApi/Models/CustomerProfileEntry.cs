@@ -25,13 +25,15 @@ namespace EduSafe.WebApi.Models
 
         public double CustomerBalance { get; set; }
         public double MonthlyPaymentAmount { get; set; }
+        public double TotalPaidInPremiums { get; set; }
         public DateTime NextPaymentDueDate { get; set; }
         public List<PaymentHistoryEntry> PaymentHistoryEntries { get; set; }
 
         public double TotalCoverageAmount { get; set; }
         public double? RemainingCoverageAmount { get; set; }
         public double CoverageMonths { get; set; }
-        public ClaimStatusEntry GetClaimStatusEntry { get; set; }
+        public ClaimStatusEntry ClaimStatusEntry { get; set; }
+        public List<ClaimOptionEntry> ClaimOptionEntries { get; set; }
 
         public bool EnrollmentVerified { get; set; }
         public bool GraduationVerified { get; set; }
