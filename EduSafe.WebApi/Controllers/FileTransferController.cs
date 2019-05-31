@@ -17,10 +17,11 @@ namespace EduSafe.WebApi.Controllers
         // Could this be the path to an IP address for our hosted file server perhaps?
         private const string _rootDirectoryPath = "~/App_Data";
 
+        // Should we set a file size limite somewhere for uploads?
         // POST: api/file/upload/{customerIdentifier}/{fileType}
         [Route("upload/{customerIdentifier}/{fileType}")]
         [HttpPost]
-        public async Task<HttpResponseMessage> UploadFileToServer(int customerIdentifier, string fileType)
+        public async Task<HttpResponseMessage> UploadFileToServer(int customerIdentifier, string claimType)
         {
             var isRequestValid = !Request.Content.IsMimeMultipartContent();
             if (!isRequestValid)
@@ -54,10 +55,56 @@ namespace EduSafe.WebApi.Controllers
             }
         }
 
+        // Another example I found of a file upload method, which takes a slightly different tack
+        public IHttpActionResult UploadFiles()
+        {
+            int i = 0;
+            int cntSuccess = 0;
+            var uploadedFileNames = new List<string>();
+            string result = string.Empty;
+
+            HttpResponseMessage response = new HttpResponseMessage();
+
+            var httpRequest = HttpContext.Current.Request;
+            if (httpRequest.Files.Count > 0)
+            {
+                foreach (string file in httpRequest.Files)
+                {
+                    var postedFile = httpRequest.Files[i];
+                    var filePath = HttpContext.Current.Server.MapPath("~/UploadedFiles/" + postedFile.FileName);
+                    try
+                    {
+                        postedFile.SaveAs(filePath);
+                        uploadedFileNames.Add(httpRequest.Files[i].FileName);
+                        cntSuccess++;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+
+                    i++;
+                }
+            }
+
+            result = cntSuccess.ToString() + " files uploaded succesfully.<br/>";
+
+            result += "<ul>";
+
+            foreach (var f in uploadedFileNames)
+            {
+                result += "<li>" + f + "</li>";
+            }
+
+            result += "</ul>";
+
+            return Json(result);
+        }
+
         // GET: api/file/download/{customerIdentifier}/{fileType}/{fileName}
         [Route("download/{customerIdentifier}/{fileType}/{fileName}")]
         [HttpGet]
-        public void DownloadFileFromServer(int customerIdentifier, string fileType, string fileName)
+        public void DownloadFileFromServer(int customerIdentifier, string claimType, string fileName)
         {
             var response = HttpContext.Current.Response;
             response.ClearContent();
