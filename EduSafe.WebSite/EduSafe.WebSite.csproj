@@ -76,10 +76,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="e2e\protractor.conf.js" />
+    <Content Include="src\app\styles\authentication.component.css" />
+    <Content Include="src\app\styles\claims.component.css" />
     <Content Include="src\app\styles\contact.component.css" />
+    <Content Include="src\app\styles\individual-profile.component.css" />
+    <Content Include="src\app\styles\institutional-profile.component.css" />
+    <Content Include="src\app\styles\notification-history.component.css" />
     <Content Include="src\app\styles\output.component.css" />
+    <Content Include="src\app\styles\payment-history.component.css" />
     <Content Include="src\app\views\articles.component.html" />
+    <Content Include="src\app\views\authentication.component.html" />
+    <Content Include="src\app\views\claims.component.html" />
     <Content Include="src\app\views\contact.component.html" />
+    <Content Include="src\app\views\individual-profile.component.html" />
+    <Content Include="src\app\views\institutional-profile.component.html" />
+    <Content Include="src\app\views\notification-history.component.html" />
+    <Content Include="src\app\views\payment-history.component.html" />
     <Content Include="src\assets\EduSafe_0_Logo.png" />
     <Content Include="src\assets\EduSafe_0_Logo.svg" />
     <Content Include="src\assets\EduSafe_1_Comic.png" />
@@ -129,6 +141,7 @@
     <TypeScriptCompile Include="src\app\classes\paymentHistoryEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\resultsEmailEntry.ts" />
     <TypeScriptCompile Include="src\app\components\articles.component.ts" />
+    <TypeScriptCompile Include="src\app\components\authentication.component.ts" />
     <TypeScriptCompile Include="src\app\components\claims.component.ts" />
     <TypeScriptCompile Include="src\app\components\contact.component.ts" />
     <TypeScriptCompile Include="src\app\components\home.component.ts" />
@@ -142,6 +155,7 @@
     <TypeScriptCompile Include="src\app\modules\routing.module.ts" />
     <TypeScriptCompile Include="src\app\services\activityCapture.service.ts" />
     <TypeScriptCompile Include="src\app\services\articleInformation.service.ts" />
+    <TypeScriptCompile Include="src\app\services\authentication.service.ts" />
     <TypeScriptCompile Include="src\app\services\collegeDataSearch.service.ts" />
     <TypeScriptCompile Include="src\app\services\excelExport.service.ts" />
     <TypeScriptCompile Include="src\app\services\fileTransfer.service.ts" />

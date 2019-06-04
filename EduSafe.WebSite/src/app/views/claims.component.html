@@ -1,0 +1,16 @@
+<!-- Need to have the ability to upload and download file, plus view the claim terms and such -->
+<h1>Upload File</h1>
+<input #file type="file" multiple (change)="uploadFilesToServer($event.target.files)" />
+<!-- Somehow the above line looks more accurate -->
+<!--<input #file type="file" multiple (change)="uploadFilesToServer(file.files)" />-->
+<br />
+<!--<span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
+  {{progress}}%
+</span>
+
+<span style="font-weight:bold;color:green;" *ngIf="message">
+  {{message}}
+</span>-->
+<div>
+  <!--Loop through claim payment entries to show in table-->
+</div>

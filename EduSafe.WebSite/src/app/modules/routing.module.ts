@@ -9,6 +9,11 @@ import { ModelOuputComponent } from '../components/output.component';
 import { ContactComponent } from '../components/contact.component';
 import { ArticlesComponent } from '../components/articles.component';
 
+import { AuthenticationComponent } from '../components/authentication.component';
+import { InsitutionalProfileComponent } from '../components/institutional-profile.component';
+import { IndividualProfileComponent } from '../components/individual-profile.component';
+import { ClaimsComponent } from '../components/claims.component';
+
 import { filter, mergeMap, map } from 'rxjs/operators';
 
 const appRoutes: Routes = [
@@ -58,6 +63,34 @@ const appRoutes: Routes = [
     data: {
       title: 'Edu$afe, Read Our Recommended Articles',
       metaDescription: 'Have a look at the articles Edu$afe recommends for more information about the problems we are trying to solve for new college graduates.'
+    }
+  },
+  {
+    path: 'portal-authentication',
+    component: AuthenticationComponent,
+    data: {
+      title: 'Edu$afe, Portal Login',
+    }
+  },
+  {
+    path: 'institutional-profile',
+    component: InsitutionalProfileComponent,
+    data: {
+      title: 'Edu$afe, Institional Customer Portal',
+    }
+  },
+  {
+    path: 'individual-profile',
+    component: IndividualProfileComponent,
+    data: {
+      title: 'Edu$afe, Individual Customer Portal',
+    }
+  },
+  {
+    path: 'claims-detail',
+    component: ClaimsComponent,
+    data: {
+      title: 'Edu$afe, Claims Details',
     }
   },
 ];

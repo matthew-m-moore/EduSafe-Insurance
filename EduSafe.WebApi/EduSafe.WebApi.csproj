@@ -159,6 +159,7 @@
     <Compile Include="Adapters\PremiumComputationAdapter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AriticlesLoadingController.cs" />
+    <Compile Include="Controllers\AuthenticationController.cs" />
     <Compile Include="Controllers\CollegeDataSearchController.cs" />
     <Compile Include="Controllers\ExcelExportController.cs" />
     <Compile Include="Controllers\FileTransferController.cs" />
