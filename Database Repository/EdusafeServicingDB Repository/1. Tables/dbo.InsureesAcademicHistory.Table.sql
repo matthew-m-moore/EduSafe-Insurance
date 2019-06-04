@@ -1,3 +1,9 @@
+SET ANSI_NULLS OFF
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO 
+
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'InsureesAcademicHistory')
 	BEGIN
 
@@ -13,7 +19,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Insur
 			, CourseInMajor bit not null
 			, CourseUnits int not null
 			, CourseGrade varchar(5) not null
-			CONSTRAINT PK_InsureesAcademicHistory_Id PRIMARY KEY (Id)
+			CONSTRAINT PK_InsureesAcademicHistory_Id PRIMARY KEY CLUSTERED (Id)
 		)
 	
 	END

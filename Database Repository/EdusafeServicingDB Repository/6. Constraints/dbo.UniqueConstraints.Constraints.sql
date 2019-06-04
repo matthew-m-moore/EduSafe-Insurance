@@ -4,12 +4,6 @@ BEGIN
 	ADD CONSTRAINT UC_InsureesAccountData_SSN UNIQUE (SSN)
 END
 
-IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'UC_InsureesAccountData_EmailAddress' and type = 'UQ') 
-BEGIN
-	ALTER TABLE cust.InsureesAccountData
-	ADD CONSTRAINT UC_InsureesAccountData_EmailAddress UNIQUE (EmailAddress)
-END
-
 IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'UC_CollegeMajor_CollegeMajor' and type = 'UQ') 
 BEGIN
 	ALTER TABLE dbo.CollegeMajor

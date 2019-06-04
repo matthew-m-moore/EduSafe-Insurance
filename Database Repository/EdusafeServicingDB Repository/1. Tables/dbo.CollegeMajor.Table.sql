@@ -1,3 +1,9 @@
+SET ANSI_NULLS OFF
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO 
+
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'CollegeMajor')
 	BEGIN
 
@@ -7,7 +13,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Colle
 			, CreatedOn datetime not null
 			, CreatedBy varchar(25) not null
 			, CollegeMajor varchar(50) not null
-			CONSTRAINT PK_CollegeMajor_Id PRIMARY KEY (Id)
+			CONSTRAINT PK_CollegeMajor_Id PRIMARY KEY CLUSTERED (Id)
 		)
 	
 	END
