@@ -15,6 +15,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Insur
 			, AccountNumber bigint not null
 			, IsVerified bit not null
 			, VerificationDate datetime null
+			, Comments varchar(250) null
 			CONSTRAINT PK_InsureesGraduationVerificationDetails_Id PRIMARY KEY CLUSTERED (Id)
 		)
 	
