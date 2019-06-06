@@ -1,28 +1,28 @@
 IF EXISTS (SELECT * FROM sys.objects WHERE NAME = 'SP_InsertClaimStatusType' and TYPE = 'P') 
 BEGIN 
-	DROP PROCEDURE SP_InsertCollegeType
+	DROP PROCEDURE SP_InsertClaimStatusType
 END 
 GO
 
-CREATE PROCEDURE SP_InsertCollegeType
-	@CollegeType varchar(25)
+CREATE PROCEDURE SP_InsertClaimStatusType
+	@ClaimStatusType varchar(25)
 	, @Description varchar(250)
 
 AS
 
-INSERT INTO dbo.CollegeType
+INSERT INTO dbo.ClaimStatusType
 (			
 	CreatedOn
 	, CreatedBy
-	, CollegeType
+	, ClaimStatusType
 	, Description
 )
 VALUES
 (		
 	GETDATE()
 	, USER
-	, @CollegeType
+	, @ClaimStatusType
 	, @Description
 )
 
-SELECT Id = MAX(Id) FROM dbo.CollegeType
+SELECT Id = MAX(Id) FROM dbo.ClaimStatusType

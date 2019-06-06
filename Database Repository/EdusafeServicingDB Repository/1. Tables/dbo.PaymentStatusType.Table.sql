@@ -12,7 +12,8 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Payme
 			Id int IDENTITY(1,1)
 			, CreatedOn datetime null
 			, CreatedBy varchar(25) null
-			, PaymentStatusType varchar(50) not null
+			, PaymentStatusType varchar(25) not null
+			, Description varchar(250) not null
 			CONSTRAINT PK_PaymentStatusType PRIMARY KEY CLUSTERED (Id)
 		)
 	

@@ -12,7 +12,8 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Claim
 			Id int IDENTITY(1,1)
 			, CreatedOn datetime null
 			, CreatedBy varchar(25) null
-			, ClaimStatusType varchar(50) not null
+			, ClaimStatusType varchar(25) not null
+			, Description varchar(250) null
 			CONSTRAINT PK_ClaimStatusType PRIMARY KEY CLUSTERED (Id)
 		)
 	

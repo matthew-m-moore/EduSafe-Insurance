@@ -9,7 +9,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Claim
 
 		CREATE TABLE dbo.ClaimPaymentEntry
 		(
-			ClaimPaymentNumber bigint IDENTITY(10000000,1)
+			Id int IDENTITY(1,1)
 			, CreatedOn datetime null
 			, CreatedBy varchar(25) null
 			, ClaimNumber bigint not null
@@ -17,7 +17,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Claim
 			, ClaimPaymentDate datetime not null
 			, ClaimPaymentStatusTypeId int not null
 			, ClaimPaymentComments varchar(250) null
-			CONSTRAINT PK_ClaimPaymentEntry PRIMARY KEY CLUSTERED (ClaimPaymentNumber)
+			CONSTRAINT PK_ClaimPaymentEntry PRIMARY KEY CLUSTERED (Id)
 		)
 	
 	END

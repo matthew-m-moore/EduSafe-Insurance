@@ -13,11 +13,12 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Colle
 			, CreatedOn datetime not null
 			, CreatedBy varchar(25) not null
 			, CollegeAcademicTermType varchar(25) not null
+			, Description varchar(250) null
 			CONSTRAINT PK_CollegeAcademicTermType_Id PRIMARY KEY CLUSTERED (Id)
 		)
 	
 	END
 
-INSERT INTO CollegeAcademicTermType VALUES(GETDATE(), 'Sharon Paesachov', 'Semester')
-INSERT INTO CollegeAcademicTermType VALUES(GETDATE(), 'Sharon Paesachov', 'Quarter')
-INSERT INTO CollegeAcademicTermType VALUES(GETDATE(), 'Sharon Paesachov', 'Trimester')
+INSERT INTO CollegeAcademicTermType VALUES(GETDATE(), 'Sharon Paesachov', 'Semester', null)
+INSERT INTO CollegeAcademicTermType VALUES(GETDATE(), 'Sharon Paesachov', 'Quarter', null)
+INSERT INTO CollegeAcademicTermType VALUES(GETDATE(), 'Sharon Paesachov', 'Trimester', null)

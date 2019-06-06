@@ -9,13 +9,14 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Insur
 
 		CREATE TABLE dbo.InsureesPremiumCalculationDetailsSet
 		(
-			Id int IDENTITY(1,1)
+			SetId int IDENTITY(1000,1)
 			, CreatedOn datetime not null
 			, CreatedBy varchar(25) not null
 			, AccountNumber bigint not null
 			, InsureesPremiumCalculationDetailsId int not null
-			, InsureesPremiumCalculationOptionDetailsId int not null
-			CONSTRAINT PK_InsureesPremiumCalculationDetailsSet_Id PRIMARY KEY CLUSTERED (Id)
+			, InsureesPremiumCalculationOptionDetailsSetId int not null
+			, Description varchar(250) null
+			CONSTRAINT PK_InsureesPremiumCalculationDetailsSet_Id PRIMARY KEY CLUSTERED (SetId)
 		)	
 	END
 GO
