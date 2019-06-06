@@ -13,7 +13,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Insti
 			, CreatedOn datetime null
 			, CreatedBy varchar(25) null
 			, InstitutionsAccountNumber bigint not null
-			, NotificationTypeId int null
+			, NotificationTypeId int not null
 			, NotificationDate datetime not null
 			CONSTRAINT PK_InstitutionsNotificationHistoryEntry_Id PRIMARY KEY CLUSTERED (Id)
 		)

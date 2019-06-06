@@ -28,6 +28,21 @@ BEGIN
 END
 
 -- for all the tables with an accountnumber reference to cust schema
+IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesPremiumCalculationOptionDetailsSet_AccountNumber' and type = 'F') 
+BEGIN
+	ALTER TABLE dbo.InsureesPremiumCalculationOptionDetailsSet
+		ADD CONSTRAINT FK_InsureesPremiumCalculationOptionDetailsSet_AccountNumber
+		FOREIGN KEY (AccountNumber) REFERENCES cust.InsureesAccountData(AccountNumber)
+END
+
+IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesPremiumCalculationOptionDetailsSet_AccountNumber' and type = 'F') 
+BEGIN
+	ALTER TABLE dbo.InsureesMajorMinorDetailsSet
+		ADD CONSTRAINT FK_InsureesPremiumCalculationOptionDetailsSet_AccountNumber
+		FOREIGN KEY (AccountNumber) REFERENCES cust.InsureesAccountData(AccountNumber)
+END
+
+
 IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InstitutionsInsureeList_AccountNumber' and type = 'F') 
 BEGIN
 	ALTER TABLE dbo.InstitutionsInsureeList
@@ -198,6 +213,13 @@ BEGIN
 		FOREIGN KEY (OptionTypeId) REFERENCES dbo.OptionType(Id)
 END
 
+IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesPremiumCalculationOptionDetails_InsureesPremiumCalculationOptionDetailsSetId' and type = 'F') 
+BEGIN
+	ALTER TABLE dbo.InsureesPremiumCalculationOptionDetails
+		ADD CONSTRAINT FK_InsureesPremiumCalculationOptionDetails_InsureesPremiumCalculationOptionDetailsSetId
+		FOREIGN KEY (InsureesPremiumCalculationOptionDetailsSetId) REFERENCES dbo.InsureesPremiumCalculationOptionDetailsSet(SetId)
+END
+
 --InsureesPremiumCalculationDetails
 IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesPremiumCalculationDetails_CollegeDetailId' and type = 'F') 
 BEGIN
@@ -206,19 +228,19 @@ BEGIN
 		FOREIGN KEY (CollegeDetailId) REFERENCES dbo.CollegeDetail(Id)
 END
 
-IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesPremiumCalculationDetails_CollegeMajorId' and type = 'F') 
+IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesPremiumCalculationDetails_InsureesMajorMinorDetailsSetId' and type = 'F') 
 BEGIN
 	ALTER TABLE dbo.InsureesPremiumCalculationDetails
-		ADD CONSTRAINT FK_InsureesPremiumCalculationDetails_CollegeMajorId
-		FOREIGN KEY (CollegeMajorId) REFERENCES dbo.CollegeMajor(Id)
+		ADD CONSTRAINT FK_InsureesPremiumCalculationDetails_InsureesMajorMinorDetailsSetId
+		FOREIGN KEY (InsureesMajorMinorDetailsSetId) REFERENCES dbo.InsureesMajorMinorDetailsSet(SetId)
 END
 
 --InsureesPremiumCalculationDetailsSet
-IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesPremiumCalculationDetailsSet_InsureesPremiumCalculationOptionDetailsId' and type = 'F') 
+IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesPremiumCalculationDetailsSet_InsureesPremiumCalculationOptionDetailsSetId' and type = 'F') 
 BEGIN
 	ALTER TABLE dbo.InsureesPremiumCalculationDetailsSet
-		ADD CONSTRAINT FK_InsureesPremiumCalculationDetailsSet_InsureesPremiumCalculationOptionDetailsId
-		FOREIGN KEY (InsureesPremiumCalculationOptionDetailsId) REFERENCES dbo.InsureesPremiumCalculationOptionDetails(Id)
+		ADD CONSTRAINT FK_InsureesPremiumCalculationDetailsSet_InsureesPremiumCalculationOptionDetailsSetId
+		FOREIGN KEY (InsureesPremiumCalculationOptionDetailsSetId) REFERENCES dbo.InsureesPremiumCalculationOptionDetailsSet(SetId)
 END
 
 IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesPremiumCalculationDetailsSet_InsureesPremiumCalculationDetailsId' and type = 'F') 
@@ -226,14 +248,6 @@ BEGIN
 	ALTER TABLE dbo.InsureesPremiumCalculationDetailsSet
 		ADD CONSTRAINT FK_InsureesPremiumCalculationDetailsSet_InsureesPremiumCalculationDetailsId
 		FOREIGN KEY (InsureesPremiumCalculationDetailsId) REFERENCES dbo.InsureesPremiumCalculationDetails(Id)
-END
-
---InsureesMajorMinorDetails
-IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesMajorMinorDetails_CollegeMajorId' and type = 'F') 
-BEGIN
-	ALTER TABLE dbo.InsureesMajorMinorDetails
-		ADD CONSTRAINT FK_InsureesMajorMinorDetails_CollegeMajorId
-		FOREIGN KEY (CollegeMajorId) REFERENCES dbo.CollegeMajor(Id)
 END
 
 --NotificationHistoryEntry
@@ -250,4 +264,27 @@ BEGIN
 	ALTER TABLE dbo.InstitutionsNotificationHistoryEntry
 		ADD CONSTRAINT FK_InstitutionsNotificationHistoryEntry_NotificationTypeId
 		FOREIGN KEY (NotificationTypeId) REFERENCES dbo.NotificationType(Id)
+END
+
+--InsureesAcademicHistory
+IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesAcademicHistory_CollegeMajorOrMinorId' and type = 'F') 
+BEGIN
+	ALTER TABLE dbo.InsureesAcademicHistory
+		ADD CONSTRAINT FK_InsureesAcademicHistory_CollegeMajorOrMinorId
+		FOREIGN KEY (CollegeMajorOrMinorId) REFERENCES dbo.CollegeMajor(Id)
+END
+
+--InsureesMajorMinorDetails
+IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesMajorMinorDetails_CollegeMajorId' and type = 'F') 
+BEGIN
+	ALTER TABLE dbo.InsureesMajorMinorDetails
+		ADD CONSTRAINT FK_InsureesMajorMinorDetails_CollegeMajorId
+		FOREIGN KEY (CollegeMajorId) REFERENCES dbo.CollegeMajor(Id)
+END
+
+IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesMajorMinorDetails_InsureesMajorMinorDetailsSetId' and type = 'F') 
+BEGIN
+	ALTER TABLE dbo.InsureesMajorMinorDetails
+		ADD CONSTRAINT FK_InsureesMajorMinorDetails_InsureesMajorMinorDetailsSetId
+		FOREIGN KEY (InsureesMajorMinorDetailsSetId) REFERENCES dbo.InsureesMajorMinorDetailsSet(SetId)
 END

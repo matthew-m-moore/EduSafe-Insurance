@@ -13,6 +13,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'FileV
 			, CreatedOn datetime null
 			, CreatedBy varchar(25) null
 			, FileVerificationStatusType varchar(25)
+			, Description varchar(250) null
 			CONSTRAINT PK_FileVerificationStatusType PRIMARY KEY CLUSTERED (Id)
 		)
 	

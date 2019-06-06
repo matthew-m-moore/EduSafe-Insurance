@@ -21,7 +21,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Insur
 			, ExpectedGraduationDate datetime not null
 
 			, CollegeDetailId int not null
-			, CollegeMajorId int not null
+			, InsureesMajorMinorDetailsSetId int not null
 
 			, MajorDeclarationDate datetime null
 			, UnitsCompleted int not null

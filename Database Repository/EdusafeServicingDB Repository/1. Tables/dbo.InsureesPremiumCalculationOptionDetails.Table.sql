@@ -12,6 +12,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Insur
 			Id int IDENTITY(1,1)
 			, CreatedOn datetime not null
 			, CreatedBy varchar(25) not null
+			, InsureesPremiumCalculationOptionDetailsSetId int not null
 			, OptionTypeId int not null 
 			, OptionPercentage decimal not null 
 			CONSTRAINT PK_InsureesPremiumCalculationOptionDetails_Id PRIMARY KEY CLUSTERED (Id)
