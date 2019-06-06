@@ -1,4 +1,4 @@
-﻿namespace EduSafe.IO.Database.Entities
+﻿namespace EduSafe.IO.Database.Entities.WebApp
 {
     public class WebSiteInquiryCollegeNameEntity
     {

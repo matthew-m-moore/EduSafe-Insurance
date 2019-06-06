@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
-using EduSafe.IO.Database.Entities;
-using EduSafe.IO.Database.Mappings;
+using EduSafe.IO.Database.Entities.Servicing;
+using EduSafe.IO.Database.Mappings.WebApp;
 
 namespace EduSafe.IO.Database.Contexts
 {

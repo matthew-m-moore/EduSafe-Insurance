@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EduSafe.IO.Database.Entities
+namespace EduSafe.IO.Database.Entities.WebApp
 {
     public class WebSiteInquiryAnswersToQuestionsEntity
     {
