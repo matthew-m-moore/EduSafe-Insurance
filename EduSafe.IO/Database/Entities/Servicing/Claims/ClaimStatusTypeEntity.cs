@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EduSafe.IO.Database.Entities.Servicing.Claims
+﻿namespace EduSafe.IO.Database.Entities.Servicing.Claims
 {
     public class ClaimStatusTypeEntity
     {
+        public int Id { get; set; }
+        public string ClaimStatusType { get; set; }
+        public string Description { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EduSafe.IO.Database.Entities.Servicing.Claim;
+using EduSafe.IO.Database.Entities.Servicing.Claims;
 
 namespace EduSafe.IO.Database.Mappings.Servicing.Claims
 {

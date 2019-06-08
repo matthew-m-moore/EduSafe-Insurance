@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EduSafe.IO.Database.Entities.Servicing
+﻿namespace EduSafe.IO.Database.Entities.Servicing
 {
     public class FileVerificationStatusTypeEntity
     {
+        public int Id { get; set; }
+        public string FileVerificationStatusType { get; set; }
+        public string Description { get; set; }
     }
 }

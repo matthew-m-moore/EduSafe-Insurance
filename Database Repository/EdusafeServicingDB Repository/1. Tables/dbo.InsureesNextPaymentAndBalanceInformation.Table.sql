@@ -13,9 +13,9 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Insur
 			, CreatedOn datetime not null
 			, CreatedBy varchar(25) not null
 			, AccountNumber bigint not null
-			, NextPaymentAmount numeric not null
+			, NextPaymentAmount float not null
 			, NextPaymentDate datetime not null
-			, CurrentBalance numeric not null
+			, CurrentBalance float not null
 			, NextPaymentStatusTypeId int not null
 			CONSTRAINT PK_InsureesNextPaymentAndBalanceInformation_Id PRIMARY KEY CLUSTERED (Id)
 		)

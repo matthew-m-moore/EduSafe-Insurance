@@ -8,7 +8,7 @@ CREATE PROCEDURE SP_InsertInsureesInsureesMajorMinorDetails
 	@InsureesMajorMinorDetailsSetId int
 	, @AccountNumber bigint 
 	, @CollegeMajor varchar(50)
-	, @isMinor bit 
+	, @IsMinor bit 
 AS
 
 DECLARE @CollegeMajorId int
@@ -21,7 +21,7 @@ INSERT INTO dbo.InsureesMajorMinorDetails
 	, InsureesMajorMinorDetailsSetId
 	, AccountNumber
 	, CollegeMajorId
-	, isMinor
+	, IsMinor
 )
 VALUES
 (
@@ -30,7 +30,7 @@ VALUES
 	, @InsureesMajorMinorDetailsSetId
 	, @AccountNumber
 	, @CollegeMajorId
-	, @isMinor
+	, @IsMinor
 )
 
 SELECT Id = MAX(Id) FROM dbo.InsureesMajorMinorDetails
