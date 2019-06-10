@@ -48,9 +48,9 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
                 "Use the numerical calculation method if a given premium was provided.");
         }
 
-        protected override PremiumCalculationCashFlow CreateInitialCashFlow()
+        protected override PremiumCalculationCashFlow CreateInitialCashFlow(double totalUnemploymentFraction, int firstUnemploymentPeriod)
         {
-            var initialPeriodCashFlow = base.CreateInitialCashFlow();
+            var initialPeriodCashFlow = base.CreateInitialCashFlow(totalUnemploymentFraction, firstUnemploymentPeriod);
             var initialPeriodAnalyticalCashFlow = new AnalyticalPremiumCalculationCashFlow(initialPeriodCashFlow);
 
             initialPeriodAnalyticalCashFlow.Premium = 0.0;
@@ -59,10 +59,20 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             return initialPeriodAnalyticalCashFlow;
         }
 
-        protected override PremiumCalculationCashFlow CalculateCashFlow
-            (EnrollmentStateArray enrollmentStateArray, double premiumAmountGuess, int monthlyPeriod)
+        protected override PremiumCalculationCashFlow CalculateCashFlow(
+            EnrollmentStateArray enrollmentStateArray,
+            ref double totalUnemploymentFraction,
+            double premiumAmountGuess, 
+            int firstUnemploymentPeriod,
+            int monthlyPeriod)
         {
-            var currentPeriodCashFlow  = base.CalculateCashFlow(enrollmentStateArray, premiumAmountGuess, monthlyPeriod);
+            var currentPeriodCashFlow  = base.CalculateCashFlow(
+                enrollmentStateArray, 
+                ref totalUnemploymentFraction, 
+                premiumAmountGuess,
+                firstUnemploymentPeriod,
+                monthlyPeriod);
+
             var analyticalPremiumCashFlow = new AnalyticalPremiumCalculationCashFlow(currentPeriodCashFlow);
 
             var previouslyPaidInPremiums = PremiumCalculationModelInput.PreviouslyPaidInPremiums;

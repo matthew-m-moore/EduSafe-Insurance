@@ -101,11 +101,14 @@ namespace EduSafe.Core.BusinessLogic.Models.Investments
                 reinvestmentModelResultEntry.InterestFromSixMonth = interest6M;
                 reinvestmentModelResultEntry.InterestFromOneYear = interest1Y;
 
-                var cashFlowReturningFromThreeMonth = period < 3 ? 0 : listOfReinvestmentModelResultEntries[period - 2].PortionInThreeMonth;
+                var cashFlowReturningFromThreeMonth = period < 3 ? 0.0 
+                    : listOfReinvestmentModelResultEntries[period - 2].PortionInThreeMonth;
 
-                var cashFlowReturningFromSixMonth = period < 6 ? 0 : listOfReinvestmentModelResultEntries[period - 5].PortionInSixMonth;
+                var cashFlowReturningFromSixMonth = period < 6 ? 0.0 
+                    : listOfReinvestmentModelResultEntries[period - 5].PortionInSixMonth;
 
-                var cashFlowReturningFromOneYear = period < 12 ? 0 : listOfReinvestmentModelResultEntries[period - 11].PortionInOneYear;
+                var cashFlowReturningFromOneYear = period < 12 ? 0.0 
+                    : listOfReinvestmentModelResultEntries[period - 11].PortionInOneYear;
 
                 reinvestmentModelResultEntry.CashFlowReturningFromThreeMonth = cashFlowReturningFromThreeMonth;
                 reinvestmentModelResultEntry.CashFlowReturningFromSixMonth = cashFlowReturningFromSixMonth;
@@ -120,8 +123,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Investments
 
                 var totalInterestEarned = interest1M + interest3M + interest6M + interest1Y;
 
-                reinvestmentModelResultEntry.EndingCashFlow = period == 0 ? 0 : totalReturningCash + totalInterestEarned;
-
+                reinvestmentModelResultEntry.EndingCashFlow = period == 0 ? 0.0 : totalReturningCash + totalInterestEarned;
                 listOfReinvestmentModelResultEntries.Add(reinvestmentModelResultEntry);
             }
 

@@ -5,6 +5,7 @@
         public double DiscountFactor { get; set; }
 
         public double Premium { get; set; }
+        public double ProbabilityAdjustedCoverage { get; set; }
         public double ProbabilityAdjustedPremium { get; set; }
         public double ProbabilityAdjustedEquity { get; set; }
 
@@ -27,7 +28,10 @@
             ProbabilityAdjustedEarlyHireClaims +
             ProbabilityAdjustedUnemploymentClaims;
 
-        public double PremiumAvailableForReinvestment => ProbabilityAdjustedPremium - TotalCostsAndClaims;
+        public double IncrementalLossReserves { get; set; }
+        public double TotalLossReserves { get; set; }
+
+        public double PremiumAvailableForReinvestment => ProbabilityAdjustedPremium - TotalCostsAndClaims - IncrementalLossReserves;
 
         public double TotalCashFlow => ProbabilityAdjustedPremium - TotalCostsAndClaims - ProbabilityAdjustedEquity;
         public double DiscountedCashFlow => TotalCashFlow * DiscountFactor;
@@ -40,6 +44,7 @@
             DiscountFactor = premiumCalculationCashFlow.DiscountFactor;
 
             Premium = premiumCalculationCashFlow.Premium;
+            ProbabilityAdjustedCoverage = premiumCalculationCashFlow.ProbabilityAdjustedCoverage;
             ProbabilityAdjustedPremium = premiumCalculationCashFlow.ProbabilityAdjustedPremium;
             ProbabilityAdjustedEquity = premiumCalculationCashFlow.ProbabilityAdjustedEquity;
 
@@ -48,6 +53,9 @@
             ProbabilityAdjustedGradSchoolClaims = premiumCalculationCashFlow.ProbabilityAdjustedGradSchoolClaims;
             ProbabilityAdjustedEarlyHireClaims = premiumCalculationCashFlow.ProbabilityAdjustedEarlyHireClaims;
             ProbabilityAdjustedUnemploymentClaims = premiumCalculationCashFlow.ProbabilityAdjustedUnemploymentClaims;
+
+            IncrementalLossReserves = premiumCalculationCashFlow.IncrementalLossReserves;
+            TotalLossReserves = premiumCalculationCashFlow.TotalLossReserves;
         }
 
         public override CashFlow Copy()
@@ -60,6 +68,7 @@
             StudentCount *= scaleFactor;
 
             Premium *= scaleFactor;
+            ProbabilityAdjustedCoverage *= scaleFactor;
             ProbabilityAdjustedPremium *= scaleFactor;
             ProbabilityAdjustedEquity *= scaleFactor;
 
@@ -68,6 +77,9 @@
             ProbabilityAdjustedGradSchoolClaims *= scaleFactor;
             ProbabilityAdjustedEarlyHireClaims *= scaleFactor;
             ProbabilityAdjustedUnemploymentClaims *= scaleFactor;
+
+            IncrementalLossReserves *= scaleFactor;
+            TotalLossReserves *= scaleFactor;
         }
 
         public override void Aggregate(CashFlow cashFlow)
@@ -77,6 +89,7 @@
                 StudentCount += premiumCalculationCashFlow.StudentCount;
 
                 Premium += premiumCalculationCashFlow.Premium;
+                ProbabilityAdjustedCoverage += premiumCalculationCashFlow.ProbabilityAdjustedCoverage;
                 ProbabilityAdjustedPremium += premiumCalculationCashFlow.ProbabilityAdjustedPremium;
                 ProbabilityAdjustedEquity += premiumCalculationCashFlow.ProbabilityAdjustedEquity;
 
@@ -85,6 +98,9 @@
                 ProbabilityAdjustedGradSchoolClaims += premiumCalculationCashFlow.ProbabilityAdjustedGradSchoolClaims;
                 ProbabilityAdjustedEarlyHireClaims += premiumCalculationCashFlow.ProbabilityAdjustedEarlyHireClaims;
                 ProbabilityAdjustedUnemploymentClaims += premiumCalculationCashFlow.ProbabilityAdjustedUnemploymentClaims;
+
+                IncrementalLossReserves += premiumCalculationCashFlow.IncrementalLossReserves;
+                TotalLossReserves += premiumCalculationCashFlow.TotalLossReserves;
             }
         }
     }
