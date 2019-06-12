@@ -1,3 +1,5 @@
+USE EdusafeServicingDB 
+
 IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'F' and Name = 'FK_InsureesPaymentHistory_AccountNumber') BEGIN ALTER TABLE InsureesPaymentHistoryEntry DROP CONSTRAINT FK_InsureesPaymentHistory_AccountNumber END
 IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'F' and Name = 'FK_InsureesPremiumCalculationDetailsSet_AccountNumber') BEGIN ALTER TABLE InsureesPremiumCalculationDetailsSet DROP CONSTRAINT FK_InsureesPremiumCalculationDetailsSet_AccountNumber END
 IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'F' and Name = 'FK_ClaimAccountEntry_AccountNumber') BEGIN ALTER TABLE ClaimAccountEntry DROP CONSTRAINT FK_ClaimAccountEntry_AccountNumber END
