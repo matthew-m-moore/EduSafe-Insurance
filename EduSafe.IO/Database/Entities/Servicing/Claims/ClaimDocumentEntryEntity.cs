@@ -12,5 +12,7 @@ namespace EduSafe.IO.Database.Entities.Servicing.Claims
         public bool IsVerified { get; set; }
         public DateTime UploadDate { get; set; }
         public DateTime? ExpirationDate { get; set; }
+
+        public string FileVerificationStatusType { get; set; }
     }
 }

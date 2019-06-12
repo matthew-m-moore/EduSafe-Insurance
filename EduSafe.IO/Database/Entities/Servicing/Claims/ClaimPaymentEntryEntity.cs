@@ -10,5 +10,7 @@ namespace EduSafe.IO.Database.Entities.Servicing.Claims
         public DateTime ClaimPaymentDate { get; set; }
         public int ClaimPaymentStatusTypeId { get; set; }
         public string ClaimPaymentComments { get; set; }
+
+        public string ClaimPaymentStatusType { get; set; }
     }
 }

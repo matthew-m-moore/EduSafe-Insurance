@@ -78,7 +78,6 @@
     <Compile Include="Database\Entities\Servicing\CollegeMajorEntity.cs" />
     <Compile Include="Database\Entities\Servicing\CollegeTypeEntity.cs" />
     <Compile Include="Database\Entities\Servicing\FileVerificationStatusTypeEntity.cs" />
-    <Compile Include="Database\Entities\Servicing\Individuals\InsureesAcademicHistoryEntity.cs" />
     <Compile Include="Database\Entities\Servicing\Individuals\InsureesAccountDataEntity.cs" />
     <Compile Include="Database\Entities\Servicing\Individuals\InsureesEnrollmentVerificationDetailsEntity.cs" />
     <Compile Include="Database\Entities\Servicing\Individuals\InsureesGraduationVerificationDetailsEntity.cs" />
@@ -116,7 +115,6 @@
     <Compile Include="Database\Mappings\Servicing\CollegeMajorMapping.cs" />
     <Compile Include="Database\Mappings\Servicing\CollegeTypeMapping.cs" />
     <Compile Include="Database\Mappings\Servicing\FileVerificationStatusTypeMapping.cs" />
-    <Compile Include="Database\Mappings\Servicing\Individuals\InsureesAcademicHistoryMapping.cs" />
     <Compile Include="Database\Mappings\Servicing\Individuals\InsureesAccountDataMapping.cs" />
     <Compile Include="Database\Mappings\Servicing\Individuals\InsureesEnrollmentVerificationDetailsMapping.cs" />
     <Compile Include="Database\Mappings\Servicing\Individuals\InsureesGraduationVerificationDetailsMapping.cs" />

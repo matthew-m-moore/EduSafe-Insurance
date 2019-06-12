@@ -26,7 +26,6 @@ namespace EduSafe.IO.Database.Contexts
             modelBuilder.Configurations.Add(new ClaimStatusEntryMapping());
             modelBuilder.Configurations.Add(new ClaimStatusTypeMapping());
 
-            modelBuilder.Configurations.Add(new InsureesAcademicHistoryMapping());
             modelBuilder.Configurations.Add(new InsureesAccountDataMapping());
             modelBuilder.Configurations.Add(new InsureesEnrollmentVerificationDetailsMapping());
             modelBuilder.Configurations.Add(new InsureesGraduationVerificationDetailsMapping());
@@ -64,7 +63,6 @@ namespace EduSafe.IO.Database.Contexts
         public virtual DbSet<ClaimStatusEntryEntity> ClaimStatusEntryEntities { get; set; }
         public virtual DbSet<ClaimStatusTypeEntity> ClaimStatusTypeEntities { get; set; }
 
-        public virtual DbSet<InsureesAcademicHistoryEntity> InsureesAcademicHistoryEntities { get; set; }
         public virtual DbSet<InsureesAccountDataEntity> InsureesAccountDataEntities { get; set; }
         public virtual DbSet<InsureesEnrollmentVerificationDetailsEntity> InsureesEnrollmentVerificationDetailsEntities { get; set; }
         public virtual DbSet<InsureesGraduationVerificationDetailsEntity> InsureesGraduationVerificationDetailsEntities { get; set; }

@@ -6,5 +6,7 @@
         public long ClaimNumber { get; set; }
         public int ClaimOptionTypeId { get; set; }
         public double ClaimOptionPercentage { get; set; }
+
+        public string ClaimOptionType { get; set; }
     }
 }
