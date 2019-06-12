@@ -1,0 +1,5 @@
+Msg 3701, Level 11, State 5, Server edusafe, Line 3
+Cannot drop the procedure 'SP_InsertCollegeType', because it does not exist or you do not have permission.
+Msg 207, Level 16, State 1, Server edusafe, Procedure SP_InsertEmailsSet, Line 19
+Invalid column name 'Id'.
+Canceling connection...

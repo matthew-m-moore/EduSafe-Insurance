@@ -35,6 +35,8 @@ IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'F' and Name = 'FK_Institution
 IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'F' and Name = 'FK_InsureesMajorMinorDetails_AccountNumber') BEGIN ALTER TABLE InsureesMajorMinorDetails DROP CONSTRAINT FK_InsureesMajorMinorDetails_AccountNumber END
 IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'F' and Name = 'FK_InsureesAcademicHistory_AccountNumber') BEGIN ALTER TABLE InsureesAcademicHistory DROP CONSTRAINT FK_InsureesAcademicHistory_AccountNumber END
 IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'F' and Name = 'FK_InsureesNotificationHistoryEntry_AccountNumber') BEGIN ALTER TABLE InsureesNotificationHistoryEntry DROP CONSTRAINT FK_InsureesNotificationHistoryEntry_AccountNumber END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'F' and Name = 'FK_InstitutionsAccountData_EmailsSetId') BEGIN ALTER TABLE cust.InsureesAccountData DROP CONSTRAINT FK_InstitutionsAccountData_EmailsSetId END
+
 
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'ClaimDocumentEntry') BEGIN DROP TABLE dbo.ClaimDocumentEntry END
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'ClaimOptionEntry') BEGIN DROP TABLE dbo.ClaimOptionEntry END
@@ -68,30 +70,41 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'CollegeDe
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'CollegeMajor') BEGIN DROP TABLE dbo.CollegeMajor END
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'InstitutionsAccountData') BEGIN DROP TABLE dbo.InstitutionsAccountData END
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'InsureesPremiumCalculationDetails') BEGIN DROP TABLE dbo.InsureesPremiumCalculationDetails END
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'EmailsSet') BEGIN DROP TABLE dbo.EmailsSet END
+
 
 
 -- DROP SPs
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesAccountData') BEGIN DROP PROCEDURE cust.SP_InsertInsureesAccountData END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertClaimAccountEntry') BEGIN DROP PROCEDURE SP_InsertClaimAccountEntry END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertClaimDocumentEntry') BEGIN DROP PROCEDURE SP_InsertClaimDocumentEntry END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertClaimOptionEntry') BEGIN DROP PROCEDURE SP_InsertClaimOptionEntry END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertClaimPaymentEntry') BEGIN DROP PROCEDURE SP_InsertClaimPaymentEntry END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertClaimStatusEntry') BEGIN DROP PROCEDURE SP_InsertClaimStatusEntry END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertClaimStatusType') BEGIN DROP PROCEDURE SP_InsertClaimStatusType END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertCollegeDetail') BEGIN DROP PROCEDURE SP_InsertCollegeDetail END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertCollegeMajor') BEGIN DROP PROCEDURE SP_InsertCollegeMajor END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertFileVerificationStatusType') BEGIN DROP PROCEDURE SP_InsertFileVerificationStatusType END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInstitutionsAccountData') BEGIN DROP PROCEDURE SP_InsertInstitutionsAccountData END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInstitutionsInsureeList') BEGIN DROP PROCEDURE SP_InsertInstitutionsInsureeList END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInstitutionsNextPaymentAndBalanceInformation') BEGIN DROP PROCEDURE SP_InsertInstitutionsNextPaymentAndBalanceInformation END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInstitutionsNotificationHistoryEntry') BEGIN DROP PROCEDURE SP_InsertInstitutionsNotificationHistoryEntry END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesAcademicHistory') BEGIN DROP PROCEDURE SP_InsertInsureesAcademicHistory END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesEnrollmentVerificationDetails') BEGIN DROP PROCEDURE SP_InsertInsureesEnrollmentVerificationDetails END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesGraduationVerificationDetails') BEGIN DROP PROCEDURE SP_InsertInsureesGraduationVerificationDetails END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesInsureesMajorMinorDetails') BEGIN DROP PROCEDURE SP_InsertInsureesInsureesMajorMinorDetails END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesNextPaymentAndBalanceInformation') BEGIN DROP PROCEDURE SP_InsertInsureesNextPaymentAndBalanceInformation END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesNotificationHistoryEntry') BEGIN DROP PROCEDURE SP_InsertInsureesNotificationHistoryEntry END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInstitutionsPaymentHistoryEntry') BEGIN DROP PROCEDURE SP_InsertInstitutionsPaymentHistoryEntry END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesPremiumCalculationDetails') BEGIN DROP PROCEDURE SP_InsertInsureesPremiumCalculationDetails END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesPremiumCalculationDetailsSet') BEGIN DROP PROCEDURE SP_InsertInsureesPremiumCalculationDetailsSet END 
-IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesPremiumCalculationOptionDetails') BEGIN DROP PROCEDURE SP_InsertInsureesPremiumCalculationOptionDetails END 
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesAccountData' ) BEGIN DROP PROCEDURE cust.SP_InsertInsureesAccountData END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertClaimAccountEntry' ) BEGIN DROP PROCEDURE dbo.SP_InsertClaimAccountEntry END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertClaimDocumentEntry' ) BEGIN DROP PROCEDURE dbo.SP_InsertClaimDocumentEntry END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertClaimOptionEntry' ) BEGIN DROP PROCEDURE dbo.SP_InsertClaimOptionEntry END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertClaimPaymentEntry' ) BEGIN DROP PROCEDURE dbo.SP_InsertClaimPaymentEntry END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertClaimStatusEntry' ) BEGIN DROP PROCEDURE dbo.SP_InsertClaimStatusEntry END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertClaimStatusType' ) BEGIN DROP PROCEDURE dbo.SP_InsertClaimStatusType END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertCollegeAcademicTermType' ) BEGIN DROP PROCEDURE dbo.SP_InsertCollegeAcademicTermType END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertCollegeDetail' ) BEGIN DROP PROCEDURE dbo.SP_InsertCollegeDetail END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertCollegeMajor' ) BEGIN DROP PROCEDURE dbo.SP_InsertCollegeMajor END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertCollegeType' ) BEGIN DROP PROCEDURE dbo.SP_InsertCollegeType END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertFileVerificationStatusType' ) BEGIN DROP PROCEDURE dbo.SP_InsertFileVerificationStatusType END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInstitutionsAccountData' ) BEGIN DROP PROCEDURE dbo.SP_InsertInstitutionsAccountData END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInstitutionsInsureeList' ) BEGIN DROP PROCEDURE dbo.SP_InsertInstitutionsInsureeList END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInstitutionsNextPaymentAndBalanceInformation' ) BEGIN DROP PROCEDURE dbo.SP_InsertInstitutionsNextPaymentAndBalanceInformation END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInstitutionsNotificationHistoryEntry' ) BEGIN DROP PROCEDURE dbo.SP_InsertInstitutionsNotificationHistoryEntry END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInstitutionsPaymentHistoryEntry' ) BEGIN DROP PROCEDURE dbo.SP_InsertInstitutionsPaymentHistoryEntry END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesAcademicHistory' ) BEGIN DROP PROCEDURE dbo.SP_InsertInsureesAcademicHistory END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesEnrollmentVerificationDetails' ) BEGIN DROP PROCEDURE dbo.SP_InsertInsureesEnrollmentVerificationDetails END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesGraduationVerificationDetails' ) BEGIN DROP PROCEDURE dbo.SP_InsertInsureesGraduationVerificationDetails END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesMajorMinorDetails' ) BEGIN DROP PROCEDURE dbo.SP_InsertInsureesMajorMinorDetails END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesMajorMinorDetailsSet' ) BEGIN DROP PROCEDURE dbo.SP_InsertInsureesMajorMinorDetailsSet END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesNextPaymentAndBalanceInformation' ) BEGIN DROP PROCEDURE dbo.SP_InsertInsureesNextPaymentAndBalanceInformation END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesNotificationHistoryEntry' ) BEGIN DROP PROCEDURE dbo.SP_InsertInsureesNotificationHistoryEntry END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesPaymentHistoryEntry' ) BEGIN DROP PROCEDURE dbo.SP_InsertInsureesPaymentHistoryEntry END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesPremiumCalculationDetails' ) BEGIN DROP PROCEDURE dbo.SP_InsertInsureesPremiumCalculationDetails END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesPremiumCalculationDetailsSet' ) BEGIN DROP PROCEDURE dbo.SP_InsertInsureesPremiumCalculationDetailsSet END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesPremiumCalculationOptionDetails' ) BEGIN DROP PROCEDURE dbo.SP_InsertInsureesPremiumCalculationOptionDetails END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesPremiumCalculationOptionDetailsSet' ) BEGIN DROP PROCEDURE dbo.SP_InsertInsureesPremiumCalculationOptionDetailsSet END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertNotificationType' ) BEGIN DROP PROCEDURE dbo.SP_InsertNotificationType END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertOptionType' ) BEGIN DROP PROCEDURE dbo.SP_InsertOptionType END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertPaymentStatusType' ) BEGIN DROP PROCEDURE dbo.SP_InsertPaymentStatusType END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertEmailsSet' ) BEGIN DROP PROCEDURE dbo.SP_InsertEmailsSet END

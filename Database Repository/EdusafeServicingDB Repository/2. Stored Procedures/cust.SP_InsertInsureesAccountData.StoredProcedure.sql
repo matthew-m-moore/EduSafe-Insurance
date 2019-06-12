@@ -9,7 +9,7 @@ CREATE PROCEDURE cust.SP_InsertInsureesAccountData
 			, @FirstName varchar(25) 
 			, @MiddleName varchar(25) null
 			, @LastName varchar(25) 
-			, @Emails varchar(250) 
+			, @Email varchar(250) 
 			, @SSN bigint 
 			, @Birthdate datetime 
 			, @Address1 varchar(50) 
@@ -22,6 +22,9 @@ CREATE PROCEDURE cust.SP_InsertInsureesAccountData
 
 AS
 
+DECLARE @EmailsSetId int
+SET @EmailsSetId = (SELECT SetId FROM EmailsSet WHERE Email = @Email)
+
 INSERT INTO cust.InsureesAccountData
 (
 			CreatedOn
@@ -30,7 +33,7 @@ INSERT INTO cust.InsureesAccountData
 			, FirstName
 			, MiddleName
 			, LastName
-			, Emails
+			, EmailsSetId
 			, SSN
 			, Birthdate
 			, Address1
@@ -49,7 +52,7 @@ VALUES
 			, @FirstName
 			, @MiddleName
 			, @LastName
-			, @Emails
+			, @EmailsSetId
 			, @SSN
 			, @Birthdate
 			, @Address1
