@@ -15,7 +15,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Insur
 			, InsureesMajorMinorDetailsSetId int not null
 			, AccountNumber bigint not null
 			, CollegeMajorId int not null
-			, isMinor bit not null
+			, IsMinor bit not null
 			CONSTRAINT PK_InsureesMajorMinorDetails_Id PRIMARY KEY CLUSTERED (Id)
 		)
 	

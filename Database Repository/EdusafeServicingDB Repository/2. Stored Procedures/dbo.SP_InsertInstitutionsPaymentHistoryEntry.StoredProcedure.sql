@@ -6,7 +6,7 @@ GO
 
 CREATE PROCEDURE SP_InsertInstitutionsPaymentHistoryEntry
 	@InstitutionsAccountNumber bigint
-	, @PaymentAmount decimal 
+	, @PaymentAmount float 
 	, @PaymentDate datetime 
 	, @PaymentComments varchar(250) null
 

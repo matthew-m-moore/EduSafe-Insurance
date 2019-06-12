@@ -7,7 +7,7 @@ GO
 CREATE PROCEDURE SP_InsertInsureesPremiumCalculationOptionDetails
 	@InsureesPremiumCalculationOptionDetailsSetId int 
 	, @OptionTypeId int  
-	, @OptionPercentage decimal 
+	, @OptionPercentage float 
 AS
 
 

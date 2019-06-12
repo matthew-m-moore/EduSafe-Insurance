@@ -30,6 +30,10 @@ namespace EduSafe.Core.BusinessLogic.Containers
         public double TotalLifetimePremiums { get; set; }
         public double TotalLifetimeCosts { get; set; }
         public double TotalLifetimeClaims { get; set; }
+        public double TotalUnemploymentClaims { get; set; }
+        public double TotalCoverageAmount { get; set; }
+
+        public double LossReservesRatio { get; set; }
         public double LossViaClaimsRatio { get; set; }
 
         public PremiumComputationResultSummary(PremiumComputationResult premiumComputationResult)
@@ -60,7 +64,10 @@ namespace EduSafe.Core.BusinessLogic.Containers
             TotalLifetimePremiums = premiumComputationResult.PremiumCalculationCashFlows.Sum(c => c.ProbabilityAdjustedPremium);
             TotalLifetimeCosts = premiumComputationResult.PremiumCalculationCashFlows.Sum(c => c.ProbabilityAdjustedCostsAndFees);
             TotalLifetimeClaims = premiumComputationResult.PremiumCalculationCashFlows.Sum(c => c.TotalClaims);
+            TotalUnemploymentClaims = premiumComputationResult.PremiumCalculationCashFlows.Sum(c => c.ProbabilityAdjustedUnemploymentClaims);
+            TotalCoverageAmount = premiumComputationResult.TotalCoverageAmount;
 
+            LossReservesRatio = TotalUnemploymentClaims / TotalCoverageAmount;
             LossViaClaimsRatio = TotalLifetimeClaims / TotalLifetimePremiums;
         }
 

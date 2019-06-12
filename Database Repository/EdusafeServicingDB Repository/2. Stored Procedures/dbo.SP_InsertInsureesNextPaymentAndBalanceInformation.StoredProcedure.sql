@@ -6,9 +6,9 @@ GO
 
 CREATE PROCEDURE SP_InsertInsureesNextPaymentAndBalanceInformation
 	@AccountNumber bigint
-	, @NextPaymentAmount numeric
+	, @NextPaymentAmount float
 	, @NextPaymentDate datetime
-	, @CurrentBalance numeric
+	, @CurrentBalance float
 	, @NextPaymentStatusType varchar(50)
 
 AS

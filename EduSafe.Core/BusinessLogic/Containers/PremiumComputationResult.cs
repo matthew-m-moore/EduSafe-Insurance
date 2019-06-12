@@ -18,6 +18,7 @@ namespace EduSafe.Core.BusinessLogic.Containers
         public List<PremiumCalculationCashFlow> PremiumCalculationCashFlows { get; set; }
         public List<StudentEnrollmentStateTimeSeriesEntry> EnrollmentStateTimeSeries { get; set; }       
         public double CalculatedMonthlyPremium { get; set; }
+        public double TotalCoverageAmount { get; set; }
 
         public PremiumComputationResultSummary ResultSummary => new PremiumComputationResultSummary(this);
 
@@ -31,7 +32,8 @@ namespace EduSafe.Core.BusinessLogic.Containers
                 ServicingCosts = ServicingCosts.AsEnumerable().CopyToDataTable(),
                 PremiumCalculationCashFlows = PremiumCalculationCashFlows.Select(c => c.Copy() as PremiumCalculationCashFlow).ToList(),
                 EnrollmentStateTimeSeries = EnrollmentStateTimeSeries.Select(t => t.Copy() as StudentEnrollmentStateTimeSeriesEntry).ToList(),
-                CalculatedMonthlyPremium = CalculatedMonthlyPremium
+                CalculatedMonthlyPremium = CalculatedMonthlyPremium,
+                TotalCoverageAmount = TotalCoverageAmount
             };
         }
 
@@ -65,6 +67,7 @@ namespace EduSafe.Core.BusinessLogic.Containers
             foreach (var dataRow in ServicingCosts.AsEnumerable()) dataRow.Scale(scaleFactor);
 
             CalculatedMonthlyPremium *= scaleFactor;
+            TotalCoverageAmount *= scaleFactor;
         }
 
         public void AggregateResults(PremiumComputationResult premiumComputationResult)
@@ -92,6 +95,7 @@ namespace EduSafe.Core.BusinessLogic.Containers
             ServicingCosts = DataTableAggregator.AggregateDataTables(combinedDataTablesList);
 
             CalculatedMonthlyPremium += premiumComputationResult.CalculatedMonthlyPremium;
+            TotalCoverageAmount += premiumComputationResult.TotalCoverageAmount;
         }
     }
 }

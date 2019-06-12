@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
 using EduSafe.IO.Database;
-using EduSafe.IO.Database.Entities;
+using EduSafe.IO.Database.Entities.WebApp;
 using EduSafe.WebApi.Models;
 
 namespace EduSafe.WebApi.Controllers

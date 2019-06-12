@@ -7,7 +7,7 @@ GO
 CREATE PROCEDURE SP_InsertClaimOptionEntry
 	@ClaimNumber bigint
 	, @ClaimOptionType int
-	, @ClaimOptionPercentage decimal
+	, @ClaimOptionPercentage float
 
 AS
 

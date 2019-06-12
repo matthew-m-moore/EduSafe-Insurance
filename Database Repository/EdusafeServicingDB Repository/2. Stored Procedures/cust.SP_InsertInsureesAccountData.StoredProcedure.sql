@@ -18,7 +18,7 @@ CREATE PROCEDURE cust.SP_InsertInsureesAccountData
 			, @City varchar(50) 
 			, @State varchar(2) 
 			, @Zipcode varchar(5) 
-			, @isInsuredViaInstitution bit 
+			, @IsInsuredViaInstitution bit 
 
 AS
 
@@ -42,7 +42,7 @@ INSERT INTO cust.InsureesAccountData
 			, City
 			, State
 			, Zipcode
-			, isInsuredViaInstitution
+			, IsInsuredViaInstitution
 )
 VALUES
 (
@@ -61,7 +61,7 @@ VALUES
 			, @City
 			, @State
 			, @Zipcode
-			, @isInsuredViaInstitution
+			, @IsInsuredViaInstitution
 	
 )
 

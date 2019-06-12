@@ -14,7 +14,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Claim
 			, CreatedBy varchar(25) null
 			, ClaimNumber bigint not null
 			, ClaimOptionTypeId int not null 
-			, ClaimOptionPercentage decimal not null 
+			, ClaimOptionPercentage float not null 
 			CONSTRAINT PK_ClaimOptionEntry PRIMARY KEY CLUSTERED (Id)
 		)
 	

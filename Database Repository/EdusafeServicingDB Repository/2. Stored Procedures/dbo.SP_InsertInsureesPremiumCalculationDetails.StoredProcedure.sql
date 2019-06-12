@@ -5,9 +5,9 @@ END
 GO
 
 CREATE PROCEDURE SP_InsertInsureesPremiumCalculationDetails
-	@PremiumCalulated decimal 
+	@PremiumCalulated float 
 	, @PremiumCalculationDate datetime
-	, @TotalCoverageAmount decimal 
+	, @TotalCoverageAmount float 
 	, @CollegeStartDate datetime
 	, @ExpectedGraduationDate datetime
 	, @CollegeName varchar(250)

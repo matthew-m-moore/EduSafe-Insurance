@@ -21,4 +21,4 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Colle
 
 INSERT INTO CollegeType VALUES(GETDATE(), 'Sharon Paesachov', 'Public', 'Public Institutions')
 INSERT INTO CollegeType VALUES(GETDATE(), 'Sharon Paesachov', 'Private', 'Private Institutions')
-INSERT INTO CollegeType VALUES(GETDATE(), 'Sharon Paesachov', 'ForProfit', 'ForProfit Institutions')
+INSERT INTO CollegeType VALUES(GETDATE(), 'Sharon Paesachov', 'ForProfit', 'For-Profit Institutions')

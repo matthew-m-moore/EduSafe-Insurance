@@ -25,7 +25,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Insur
 			, City varchar(50) not null
 			, State varchar(2) not null
 			, Zipcode varchar(5) not null
-			, isInsuredViaInstitution bit not null
+			, IsInsuredViaInstitution bit not null
 			CONSTRAINT PK_InsureesAccountData_AcccountNumber PRIMARY KEY CLUSTERED (AccountNumber)
 		)
 	

@@ -7,6 +7,8 @@ namespace EduSafe.Common
     public static class Constants
     {
         public const string DatabaseOwnerSchemaName = "dbo";
+        public const string IndividualCustomerSchemaName = "cust";
+
         public const string PeriodIdentifier = "Period";
         public const string TotalIdentifier = "Total";
 
