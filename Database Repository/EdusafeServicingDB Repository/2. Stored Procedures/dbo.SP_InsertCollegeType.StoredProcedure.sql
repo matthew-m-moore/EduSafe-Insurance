@@ -1,4 +1,4 @@
-IF EXISTS (SELECT * FROM sys.objects WHERE NAME = 'SP_InsertClaimStatusType' and TYPE = 'P') 
+IF EXISTS (SELECT * FROM sys.objects WHERE NAME = 'SP_InsertCollegeType' and TYPE = 'P') 
 BEGIN 
 	DROP PROCEDURE SP_InsertCollegeType
 END 

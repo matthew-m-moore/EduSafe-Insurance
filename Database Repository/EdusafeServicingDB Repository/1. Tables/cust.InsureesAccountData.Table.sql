@@ -16,7 +16,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Insur
 			, FirstName varchar(25) not null
 			, MiddleName varchar(25) null
 			, LastName varchar(25) not null
-			, Emails varchar(250) not null
+			, EmailsSetId int not null
 			, SSN bigint not null
 			, Birthdate datetime not null
 			, Address1 varchar(50) not null

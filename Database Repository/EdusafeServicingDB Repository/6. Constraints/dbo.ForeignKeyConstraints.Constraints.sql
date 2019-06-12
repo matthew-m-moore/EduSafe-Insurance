@@ -288,3 +288,12 @@ BEGIN
 		ADD CONSTRAINT FK_InsureesMajorMinorDetails_InsureesMajorMinorDetailsSetId
 		FOREIGN KEY (InsureesMajorMinorDetailsSetId) REFERENCES dbo.InsureesMajorMinorDetailsSet(SetId)
 END
+
+
+--InsureesAccountData
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE name = 'FK_InstitutionsAccountData_EmailsSetId' and Type = 'F') 
+BEGIN 
+	ALTER TABLE cust.InsureesAccountData 
+		ADD CONSTRAINT FK_InstitutionsAccountData_EmailsSetId
+		FOREIGN KEY (EmailsSetId) REFERENCES dbo.EmailsSet(SetId)
+END

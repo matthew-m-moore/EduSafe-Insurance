@@ -30,7 +30,7 @@ sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "1. Tables\dbo.NotificationType.Table.sql" >> "CreateTable.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "1. Tables\dbo.OptionType.Table.sql" >> "CreateTable.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "1. Tables\dbo.PaymentStatusType.Table.sql" >> "CreateTable.txt
-
+sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "1. Tables\dbo.EmailsSet.Table.sql" >> "CreateTable.txt
 
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\cust.SP_InsertInsureesAccountData.StoredProcedure.sql" >> "CreateSp.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertClaimAccountEntry.StoredProcedure.sql" >> "CreateSp.txt
@@ -52,8 +52,8 @@ sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertInsureesAcademicHistory.StoredProcedure.sql" >> "CreateSp.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertInsureesEnrollmentVerificationDetails.StoredProcedure.sql" >> "CreateSp.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertInsureesGraduationVerificationDetails.StoredProcedure.sql" >> "CreateSp.txt
-sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertInsureesInsureesMajorMinorDetails.StoredProcedure.sql" >> "CreateSp.txt
-sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertInsureesInsureesMajorMinorDetailsSet.StoredProcedure.sql" >> "CreateSp.txt
+sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertInsureesMajorMinorDetails.StoredProcedure.sql" >> "CreateSp.txt
+sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertInsureesMajorMinorDetailsSet.StoredProcedure.sql" >> "CreateSp.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertInsureesNextPaymentAndBalanceInformation.StoredProcedure.sql" >> "CreateSp.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertInsureesNotificationHistoryEntry.StoredProcedure.sql" >> "CreateSp.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertInsureesPaymentHistoryEntry.StoredProcedure.sql" >> "CreateSp.txt
@@ -64,5 +64,8 @@ sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertNotificationType.StoredProcedure.sql" >> "CreateSp.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertOptionType.StoredProcedure.sql" >> "CreateSp.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertPaymentStatusType.StoredProcedure.sql" >> "CreateSp.txt
+sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertEmailsSet.StoredProcedure.sql" >> "CreateSp.txt
 
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i 6. Constraintsdbo.dbo.ForeignKeyConstraints.Constraints.Constraints.sql" >> "CreateFK
+
+
