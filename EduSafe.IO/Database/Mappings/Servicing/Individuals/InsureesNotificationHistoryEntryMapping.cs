@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EduSafe.Common;
 using EduSafe.IO.Database.Entities.Servicing.Individuals;
 
 namespace EduSafe.IO.Database.Mappings.Servicing.Individuals
@@ -12,7 +9,26 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Individuals
     {
         public InsureesNotificationHistoryEntryMapping()
         {
+            HasKey(t => t.Id);
 
+            ToTable("InsureesNotificationHistoryEntry", Constants.DatabaseOwnerSchemaName);
+
+            Property(t => t.Id)
+                .HasColumnName("Id")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            Property(t => t.NotificationTypeId).HasColumnName("NotificationTypeId")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+
+            Property(t => t.AccountNumber).HasColumnName("AccountNumber");
+            Property(t => t.NotificationDate).HasColumnName("NotificationDate");
+
+            MapToStoredProcedures(s =>
+                s.Insert(i => i.HasName("SP_InsertInsureesNotificationHistoryEntry", Constants.DatabaseOwnerSchemaName)
+                    .Parameter(p => p.AccountNumber, "AccountNumber")
+                    .Parameter(p => p.NotificationType, "NotificationType")
+                    .Parameter(p => p.NotificationDate, "NotificationDate")                    
+                    ));
         }
     }
 }

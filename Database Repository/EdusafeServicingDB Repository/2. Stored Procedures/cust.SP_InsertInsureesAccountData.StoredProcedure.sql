@@ -9,7 +9,6 @@ CREATE PROCEDURE cust.SP_InsertInsureesAccountData
 			, @FirstName varchar(25) 
 			, @MiddleName varchar(25) null
 			, @LastName varchar(25) 
-			, @Email varchar(250) 
 			, @SSN bigint 
 			, @Birthdate datetime 
 			, @Address1 varchar(50) 
@@ -22,8 +21,10 @@ CREATE PROCEDURE cust.SP_InsertInsureesAccountData
 
 AS
 
+EXEC cust.SP_InsertEmailsSet
+
 DECLARE @EmailsSetId int
-SET @EmailsSetId = (SELECT SetId FROM EmailsSet WHERE Email = @Email)
+SET @EmailsSetId = (SELECT Max(SetId) FROM EmailsSet)
 
 INSERT INTO cust.InsureesAccountData
 (

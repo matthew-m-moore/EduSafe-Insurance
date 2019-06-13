@@ -67,6 +67,7 @@
     <Compile Include="Database\DatabaseConnectionSettings.cs" />
     <Compile Include="Database\DatabaseContextRetriever.cs" />
     <Compile Include="Database\DatabaseContextSettings.cs" />
+    <Compile Include="Database\Entities\Servicing\EmailsEntity.cs" />
     <Compile Include="Database\Entities\Servicing\Claims\ClaimAccountEntryEntity.cs" />
     <Compile Include="Database\Entities\Servicing\Claims\ClaimDocumentEntryEntity.cs" />
     <Compile Include="Database\Entities\Servicing\Claims\ClaimOptionEntryEntity.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Database\Entities\Servicing\CollegeDetailEntity.cs" />
     <Compile Include="Database\Entities\Servicing\CollegeMajorEntity.cs" />
     <Compile Include="Database\Entities\Servicing\CollegeTypeEntity.cs" />
+    <Compile Include="Database\Entities\Servicing\EmailsSetEntity.cs" />
     <Compile Include="Database\Entities\Servicing\FileVerificationStatusTypeEntity.cs" />
     <Compile Include="Database\Entities\Servicing\Individuals\InsureesAccountDataEntity.cs" />
     <Compile Include="Database\Entities\Servicing\Individuals\InsureesEnrollmentVerificationDetailsEntity.cs" />
@@ -104,6 +106,8 @@
     <Compile Include="Database\Entities\WebApp\WebSiteInquiryEmailAddressEntity.cs" />
     <Compile Include="Database\Entities\WebApp\WebSiteInquiryIpAddressEntity.cs" />
     <Compile Include="Database\Entities\WebApp\WebSiteInquiryMajorEntity.cs" />
+    <Compile Include="Database\Mappings\EmailsMapping.cs" />
+    <Compile Include="Database\Mappings\EmailsSetMapping.cs" />
     <Compile Include="Database\Mappings\Servicing\Claims\ClaimAccountEntryMapping.cs" />
     <Compile Include="Database\Mappings\Servicing\Claims\ClaimDocumentEntryMapping.cs" />
     <Compile Include="Database\Mappings\Servicing\Claims\ClaimOptionEntryMapping.cs" />

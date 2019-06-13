@@ -9,7 +9,7 @@ namespace EduSafe.IO.Database.Entities.Servicing.Individuals
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
-        public string Emails { get; set; }
+        public int EmailsSetId { get; set; }
         public long SSN { get; set; }
         public DateTime Birthdate { get; set; }
         public string Address1 { get; set; }

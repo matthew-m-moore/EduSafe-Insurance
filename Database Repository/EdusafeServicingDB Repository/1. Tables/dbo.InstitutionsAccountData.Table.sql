@@ -14,7 +14,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Insti
 			, CreatedBy varchar(25) not null
 			, FolderPath varchar(250) null
 			, InstitutionName varchar(100) not null
-			, Emails varchar(250) not null
+			, EmailsSetId int not null
 			, Address1 varchar(50) not null
 			, Address2 varchar(50) null
 			, Address3 varchar(50) null

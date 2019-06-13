@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EduSafe.Common;
 using EduSafe.IO.Database.Entities.Servicing.Individuals;
 
 namespace EduSafe.IO.Database.Mappings.Servicing.Individuals
@@ -12,7 +9,26 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Individuals
     {
         public InsureesPaymentHistoryEntryMapping()
         {
+            HasKey(t => t.Id);
 
+            ToTable("InsureesPaymentHistoryEntry", Constants.DatabaseOwnerSchemaName);
+
+            Property(t => t.Id)
+                .HasColumnName("Id")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            Property(t => t.AccountNumber).HasColumnName("AccountNumber");
+            Property(t => t.PaymentAmount).HasColumnName("PaymentAmount");
+            Property(t => t.PaymentDate).HasColumnName("PaymentDate");
+            Property(t => t.PaymentComments).HasColumnName("PaymentComments");
+
+            MapToStoredProcedures(s =>
+                s.Insert(i => i.HasName("SP_InsertInsureesPaymentHistoryEntry", Constants.DatabaseOwnerSchemaName)
+                    .Parameter(p => p.AccountNumber, "AccountNumber")
+                    .Parameter(p => p.PaymentAmount, "PaymentAmount")
+                    .Parameter(p => p.PaymentDate, "PaymentDate")
+                    .Parameter(p => p.PaymentComments, "PaymentComments")
+                    ));
         }
     }
 }

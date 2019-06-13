@@ -7,7 +7,6 @@ GO
 CREATE PROCEDURE dbo.SP_InsertInstitutionsAccountData
 	@FolderPath varchar(250) null
 	, @InstitutionName varchar(100) 
-	, @Emails varchar(250) 
 	, @Address1 varchar(50) 
 	, @Address2 varchar(50) null
 	, @Address3 varchar(50) null
@@ -17,13 +16,18 @@ CREATE PROCEDURE dbo.SP_InsertInstitutionsAccountData
 
 AS
 
+EXEC cust.SP_InsertEmailsSet
+
+DECLARE @EmailsSetId int
+SET @EmailsSetId = (SELECT Max(SetId) FROM EmailsSet)
+
 INSERT INTO dbo.InstitutionsAccountData
 (
 	CreatedOn
 	, CreatedBy
 	, FolderPath
 	, InstitutionName
-	, Emails
+	, EmailsSetId
 	, Address1
 	, Address2
 	, Address3
@@ -37,7 +41,7 @@ VALUES
 	, USER
 	, @FolderPath
 	, @InstitutionName
-	, @Emails
+	, @EmailsSetId
 	, @Address1
 	, @Address2
 	, @Address3

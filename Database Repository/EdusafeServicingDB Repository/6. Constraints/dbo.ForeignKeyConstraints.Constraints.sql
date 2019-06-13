@@ -291,9 +291,25 @@ END
 
 
 --InsureesAccountData
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE name = 'FK_InstitutionsAccountData_EmailsSetId' and Type = 'F') 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE name = 'FK_InsureesAccountData_EmailsSetId' and Type = 'F') 
 BEGIN 
 	ALTER TABLE cust.InsureesAccountData 
+		ADD CONSTRAINT FK_InsureesAccountData_EmailsSetId
+		FOREIGN KEY (EmailsSetId) REFERENCES cust.EmailsSet(SetId)
+END
+
+--InstitutionsAccountData
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE name = 'FK_InstitutionsAccountData_EmailsSetId' and Type = 'F') 
+BEGIN 
+	ALTER TABLE dbo.InstitutionsAccountData 
 		ADD CONSTRAINT FK_InstitutionsAccountData_EmailsSetId
-		FOREIGN KEY (EmailsSetId) REFERENCES dbo.EmailsSet(SetId)
+		FOREIGN KEY (EmailsSetId) REFERENCES cust.EmailsSet(SetId)
+END
+
+--Emails
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE name = 'FK_Emails_EmailsSetId' and Type = 'F') 
+BEGIN 
+	ALTER TABLE cust.Emails 
+		ADD CONSTRAINT FK_Emails_EmailsSetId
+		FOREIGN KEY (EmailsSetId) REFERENCES cust.EmailsSet(SetId)
 END

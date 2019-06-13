@@ -17,11 +17,13 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Individuals
                 .HasColumnName("AccountNumber")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
+            Property(t => t.EmailsSetId).HasColumnName("EmailsSetId")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+
             Property(t => t.FolderPath).HasColumnName("FolderPath");
             Property(t => t.FirstName).HasColumnName("FirstName");
             Property(t => t.MiddleName).HasColumnName("MiddleName");
             Property(t => t.LastName).HasColumnName("LastName");
-            Property(t => t.Emails).HasColumnName("Emails");
             Property(t => t.SSN).HasColumnName("SSN");
             Property(t => t.Birthdate).HasColumnName("Birthdate");
             Property(t => t.Address1).HasColumnName("Address1");
@@ -30,7 +32,7 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Individuals
             Property(t => t.City).HasColumnName("City");
             Property(t => t.State).HasColumnName("State");
             Property(t => t.ZipCode).HasColumnName("ZipCode");
-            Property(t => t.IsInsuredViaInstitution).HasColumnName("IsInsuredViaInstitution");
+            Property(t => t.IsInsuredViaInstitution).HasColumnName("IsInsuredViaInstitution");         
 
             MapToStoredProcedures(s =>
                 s.Insert(i => i.HasName("SP_InsertInsureesAccountData", Constants.IndividualCustomerSchemaName)
@@ -38,7 +40,6 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Individuals
                     .Parameter(p => p.FirstName, "FirstName")
                     .Parameter(p => p.MiddleName, "MiddleName")
                     .Parameter(p => p.LastName, "LastName")
-                    .Parameter(p => p.Emails, "Emails")
                     .Parameter(p => p.SSN, "SSN")
                     .Parameter(p => p.Birthdate, "Birthdate")
                     .Parameter(p => p.Address1, "Address1")
