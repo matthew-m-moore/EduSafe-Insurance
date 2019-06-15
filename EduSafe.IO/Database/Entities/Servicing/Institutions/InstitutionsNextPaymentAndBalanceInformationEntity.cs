@@ -10,5 +10,7 @@ namespace EduSafe.IO.Database.Entities.Servicing.Institutions
         public DateTime NextPaymentDate { get; set; }
         public double CurrentBalance { get; set; }
         public int NextPaymentStatusTypeId { get; set; }
+
+        public string NextPaymentStatusType { get; set; }
     }
 }

@@ -27,7 +27,7 @@ VALUES
 	GETDATE()
 	, USER
 	, @InstitutionsAccountNumber 
-	, @NotificationType
+	, @NotificationTypeId
 	, @NotificationDate
 )
 

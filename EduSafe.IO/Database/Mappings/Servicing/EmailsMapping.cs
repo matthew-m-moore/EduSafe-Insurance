@@ -3,7 +3,7 @@ using EduSafe.IO.Database.Entities.Servicing;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-namespace EduSafe.IO.Database.Mappings
+namespace EduSafe.IO.Database.Mappings.Servicing
 {
     public class EmailsMapping : EntityTypeConfiguration<EmailsEntity>
     {

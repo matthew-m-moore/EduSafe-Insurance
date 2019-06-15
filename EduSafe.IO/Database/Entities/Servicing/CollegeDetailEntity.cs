@@ -6,5 +6,8 @@
         public string CollegeName { get; set; }
         public int CollegeTypeId { get; set; }
         public int CollegeAcademicTermTypeId { get; set; }
+
+        public string CollegeType { get; set; }
+        public string CollegeAcademicTermType { get; set; }
     }
 }

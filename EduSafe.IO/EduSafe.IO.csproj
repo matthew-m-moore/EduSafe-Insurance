@@ -106,8 +106,8 @@
     <Compile Include="Database\Entities\WebApp\WebSiteInquiryEmailAddressEntity.cs" />
     <Compile Include="Database\Entities\WebApp\WebSiteInquiryIpAddressEntity.cs" />
     <Compile Include="Database\Entities\WebApp\WebSiteInquiryMajorEntity.cs" />
-    <Compile Include="Database\Mappings\EmailsMapping.cs" />
-    <Compile Include="Database\Mappings\EmailsSetMapping.cs" />
+    <Compile Include="Database\Mappings\Servicing\EmailsMapping.cs" />
+    <Compile Include="Database\Mappings\Servicing\EmailsSetMapping.cs" />
     <Compile Include="Database\Mappings\Servicing\Claims\ClaimAccountEntryMapping.cs" />
     <Compile Include="Database\Mappings\Servicing\Claims\ClaimDocumentEntryMapping.cs" />
     <Compile Include="Database\Mappings\Servicing\Claims\ClaimOptionEntryMapping.cs" />
