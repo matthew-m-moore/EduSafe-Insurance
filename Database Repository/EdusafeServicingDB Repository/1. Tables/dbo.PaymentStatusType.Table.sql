@@ -18,3 +18,8 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Payme
 		)
 	
 	END
+	
+INSERT INTO PaymentStatusType VALUES(GETDATE(), USER, 'Pending', 'Payment is pending, information receiving awaiting processing')
+INSERT INTO PaymentStatusType VALUES(GETDATE(), USER, 'Processed', 'Payment has been processed and funds have been successfully transferred')
+INSERT INTO PaymentStatusType VALUES(GETDATE(), USER, 'Declined', 'Payment was declined and not processed, funds were not transferred')
+INSERT INTO PaymentStatusType VALUES(GETDATE(), USER, 'Reversed', 'Payment was reversed, funds have been returned to original source')

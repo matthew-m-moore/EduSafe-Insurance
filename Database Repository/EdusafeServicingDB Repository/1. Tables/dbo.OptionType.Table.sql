@@ -19,7 +19,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Optio
 	
 	END
 
-INSERT INTO OptionType VALUES(GETDATE(), USER, 'GradSchoolOption', 'Optionality to allow repayment in the event of student transitioning to GradSchool')
+INSERT INTO OptionType VALUES(GETDATE(), USER, 'GradSchoolOption', 'Optionality to allow repayment in the event of student transitioning to graduate school')
 INSERT INTO OptionType VALUES(GETDATE(), USER, 'TerminationOption', 'Optionality to allow repayment in the event of student terminates education. Example is dropout, but not limited to')
 INSERT INTO OptionType VALUES(GETDATE(), USER, 'EarlyHireOption', 'Optionality to allow repayment in the event of student getting hired before graduation')
 INSERT INTO OptionType VALUES(GETDATE(), USER, 'CollegeClosureOption', 'Optionality to allow repayment in the event of institution closure')

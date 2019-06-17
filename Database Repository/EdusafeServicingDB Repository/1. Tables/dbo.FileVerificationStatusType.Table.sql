@@ -18,3 +18,11 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'FileV
 		)
 	
 	END
+GO
+
+INSERT INTO FileVerificationStatusType VALUES(GETDATE(), USER, 'Uploaded', 'File has been successfully upload, no further action has occurred')
+INSERT INTO FileVerificationStatusType VALUES(GETDATE(), USER, 'Pending', 'File is pending verification, it is in queue to begin verification process')
+INSERT INTO FileVerificationStatusType VALUES(GETDATE(), USER, 'Verifying', 'File is in the proces of being verified')
+INSERT INTO FileVerificationStatusType VALUES(GETDATE(), USER, 'PartiallyVerified', 'File has been partially verified, but not fully verified')
+INSERT INTO FileVerificationStatusType VALUES(GETDATE(), USER, 'FullyVerified', 'File is fully verified')
+INSERT INTO FileVerificationStatusType VALUES(GETDATE(), USER, 'Rejected', 'File was rejected during verification')

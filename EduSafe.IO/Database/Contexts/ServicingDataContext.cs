@@ -50,6 +50,9 @@ namespace EduSafe.IO.Database.Contexts
             modelBuilder.Configurations.Add(new CollegeMajorMapping());
             modelBuilder.Configurations.Add(new CollegeTypeMapping());
 
+            modelBuilder.Configurations.Add(new EmailsMapping());
+            modelBuilder.Configurations.Add(new EmailsSetMapping());
+            
             modelBuilder.Configurations.Add(new FileVerificationStatusTypeMapping());
             modelBuilder.Configurations.Add(new NotificationTypeMapping());
             modelBuilder.Configurations.Add(new OptionTypeMapping());
@@ -86,6 +89,9 @@ namespace EduSafe.IO.Database.Contexts
         public virtual DbSet<CollegeDetailEntity> CollegeDetailEntities { get; set; }
         public virtual DbSet<CollegeMajorEntity> CollegeMajorEntities { get; set; }
         public virtual DbSet<CollegeTypeEntity> CollegeTypeEntities { get; set; }
+
+        public virtual DbSet<EmailsEntity> EmailsEntities { get; set; }
+        public virtual DbSet<EmailsSetEntity> EmailsSetEntities { get; set; }
 
         public virtual DbSet<FileVerificationStatusTypeEntity> FileVerificationStatusTypeEntities { get; set; }
         public virtual DbSet<NotificationTypeEntity> NotificationTypeEntities { get; set; }
