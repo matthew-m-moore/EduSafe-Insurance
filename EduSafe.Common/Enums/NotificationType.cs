@@ -2,6 +2,8 @@
 {
     public enum NotificationType
     {
+        Unknown = 0,
+
         EmailWelcome,
         EmailAccepted,
         EmailPleaseReapply,

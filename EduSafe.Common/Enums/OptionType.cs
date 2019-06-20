@@ -2,6 +2,8 @@
 {
     public enum OptionType
     {
+        Unknown = 0,
+
         GradSchoolOption,
         TerminationOption,
         EarlyHireOption,

@@ -4,6 +4,8 @@ namespace EduSafe.Common.Enums
 {
     public enum CollegeType
     {
+        Unknown = 0,
+
         [Description("Public")]
         Public,
         [Description("Private")]

@@ -2,6 +2,8 @@
 {
     public enum CollegeAcademicTermType
     {
+        Unknown = 0,
+
         Semester,
         Quarter,
         Trimester,

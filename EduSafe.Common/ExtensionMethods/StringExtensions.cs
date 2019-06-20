@@ -64,10 +64,22 @@ namespace EduSafe.Common.ExtensionMethods
         /// <summary>
         /// Converts a string to title casing (e.g. "this represents a string" to "This Represents a String").
         /// </summary>
-        public static string ToTitleCase(this string s)
+        public static string ToTitleCase(this string stringToConvert)
         {
             var textInfo = new CultureInfo("en-US", false).TextInfo;
-            return textInfo.ToTitleCase(s.ToLower());
+            return textInfo.ToTitleCase(stringToConvert.ToLower());
+        }
+
+        /// <summary>
+        /// Converts a string to a target Enum type. The generic constraint is only on struct; be sure to pass an Enum type.
+        /// </summary>
+        public static TEnum ConvertToEnum<TEnum>(this string stringToConvert) where TEnum : struct, Enum
+        {
+            // Why is Enum.TryParse only constrained to be a struct? --Matthew M.
+            if (Enum.TryParse(stringToConvert, out TEnum convertedEnum))
+                return convertedEnum;
+
+            return default;
         }
     }
 }

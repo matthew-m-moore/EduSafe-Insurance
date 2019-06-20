@@ -2,6 +2,8 @@
 {
     public enum ClaimStatusType
     {
+        Unknown = 0,
+
         Received,
         Pending,
         Validating,

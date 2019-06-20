@@ -3,7 +3,7 @@ using System.IO;
 
 namespace EduSafe.Core.Repositories.Excel
 {
-    public class ExcelDataRepository
+    public abstract class ExcelDataRepository
     {
         protected ExcelFileReader _ExcelFileReader;
 

@@ -2,6 +2,8 @@
 {
     public enum PaymentStatusType
     {
+        Unknown = 0,
+
         Pending,
         Processed,
         Declined,
