@@ -49,11 +49,13 @@ namespace EduSafe.Core.Repositories.Database
 
             var enrollmentVerificationEntities = servicingDataContext
                 .InsureesEnrollmentVerificationDetailsEntities
-                .Where(e => e.AccountNumber == individualAccountNumber).ToList();
+                .Where(e => e.AccountNumber == individualAccountNumber)
+                .OrderBy(i => i.VerificationDate).ToList();
 
             var graduationVerificationEntities = servicingDataContext
                 .InsureesGraduationVerificationDetailsEntities
-                .Where(e => e.AccountNumber == individualAccountNumber).ToList();
+                .Where(e => e.AccountNumber == individualAccountNumber)
+                .OrderBy(i => i.VerificationDate).ToList();
 
             var emailsSetId = individualCustomerDataEntity.EmailsSetId;
             var emailEntities = servicingDataContext.EmailsEntities

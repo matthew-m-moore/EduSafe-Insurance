@@ -33,8 +33,8 @@ namespace EduSafe.WebApi.Models
         public double TotalCoverageAmount { get; set; }
         public double? RemainingCoverageAmount { get; set; }
         public double CoverageMonths { get; set; }
-        public List<ClaimStatusEntry> ClaimStatusEntries { get; set; }
         public List<ClaimOptionEntry> ClaimOptionEntries { get; set; }
+        public List<ClaimStatusEntry> ClaimStatusEntries { get; set; }
         public List<ClaimPaymentEntry> ClaimPaymentEntries { get; set; }
 
         public bool EnrollmentVerified { get; set; }

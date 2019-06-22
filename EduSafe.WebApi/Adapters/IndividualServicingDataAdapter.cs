@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using EduSafe.Common.Enums;
 using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.Core.Repositories.Database;
@@ -30,13 +28,19 @@ namespace EduSafe.WebApi.Adapters
             var customerNameFormatted = GetFormattedCustomerName(individualServicingData);
             var collegeMajorFormatted = GetFormattedCollegeMajorMinor(individualServicingData);
             var collegeMinorFormatted = GetFormattedCollegeMajorMinor(individualServicingData, true);
+
             var notificationHistory = GetNotificationHistory(individualServicingData);
             var paymentHistory = GetPaymentHistory(individualServicingData, out var totalPaidInPremiums);
+
+            var claimOptionEntries = GetClaimOptionEntries(individualServicingData);
             var claimStatusEntries = GetClaimStatusEntries(individualServicingData);
             var claimPaymentEntries = GetClaimPaymentEntries(individualServicingData, out var remainingCoverageAmount);
 
             var collegeName = _servicingDataTypesRepository
                 .CollegeNameDictionary[individualServicingData.PremiumCalculationDetails.CollegeDetailId];
+
+            var enrollmentVerificationEntity = individualServicingData.EnrollmentVerificationHistory.LastOrDefault();
+            var graduationVerificationEntity = individualServicingData.GraduationVerificationHistory.LastOrDefault();
 
             var customerProfileEntry = new CustomerProfileEntry
             {
@@ -67,11 +71,21 @@ namespace EduSafe.WebApi.Adapters
 
                 TotalCoverageAmount = individualServicingData.PremiumCalculationDetails.TotalCoverageAmount,
                 RemainingCoverageAmount = remainingCoverageAmount,
-                CoverageMonths = individualServicingData.PremiumCalculationDetails.CoverageMonths
+                CoverageMonths = individualServicingData.PremiumCalculationDetails.CoverageMonths,
+                ClaimOptionEntries = claimOptionEntries,
+                ClaimStatusEntries = claimStatusEntries,
+                ClaimPaymentEntries = claimPaymentEntries,
 
+                EnrollmentVerified = (enrollmentVerificationEntity != null) 
+                    ? enrollmentVerificationEntity.IsVerified
+                    : false,
+
+                GraduationVerified = (graduationVerificationEntity != null)
+                    ? graduationVerificationEntity.IsVerified
+                    : false,
             };
 
-            return new CustomerProfileEntry();
+            return customerProfileEntry;
         }
 
         private string GetFormattedCustomerName(IndividualServicingData individualServicingData)
@@ -155,9 +169,80 @@ namespace EduSafe.WebApi.Adapters
             return paymentHistoryEntries;
         }
 
+        private List<ClaimOptionEntry> GetClaimOptionEntries(IndividualServicingData individualServicingData)
+        {
+            var claimOptionEntries = new List<ClaimOptionEntry>();
+
+            foreach (var premiumCalculationOptionEntity in individualServicingData.PremiumCalculationOptionDetails)
+            {
+                var claimOptionType = _servicingDataTypesRepository
+                    .OptionTypeDictionary[premiumCalculationOptionEntity.OptionTypeId];
+
+                var claimOptionEntry = new ClaimOptionEntry
+                {
+                    ClaimOptionType = claimOptionType.ToString(),
+                    ClaimOptionPercentage = premiumCalculationOptionEntity.OptionPercentage,
+                };
+
+                claimOptionEntries.Add(claimOptionEntry);
+            }
+
+            return claimOptionEntries;
+        }
+
         private List<ClaimStatusEntry> GetClaimStatusEntries(IndividualServicingData individualServicingData)
         {
-            throw new NotImplementedException();
+            var claimStatusEntries = new List<ClaimStatusEntry>();
+
+            foreach (var claimNumber in individualServicingData.ClaimNumbers)
+            {
+                var claimStatusEntity = individualServicingData.ClaimStatusDictionary[claimNumber];
+                var claimOptionEntity = individualServicingData.ClaimOptionsDictionary[claimNumber];
+                var claimDocumentEntries = GetClaimDocumentEntries(individualServicingData, claimNumber);
+
+                var claimType = _servicingDataTypesRepository
+                    .OptionTypeDictionary[claimOptionEntity.ClaimOptionTypeId];
+                var claimStatus = _servicingDataTypesRepository
+                    .ClaimStatusTypeDictionary[claimStatusEntity.ClaimStatusTypeId];
+
+                var claimStatusEntry = new ClaimStatusEntry
+                {
+                    ClaimType = claimType.ToString(),
+                    ClaimStatus = claimStatus.ToString(),
+                    IsClaimApproved = claimStatusEntity.IsClaimApproved,
+                    ClaimDocumentEntries = claimDocumentEntries,
+                };
+
+                claimStatusEntries.Add(claimStatusEntry);
+            }
+
+            return claimStatusEntries;
+        }
+
+        private List<ClaimDocumentEntry> GetClaimDocumentEntries(IndividualServicingData individualServicingData, long claimNumber)
+        {
+            var claimDocumentEntries = new List<ClaimDocumentEntry>();
+            var claimDocumentEntities = individualServicingData.ClaimDocumentsDictionary[claimNumber];
+
+            foreach (var claimDocumentEntity in claimDocumentEntities)
+            {
+                var fileVerificationStatus = _servicingDataTypesRepository
+                    .FileVerificationStatusTypeDictionary[claimDocumentEntity.FileVerificationStatusTypeId];
+
+                var claimDocumentEntry = new ClaimDocumentEntry
+                {
+                    FileName = claimDocumentEntity.FileName,
+                    FileType = claimDocumentEntity.FileType,
+                    FileVerificationStatus = fileVerificationStatus.ToString(),
+                    IsFileVerified = claimDocumentEntity.IsVerified,
+                    UploadDate = claimDocumentEntity.UploadDate,
+                    ExpirationDate = claimDocumentEntity.ExpirationDate,
+                };
+
+                claimDocumentEntries.Add(claimDocumentEntry);
+            }
+
+            return claimDocumentEntries;
         }
 
         private List<ClaimPaymentEntry> GetClaimPaymentEntries(IndividualServicingData individualServicingData, out double? remainingCoverageAmount)
@@ -181,8 +266,7 @@ namespace EduSafe.WebApi.Adapters
                     else
                         remainingCoverageAmount = individualServicingData.PremiumCalculationDetails.TotalCoverageAmount
                             - claimPaymentHistoryEntity.ClaimPaymentAmount;
-                }
-                    
+                }                  
 
                 var claimPaymentEntry = new ClaimPaymentEntry
                 {

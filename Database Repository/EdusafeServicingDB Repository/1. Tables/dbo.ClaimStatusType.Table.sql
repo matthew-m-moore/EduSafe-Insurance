@@ -20,7 +20,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Claim
 	END
 	
 INSERT INTO ClaimStatusType VALUES(GETDATE(), USER, 'Received', 'Claim was recieved, no further action has occured')
-INSERT INTO ClaimStatusType VALUES(GETDATE(), USER, 'Pending', 'Claim is pending validatoin, it is in queue to begin validating')
+INSERT INTO ClaimStatusType VALUES(GETDATE(), USER, 'Pending', 'Claim is pending validation, it is in queue to begin validating')
 INSERT INTO ClaimStatusType VALUES(GETDATE(), USER, 'Validating', 'Claim is in the process of being validated')
 INSERT INTO ClaimStatusType VALUES(GETDATE(), USER, 'Accepted', 'Claim has passed validation and is accepted')
 INSERT INTO ClaimStatusType VALUES(GETDATE(), USER, 'Denied', 'Claim has not passed validation and is denied')

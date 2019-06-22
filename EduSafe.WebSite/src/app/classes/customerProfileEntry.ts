@@ -29,8 +29,8 @@ export class CustomerProfileEntry {
   TotalCoverageAmount: number;
   RemainingCoverageAmount: number;
   CoverageMonths: number;
-  ClaimStatusEntries: ClaimStatusEntry[];
   ClaimOptionEntries: ClaimOptionEntry[];
+  ClaimStatusEntries: ClaimStatusEntry[];
   ClaimPaymentEntries: ClaimPaymentEntry[];
   EnrollmentVerified: boolean;
   GraduationVerified: boolean;
