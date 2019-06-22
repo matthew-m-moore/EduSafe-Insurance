@@ -15,11 +15,6 @@ namespace EduSafe.Core.BusinessLogic.Containers
 
         public List<EmailsEntity> Emails { get; set; }
 
-        public List<IndividualServicingData> IndividualInsureesServicingData { get; set; }
-
-        public InstitutionServicingData()
-        {
-            IndividualInsureesServicingData = new List<IndividualServicingData>();
-        }
+        public List<long> IndividualInsureeAccountNumbers { get; set; }
     }
 }

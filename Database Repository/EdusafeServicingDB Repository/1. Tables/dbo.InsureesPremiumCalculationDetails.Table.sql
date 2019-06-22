@@ -15,6 +15,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Insur
 			, PremiumCalulated float not null
 			, PremiumCalculationDate datetime not null
 			, TotalCoverageAmount float not null
+			, CoverageMonths int not null
 			, CollegeStartDate datetime not null
 			, ExpectedGraduationDate datetime not null
 			, CollegeDetailId int not null

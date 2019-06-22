@@ -14,24 +14,30 @@ namespace EduSafe.Core.Repositories.Database
         public override DbContext DatabaseContext => _databaseContext ?? DatabaseContextRetriever.GetServicingDataContext();
 
         private Dictionary<int, string> _collegeMajorDictionary;
+        private Dictionary<int, string> _collegeNameDictionary;
 
         private Dictionary<int, ClaimStatusType> _claimStatusTypeDictionary;
         private Dictionary<int, CollegeAcademicTermType> _collegeAcademicTermTypeDictionary;   
         private Dictionary<int, CollegeType> _collegeTypeDictionary;
-        private Dictionary<int, FileVerificationStatusType> _fileVerificationStatusTypeDictionary;
-        private Dictionary<int, NotificationType> _notificationTypeDictionary;
+        private Dictionary<int, FileVerificationStatusType> _fileVerificationStatusTypeDictionary;     
         private Dictionary<int, OptionType> _optionTypeDictionary;
         private Dictionary<int, PaymentStatusType> _paymentStatusTypeDictionary;
 
+        private Dictionary<int, (NotificationType NotificationType, string NotificationDescription)> 
+            _notificationTypeTupleDictionary;
+
         public Dictionary<int, string> CollegeMajorDictionary => GetCollegeMajorDictionary();
+        public Dictionary<int, string> CollegeNameDictionary => GetCollegeNameDictionary();
 
         public Dictionary<int, ClaimStatusType> ClaimStatusTypeDictionary => GetClaimStatusTypeDictionary();
         public Dictionary<int, CollegeAcademicTermType> CollegeAcademicTermTypeDictionary => GetCollegeAcademicTermTypeDictionary();
         public Dictionary<int, CollegeType> CollegeTypeDictionary => GetCollegeTypeDictionary();
         public Dictionary<int, FileVerificationStatusType> FileVerificationStatusTypeDictionary => GetFileVerificationStatusTypeDictionary();
-        public Dictionary<int, NotificationType> NotificationTypeDictionary => GetNotificationTypeDictionary();
         public Dictionary<int, OptionType> OptionTypeDictionary => GetOptionTypeDictionary();
         public Dictionary<int, PaymentStatusType> PaymentStatusTypeDictionary => GetPaymentStatusTypeDictionary();
+
+        public Dictionary<int, (NotificationType NotificationType, string NotificationDescription)> 
+            NotificationTypeTupleDictionary => GetNotificationTypeDictionary();
 
         public ServicingDataTypesRepository(DbContext databaseContext)
         {
@@ -52,6 +58,22 @@ namespace EduSafe.Core.Repositories.Database
             }
 
             return _collegeMajorDictionary;
+        }
+
+        private Dictionary<int, string> GetCollegeNameDictionary()
+        {
+            if (_collegeNameDictionary == null)
+            {
+                using (var servicingDataContext = DatabaseContext as ServicingDataContext)
+                {
+                    var collegeDetails = servicingDataContext.CollegeDetailEntities.ToList();
+                    _collegeNameDictionary = collegeDetails.ToDictionary(
+                        e => e.Id,
+                        e => e.CollegeName);
+                }
+            }
+
+            return _collegeNameDictionary;
         }
 
         private Dictionary<int, ClaimStatusType> GetClaimStatusTypeDictionary()
@@ -119,22 +141,6 @@ namespace EduSafe.Core.Repositories.Database
             return _fileVerificationStatusTypeDictionary;
         }
 
-        private Dictionary<int, NotificationType> GetNotificationTypeDictionary()
-        {
-            if (_notificationTypeDictionary == null)
-            {
-                using (var servicingDataContext = DatabaseContext as ServicingDataContext)
-                {
-                    var notificationTypes = servicingDataContext.NotificationTypeEntities.ToList();
-                    _notificationTypeDictionary = notificationTypes.ToDictionary(
-                        e => e.Id,
-                        e => e.NotificationType.ConvertToEnum<NotificationType>());
-                }
-            }
-
-            return _notificationTypeDictionary;
-        }
-
         private Dictionary<int, OptionType> GetOptionTypeDictionary()
         {
             if (_optionTypeDictionary == null)
@@ -165,6 +171,24 @@ namespace EduSafe.Core.Repositories.Database
             }
 
             return _paymentStatusTypeDictionary;
+        }
+
+        private Dictionary<int, (NotificationType NotificationType, string NotificationDescription)>
+            GetNotificationTypeDictionary()
+        {
+            if (_notificationTypeTupleDictionary == null)
+            {
+                using (var servicingDataContext = DatabaseContext as ServicingDataContext)
+                {
+                    var notificationTypes = servicingDataContext.NotificationTypeEntities.ToList();
+                    _notificationTypeTupleDictionary = notificationTypes.ToDictionary(
+                        e => e.Id,
+                        e => (e.NotificationType.ConvertToEnum<NotificationType>(),
+                              e.Description));
+                }
+            }
+
+            return _notificationTypeTupleDictionary;
         }
     }
 }

@@ -5,7 +5,7 @@ namespace EduSafe.WebApi.Models
 {
     public class InstitutionProfileEntry
     {
-        public int CustomerIdNumber { get; set; }
+        public long CustomerIdNumber { get; set; }
         public string CustomerUniqueId { get; set; }
 
         public string CustomerName { get; set; }

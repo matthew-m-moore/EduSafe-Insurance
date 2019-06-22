@@ -8,6 +8,7 @@ namespace EduSafe.IO.Database.Entities.Servicing.Individuals
         public double PremiumCalculated { get; set; }
         public DateTime PremiumCalculationDate { get; set; }
         public double TotalCoverageAmount { get; set; }
+        public int CoverageMonths { get; set; }
         public DateTime CollegeStartDate { get; set; }
         public DateTime ExpectedGraduationDate { get; set; }
         public int CollegeDetailId { get; set; }

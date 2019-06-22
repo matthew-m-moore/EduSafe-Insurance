@@ -7,19 +7,19 @@ using EduSafe.IO.Database;
 
 namespace EduSafe.WebApi.Adapters
 {
-    public class ServicingDataAdapter
+    public class InstitutionServicingDataAdapter
     {
-        private ServicingDataTypesRepository _servicingDataTypesRepository;
-        private IndividualServicingDataRepository _individualServicingDataRepository;
-        private InstitutionServicingDataRepository _institutionServicingDataRepository;
+        private readonly ServicingDataTypesRepository _servicingDataTypesRepository;
+        private readonly InstitutionServicingDataRepository _institutionServicingDataRepository;
+        private readonly IndividualServicingDataAdapter _individualServicingDataAdapter;
 
-        public ServicingDataAdapter()
+        public InstitutionServicingDataAdapter()
         {
             var databaseContext = DatabaseContextRetriever.GetServicingDataContext();
 
             _servicingDataTypesRepository = new ServicingDataTypesRepository(databaseContext);
-            _individualServicingDataRepository = new IndividualServicingDataRepository(databaseContext);
             _institutionServicingDataRepository = new InstitutionServicingDataRepository(databaseContext);
+            _individualServicingDataAdapter = new IndividualServicingDataAdapter();
         }
     }
 }

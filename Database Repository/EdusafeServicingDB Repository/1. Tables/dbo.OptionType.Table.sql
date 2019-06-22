@@ -19,6 +19,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Optio
 	
 	END
 
+INSERT INTO OptionType VALUES(GETDATE(), USER, 'UnemploymentOption', 'Standard claim option to cover the student in the event of unemployment after graduation')
 INSERT INTO OptionType VALUES(GETDATE(), USER, 'GradSchoolOption', 'Optionality to allow repayment in the event of student transitioning to graduate school')
 INSERT INTO OptionType VALUES(GETDATE(), USER, 'TerminationOption', 'Optionality to allow repayment in the event of student terminates education. Example is dropout, but not limited to')
 INSERT INTO OptionType VALUES(GETDATE(), USER, 'EarlyHireOption', 'Optionality to allow repayment in the event of student getting hired before graduation')

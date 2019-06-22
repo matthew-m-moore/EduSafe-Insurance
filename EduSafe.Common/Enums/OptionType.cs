@@ -4,6 +4,7 @@
     {
         Unknown = 0,
 
+        UnemploymentOption,
         GradSchoolOption,
         TerminationOption,
         EarlyHireOption,

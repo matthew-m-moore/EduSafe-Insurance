@@ -109,13 +109,13 @@ namespace EduSafe.Core.Repositories.Database
             individualServicingData.MajorMinorDetails = collegeMajorMinorDetailsEntities;
         }
 
-        private static void GetNotificationAndPaymentHistory(
+        private void GetNotificationAndPaymentHistory(
             long individualAccountNumber, 
             IndividualServicingData individualServicingData, 
             ServicingDataContext servicingDataContext)
         {
             var notificationHistoryEntities = servicingDataContext.InsureesNotificationHistoryEntryEntities
-                                .Where(e => e.AccountNumber == individualAccountNumber).ToList();
+                .Where(e => e.AccountNumber == individualAccountNumber).ToList();
 
             var paymentHistoryEntities = servicingDataContext.InsureesPaymentHistoryEntryEntities
                 .Where(e => e.AccountNumber == individualAccountNumber).ToList();

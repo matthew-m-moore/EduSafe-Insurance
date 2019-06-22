@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.IO.Database;
 using EduSafe.IO.Database.Contexts;
-using EduSafe.IO.Database.Entities.Servicing.Individuals;
-using EduSafe.IO.Database.Entities.Servicing.Institutions;
 
 namespace EduSafe.Core.Repositories.Database
 {
@@ -21,40 +16,68 @@ namespace EduSafe.Core.Repositories.Database
             _databaseContext = databaseContext;
         }
 
-        public InstitutionsAccountDataEntity GetInstitutionCustomerData(long institutionAccountNumber)
+        public InstitutionServicingData GetInstitutionServicingData(long institutionAccountNumber)
         {
-            InstitutionsAccountDataEntity institutionCustomerDataEntity;
+            var institutionServicingData = new InstitutionServicingData();
 
             using (var servicingDataContext = DatabaseContext as ServicingDataContext)
             {
-                institutionCustomerDataEntity = servicingDataContext.InstitutionsAccountDataEntities
-                    .SingleOrDefault(e => e.InstitutionsAccountNumber == institutionAccountNumber);
+                GetBasicAccountData(institutionAccountNumber, institutionServicingData, servicingDataContext);
+                GetNotificationAndPaymentHistory(institutionAccountNumber, institutionServicingData, servicingDataContext);
+                GetIndividualInsureeAccountNumbers(institutionAccountNumber, institutionServicingData, servicingDataContext);
             }
-
-            return institutionCustomerDataEntity;
+            
+            return institutionServicingData;
         }
 
-        public List<InsureesAccountDataEntity> GetAllIndividualCustomerDataForInstitution(long institutionAccountNumber)
+        private void GetBasicAccountData(
+            long institutionAccountNumber,
+            InstitutionServicingData institutionServicingData,
+            ServicingDataContext servicingDataContext)
         {
-            var individualCustomerDataEntities = new List<InsureesAccountDataEntity>();
+            var institutionCustomerDataEntity = servicingDataContext.InstitutionsAccountDataEntities
+                .SingleOrDefault(e => e.InstitutionsAccountNumber == institutionAccountNumber);
 
-            using (var servicingDataContext = DatabaseContext as ServicingDataContext)
-            {
-                var institutionCustomerDataEntity = servicingDataContext.InstitutionsAccountDataEntities
-                    .SingleOrDefault(e => e.InstitutionsAccountNumber == institutionAccountNumber);
+            var nextPaymentAndBalanceEntity = servicingDataContext
+                .InstitutionsNextPaymentAndBalanceInformationEntities
+                .Where(e => e.InstitutionsAccountNumber == institutionAccountNumber)
+                .OrderBy(i => i.Id).LastOrDefault();
 
-                if (institutionCustomerDataEntity != null)
-                {
-                    var individualAccountNumbers = servicingDataContext.InstitutionsInsureeListEntities
-                        .Where(e => e.InstitutionsAccountNumber == institutionAccountNumber)
-                        .Select(i => i.InsureeAccountNumber).ToList();
+            var emailsSetId = institutionCustomerDataEntity.EmailsSetId;
+            var emailEntities = servicingDataContext.EmailsEntities
+                .Where(e => e.EmailsSetId == emailsSetId).ToList();
 
-                    individualCustomerDataEntities = servicingDataContext.InsureesAccountDataEntities
-                        .Where(e => individualAccountNumbers.Contains(e.AccountNumber)).ToList();
-                }
-            }
+            institutionServicingData.InstitutionAccountData = institutionCustomerDataEntity;
+            institutionServicingData.NextPaymentAndBalanceInformation = nextPaymentAndBalanceEntity;
 
-            return individualCustomerDataEntities;
+            institutionServicingData.Emails = emailEntities;
+        }
+
+        private void GetNotificationAndPaymentHistory(
+            long institutionAccountNumber,
+            InstitutionServicingData institutionServicingData,
+            ServicingDataContext servicingDataContext)
+        {
+            var notificationHistoryEntities = servicingDataContext.InstitutionsNotificationHistoryEntryEntities
+                .Where(e => e.InstitutionsAccountNumber == institutionAccountNumber).ToList();
+
+            var paymentHistoryEntities = servicingDataContext.InstitutionsPaymentHistoryEntryEntities
+                .Where(e => e.InstitutionsAccountNumber == institutionAccountNumber).ToList();
+
+            institutionServicingData.NotificationHistory = notificationHistoryEntities;
+            institutionServicingData.PaymentHistory = paymentHistoryEntities;
+        }
+
+        private void GetIndividualInsureeAccountNumbers(
+            long institutionAccountNumber, 
+            InstitutionServicingData institutionServicingData, 
+            ServicingDataContext servicingDataContext)
+        {
+            var individualAccountNumbers = servicingDataContext.InstitutionsInsureeListEntities
+                .Where(e => e.InstitutionsAccountNumber == institutionAccountNumber)
+                .Select(i => i.InsureeAccountNumber).ToList();
+
+            institutionServicingData.IndividualInsureeAccountNumbers = individualAccountNumbers;
         }
     }
 }
