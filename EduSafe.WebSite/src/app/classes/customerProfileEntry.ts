@@ -2,6 +2,7 @@ import { NotificationHistoryEntry } from './notificationHistoryEntry';
 import { PaymentHistoryEntry } from './paymentHistoryEntry';
 import { ClaimStatusEntry } from './claimStatusEntry';
 import { ClaimOptionEntry } from './claimOptionEntry';
+import { ClaimPaymentEntry } from './claimPaymentEntry';
 
 export class CustomerProfileEntry {
   CustomerIdNumber: number;
@@ -16,6 +17,7 @@ export class CustomerProfileEntry {
   CustomerEmails: string[];
   CollegeName: string;
   CollegeMajor: string;
+  CollegeMinor: string;
   CollegeStartDate: Date;
   ExpectedGraduationDate: Date;
   NotificationHistoryEntries: NotificationHistoryEntry[];
@@ -27,8 +29,9 @@ export class CustomerProfileEntry {
   TotalCoverageAmount: number;
   RemainingCoverageAmount: number;
   CoverageMonths: number;
-  ClaimStatusEntry: ClaimStatusEntry;
   ClaimOptionEntries: ClaimOptionEntry[];
+  ClaimStatusEntries: ClaimStatusEntry[];
+  ClaimPaymentEntries: ClaimPaymentEntry[];
   EnrollmentVerified: boolean;
   GraduationVerified: boolean;
 }

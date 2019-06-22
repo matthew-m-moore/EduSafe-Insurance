@@ -8,9 +8,13 @@ CREATE PROCEDURE SP_InsertInstitutionsPaymentHistoryEntry
 	@AccountNumber bigint
 	, @PaymentAmount float 
 	, @PaymentDate datetime 
+	, @PaymentStatusType varchar(50)
 	, @PaymentComments varchar(250) null
 
 AS
+
+DECLARE @PaymentStatusTypeId int
+SET @PaymentStatusTypeId = (SELECT Id FROM dbo.PaymentStatusType WHERE PaymentStatusType = @PaymentStatusType)
 
 INSERT INTO dbo.InsureesPaymentHistoryEntry
 (
@@ -19,6 +23,7 @@ INSERT INTO dbo.InsureesPaymentHistoryEntry
 	, AccountNumber
 	, PaymentAmount
 	, PaymentDate
+	, PaymentStatusTypeId
 	, PaymentComments
 )
 VALUES
@@ -28,6 +33,7 @@ VALUES
 	, @AccountNumber 
 	, @PaymentAmount
 	, @PaymentDate
+	, @PaymentStatusTypeId
 	, @PaymentComments
 )
 

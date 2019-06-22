@@ -8,6 +8,7 @@ CREATE PROCEDURE SP_InsertInsureesPremiumCalculationDetails
 	@PremiumCalulated float 
 	, @PremiumCalculationDate datetime
 	, @TotalCoverageAmount float 
+	, @CoverageMonths int
 	, @CollegeStartDate datetime
 	, @ExpectedGraduationDate datetime
 	, @CollegeName varchar(250)
@@ -26,6 +27,7 @@ INSERT INTO dbo.InsureesPremiumCalculationDetails
 	, PremiumCalulated
 	, PremiumCalculationDate
 	, TotalCoverageAmount
+	, CoverageMonths
 	, CollegeStartDate
 	, ExpectedGraduationDate
 	, CollegeDetailId
@@ -40,6 +42,7 @@ VALUES
 	, @PremiumCalulated
 	, @PremiumCalculationDate
 	, @TotalCoverageAmount
+	, @CoverageMonths
 	, @CollegeStartDate
 	, @ExpectedGraduationDate
 	, @CollegeDetailId

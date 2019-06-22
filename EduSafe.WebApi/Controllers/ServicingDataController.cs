@@ -14,7 +14,7 @@ namespace EduSafe.WebApi.Controllers
         [Route("institution/{customerIdentifier}")]
         [HttpGet]
         public InstitutionProfileEntry GetInstitutionProfile(string customerIdentifier)
-        {
+        {   
             return new InstitutionProfileEntry();
         }
 

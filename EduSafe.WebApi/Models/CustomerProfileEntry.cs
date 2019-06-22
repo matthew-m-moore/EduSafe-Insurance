@@ -5,7 +5,7 @@ namespace EduSafe.WebApi.Models
 {
     public class CustomerProfileEntry
     {
-        public int CustomerIdNumber { get; set; }
+        public long CustomerIdNumber { get; set; }
         public string CustomerUniqueId { get; set; }
 
         public string CustomerName { get; set; }
@@ -19,6 +19,7 @@ namespace EduSafe.WebApi.Models
 
         public string CollegeName { get; set; }
         public string CollegeMajor { get; set; }
+        public string CollegeMinor { get; set; }
         public DateTime CollegeStartDate { get; set; }
         public DateTime ExpectedGraduationDate { get; set; }
         public List<NotificationHistoryEntry> NotificationHistoryEntries { get; set; }
@@ -32,8 +33,9 @@ namespace EduSafe.WebApi.Models
         public double TotalCoverageAmount { get; set; }
         public double? RemainingCoverageAmount { get; set; }
         public double CoverageMonths { get; set; }
-        public ClaimStatusEntry ClaimStatusEntry { get; set; }
         public List<ClaimOptionEntry> ClaimOptionEntries { get; set; }
+        public List<ClaimStatusEntry> ClaimStatusEntries { get; set; }
+        public List<ClaimPaymentEntry> ClaimPaymentEntries { get; set; }
 
         public bool EnrollmentVerified { get; set; }
         public bool GraduationVerified { get; set; }

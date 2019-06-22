@@ -34,6 +34,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,8 +44,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="ClosedXML">
       <HintPath>..\packages\ClosedXML.0.94.2\lib\net40\ClosedXML.dll</HintPath>
     </Reference>
@@ -154,9 +159,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapters\ArticlesLoadingAdapter.cs" />
+    <Compile Include="Adapters\AuthenticationAdapater.cs" />
     <Compile Include="Adapters\CollegeDataAdapter.cs" />
     <Compile Include="Adapters\FileTransferAdapter.cs" />
+    <Compile Include="Adapters\InstitutionServicingDataAdapter.cs" />
     <Compile Include="Adapters\PremiumComputationAdapter.cs" />
+    <Compile Include="Adapters\IndividualServicingDataAdapter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AriticlesLoadingController.cs" />
     <Compile Include="Controllers\AuthenticationController.cs" />

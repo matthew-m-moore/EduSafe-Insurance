@@ -15,6 +15,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Insur
 			, AccountNumber bigint not null
 			, PaymentAmount float not null
 			, PaymentDate datetime not null
+			, PaymentStatusTypeId int not null
 			, PaymentComments varchar(250) null
 			CONSTRAINT PK_InsureesPaymentHistoryEntry_Id PRIMARY KEY CLUSTERED (Id)
 		)

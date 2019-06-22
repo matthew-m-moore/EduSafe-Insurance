@@ -204,6 +204,19 @@ BEGIN
 		FOREIGN KEY (NextPaymentStatusTypeId) REFERENCES dbo.PaymentStatusType(Id)
 END
 
+IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InstitutionsPaymentHistoryEntry_PaymentStatusTypeId' and type = 'F') 
+BEGIN
+	ALTER TABLE dbo.InstitutionsPaymentHistoryEntry
+		ADD CONSTRAINT FK_InstitutionsPaymentHistoryEntry_PaymentStatusTypeId
+		FOREIGN KEY (PaymentStatusTypeId) REFERENCES dbo.PaymentStatusType(Id)
+END
+
+IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesPaymentHistoryEntry_PaymentStatusTypeId' and type = 'F') 
+BEGIN
+	ALTER TABLE dbo.InsureesPaymentHistoryEntry
+		ADD CONSTRAINT FK_InsureesPaymentHistoryEntry_PaymentStatusTypeId
+		FOREIGN KEY (PaymentStatusTypeId) REFERENCES dbo.PaymentStatusType(Id)
+END
 
 --InsureesPremiumCalculationOptionDetails
 IF NOT EXISTS(SELECT * FROM sys.objects WHERE name = 'FK_InsureesPremiumCalculationOptionDetails_OptionTypeId' and type = 'F') 

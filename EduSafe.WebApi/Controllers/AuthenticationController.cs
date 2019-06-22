@@ -12,7 +12,7 @@ namespace EduSafe.WebApi.Controllers
     {
         // Note: Send the customerNumber or customerEmail via a header, not in the URL
 
-        // GET: api/servicing/id
+        // GET: api/authentication/id
         [Route("id")]
         [HttpGet]
         public string GetCustomerIdentifierFromNumber(string customerNumber)
@@ -20,16 +20,16 @@ namespace EduSafe.WebApi.Controllers
             return RetrieveCustomerIdentifer(customerNumber);
         }
 
-        // GET: api/servicing/email
+        // GET: api/authentication/email
         [Route("email")]
         [HttpGet]
-        public string GetCustomerIdentifierFromEmail(string customerEmail)
+        public List<string> GetCustomerIdentifiersFromEmail(string customerEmail)
         {
-            var customerNumber = RetrieveCustomerNumber(customerEmail);
-            return RetrieveCustomerIdentifer(customerNumber);
+            var customerNumbers = RetrieveCustomerNumbers(customerEmail);
+            return customerNumbers.Select(RetrieveCustomerIdentifer).ToList();
         }
 
-        private static string RetrieveCustomerNumber(string customerEmail)
+        private static List<string> RetrieveCustomerNumbers(string customerEmail)
         {
             throw new NotImplementedException();
         }
