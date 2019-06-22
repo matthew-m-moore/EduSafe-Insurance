@@ -27,3 +27,10 @@ BEGIN
 	ALTER TABLE dbo.CollegeAcademicTermType
 	ADD CONSTRAINT UC_CollegeAcademicTermType_CollegeAcademicTermType UNIQUE (CollegeAcademicTermType)
 END
+
+IF (NOT EXISTS (SELECT * FROM sys.indexes WHERE NAME = 'UIDX_Emails_IsPrimary'))
+BEGIN
+	CREATE UNIQUE INDEX UIDX_Emails_IsPrimary
+	ON cust.Emails(EmailsSetId)
+	WHERE IsPrimary = 1
+END

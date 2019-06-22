@@ -5,5 +5,6 @@
         public int Id { get; set; }
         public int EmailsSetId { get; set; }
         public string Email { get; set; }
+        public bool IsPrimary { get; set; }
     }
 }
