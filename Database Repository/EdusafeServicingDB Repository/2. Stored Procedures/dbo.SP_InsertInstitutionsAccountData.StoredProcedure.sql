@@ -19,7 +19,7 @@ AS
 EXEC cust.SP_InsertEmailsSet
 
 DECLARE @EmailsSetId int
-SET @EmailsSetId = (SELECT Max(SetId) FROM EmailsSet)
+SET @EmailsSetId = (SELECT Max(SetId) FROM cust.EmailsSet)
 
 INSERT INTO dbo.InstitutionsAccountData
 (
