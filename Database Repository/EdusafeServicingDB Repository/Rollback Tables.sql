@@ -34,7 +34,8 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'EmailsSet
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'InsureesAccountData') BEGIN DROP TABLE cust.InsureesAccountData END
 
 
-
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_DeleteEmails' ) BEGIN DROP PROCEDURE cust.SP_DeleteEmails END
+IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_UpdateEmails' ) BEGIN DROP PROCEDURE cust.SP_UpdateEmails END
 IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertEmails' ) BEGIN DROP PROCEDURE cust.SP_InsertEmails END
 IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertEmailsSet' ) BEGIN DROP PROCEDURE cust.SP_InsertEmailsSet END
 IF EXISTS (SELECT * FROM sys.objects WHERE Type = 'P' and Name = 'SP_InsertInsureesAccountData' ) BEGIN DROP PROCEDURE cust.SP_InsertInsureesAccountData END

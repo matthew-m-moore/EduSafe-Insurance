@@ -10,7 +10,7 @@ EXEC cust.SP_InsertInsureesAccountData NULL,'Fiddler',NULL,'Strings',123456797,'
 EXEC cust.SP_InsertInsureesAccountData NULL,'Clark','Superman','Kent',123456798,'1900-01-10','132 Awesome street',NULL,NULL,'Smallville','IO','99999',1
 EXEC cust.SP_InsertInsureesAccountData NULL,'Bruce','Batman','Wayne',123456799,'1900-01-11','133 Awesome street',NULL,NULL,'Gotham City','NY','99999',1
 EXEC cust.SP_InsertInsureesAccountData NULL,'Dassem',NULL,'Ultor',123456800,'1900-01-12','134 Awesome street',NULL,NULL,'Malazan','CA','99999',1
-EXEC cust.SP_InsertInsureesAccountData NULL,'Onos'','FirstSword','T'oolan',123456801,'1900-01-13','135 Awesome street',NULL,NULL,'Clanless','CA','99999',1
+EXEC cust.SP_InsertInsureesAccountData NULL,'Onos','FirstSword','T''oolan',123456801,'1900-01-13','135 Awesome street',NULL,NULL,'Clanless','CA','99999',1
 EXEC cust.SP_InsertInsureesAccountData NULL,'Kalam',NULL,'Mekhar',123456802,'1900-01-14','136 Awesome street',NULL,NULL,'Malazan','CA','99999',1
 EXEC cust.SP_InsertInsureesAccountData NULL,'Eye','See','Youpee',123456803,'1900-01-15','137 Awesome street',NULL,NULL,'Somewhere Gross','CA','99999',1
 EXEC cust.SP_InsertInsureesAccountData NULL,'Elephant',NULL,'Shoe',123456804,'1900-01-16','138 Awesome street',NULL,NULL,'La Zoo','CA','99999',1

@@ -33,6 +33,9 @@ sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "1. Tables\dbo.OptionType.Table.sql" >> "CreateTable.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "1. Tables\dbo.PaymentStatusType.Table.sql" >> "CreateTable.txt
 
+
+sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\cust.SP_DeleteEmails.StoredProcedure.sql" >> "CreateSp.txt
+sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\cust.SP_UpdateEmails.StoredProcedure.sql" >> "CreateSp.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\cust.SP_InsertEmails.StoredProcedure.sql" >> "CreateSp.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\cust.SP_InsertEmailsSet.StoredProcedure.sql" >> "CreateSp.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\cust.SP_InsertInsureesAccountData.StoredProcedure.sql" >> "CreateSp.txt
