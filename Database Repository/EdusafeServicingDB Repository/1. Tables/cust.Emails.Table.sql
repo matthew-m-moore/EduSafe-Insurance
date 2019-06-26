@@ -14,6 +14,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Email
 			, CreatedBy varchar(25) not null
 			, EmailsSetId int not null
 			, Email varchar(50) not null
+			, IsPrimary bit not null
 			CONSTRAINT PK_Emails_Id PRIMARY KEY CLUSTERED (Id)
 		)
 	
