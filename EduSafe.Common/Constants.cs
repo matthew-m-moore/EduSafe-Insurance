@@ -27,6 +27,8 @@ namespace EduSafe.Common
         public const int ThirtyDaysInOneMonth = 30;
         public const int ThirtyOneDaysInOneMonth = 31;
 
+        public const int IndividalAccountNumberLength = 11;
+
         public static readonly List<InterestRateCurveType> DiscountFactorCurves = new List<InterestRateCurveType>
         {
             InterestRateCurveType.LiborDiscount,

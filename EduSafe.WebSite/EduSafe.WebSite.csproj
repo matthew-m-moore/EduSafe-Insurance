@@ -126,6 +126,7 @@
     <TypeScriptCompile Include="e2e\src\app.po.ts" />
     <TypeScriptCompile Include="src\app\classes\activityInputEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\articleInformationEntry.ts" />
+    <TypeScriptCompile Include="src\app\classes\authenticationPackage.ts" />
     <TypeScriptCompile Include="src\app\classes\claimDocumentEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\claimOptionEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\claimPaymentEntry.ts" />

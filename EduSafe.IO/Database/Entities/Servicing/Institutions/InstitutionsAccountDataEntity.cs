@@ -1,6 +1,8 @@
-﻿namespace EduSafe.IO.Database.Entities.Servicing.Institutions
+﻿using EduSafe.IO.Interfaces;
+
+namespace EduSafe.IO.Database.Entities.Servicing.Institutions
 {
-    public class InstitutionsAccountDataEntity
+    public class InstitutionsAccountDataEntity : IAccountData
     {
         public long InstitutionsAccountNumber { get; set; }
         public string FolderPath { get; set; }
@@ -12,5 +14,7 @@
         public string City { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
+
+        public long AccountNumber => InstitutionsAccountNumber;
     }
 }

@@ -1,9 +1,63 @@
-<!--Username-->
-<!--Password-->
-<!--Below would be controlled via ngIf through the authentication-->
-<div>
-  <individual-profile></individual-profile>
+<form>
+  <div class="form-group">
+    <label for="userIdentifierField">Customer number or primary email address for account:</label>
+    <input [(ngModel)]="userIdentifier"
+            id="userIdentifierField"
+            class="form-control"
+            placeholder="myemail@school.edu or 1011010101" />
+  </div>
+
+  <div class="form-group">
+    <label for="passwordEnteredField">Customer number or primary email address for account:</label>
+    <input [(ngModel)]="passwordEntered"
+            [type]="hidePasswordEntered ? 'password' : 'text'"
+            id="passwordEnteredField"
+            class="form-control"
+            placeholder="-----" />
+    <button type="button" class="btn btn-info" (click)="showHidePassword()">Show / Hide</button>
+  </div>
+</form>
+
+<div *ngIf="authenticationFailedBadUserIdentifier" class="row justify-content-center">
+  <div class="col-md-6 text-left">
+    Sorry, customer number or primary email address entered not found for any account.
+  </div>
 </div>
-<div>
-  <institutional-profile></institutional-profile>
+
+<div *ngIf="authenticationFailedBadPassword" class="row justify-content-center">
+  <div class="col-md-6 text-left">
+    Sorry, password entered incorrectly or wrong password for this account.
+  </div>
 </div>
+
+<button type="button" class="btn btn-primary"
+        (click)="authenticateUser(userIdentifier, passwordEntered)"
+        [disabled]="!userIdentifier || !passwordEntered">
+  Login to Customer Portal
+</button>
+
+<button (click)="openChooseCustomerNumberModal(chooseCustomerNumberTemplate)" [hidden]="true">
+  Hidden Open Choose Customer-Number Modal Button
+</button>
+
+<ng-template #chooseCustomerNumberTemplate>
+  <div class="modal-body text-center">
+    <form>
+      <div class="form-group">
+        Mulitple customer numbers have this primary email address.
+        <label for="customerNumberChoices"><b>Please Choose:</b></label>
+        <div id="customerNumberChoices">
+          <ul>
+            <li *ngFor="let customerNumber of customerNumbers"
+                (click)="chooseCustomerNumber(customerNumber)">
+              <span>{{customerNumber}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+
+

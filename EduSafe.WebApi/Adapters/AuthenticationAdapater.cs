@@ -1,35 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using EduSafe.Core.Repositories.Database;
 
 namespace EduSafe.WebApi.Adapters
 {
     public class AuthenticationAdapater
     {
-        public long GetInstitutionCustomerNumberFromIdentifer(string customerIdentifier)
+        private AuthenticationRepository _authenicationRepository;
+
+        public AuthenticationAdapater(long customerNumber)
         {
-            throw new NotImplementedException();
+            _authenicationRepository = new AuthenticationRepository(customerNumber);
         }
 
-        public long GetIndividualCustomerNumberFromIdentifer(string customerIdentifier)
+        public AuthenticationAdapater(string emailAddress)
         {
-            throw new NotImplementedException();
+            _authenicationRepository = new AuthenticationRepository(emailAddress);
         }
 
-        public long GetInstitutionCustomerIdentifierFromNumber(long customerNumber)
+        public List<long> GetAllCustomerNumbers() => 
+            _authenicationRepository.AccountDataEntities.Select(e => e.AccountNumber).ToList();
+
+        public long GetCustomerNumberFromIdentifer(string customerIdentifier)
         {
-            throw new NotImplementedException();
+            var accountData = _authenicationRepository
+                .AccountDataEntities.SingleOrDefault(e => e.FolderPath == customerIdentifier);
+
+            return (accountData != null)
+                ? accountData.AccountNumber
+                : default;
         }
 
-        public long GetIndividualCustomerIdentifierFromNumber(long customerNumber)
+        public string GetCustomerIdentifierFromNumber(long customerNumber)
         {
-            throw new NotImplementedException();
-        }
+            var accountData = _authenicationRepository
+                .AccountDataEntities.SingleOrDefault(e => e.AccountNumber == customerNumber);
 
-        public List<string> GetCustomerNumbersFromEmailAddress(string emailAddress)
-        {
-            throw new NotImplementedException();
+            return (accountData != null)
+                ? accountData.FolderPath
+                : default;
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System;
+using EduSafe.IO.Interfaces;
 
 namespace EduSafe.IO.Database.Entities.Servicing.Individuals
 {
-    public class InsureesAccountDataEntity
+    public class InsureesAccountDataEntity : IAccountData
     {
         public long AccountNumber { get; set; }
         public string FolderPath { get; set; }

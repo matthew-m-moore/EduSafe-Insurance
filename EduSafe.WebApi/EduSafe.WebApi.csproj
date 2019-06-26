@@ -180,6 +180,7 @@
     </Compile>
     <Compile Include="Models\ActivityInputEntry.cs" />
     <Compile Include="Models\ArticleInformationEntry.cs" />
+    <Compile Include="Models\AuthenticationPackage.cs" />
     <Compile Include="Models\ClaimDocumentEntry.cs" />
     <Compile Include="Models\ClaimOptionEntry.cs" />
     <Compile Include="Models\ClaimPaymentEntry.cs" />

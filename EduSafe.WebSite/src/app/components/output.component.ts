@@ -1,5 +1,4 @@
 import { Component, Input, OnInit, AfterViewInit, ElementRef, TemplateRef } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal'
 
@@ -34,8 +33,7 @@ export class ModelOuputComponent implements OnInit, AfterViewInit {
     private elementRef: ElementRef,
     private modalService: BsModalService,
     private sendEmailService: SendEmailService,
-    private activityCaptureService: ActivityCaptureService,
-    private router: Router
+    private activityCaptureService: ActivityCaptureService
   ) { }
 
   revealModelInputsAgain(): void {
@@ -44,7 +42,7 @@ export class ModelOuputComponent implements OnInit, AfterViewInit {
     window.scroll(0, 0);
   }
 
-  openConfirmationModal(provideEmailTemplate: TemplateRef<any>) {
+  openConfirmationModal(provideEmailTemplate: TemplateRef<any>) : void {
     this.isSendingResults = true;
     this.modalReference = this.modalService.show(provideEmailTemplate, { class: 'modal-sm', animated: true });
   }
