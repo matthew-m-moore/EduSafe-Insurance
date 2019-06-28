@@ -10,7 +10,7 @@ import { FileTransferService } from '../services/fileTransfer.service';
   styleUrls: ['../styles/claim-detail.component.css']
 })
 
-export class ClaimTabComponent implements OnInit {
+export class ClaimDetailComponent implements OnInit {
   @Input('claim') claimStatusEntry: ClaimStatusEntry;
   @Input('customer') customerIdentifier: string;
   claimType: string;

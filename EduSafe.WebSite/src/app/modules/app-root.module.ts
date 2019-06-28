@@ -26,7 +26,8 @@ import { InstitutionalProfileComponent } from '../components/institutional-profi
 import { PaymentHistoryComponent } from '../components/payment-history.component';
 import { NotificationHistoryComponent } from '../components/notification-history.component';
 import { ClaimsComponent } from '../components/claims.component';
-import { ClaimComponent } from '../components/claim-detail.component';
+import { ClaimTabComponent } from '../components/claim-tab.component';
+import { ClaimDetailComponent } from '../components/claim-detail.component';
 
 import { AnimateOnScrollDirective } from '../directives/animateOnScroll.directive';
 import { DynamicTabsDirective } from '../directives/dynamicTabs.directive';
@@ -38,6 +39,10 @@ import { ArticleInformationService } from '../services/articleInformation.servic
 import { IpAddressCaptureService } from '../services/ipAddressCapture.service';
 import { ScrollInformationService } from '../services/scrollInformation.service';
 import { SendEmailService } from '../services/sendEmail.Service';
+import { AuthenticationService } from '../services/authentication.service';
+import { ExcelExportService } from '../services/excelExport.service';
+import { FileTransferService } from '../services/fileTransfer.service';
+import { ServicingDataService } from '../services/servicingData.Service';
 
 @NgModule({
   imports: [
@@ -67,7 +72,8 @@ import { SendEmailService } from '../services/sendEmail.Service';
     PaymentHistoryComponent,
     NotificationHistoryComponent,
     ClaimsComponent,
-    ClaimComponent,
+    ClaimTabComponent,
+    ClaimDetailComponent,
     AnimateOnScrollDirective,
     DynamicTabsDirective,
   ],
@@ -78,7 +84,11 @@ import { SendEmailService } from '../services/sendEmail.Service';
     ArticleInformationService,
     IpAddressCaptureService,
     ScrollInformationService,
-    SendEmailService
+    SendEmailService,
+    AuthenticationService,
+    ExcelExportService,
+    FileTransferService,
+    ServicingDataService,
   ],
   bootstrap: [
     AppRootComponent
