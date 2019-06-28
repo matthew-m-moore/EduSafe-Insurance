@@ -11,7 +11,7 @@ namespace EduSafe.Core.Repositories.Database
         private readonly DbContext _databaseContext;
         public override DbContext DatabaseContext => _databaseContext ?? DatabaseContextRetriever.GetServicingDataContext();
 
-        public InstitutionServicingDataRepository(DbContext databaseContext)
+        public InstitutionServicingDataRepository(DbContext databaseContext = null)
         {
             _databaseContext = databaseContext;
         }

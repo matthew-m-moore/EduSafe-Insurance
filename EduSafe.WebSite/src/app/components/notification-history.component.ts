@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { ServicingDataService } from '../services/servicingData.service';
+import { NotificationHistoryEntry } from '../classes/notificationHistoryEntry';
 
 @Component({
   selector: 'notification-history',
@@ -9,4 +9,16 @@ import { ServicingDataService } from '../services/servicingData.service';
 })
 
 export class NotificationHistoryComponent {
+  public notificationHistoryEntries: NotificationHistoryEntry[]
+
+  constructor(notificationHistoryEntries: NotificationHistoryEntry[]) {
+      this.notificationHistoryEntries = notificationHistoryEntries;
+  }
+
+  checkNotificationHistory(): boolean {
+    if (this.notificationHistoryEntries)
+      return this.notificationHistoryEntries.length > 0
+
+    return false;
+  }
 }

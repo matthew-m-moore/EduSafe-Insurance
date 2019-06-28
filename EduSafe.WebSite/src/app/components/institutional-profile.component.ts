@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { NotificationHistoryComponent } from '../components/notification-history.component'
@@ -15,9 +15,16 @@ import { ServicingDataService } from '../services/servicingData.service';
   styleUrls: ['../styles/institutional-profile.component.css']
 })
 
-export class InsitutionalProfileComponent implements OnInit {
+export class InstitutionalProfileComponent implements OnInit {
   institutionProfileEntry: InstitutionProfileEntry;
   customerNumber: string;
+
+  public isCustomerInformationRetrievedSuccessfully = true;
+  public customerHasPaymentHistory = false;
+  public customerHasNotificationHistory = false;
+
+  @ViewChild('paymentHistory') private paymentHistoryComponent: PaymentHistoryComponent;
+  @ViewChild('notificationHistory') private notificationHistoryComponent: NotificationHistoryComponent;
 
   constructor(
     private servicingDataService: ServicingDataService,
@@ -30,8 +37,26 @@ export class InsitutionalProfileComponent implements OnInit {
         });
   }
 
+  goBackToAuthentication(): void {
+    this.router.navigate(['/portal-authentication']);
+  }
+
   ngOnInit(): void {
     this.servicingDataService.getInstituionalServicingData(this.customerNumber)
-      .then(result => this.institutionProfileEntry = result);
+      .then(result => {
+        this.institutionProfileEntry = result;
+        if (!this.institutionProfileEntry.CustomerIdNumber) {
+          this.isCustomerInformationRetrievedSuccessfully = false;
+        }   
+        else {
+          this.paymentHistoryComponent =
+            new PaymentHistoryComponent(this.institutionProfileEntry.PaymentHistoryEntries);
+          this.notificationHistoryComponent =
+            new NotificationHistoryComponent(this.institutionProfileEntry.NotificationHistoryEntries);
+
+          this.customerHasPaymentHistory = this.paymentHistoryComponent.checkPaymentHistory();
+          this.customerHasNotificationHistory = this.notificationHistoryComponent.checkNotificationHistory();
+        }
+      });
   }
 }

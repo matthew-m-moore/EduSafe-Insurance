@@ -10,7 +10,7 @@ import { ContactComponent } from '../components/contact.component';
 import { ArticlesComponent } from '../components/articles.component';
 
 import { AuthenticationComponent } from '../components/authentication.component';
-import { InsitutionalProfileComponent } from '../components/institutional-profile.component';
+import { InstitutionalProfileComponent } from '../components/institutional-profile.component';
 import { IndividualProfileComponent } from '../components/individual-profile.component';
 import { ClaimsComponent } from '../components/claims.component';
 
@@ -74,7 +74,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'institutional-profile',
-    component: InsitutionalProfileComponent,
+    component: InstitutionalProfileComponent,
     data: {
       title: 'Edu$afe, Institional Customer Portal',
     }
@@ -87,10 +87,10 @@ const appRoutes: Routes = [
     }
   },
   {
-    path: 'claims-detail',
+    path: 'claims-inventory',
     component: ClaimsComponent,
     data: {
-      title: 'Edu$afe, Claims Details',
+      title: 'Edu$afe, Claims',
     }
   },
 ];

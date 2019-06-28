@@ -1,15 +1,55 @@
-<!--Total Paid-In Premiums-->
-<!--Next Premium Due-->
-<!--Next Premium Amount-->
-<!--Policy Details (Expands if Opened?)-->
-<div>
-  <payment-history></payment-history>
-</div>
-<div>
-  <notification-history></notification-history>
+<div *ngIf="!showClaimsDetail">
+  <!--Total Paid-In Premiums-->
+  <!--Next Premium Due-->
+  <!--Next Premium Amount-->
+  <!--Policy Details (Expands if Opened?)-->
+  <div id="accordion">
+    <div *ngIf="customerHasPaymentHistory">
+      <div class="card w-100">
+        <div class="card-header">
+          <h2>
+            <button class="btn btn-secondary"
+                    data-toggle="collapse"
+                    data-target="#paymentHistoryTable">
+              Notification History
+            </button>
+          </h2>
+        </div>
+        <div id="paymentHistoryTable" class="collapse show" data-parent="#accordion">
+          <div class="card-body">
+            <payment-history #paymentHistory></payment-history>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="customerHasNotificationHistory">
+      <div class="card w-100">
+        <div class="card-header">
+          <h2>
+            <button class="btn btn-secondary"
+                    data-toggle="collapse"
+                    data-target="#notificationHistoryTable">
+              Notification History
+            </button>
+          </h2>
+        </div>
+        <div id="notificationHistoryTable" class="collapse show" data-parent="#accordion">
+          <div class="card-body">
+            <notification-history #notificationHistory></notification-history>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary" (click)="toggleClaimsInventory()">
+    Show Claims
+  </button>
 </div>
 <!--View Claims Details Button-->
 <!--This claims section would use ngIf to collapse everything above it-->
-<div>
-  <claims-detail></claims-detail>
+<div *ngIf="showClaimsInventory">
+  <button type="button" class="btn btn-primary" (click)="toggleClaimsInventory()">
+    Hide Claims
+  </button>
+  <claims-inventory></claims-inventory>
 </div>

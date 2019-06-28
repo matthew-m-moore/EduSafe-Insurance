@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
+﻿using System.Web.Http;
+using EduSafe.WebApi.Adapters;
 using EduSafe.WebApi.Models;
 
 namespace EduSafe.WebApi.Controllers
@@ -14,7 +11,14 @@ namespace EduSafe.WebApi.Controllers
         [Route("institution/{customerIdentifier}")]
         [HttpGet]
         public InstitutionProfileEntry GetInstitutionProfile(string customerIdentifier)
-        {   
+        {
+            var institutionServicingDataAdapter = new InstitutionServicingDataAdapter();
+            if (long.TryParse(customerIdentifier, out var customerNumber))
+            {
+                var institutionProfileEntry = institutionServicingDataAdapter.GetInstitutionProfileData(customerNumber);
+                return institutionProfileEntry;
+            }
+
             return new InstitutionProfileEntry();
         }
 
@@ -23,6 +27,13 @@ namespace EduSafe.WebApi.Controllers
         [HttpGet]
         public CustomerProfileEntry GetCustomerProfile(string customerIdentifier)
         {
+            var individualServicingDataAdapter = new IndividualServicingDataAdapter();
+            if (long.TryParse(customerIdentifier, out var customerNumber))
+            {
+                var customerProfileEntry = individualServicingDataAdapter.GetIndividualProfileData(customerNumber);
+                return customerProfileEntry;
+            }
+
             return new CustomerProfileEntry();
         }
     }

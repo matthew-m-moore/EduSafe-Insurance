@@ -20,8 +20,16 @@ import { ModelComponent } from '../components/model.component';
 import { ModelOuputComponent } from '../components/output.component';
 import { ContactComponent } from '../components/contact.component';
 import { ArticlesComponent } from '../components/articles.component';
+import { AuthenticationComponent } from '../components/authentication.component';
+import { IndividualProfileComponent } from '../components/individual-profile.component';
+import { InstitutionalProfileComponent } from '../components/institutional-profile.component';
+import { PaymentHistoryComponent } from '../components/payment-history.component';
+import { NotificationHistoryComponent } from '../components/notification-history.component';
+import { ClaimsComponent } from '../components/claims.component';
+import { ClaimComponent } from '../components/claim-detail.component';
 
 import { AnimateOnScrollDirective } from '../directives/animateOnScroll.directive';
+import { DynamicTabsDirective } from '../directives/dynamicTabs.directive';
 
 import { ActivityCaptureService } from '../services/activityCapture.service';
 import { ModelCalculationService } from '../services/modelCalculation.service';
@@ -53,7 +61,15 @@ import { SendEmailService } from '../services/sendEmail.Service';
     ModelOuputComponent,
     ContactComponent,
     ArticlesComponent,
-    AnimateOnScrollDirective
+    AuthenticationComponent,
+    IndividualProfileComponent,
+    InstitutionalProfileComponent,
+    PaymentHistoryComponent,
+    NotificationHistoryComponent,
+    ClaimsComponent,
+    ClaimComponent,
+    AnimateOnScrollDirective,
+    DynamicTabsDirective,
   ],
   providers: [
     ActivityCaptureService,

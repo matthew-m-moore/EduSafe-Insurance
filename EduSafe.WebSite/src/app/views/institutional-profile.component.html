@@ -1,10 +1,42 @@
 <!--Next Payment Due-->
 <!--Next Payment Amount-->
 <!--Student Details (Expands if Opened? Needs Excel Export Button)-->
-  <!--Can double-click on a studnet to see their individual page-->
-<div>
-  <payment-history></payment-history>
-</div>
-<div>
-  <notification-history></notification-history>
+  <!--Can double-click on a student to see their individual page-->
+<div id="accordion">
+  <div *ngIf="customerHasPaymentHistory">
+    <div class="card w-100">
+      <div class="card-header">
+        <h2>
+          <button class="btn btn-secondary"
+                  data-toggle="collapse"
+                  data-target="#paymentHistoryTable">
+            Notification History
+          </button>
+        </h2>
+      </div>
+      <div id="paymentHistoryTable" class="collapse show" data-parent="#accordion">
+        <div class="card-body">
+          <payment-history #paymentHistory></payment-history>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="customerHasNotificationHistory">
+    <div class="card w-100">
+      <div class="card-header">
+        <h2>
+          <button class="btn btn-secondary"
+                  data-toggle="collapse"
+                  data-target="#notificationHistoryTable">
+            Notification History
+          </button>
+        </h2>
+      </div>
+      <div id="notificationHistoryTable" class="collapse show" data-parent="#accordion">
+        <div class="card-body">
+          <notification-history #notificationHistory></notification-history>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

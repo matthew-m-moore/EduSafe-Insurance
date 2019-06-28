@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { ServicingDataService } from '../services/servicingData.service';
+import { PaymentHistoryEntry } from '../classes/paymentHistoryEntry';
 
 @Component({
   selector: 'payment-history',
@@ -9,4 +9,16 @@ import { ServicingDataService } from '../services/servicingData.service';
 })
 
 export class PaymentHistoryComponent {
+  public paymentHistoryEntries: PaymentHistoryEntry[]
+
+  constructor(paymentHistoryEntries: PaymentHistoryEntry[]) {
+      this.paymentHistoryEntries = paymentHistoryEntries;
+  }
+
+  checkPaymentHistory(): boolean {
+    if (this.paymentHistoryEntries)
+      return this.paymentHistoryEntries.length > 0
+
+    return false;
+  }
 }

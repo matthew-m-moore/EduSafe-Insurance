@@ -1,1 +1,20 @@
 <!--Loop through notification history entries to show in table-->
+<h2>Notification History</h2>
+<div class="table-responsive table-sm">
+  <table align="center" class="table">
+    <thead class="thead-light">
+      <tr>
+        <td><b>Date</b></td>
+        <td><b>Type</b></td>
+        <td><b>Description</b></td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let notificationHistoryEntry of notificationHistoryEntries">
+        <td><b>{{ notificationHistoryEntry.NotificationDate | date: 'shortDate' }}</b></td>
+        <td>{{ notificationHistoryEntry.NotificationType }}</td>
+        <td>{{ notificationHistoryEntry.NotificationDescription }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
