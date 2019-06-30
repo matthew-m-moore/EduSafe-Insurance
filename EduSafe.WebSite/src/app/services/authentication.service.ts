@@ -11,6 +11,8 @@ export class AuthenticationService {
   private idAuthUrl = EnvironmentSettings.BaseApiUrl + '/api/authentication/user';
   private headers = new Headers({ 'Content-Type': 'application/json' });
 
+  public isAuthenticated = false;
+
   constructor(private http: Http) { }
 
   authenticateUser(authenticationPackage: AuthenticationPackage): Promise<boolean> {

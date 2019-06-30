@@ -14,14 +14,14 @@
     <div class="card w-100">
       <div class="card-header">
         <h2>
-          <button class="btn btn-info"
-                  data-toggle="collapse"
-                  data-target="#customerInformation">
+          <button class="btn btn-link"
+                  (click)="isCustomerInformationCollapsed = !isCustomerInformationCollapsed"
+                  aria-expanded="false">
             Policyholder Contact Information
           </button>
         </h2>
       </div>
-      <div id="customerInformation" class="collapse show" data-parent="#accordion">
+      <div class="collapse" [collapse]="isCustomerInformationCollapsed" data-parent="#accordion">
         <div class="card-body">
           <ul>
             <li><b>Name:</b> {{ customerProfileEntry.CustomerName }}</li>
@@ -33,7 +33,7 @@
             <li><b>Zip:</b> {{ customerProfileEntry.CustomerZip }}</li>
             <li>
               <b>Emails:</b>
-              <div class="table-responsive table-sm">
+              <div class="table-sm">
                 <table align="center" class="table">
                   <thead>
                     <tr>
@@ -45,7 +45,7 @@
                   <tbody>
                     <tr *ngFor="let customerEmailEntry of customerProfileEntry.CustomerEmails">
                       <td>{{ customerEmailEntry.EmailAddress }}</td>
-                      <td><input type="checkbox" value="customerEmailEntry.IsFileVerified" disabled /></td>
+                      <td><input type="checkbox" [(ngModel)]="customerEmailEntry.IsPrimary" [ngModelOptions]="{standalone: true}" disabled /></td>
                       <td>
                         <button class="btn btn-success" (click)="makeEmailPrimary(customerEmailEntry)">Make Primary</button>
                         <button class="btn btn-dark" (click)="removeEmail(customerEmailEntry)">Remove Email</button>
@@ -58,12 +58,14 @@
                 <div class="form-group">
                   <input type="email" class="form-control" placeholder="Enter New Email"
                          [(ngModel)]="newEmailAddress"
-                         (ngModelChange)="checkIfEmailCanBeAdded($event)">
+                         (ngModelChange)="checkIfEmailCanBeAdded($event)"
+                         name="addNewEmailInput">
                   <button class="btn btn-primary" (click)="addEmailAddress()" [disabled]="canNewEmailBeAdded">Add Email</button>
                 </div>
                 <div class="form-check">
                   <input type="checkbox" class="form-check-input" id="makeNewEmailPrimary"
-                         [(ngModel)]="isNewEmailAddressPrimary">
+                         [(ngModel)]="isNewEmailAddressPrimary"
+                         name="makeNewEmailPrimaryCheckbox">
                   <label class="form-check-label" for="makeNewEmailPrimary">Make Primary</label>
                 </div>
               </form>
@@ -76,14 +78,14 @@
       <div class="card w-100">
         <div class="card-header">
           <h2>
-            <button class="btn btn-secondary"
-                    data-toggle="collapse"
-                    data-target="#paymentHistoryTable">
-              Notification History
+            <button class="btn btn-link"
+                    (click)="isPaymentHistoryCollapsed = !isPaymentHistoryCollapsed"
+                    aria-expanded="false">
+              Payment History
             </button>
           </h2>
         </div>
-        <div id="paymentHistoryTable" class="collapse show" data-parent="#accordion">
+        <div class="collapse" [collapse]="isPaymentHistoryCollapsed" data-parent="#accordion">
           <div class="card-body">
             <payment-history #paymentHistory></payment-history>
           </div>
@@ -94,14 +96,14 @@
       <div class="card w-100">
         <div class="card-header">
           <h2>
-            <button class="btn btn-secondary"
-                    data-toggle="collapse"
-                    data-target="#notificationHistoryTable">
+            <button class="btn btn-link"
+                    (click)="isNotificationHistoryCollapsed = !isNotificationHistoryCollapsed"
+                    aria-expanded="false">
               Notification History
             </button>
           </h2>
         </div>
-        <div id="notificationHistoryTable" class="collapse show" data-parent="#accordion">
+        <div class="collapse" [collapse]="isNotificationHistoryCollapsed" data-parent="#accordion">
           <div class="card-body">
             <notification-history #notificationHistory></notification-history>
           </div>

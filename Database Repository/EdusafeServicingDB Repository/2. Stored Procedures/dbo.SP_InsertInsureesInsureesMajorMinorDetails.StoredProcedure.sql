@@ -7,12 +7,9 @@ GO
 CREATE PROCEDURE SP_InsertInsureesInsureesMajorMinorDetails
 	@InsureesMajorMinorDetailsSetId int
 	, @AccountNumber bigint 
-	, @CollegeMajor varchar(50)
+	, @CollegeMajorId int
 	, @IsMinor bit 
 AS
-
-DECLARE @CollegeMajorId int
-SET @CollegeMajorId = (SELECT Id FROM CollegeMajor WHERE CollegeMajor = @CollegeMajor)
 
 INSERT INTO dbo.InsureesMajorMinorDetails
 (

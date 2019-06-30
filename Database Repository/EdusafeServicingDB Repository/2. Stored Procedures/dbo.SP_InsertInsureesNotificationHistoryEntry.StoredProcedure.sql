@@ -6,13 +6,10 @@ GO
 
 CREATE PROCEDURE SP_InsertInsureesNotificationHistoryEntry
 	@AccountNumber bigint
-	, @NotificationType varchar(50) 
+	, @NotificationTypeId int
 	, @NotificationDate datetime
 
 AS
-
-DECLARE @NotificationTypeId int
-SET @NotificationTypeId = (SELECT Id FROM dbo.NotificationType WHERE NotificationType = @NotificationType)
 
 INSERT INTO dbo.InsureesNotificationHistoryEntry
 (

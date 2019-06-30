@@ -8,13 +8,10 @@ CREATE PROCEDURE SP_InsertClaimPaymentEntry
 	@ClaimNumber bigint
 	, @ClaimPaymentAmount float
 	, @ClaimPaymentDate datetime
-	, @ClaimPaymentStatusType varchar(50)
+	, @ClaimPaymentStatusTypeId int
 	, @ClaimPaymentComments varchar(250) null
 
 AS
-
-DECLARE @ClaimPaymentStatusTypeId int
-SET @ClaimPaymentStatusTypeId = (SELECT Id FROM dbo.PaymentStatusType WHERE PaymentStatusType = @ClaimPaymentStatusType)
 
 INSERT INTO dbo.ClaimPaymentEntry
 (			

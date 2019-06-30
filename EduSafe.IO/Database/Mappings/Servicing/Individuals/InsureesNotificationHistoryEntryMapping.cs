@@ -17,16 +17,14 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Individuals
                 .HasColumnName("Id")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            Property(t => t.NotificationTypeId).HasColumnName("NotificationTypeId")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-
             Property(t => t.AccountNumber).HasColumnName("AccountNumber");
+            Property(t => t.NotificationTypeId).HasColumnName("NotificationTypeId");
             Property(t => t.NotificationDate).HasColumnName("NotificationDate");
 
             MapToStoredProcedures(s =>
                 s.Insert(i => i.HasName("SP_InsertInsureesNotificationHistoryEntry", Constants.DatabaseOwnerSchemaName)
                     .Parameter(p => p.AccountNumber, "AccountNumber")
-                    .Parameter(p => p.NotificationType, "NotificationType")
+                    .Parameter(p => p.NotificationTypeId, "NotificationTypeId")
                     .Parameter(p => p.NotificationDate, "NotificationDate")                    
                     ));
         }

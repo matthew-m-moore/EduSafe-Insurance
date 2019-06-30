@@ -3,12 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { NotificationHistoryComponent } from '../components/notification-history.component'
 import { PaymentHistoryComponent } from '../components/payment-history.component'
-import { ClaimsComponent } from '../components/claims.component'
 
 import { CustomerProfileEntry } from '../classes/customerProfileEntry';
 import { CustomerEmailEntry } from '../classes/customerEmailEntry';
 
 import { ServicingDataService } from '../services/servicingData.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'individual-profile',
@@ -27,6 +27,10 @@ export class IndividualProfileComponent implements OnInit {
   public customerHasClaims = false;
   public showClaimsHistory = false;
 
+  isCustomerInformationCollapsed = true;
+  isPaymentHistoryCollapsed = true;
+  isNotificationHistoryCollapsed = true;
+
   @Input() newEmailAddress: string;
   @Input() isNewEmailAddressPrimary: boolean;
 
@@ -34,10 +38,12 @@ export class IndividualProfileComponent implements OnInit {
   @ViewChild('notificationHistory') private notificationHistoryComponent: NotificationHistoryComponent;
 
   constructor(
+    private authenticationService: AuthenticationService,
     private servicingDataService: ServicingDataService,
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {
+      this.customerProfileEntry = new CustomerProfileEntry();
       this.activatedRoute.queryParams
         .subscribe((params) => {
           this.customerNumber = params.customerNumber;
@@ -109,23 +115,28 @@ export class IndividualProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.servicingDataService.getIndividualsServicingData(this.customerNumber)
-      .then(result => {
-        this.customerProfileEntry = result;
-        if (!this.customerProfileEntry.CustomerIdNumber) {
-          this.isCustomerInformationRetrievedSuccessfully = false;
-        }
-        else {
-          this.paymentHistoryComponent =
-            new PaymentHistoryComponent(this.customerProfileEntry.PaymentHistoryEntries);
-          this.notificationHistoryComponent =
-            new NotificationHistoryComponent(this.customerProfileEntry.NotificationHistoryEntries);
+    if (!this.authenticationService.isAuthenticated)
+      this.goBackToAuthentication();
+    else {
+      this.authenticationService.isAuthenticated = false;
+      this.servicingDataService.getIndividualsServicingData(this.customerNumber)
+        .then(result => {
+          this.customerProfileEntry = result;
+          if (!this.customerProfileEntry.CustomerIdNumber) {
+            this.isCustomerInformationRetrievedSuccessfully = false;
+          }
+          else {
+            this.paymentHistoryComponent =
+              new PaymentHistoryComponent(this.customerProfileEntry.PaymentHistoryEntries);
+            this.notificationHistoryComponent =
+              new NotificationHistoryComponent(this.customerProfileEntry.NotificationHistoryEntries);
 
-          this.customerHasPaymentHistory = this.paymentHistoryComponent.checkPaymentHistory();
-          this.customerHasNotificationHistory = this.notificationHistoryComponent.checkNotificationHistory();
+            this.customerHasPaymentHistory = this.paymentHistoryComponent.checkPaymentHistory();
+            this.customerHasNotificationHistory = this.notificationHistoryComponent.checkNotificationHistory();
 
-          this.customerHasClaims = this.checkClaimsHistory();
-        }
-      });
+            this.customerHasClaims = this.checkClaimsHistory();
+          }
+        });
+    }
   }
 }

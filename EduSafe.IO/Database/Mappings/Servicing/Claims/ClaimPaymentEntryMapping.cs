@@ -17,12 +17,10 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Claims
                 .HasColumnName("Id")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            Property(t => t.ClaimPaymentStatusTypeId).HasColumnName("ClaimPaymentStatusTypeId")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-
             Property(t => t.ClaimNumber).HasColumnName("ClaimNumber");
             Property(t => t.ClaimPaymentAmount).HasColumnName("ClaimPaymentAmount");
             Property(t => t.ClaimPaymentDate).HasColumnName("ClaimPaymentDate");
+            Property(t => t.ClaimPaymentStatusTypeId).HasColumnName("ClaimPaymentStatusTypeId");
             Property(t => t.ClaimPaymentComments).HasColumnName("ClaimPaymentComments");
 
             MapToStoredProcedures(s =>
@@ -30,6 +28,7 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Claims
                     .Parameter(p => p.ClaimNumber, "ClaimNumber")
                     .Parameter(p => p.ClaimPaymentAmount, "ClaimPaymentAmount")
                     .Parameter(p => p.ClaimPaymentDate, "ClaimPaymentDate")
+                    .Parameter(p => p.ClaimPaymentStatusTypeId, "ClaimPaymentStatusTypeId")
                     .Parameter(p => p.ClaimPaymentComments, "ClaimPaymentComments")
                     ));
         }

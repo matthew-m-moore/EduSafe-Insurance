@@ -17,12 +17,10 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Claims
                 .HasColumnName("Id")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            Property(t => t.FileVerificationStatusTypeId).HasColumnName("FileVerificationStatusTypeId")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-
             Property(t => t.ClaimNumber).HasColumnName("ClaimNumber");
             Property(t => t.FileName).HasColumnName("FileName");
-            Property(t => t.FileType).HasColumnName("FileType");        
+            Property(t => t.FileType).HasColumnName("FileType");
+            Property(t => t.FileVerificationStatusTypeId).HasColumnName("FileVerificationStatusTypeId");
             Property(t => t.IsVerified).HasColumnName("IsVerified");
             Property(t => t.UploadDate).HasColumnName("UploadDate");
             Property(t => t.ExpirationDate).HasColumnName("ExpirationDate");
@@ -32,7 +30,7 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Claims
                     .Parameter(p => p.ClaimNumber, "ClaimNumber")
                     .Parameter(p => p.FileName, "FileName")
                     .Parameter(p => p.FileType, "FileType")
-                    .Parameter(p => p.FileVerificationStatusType, "FileVerificationStatusType")
+                    .Parameter(p => p.FileVerificationStatusTypeId, "FileVerificationStatusTypeId")
                     .Parameter(p => p.IsVerified, "IsVerified")
                     .Parameter(p => p.UploadDate, "UploadDate")
                     .Parameter(p => p.ExpirationDate, "ExpirationDate")

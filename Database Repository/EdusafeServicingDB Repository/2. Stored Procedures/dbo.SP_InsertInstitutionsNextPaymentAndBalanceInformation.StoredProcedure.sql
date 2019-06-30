@@ -9,12 +9,9 @@ CREATE PROCEDURE SP_InsertInstitutionsNextPaymentAndBalanceInformation
 	, @NextPaymentAmount float
 	, @NextPaymentDate datetime
 	, @CurrentBalance float
-	, @NextPaymentStatusType varchar(50)
+	, @NextPaymentStatusTypeId int
 
 AS
-
-DECLARE @NextPaymentStatusTypeId int
-SET @NextPaymentStatusTypeId = (SELECT Id FROM dbo.PaymentStatusType WHERE PaymentStatusType = @NextPaymentStatusType)
 
 INSERT INTO dbo.InstitutionsNextPaymentAndBalanceInformation
 (

@@ -17,16 +17,14 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Claims
                 .HasColumnName("Id")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            Property(t => t.ClaimStatusTypeId).HasColumnName("ClaimStatusTypeId")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-
             Property(t => t.ClaimNumber).HasColumnName("ClaimNumber");
+            Property(t => t.ClaimStatusTypeId).HasColumnName("ClaimStatusTypeId");
             Property(t => t.IsClaimApproved).HasColumnName("IsClaimApproved");
 
             MapToStoredProcedures(s =>
                 s.Insert(i => i.HasName("SP_InsertClaimStatusEntry", Constants.DatabaseOwnerSchemaName)
                     .Parameter(p => p.ClaimNumber, "ClaimNumber")
-                    .Parameter(p => p.ClaimStatusType, "ClaimStatusType")
+                    .Parameter(p => p.ClaimStatusTypeId, "ClaimStatusTypeId")
                     .Parameter(p => p.IsClaimApproved, "IsClaimApproved")
                     ));
         }

@@ -17,16 +17,14 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Individuals
                 .HasColumnName("Id")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            Property(t => t.OptionTypeId).HasColumnName("OptionTypeId")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-
             Property(t => t.InsureesPremiumCalculationOptionDetailsSetId).HasColumnName("InsureesPremiumCalculationOptionDetailsSetId");
+            Property(t => t.OptionTypeId).HasColumnName("OptionTypeId");
             Property(t => t.OptionPercentage).HasColumnName("OptionPercentage");
 
             MapToStoredProcedures(s =>
                 s.Insert(i => i.HasName("SP_InsertInsureesPremiumCalculationOptionDetails", Constants.DatabaseOwnerSchemaName)
                     .Parameter(p => p.InsureesPremiumCalculationOptionDetailsSetId, "InsureesPremiumCalculationOptionDetailsSetId")
-                    .Parameter(p => p.OptionType, "OptionType")
+                    .Parameter(p => p.OptionTypeId, "OptionTypeId")
                     .Parameter(p => p.OptionPercentage, "OptionPercentage")
                     ));
         }

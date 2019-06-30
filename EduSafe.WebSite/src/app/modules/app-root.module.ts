@@ -11,6 +11,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar'
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { AppRoutingModule } from '../modules/routing.module';
 
@@ -57,6 +58,7 @@ import { ServicingDataService } from '../services/servicingData.service';
     ButtonsModule.forRoot(),
     ModalModule.forRoot(),
     ProgressbarModule.forRoot(),
+    CollapseModule.forRoot(),
     AppRoutingModule  
   ],
   declarations: [

@@ -11,14 +11,11 @@ CREATE PROCEDURE SP_InsertInsureesPremiumCalculationDetails
 	, @CoverageMonths int
 	, @CollegeStartDate datetime
 	, @ExpectedGraduationDate datetime
-	, @CollegeName varchar(250)
+	, @CollegeDetailId int
 	, @InsureesMajorMinorDetailsSetId int
 	, @MajorDeclarationDate datetime null
 	, @UnitsCompleted int
 AS
-
-DECLARE @CollegeDetailId int
-SET @CollegeDetailId = (SELECT Id FROM CollegeDetail WHERE CollegeName = @CollegeName)
 
 INSERT INTO dbo.InsureesPremiumCalculationDetails
 (

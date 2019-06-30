@@ -17,18 +17,15 @@ namespace EduSafe.IO.Database.Mappings.Servicing
                 .HasColumnName("Id")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            Property(t => t.CollegeTypeId).HasColumnName("CollegeTypeId")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            Property(t => t.CollegeAcademicTermTypeId).HasColumnName("CollegeAcademicTermTypeId")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-
             Property(t => t.CollegeName).HasColumnName("CollegeName");
+            Property(t => t.CollegeTypeId).HasColumnName("CollegeTypeId");
+            Property(t => t.CollegeAcademicTermTypeId).HasColumnName("CollegeAcademicTermTypeId");
 
             MapToStoredProcedures(s =>
                 s.Insert(i => i.HasName("SP_InsertCollegeDetail", Constants.DatabaseOwnerSchemaName)
                     .Parameter(p => p.CollegeName, "CollegeName")
-                    .Parameter(p => p.CollegeType, "CollegeType")
-                    .Parameter(p => p.CollegeAcademicTermType, "CollegeAcademicTermType")
+                    .Parameter(p => p.CollegeTypeId, "CollegeTypeId")
+                    .Parameter(p => p.CollegeAcademicTermTypeId, "CollegeAcademicTermTypeId")
                     ));
         }
     }

@@ -6,17 +6,9 @@ GO
 
 CREATE PROCEDURE SP_InsertCollegeDetail
 	@CollegeName varchar(250)
-	, @CollegeType varchar(25) 
-	, @CollegeAcademicTermType varchar(25)
+	, @CollegeTypeId int
+	, @CollegeAcademicTermTypeId int
 AS
-
-DECLARE @CollegeTypeId int
-SET @CollegeTypeId = 
-	(SELECT Id FROM CollegeType WHERE CollegeType = @CollegeType)
-
-DECLARE @CollegeAcademicTermTypeId int 
-SET @CollegeAcademicTermTypeId = 
-	(SELECT Id FROM CollegeAcademicTermType WHERE CollegeAcademicTermType = @CollegeAcademicTermType)
 
 INSERT INTO dbo.CollegeDetail
 (

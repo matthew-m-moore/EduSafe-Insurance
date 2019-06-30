@@ -2,7 +2,7 @@
 
 namespace EduSafe.IO.Database.Entities.Servicing.Claims
 {
-    public class ClaimDocumentEntryEntity
+    public partial class ClaimDocumentEntryEntity
     {
         public int Id { get; set; }
         public long ClaimNumber { get; set; }
@@ -12,7 +12,5 @@ namespace EduSafe.IO.Database.Entities.Servicing.Claims
         public bool IsVerified { get; set; }
         public DateTime UploadDate { get; set; }
         public DateTime? ExpirationDate { get; set; }
-
-        public string FileVerificationStatusType { get; set; }
     }
 }

@@ -6,13 +6,10 @@ GO
 
 CREATE PROCEDURE SP_InsertClaimOptionEntry
 	@ClaimNumber bigint
-	, @ClaimOptionType int
+	, @ClaimOptionTypeId int
 	, @ClaimOptionPercentage float
 
 AS
-
-DECLARE @ClaimOptionTypeId int
-SET @ClaimOptionTypeId = (SELECT Id FROM dbo.OptionType WHERE OptionType = @ClaimOptionType)
 
 INSERT INTO dbo.ClaimOptionEntry
 (			

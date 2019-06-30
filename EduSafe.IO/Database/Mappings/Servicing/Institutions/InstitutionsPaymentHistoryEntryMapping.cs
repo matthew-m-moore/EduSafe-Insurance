@@ -17,12 +17,10 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Institutions
                 .HasColumnName("Id")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            Property(t => t.PaymentStatusTypeId).HasColumnName("PaymentStatusTypeId")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-
             Property(t => t.InstitutionsAccountNumber).HasColumnName("InstitutionsAccountNumber");
             Property(t => t.PaymentAmount).HasColumnName("PaymentAmount");
             Property(t => t.PaymentDate).HasColumnName("PaymentDate");
+            Property(t => t.PaymentStatusTypeId).HasColumnName("PaymentStatusTypeId");
             Property(t => t.PaymentComments).HasColumnName("PaymentComments");
 
             MapToStoredProcedures(s =>
@@ -30,7 +28,7 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Institutions
                     .Parameter(p => p.InstitutionsAccountNumber, "InstitutionsAccountNumber")
                     .Parameter(p => p.PaymentAmount, "PaymentAmount")
                     .Parameter(p => p.PaymentDate, "PaymentDate")
-                    .Parameter(p => p.PaymentStatusType, "PaymentStatusType")
+                    .Parameter(p => p.PaymentStatusTypeId, "PaymentStatusTypeId")
                     .Parameter(p => p.PaymentComments, "PaymentComments")
                     ));
         }

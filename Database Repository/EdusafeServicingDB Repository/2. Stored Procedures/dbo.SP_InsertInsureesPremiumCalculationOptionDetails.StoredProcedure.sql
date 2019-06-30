@@ -6,12 +6,9 @@ GO
 
 CREATE PROCEDURE SP_InsertInsureesPremiumCalculationOptionDetails
 	@InsureesPremiumCalculationOptionDetailsSetId int 
-	, @OptionType varchar(25)  
+	, @OptionTypeId int  
 	, @OptionPercentage float 
 AS
-
-DECLARE @OptionTypeId int
-SET @OptionTypeId = (SELECT Id FROM dbo.OptionType WHERE OptionType = @OptionType)
 
 INSERT INTO dbo.InsureesPremiumCalculationOptionDetails
 (

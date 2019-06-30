@@ -8,15 +8,12 @@ CREATE PROCEDURE SP_InsertClaimDocumentEntry
 	@ClaimNumber bigint
 	, @FileName varchar(50)
 	, @FileType varchar(25)
-	, @FileVerificationStatusType varchar(25)
+	, @FileVerificationStatusTypeId int
 	, @IsVerified bit
 	, @UploadDate datetime
 	, @ExpirationDate datetime null
 
 AS
-
-DECLARE @FileVerificationStatusTypeId int
-SET @FileVerificationStatusTypeId = (SELECT Id FROM dbo.FileVerificationStatusType WHERE FileVerificationStatusType = @FileVerificationStatusType)
 
 INSERT INTO dbo.ClaimDocumentEntry
 (			

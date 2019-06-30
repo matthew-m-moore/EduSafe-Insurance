@@ -17,15 +17,13 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Individuals
                 .HasColumnName("Id")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            Property(t => t.CollegeDetailId).HasColumnName("CollegeDetailId")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-
             Property(t => t.PremiumCalculated).HasColumnName("PremiumCalculated");
             Property(t => t.PremiumCalculationDate).HasColumnName("PremiumCalculationDate");
             Property(t => t.TotalCoverageAmount).HasColumnName("TotalCoverageAmount");
             Property(t => t.CoverageMonths).HasColumnName("CoverageMonths");
             Property(t => t.CollegeStartDate).HasColumnName("CollegeStartDate");
             Property(t => t.ExpectedGraduationDate).HasColumnName("ExpectedGraduationDate");
+            Property(t => t.CollegeDetailId).HasColumnName("CollegeDetailId");
             Property(t => t.InsureesMajorMinorDetailsSetId).HasColumnName("InsureesMajorMinorDetailsSetId");
             Property(t => t.MajorDeclarationDate).HasColumnName("MajorDeclarationDate");
             Property(t => t.UnitsCompleted).HasColumnName("UnitsCompleted");
@@ -38,7 +36,7 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Individuals
                     .Parameter(p => p.CoverageMonths, "CoverageMonths")
                     .Parameter(p => p.CollegeStartDate, "CollegeStartDate")
                     .Parameter(p => p.ExpectedGraduationDate, "ExpectedGraduationDate")
-                    .Parameter(p => p.CollegeName, "CollegeName")
+                    .Parameter(p => p.CollegeDetailId, "CollegeDetailId")
                     .Parameter(p => p.InsureesMajorMinorDetailsSetId, "InsureesMajorMinorDetailsSetId")
                     .Parameter(p => p.MajorDeclarationDate, "MajorDeclarationDate")
                     .Parameter(p => p.UnitsCompleted, "UnitsCompleted")

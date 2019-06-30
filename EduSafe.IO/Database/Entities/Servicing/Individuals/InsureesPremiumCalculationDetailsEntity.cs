@@ -2,7 +2,7 @@
 
 namespace EduSafe.IO.Database.Entities.Servicing.Individuals
 {
-    public class InsureesPremiumCalculationDetailsEntity
+    public partial class InsureesPremiumCalculationDetailsEntity
     {
         public int Id { get; set; }
         public double PremiumCalculated { get; set; }
@@ -15,7 +15,5 @@ namespace EduSafe.IO.Database.Entities.Servicing.Individuals
         public int InsureesMajorMinorDetailsSetId { get; set; }
         public DateTime MajorDeclarationDate { get; set; }
         public int UnitsCompleted { get; set; }
-
-        public string CollegeName { get; set; }
     }
 }

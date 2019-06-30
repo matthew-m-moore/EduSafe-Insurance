@@ -2,7 +2,7 @@
 
 namespace EduSafe.IO.Database.Entities.Servicing.Individuals
 {
-    public class InsureesPaymentHistoryEntryEntity
+    public partial class InsureesPaymentHistoryEntryEntity
     {
         public int Id { get; set; }
         public long AccountNumber { get; set; }
@@ -10,7 +10,5 @@ namespace EduSafe.IO.Database.Entities.Servicing.Individuals
         public DateTime PaymentDate { get; set; }
         public int PaymentStatusTypeId { get; set; }
         public string PaymentComments { get; set; }
-
-        public string PaymentStatusType { get; set; }
     }
 }

@@ -40,8 +40,12 @@ namespace EduSafe.WebApi.Adapters
             var claimStatusEntries = GetClaimStatusEntries(individualServicingData);
             var claimPaymentEntries = GetClaimPaymentEntries(individualServicingData, out var remainingCoverageAmount);
 
-            var collegeName = _servicingDataTypesRepository
-                .CollegeNameDictionary[individualServicingData.PremiumCalculationDetails.CollegeDetailId];
+            var collegeName = string.Empty;
+            if (individualServicingData.PremiumCalculationDetails != null)
+            {
+                collegeName = _servicingDataTypesRepository
+                    .CollegeNameDictionary[individualServicingData.PremiumCalculationDetails.CollegeDetailId];
+            }
 
             var enrollmentVerificationEntity = individualServicingData.EnrollmentVerificationHistory.LastOrDefault();
             var graduationVerificationEntity = individualServicingData.GraduationVerificationHistory.LastOrDefault();
@@ -63,30 +67,44 @@ namespace EduSafe.WebApi.Adapters
                 CollegeName = collegeName,
                 CollegeMajor = collegeMajorFormatted,
                 CollegeMinor = collegeMinorFormatted,
-                CollegeStartDate = individualServicingData.PremiumCalculationDetails.CollegeStartDate,
-                ExpectedGraduationDate = individualServicingData.PremiumCalculationDetails.ExpectedGraduationDate,
+                CollegeStartDate = (individualServicingData.PremiumCalculationDetails != null)
+                    ? individualServicingData.PremiumCalculationDetails.CollegeStartDate
+                    : default,
+                ExpectedGraduationDate = (individualServicingData.PremiumCalculationDetails != null)
+                    ? individualServicingData.PremiumCalculationDetails.ExpectedGraduationDate
+                    : default,
                 NotificationHistoryEntries = notificationHistory,
 
-                CustomerBalance = individualServicingData.NextPaymentAndBalanceInformation.CurrentBalance,
-                MonthlyPaymentAmount = individualServicingData.NextPaymentAndBalanceInformation.NextPaymentAmount,
+                CustomerBalance = (individualServicingData.NextPaymentAndBalanceInformation != null)
+                    ? individualServicingData.NextPaymentAndBalanceInformation.CurrentBalance
+                    : default,
+                MonthlyPaymentAmount = (individualServicingData.NextPaymentAndBalanceInformation != null)
+                    ? individualServicingData.NextPaymentAndBalanceInformation.NextPaymentAmount
+                    : default,
                 TotalPaidInPremiums = totalPaidInPremiums,
-                NextPaymentDueDate = individualServicingData.NextPaymentAndBalanceInformation.NextPaymentDate,
+                NextPaymentDueDate = (individualServicingData.NextPaymentAndBalanceInformation != null)
+                    ? individualServicingData.NextPaymentAndBalanceInformation.NextPaymentDate
+                    : default,
                 PaymentHistoryEntries = paymentHistory,
 
-                TotalCoverageAmount = individualServicingData.PremiumCalculationDetails.TotalCoverageAmount,
+                TotalCoverageAmount = (individualServicingData.PremiumCalculationDetails != null)
+                    ? individualServicingData.PremiumCalculationDetails.TotalCoverageAmount
+                    : default,
                 RemainingCoverageAmount = remainingCoverageAmount,
-                CoverageMonths = individualServicingData.PremiumCalculationDetails.CoverageMonths,
+                CoverageMonths = (individualServicingData.PremiumCalculationDetails != null)
+                    ? individualServicingData.PremiumCalculationDetails.CoverageMonths
+                    : default,
                 ClaimOptionEntries = claimOptionEntries,
                 ClaimStatusEntries = claimStatusEntries,
                 ClaimPaymentEntries = claimPaymentEntries,
 
                 EnrollmentVerified = (enrollmentVerificationEntity != null) 
                     ? enrollmentVerificationEntity.IsVerified
-                    : false,
+                    : default,
 
                 GraduationVerified = (graduationVerificationEntity != null)
                     ? graduationVerificationEntity.IsVerified
-                    : false,
+                    : default,
             };
 
             return customerProfileEntry;
@@ -109,16 +127,20 @@ namespace EduSafe.WebApi.Adapters
         private string GetFormattedCollegeMajorMinor(IndividualServicingData individualServicingData, bool isMinor = false)
         {
             var collegeMajorMinorFormatted = string.Empty;
-            foreach (var collegeMajorMinorDetail in 
-                individualServicingData.MajorMinorDetails.Where(d => d.IsMinor == isMinor))
-            {
-                var collegeMajorMinorName = _servicingDataTypesRepository
-                    .CollegeMajorDictionary[collegeMajorMinorDetail.CollegeMajorId];
 
-                if (string.IsNullOrEmpty(collegeMajorMinorFormatted))
-                    collegeMajorMinorFormatted += collegeMajorMinorName;
-                else
-                    collegeMajorMinorFormatted += (" / " + collegeMajorMinorName);
+            if (individualServicingData.MajorMinorDetails != null)
+            {
+                foreach (var collegeMajorMinorDetail in
+                    individualServicingData.MajorMinorDetails.Where(d => d.IsMinor == isMinor))
+                {
+                    var collegeMajorMinorName = _servicingDataTypesRepository
+                        .CollegeMajorDictionary[collegeMajorMinorDetail.CollegeMajorId];
+
+                    if (string.IsNullOrEmpty(collegeMajorMinorFormatted))
+                        collegeMajorMinorFormatted += collegeMajorMinorName;
+                    else
+                        collegeMajorMinorFormatted += (" / " + collegeMajorMinorName);
+                }
             }
 
             return collegeMajorMinorFormatted;
@@ -177,23 +199,26 @@ namespace EduSafe.WebApi.Adapters
         {
             var claimOptionEntries = new List<ClaimOptionEntry>();
 
-            foreach (var premiumCalculationOptionEntity in individualServicingData.PremiumCalculationOptionDetails)
+            if (individualServicingData.PremiumCalculationOptionDetails != null)
             {
-                var claimOptionType = _servicingDataTypesRepository
-                    .OptionTypeDictionary[premiumCalculationOptionEntity.OptionTypeId];
-
-                if (claimOptionType == OptionType.UnemploymentOption) continue;
-
-                var claimOptionPercentage = premiumCalculationOptionEntity.OptionPercentage * Constants.PercentagePoints;
-                var claimOptionDescription = string.Concat(claimOptionPercentage.ToString("##0"), _optionDescription);
-
-                var claimOptionEntry = new ClaimOptionEntry
+                foreach (var premiumCalculationOptionEntity in individualServicingData.PremiumCalculationOptionDetails)
                 {
-                    ClaimOptionType = claimOptionType.GetFriendlyDescription(),
-                    ClaimOptionDescription = claimOptionDescription
-                };
+                    var claimOptionType = _servicingDataTypesRepository
+                        .OptionTypeDictionary[premiumCalculationOptionEntity.OptionTypeId];
 
-                claimOptionEntries.Add(claimOptionEntry);
+                    if (claimOptionType == OptionType.UnemploymentOption) continue;
+
+                    var claimOptionPercentage = premiumCalculationOptionEntity.OptionPercentage * Constants.PercentagePoints;
+                    var claimOptionDescription = string.Concat(claimOptionPercentage.ToString("##0"), _optionDescription);
+
+                    var claimOptionEntry = new ClaimOptionEntry
+                    {
+                        ClaimOptionType = claimOptionType.GetFriendlyDescription(),
+                        ClaimOptionDescription = claimOptionDescription
+                    };
+
+                    claimOptionEntries.Add(claimOptionEntry);
+                }
             }
 
             return claimOptionEntries;

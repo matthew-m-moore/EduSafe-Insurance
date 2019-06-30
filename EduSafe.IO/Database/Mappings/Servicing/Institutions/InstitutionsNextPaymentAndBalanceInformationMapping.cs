@@ -17,13 +17,11 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Institutions
                 .HasColumnName("Id")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            Property(t => t.NextPaymentStatusTypeId).HasColumnName("NextPaymentStatusTypeId")
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-
             Property(t => t.InstitutionsAccountNumber).HasColumnName("InstitutionsAccountNumber");
             Property(t => t.NextPaymentAmount).HasColumnName("NextPaymentAmount");
             Property(t => t.NextPaymentDate).HasColumnName("NextPaymentDate");
             Property(t => t.CurrentBalance).HasColumnName("CurrentBalance");
+            Property(t => t.NextPaymentStatusTypeId).HasColumnName("NextPaymentStatusTypeId");
 
             MapToStoredProcedures(s =>
                 s.Insert(i => i.HasName("SP_InsertInstitutionsNextPaymentAndBalanceInformation", Constants.DatabaseOwnerSchemaName)
@@ -31,7 +29,7 @@ namespace EduSafe.IO.Database.Mappings.Servicing.Institutions
                     .Parameter(p => p.NextPaymentAmount, "NextPaymentAmount")
                     .Parameter(p => p.NextPaymentDate, "NextPaymentDate")
                     .Parameter(p => p.CurrentBalance, "CurrentBalance")
-                    .Parameter(p => p.NextPaymentStatusType, "NextPaymentStatusType")
+                    .Parameter(p => p.NextPaymentStatusTypeId, "NextPaymentStatusTypeId")
                     ));
         }
     }

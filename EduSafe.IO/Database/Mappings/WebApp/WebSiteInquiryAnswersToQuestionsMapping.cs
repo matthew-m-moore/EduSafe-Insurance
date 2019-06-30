@@ -30,6 +30,12 @@ namespace EduSafe.IO.Database.Mappings.WebApp
             Property(t => t.GraduationDate).HasColumnName("GraduationDate");
             Property(t => t.AnnualCoverage).HasColumnName("AnnualCoverage");
 
+            // Note: There's an important caveat to the way this stored procedure mapping works below.
+            // Although IpAddres, CollegeName, etc. are marked as "DatabaseGenerated", EF6 will still
+            // included them in an SELECT query, which will cause a run-time error. So, this mapping
+            // can only work so long as only INSERT functionality is needed. Apparently, implicit in the
+            // paramater mapping below is also a property mapping. In other words, anything mappeed as
+            // a stored procedure parameter will be treated as if it's a column on the table for SELECT.
             MapToStoredProcedures(s =>
                 s.Insert(i => i.HasName("SP_InsertWebSiteInquiryAnswersToQuestions", Constants.DatabaseOwnerSchemaName)
                     .Parameter(p => p.CollegeName, "CollegeName")

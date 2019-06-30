@@ -6,13 +6,10 @@ GO
 
 CREATE PROCEDURE SP_InsertClaimStatusEntry
 	@ClaimNumber bigint
-	, @ClaimStatusType varchar(50)
+	, @ClaimStatusTypeId int
 	, @IsClaimApproved bit
 
 AS
-
-DECLARE @ClaimStatusTypeId int
-SET @ClaimStatusTypeId = (SELECT Id FROM dbo.ClaimStatusType WHERE ClaimStatusType = @ClaimStatusType)
 
 INSERT INTO dbo.ClaimStatusEntry
 (			

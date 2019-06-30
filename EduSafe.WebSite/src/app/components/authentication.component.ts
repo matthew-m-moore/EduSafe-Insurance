@@ -27,7 +27,6 @@ export class AuthenticationComponent {
   public hidePasswordEntered = true;
   public hideDirectiveButton = true;
   public canLoginBeTried = false;
-  public isAuthenticated = false;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -77,6 +76,7 @@ export class AuthenticationComponent {
   }
 
   loadCustomerProfile(userIdentifier: string): void {
+    this.authenticationService.isAuthenticated = true;
     if (userIdentifier.length < EnvironmentSettings.IndividalAccountNumberLength) {
       this.router.navigate(['/institutional-profile'], {
         queryParams: { customerNumber: userIdentifier }

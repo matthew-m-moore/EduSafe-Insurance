@@ -2,7 +2,7 @@
 
 namespace EduSafe.IO.Database.Entities.Servicing.Institutions
 {
-    public class InstitutionsNextPaymentAndBalanceInformationEntity
+    public partial class InstitutionsNextPaymentAndBalanceInformationEntity
     {
         public int Id { get; set; }
         public long InstitutionsAccountNumber { get; set; }
@@ -10,7 +10,5 @@ namespace EduSafe.IO.Database.Entities.Servicing.Institutions
         public DateTime NextPaymentDate { get; set; }
         public double CurrentBalance { get; set; }
         public int NextPaymentStatusTypeId { get; set; }
-
-        public string NextPaymentStatusType { get; set; }
     }
 }
