@@ -1,4 +1,4 @@
 export class ClaimOptionEntry {
   ClaimOptionType: string;
-  ClaimOptionPercentage: number;
+  ClaimOptionDescription: number;
 }

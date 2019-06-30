@@ -1,9 +1,77 @@
-<div *ngIf="!showClaimsDetail">
-  <!--Total Paid-In Premiums-->
-  <!--Next Premium Due-->
-  <!--Next Premium Amount-->
+<h1>Edu$afe Policyholder Information Portal</h1>
+<h2>Individual Policyholder ID: {{customerProfileEntry.CustomerIdNumber}}</h2>
+<div *ngIf="!showClaimsHistory">
+  <b>Total Paid-In Premiums: </b> {{ customerProfileEntry.TotalPaidInPremiums }}
+  <b>Next Premium Amount: </b> {{ customerProfileEntry.MonthlyPaymentAmount }}
+  <h2>Additional Coverage Options</h2>
+  <ul>
+    <li *ngFor="let claimOptionEntry of customerProfileEntry.ClaimOptionEntries">
+      <i>{{ claimOptionEntry.ClaimOptionType }} : {{ claimOptionEntry.ClaimOptionDescription }}</i>
+    </li>
+  </ul>
   <!--Policy Details (Expands if Opened?)-->
   <div id="accordion">
+    <div class="card w-100">
+      <div class="card-header">
+        <h2>
+          <button class="btn btn-info"
+                  data-toggle="collapse"
+                  data-target="#customerInformation">
+            Policyholder Contact Information
+          </button>
+        </h2>
+      </div>
+      <div id="customerInformation" class="collapse show" data-parent="#accordion">
+        <div class="card-body">
+          <ul>
+            <li><b>Name:</b> {{ customerProfileEntry.CustomerName }}</li>
+            <li><b>Address (1):</b> {{ customerProfileEntry.CustomerAddress1 }}</li>
+            <li><b>Address (2):</b> {{ customerProfileEntry.CustomerAddress2 }}</li>
+            <li><b>Address (3):</b> {{ customerProfileEntry.CustomerAddress3 }}</li>
+            <li><b>City:</b> {{ customerProfileEntry.CustomerCity }}</li>
+            <li><b>State:</b> {{ customerProfileEntry.CustomerState }}</li>
+            <li><b>Zip:</b> {{ customerProfileEntry.CustomerZip }}</li>
+            <li>
+              <b>Emails:</b>
+              <div class="table-responsive table-sm">
+                <table align="center" class="table">
+                  <thead>
+                    <tr>
+                      <td><b>Address</b></td>
+                      <td><b>Is Primary</b></td>
+                      <td><b>Action</b></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let customerEmailEntry of customerProfileEntry.CustomerEmails">
+                      <td>{{ customerEmailEntry.EmailAddress }}</td>
+                      <td><input type="checkbox" value="customerEmailEntry.IsFileVerified" disabled /></td>
+                      <td>
+                        <button class="btn btn-success" (click)="makeEmailPrimary(customerEmailEntry)">Make Primary</button>
+                        <button class="btn btn-dark" (click)="removeEmail(customerEmailEntry)">Remove Email</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <form>
+                <div class="form-group">
+                  <input type="email" class="form-control" placeholder="Enter New Email"
+                         [(ngModel)]="newEmailAddress"
+                         (ngModelChange)="checkIfEmailCanBeAdded($event)">
+                  <button class="btn btn-primary" (click)="addEmailAddress()" [disabled]="canNewEmailBeAdded">Add Email</button>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="makeNewEmailPrimary"
+                         [(ngModel)]="isNewEmailAddressPrimary">
+                  <label class="form-check-label" for="makeNewEmailPrimary">Make Primary</label>
+                </div>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
     <div *ngIf="customerHasPaymentHistory">
       <div class="card w-100">
         <div class="card-header">
@@ -41,13 +109,11 @@
       </div>
     </div>
   </div>
-  <button type="button" class="btn btn-primary" (click)="toggleClaimsInventory()">
+  <button type="button" class="btn btn-primary" (click)="toggleClaimsInventory()" [disabled]="!customerHasClaims">
     Show Claims
   </button>
 </div>
-<!--View Claims Details Button-->
-<!--This claims section would use ngIf to collapse everything above it-->
-<div *ngIf="showClaimsInventory">
+<div *ngIf="showClaimsHistory">
   <button type="button" class="btn btn-primary" (click)="toggleClaimsInventory()">
     Hide Claims
   </button>

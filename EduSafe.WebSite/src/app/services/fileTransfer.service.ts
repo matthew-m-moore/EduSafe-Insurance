@@ -53,8 +53,8 @@ export class FileTransferService {
   }
 
   // Do need to return anything here or does the browser just handle this for me?
-  downloadFile(file: File, customerIdentifier: string, claimType: string): void {
-    const apiUrl = `${this.downloadFileUrl}/${customerIdentifier}/${claimType}/${file.name}`;
+  downloadFile(fileName: string, customerIdentifier: string, claimType: string): void {
+    const apiUrl = `${this.downloadFileUrl}/${customerIdentifier}/${claimType}/${fileName}`;
     this.http.get(apiUrl);
   }
 }

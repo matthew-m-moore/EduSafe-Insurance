@@ -3,6 +3,6 @@
     public class ClaimOptionEntry
     {
         public string ClaimOptionType { get; set; }
-        public double ClaimOptionPercentage { get; set; }
+        public string ClaimOptionDescription { get; set; }
     }
 }

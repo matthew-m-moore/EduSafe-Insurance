@@ -45,7 +45,7 @@ namespace EduSafe.Core.Repositories.Database
             var nextPaymentAndBalanceEntity = servicingDataContext
                 .InsureesNextPaymentAndBalanceInformationEntities
                 .Where(e => e.AccountNumber == individualAccountNumber)
-                .OrderBy(i => i.Id).LastOrDefault();
+                .OrderBy(i => i.Id).ToList().LastOrDefault();
 
             var enrollmentVerificationEntities = servicingDataContext
                 .InsureesEnrollmentVerificationDetailsEntities
@@ -78,7 +78,7 @@ namespace EduSafe.Core.Repositories.Database
             var premiumCalculationDetailsSetEntity = servicingDataContext
                 .InsureesPremiumCalculationDetailsSetEntities
                 .Where(e => e.AccountNumber == individualAccountNumber)
-                .OrderBy(i => i.SetId).LastOrDefault();
+                .OrderBy(i => i.SetId).ToList().LastOrDefault();
 
             if (premiumCalculationDetailsSetEntity != null)
             {

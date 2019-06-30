@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { NotificationHistoryComponent } from '../components/notification-history.component'
@@ -6,6 +6,7 @@ import { PaymentHistoryComponent } from '../components/payment-history.component
 import { ClaimsComponent } from '../components/claims.component'
 
 import { CustomerProfileEntry } from '../classes/customerProfileEntry';
+import { CustomerEmailEntry } from '../classes/customerEmailEntry';
 
 import { ServicingDataService } from '../services/servicingData.service';
 
@@ -20,10 +21,14 @@ export class IndividualProfileComponent implements OnInit {
   customerNumber: string;
 
   public isCustomerInformationRetrievedSuccessfully = true;
+  public canNewEmailBeAdded = false;
   public customerHasPaymentHistory = false;
   public customerHasNotificationHistory = false;
   public customerHasClaims = false;
   public showClaimsHistory = false;
+
+  @Input() newEmailAddress: string;
+  @Input() isNewEmailAddressPrimary: boolean;
 
   @ViewChild('paymentHistory') private paymentHistoryComponent: PaymentHistoryComponent;
   @ViewChild('notificationHistory') private notificationHistoryComponent: NotificationHistoryComponent;
@@ -43,6 +48,55 @@ export class IndividualProfileComponent implements OnInit {
     this.router.navigate(['/portal-authentication']);
   }
 
+  makeEmailPrimary(emailEntry: CustomerEmailEntry): void {
+    this.servicingDataService.makeEmailAddressPrimary(emailEntry)
+      .then(result => {
+        if (result === true)
+          this.customerProfileEntry.CustomerEmails.forEach(email => {
+            if (email.EmailAddress === emailEntry.EmailAddress)
+              email.IsPrimary = false;
+            else
+              email.IsPrimary = true;
+          });
+      });
+  }
+
+  removeEmail(emailEntry: CustomerEmailEntry): void {
+    this.servicingDataService.removeAddressPrimary(emailEntry)
+      .then(result => {
+        if (result === true)
+          this.customerProfileEntry.CustomerEmails =
+            this.customerProfileEntry.CustomerEmails.filter(email => email.EmailAddress !== emailEntry.EmailAddress);
+          });
+  }
+
+  addEmailAddress(): void {
+    var customerEmailEntry = new CustomerEmailEntry();
+    customerEmailEntry.EmailAddress = this.newEmailAddress;
+    customerEmailEntry.IsPrimary = this.isNewEmailAddressPrimary;
+
+    this.servicingDataService
+      .addNewEmailAddress(customerEmailEntry)
+      .then(resultEmailId => {
+        if (resultEmailId > 0) {
+          customerEmailEntry.EmailId = resultEmailId;
+          this.customerProfileEntry.CustomerEmails.push(customerEmailEntry);
+        }
+      });
+  }
+
+  checkIfEmailCanBeAdded(): void {
+    if (this.newEmailAddress.includes("@")) {
+      this.canNewEmailBeAdded = true;
+      this.customerProfileEntry.CustomerEmails.forEach(email => {
+        if (email.EmailAddress === this.newEmailAddress)
+          this.canNewEmailBeAdded = false;
+        });
+      }
+    else
+      this.canNewEmailBeAdded = false;
+  };
+
   checkClaimsHistory(): boolean {
     if (!this.customerProfileEntry.ClaimStatusEntries)
       return false;
@@ -51,7 +105,7 @@ export class IndividualProfileComponent implements OnInit {
   }
 
   toggleClaimsDetail(): void {
-    this.customerHasClaims = !this.customerHasClaims;
+    this.showClaimsHistory = !this.showClaimsHistory;
   }
 
   ngOnInit(): void {

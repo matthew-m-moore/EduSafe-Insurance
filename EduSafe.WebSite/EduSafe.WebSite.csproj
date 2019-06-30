@@ -136,6 +136,7 @@
     <TypeScriptCompile Include="src\app\classes\claimPaymentEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\claimStatusEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\collegeMajorData.ts" />
+    <TypeScriptCompile Include="src\app\classes\customerEmailEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\customerProfileEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\environmentSettings.ts" />
     <TypeScriptCompile Include="src\app\classes\inquiryEmailEntry.ts" />

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using EduSafe.Common;
 using EduSafe.Common.Enums;
+using EduSafe.Common.ExtensionMethods;
 using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.Core.Repositories.Database;
 using EduSafe.IO.Database;
@@ -12,6 +14,8 @@ namespace EduSafe.WebApi.Adapters
     {
         private readonly ServicingDataTypesRepository _servicingDataTypesRepository;
         private readonly IndividualServicingDataRepository _individualServicingDataRepository;
+
+        private const string _optionDescription = "% of 'Total Paid-In Premiums' returned";
 
         public IndividualServicingDataAdapter()
         {
@@ -54,7 +58,7 @@ namespace EduSafe.WebApi.Adapters
                 CustomerCity = individualServicingData.IndividualAccountData.City,
                 CustomerState = individualServicingData.IndividualAccountData.State,
                 CustomerZip = individualServicingData.IndividualAccountData.ZipCode,
-                CustomerEmails = individualServicingData.Emails.Select(e => e.Email).ToList(),
+                CustomerEmails = individualServicingData.Emails.Select(e => new CustomerEmailEntry(e)).ToList(),
 
                 CollegeName = collegeName,
                 CollegeMajor = collegeMajorFormatted,
@@ -178,10 +182,15 @@ namespace EduSafe.WebApi.Adapters
                 var claimOptionType = _servicingDataTypesRepository
                     .OptionTypeDictionary[premiumCalculationOptionEntity.OptionTypeId];
 
+                if (claimOptionType == OptionType.UnemploymentOption) continue;
+
+                var claimOptionPercentage = premiumCalculationOptionEntity.OptionPercentage * Constants.PercentagePoints;
+                var claimOptionDescription = string.Concat(claimOptionPercentage.ToString("##0"), _optionDescription);
+
                 var claimOptionEntry = new ClaimOptionEntry
                 {
-                    ClaimOptionType = claimOptionType.ToString(),
-                    ClaimOptionPercentage = premiumCalculationOptionEntity.OptionPercentage,
+                    ClaimOptionType = claimOptionType.GetFriendlyDescription(),
+                    ClaimOptionDescription = claimOptionDescription
                 };
 
                 claimOptionEntries.Add(claimOptionEntry);

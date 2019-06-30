@@ -25,6 +25,8 @@ export class AuthenticationComponent {
   public authenticationFailedBadUserIdentifier = false;
   public authenticationFailedBadPassword = false;
   public hidePasswordEntered = true;
+  public hideDirectiveButton = true;
+  public canLoginBeTried = false;
   public isAuthenticated = false;
 
   constructor(
@@ -37,30 +39,41 @@ export class AuthenticationComponent {
     this.hidePasswordEntered = !this.hidePasswordEntered;
   }
 
+  checkIfLoginCanBeTried(): void {
+    if (!this.userIdentifier || !this.passwordEntered)
+      this.canLoginBeTried = false;
+    else
+      this.canLoginBeTried = true;
+  }
+
   authenticateUser(userIdentifier: string, passwordEntered: string): void {
     this.authenticationFailedBadUserIdentifier = false;
     this.authenticationFailedBadPassword = false;
 
     // This password entered will eventually need to actually be encrypted somehow
+    this.authenticationPackage = new AuthenticationPackage();
     this.authenticationPackage.EncryptedPassword = passwordEntered;
     this.authenticationPackage.CustomerIdentifier = userIdentifier;
 
     this.authenticationService
-      .retrieveCustomerNumbersForIdentifier(userIdentifier)
-      .then(result => this.customerNumbers = result);
-
-    if (this.customerNumbers.length > 1)
-      document.getElementById("openChooseCustomerNumberModal").click();
-    else if (this.customerNumbers.length === 0)
-      this.authenticationFailedBadUserIdentifier = true;
-    else
-      this.authenticationService.authenticateUser(this.authenticationPackage)
-        .then(authenticationResult => {
-          if (authenticationResult === true)
-            this.loadCustomerProfile(userIdentifier);
-          else
-            this.authenticationFailedBadPassword = true;
-        });     
+      .retrieveCustomerNumbersForIdentifier(this.authenticationPackage)
+      .then(result => {
+        this.customerNumbers = result 
+        if (this.customerNumbers.length > 1)
+          document.getElementById("openChooseCustomerNumberModal").click();
+        else if (this.customerNumbers.length === 0)
+          this.authenticationFailedBadUserIdentifier = true;
+        else {
+          this.authenticationPackage.CustomerIdentifier = this.customerNumbers[0];
+          this.authenticationService.authenticateUser(this.authenticationPackage)
+            .then(authenticationResult => {
+              if (authenticationResult === true)
+                this.loadCustomerProfile(userIdentifier);
+              else
+                this.authenticationFailedBadPassword = true;
+            });       
+          }
+        });
   }
 
   loadCustomerProfile(userIdentifier: string): void {

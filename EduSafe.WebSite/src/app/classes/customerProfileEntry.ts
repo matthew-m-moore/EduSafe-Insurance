@@ -1,3 +1,4 @@
+import { CustomerEmailEntry } from './customerEmailEntry';
 import { NotificationHistoryEntry } from './notificationHistoryEntry';
 import { PaymentHistoryEntry } from './paymentHistoryEntry';
 import { ClaimStatusEntry } from './claimStatusEntry';
@@ -14,7 +15,7 @@ export class CustomerProfileEntry {
   CustomerCity: string;
   CustomerState: string;
   CustomerZip: string;
-  CustomerEmails: string[];
+  CustomerEmails: CustomerEmailEntry[];
   CollegeName: string;
   CollegeMajor: string;
   CollegeMinor: string;

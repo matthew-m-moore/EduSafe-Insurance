@@ -2,18 +2,21 @@
   <div class="form-group">
     <label for="userIdentifierField">Customer number or primary email address for account:</label>
     <input [(ngModel)]="userIdentifier"
-            id="userIdentifierField"
-            class="form-control"
-            placeholder="myemail@school.edu or 1011010101" />
+           (ngModelChange)="checkIfLoginCanBeTried($event)"
+           name="userIdentifierInput"
+           id="userIdentifierField"
+           class="form-control"
+           placeholder="myEmail@domain.com OR 10101010101"/>
   </div>
 
   <div class="form-group">
-    <label for="passwordEnteredField">Customer number or primary email address for account:</label>
+    <label for="passwordEnteredField">Password:</label>
     <input [(ngModel)]="passwordEntered"
-            [type]="hidePasswordEntered ? 'password' : 'text'"
-            id="passwordEnteredField"
-            class="form-control"
-            placeholder="-----" />
+           (ngModelChange)="checkIfLoginCanBeTried($event)"
+           [type]="hidePasswordEntered ? 'password' : 'text'"
+           name="passwordInput"
+           id="passwordEnteredField"
+           class="form-control"/>
     <button type="button" class="btn btn-info" (click)="showHidePassword()">Show / Hide</button>
   </div>
 </form>
@@ -32,13 +35,15 @@
 
 <button type="button" class="btn btn-primary"
         (click)="authenticateUser(userIdentifier, passwordEntered)"
-        [disabled]="!userIdentifier || !passwordEntered">
+        [disabled]="!canLoginBeTried">
   Login to Customer Portal
 </button>
 
-<button (click)="openChooseCustomerNumberModal(chooseCustomerNumberTemplate)" [hidden]="true">
-  Hidden Open Choose Customer-Number Modal Button
-</button>
+<div *ngIf="!hideDirectiveButton">
+  <button (click)="openChooseCustomerNumberModal(chooseCustomerNumberTemplate)">
+    Hidden Open Choose Customer-Number Modal Button
+  </button>
+</div>
 
 <ng-template #chooseCustomerNumberTemplate>
   <div class="modal-body text-center">

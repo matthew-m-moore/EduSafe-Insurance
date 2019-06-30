@@ -11,7 +11,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let notificationHistoryEntry of notificationHistoryEntries">
-        <td><b>{{ notificationHistoryEntry.NotificationDate | date: 'shortDate' }}</b></td>
+        <td><i>{{ notificationHistoryEntry.NotificationDate | date: 'shortDate' }}</i></td>
         <td>{{ notificationHistoryEntry.NotificationType }}</td>
         <td>{{ notificationHistoryEntry.NotificationDescription }}</td>
       </tr>

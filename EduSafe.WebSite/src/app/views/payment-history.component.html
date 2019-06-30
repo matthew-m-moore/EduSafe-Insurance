@@ -11,7 +11,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let paymentHistoryEntry of paymentHistoryEntries">
-        <td><b>{{ paymentHistoryEntry.PaymentDate | date: 'shortDate' }}</b></td>
+        <td><i>{{ paymentHistoryEntry.PaymentDate | date: 'shortDate' }}</i></td>
         <td>${{ paymentHistoryEntry.PaymentAmount | number: '1.2-2'}}</td>
         <td>{{ paymentHistoryEntry.PaymentStatus }}</td>
         <td>{{ paymentHistoryEntry.PaymentComments }}</td>

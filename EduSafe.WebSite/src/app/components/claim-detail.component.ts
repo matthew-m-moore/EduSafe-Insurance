@@ -20,6 +20,10 @@ export class ClaimDetailComponent implements OnInit {
 
   constructor(private fileTransferService: FileTransferService) { }
 
+  dowloadFileFromServer(fileName: string): void {
+    this.fileTransferService.downloadFile(fileName, this.customerIdentifier, this.claimType);
+  }
+
   uploadFilesToServer(files: FileList): void {
     this.isFileUploading = true;
     this.fileTransferService.uploadFiles(files, this.customerIdentifier, this.claimType)

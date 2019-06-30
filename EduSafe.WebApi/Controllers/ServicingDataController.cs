@@ -36,5 +36,26 @@ namespace EduSafe.WebApi.Controllers
 
             return new CustomerProfileEntry();
         }
+
+        [Route("email/make-primary")]
+        [HttpPut]
+        public bool MakeEmailAddressPrimary(CustomerEmailEntry customerEmailEntry)
+        {
+            return true;
+        }
+
+        [Route("email/remove")]
+        [HttpPut]
+        public bool DeleteEmailAddress(CustomerEmailEntry customerEmailEntry)
+        {
+            return true;
+        }
+
+        [Route("email/add")]
+        [HttpPost]
+        public int AddNewEmailAddress(CustomerEmailEntry customerEmailEntry)
+        {
+            return 0;
+        }
     }
 }

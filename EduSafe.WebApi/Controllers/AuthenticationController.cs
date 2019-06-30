@@ -9,21 +9,22 @@ namespace EduSafe.WebApi.Controllers
     [RoutePrefix("api/authentication")]
     public class AuthenticationController : ApiController
     {
-        // PUT: api/authentication
-        [Route("")]
+        // PUT: api/authentication/login
+        [Route("login")]
         [HttpPut]
         public bool AuthenticateCustomer(AuthenticationPackage authenticationPackage)
         {
             return !string.IsNullOrEmpty(authenticationPackage.EncryptedPassword);
         }
 
-        // PUT: api/authentication/id
-        [Route("id")]
-        [HttpPut]
-        public List<string> RetrieveCustomerNumbersFromUserIdentifier(string userIdentifier)
+        // PUT: api/authentication/user
+        [Route("user")]
+        [HttpPost]
+        public List<string> RetrieveCustomerNumbers(AuthenticationPackage authenticationPackage)
         {
             AuthenticationRepository authenticationRepository = null;
             var customerNumbers = new List<string>();
+            var userIdentifier = authenticationPackage.CustomerIdentifier;
 
             if (userIdentifier.Contains('@'))
                 authenticationRepository = new AuthenticationRepository(userIdentifier);            

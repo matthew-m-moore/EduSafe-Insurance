@@ -42,7 +42,7 @@ import { SendEmailService } from '../services/sendEmail.Service';
 import { AuthenticationService } from '../services/authentication.service';
 import { ExcelExportService } from '../services/excelExport.service';
 import { FileTransferService } from '../services/fileTransfer.service';
-import { ServicingDataService } from '../services/servicingData.Service';
+import { ServicingDataService } from '../services/servicingData.service';
 
 @NgModule({
   imports: [

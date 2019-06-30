@@ -191,6 +191,7 @@
     <Compile Include="Models\ClaimOptionEntry.cs" />
     <Compile Include="Models\ClaimPaymentEntry.cs" />
     <Compile Include="Models\ClaimStatusEntry.cs" />
+    <Compile Include="Models\CustomerEmailEntry.cs" />
     <Compile Include="Models\CustomerProfileEntry.cs" />
     <Compile Include="Models\InquiryEmailEntry.cs" />
     <Compile Include="Models\InstitutionProfileEntry.cs" />

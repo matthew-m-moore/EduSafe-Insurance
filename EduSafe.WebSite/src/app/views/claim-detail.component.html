@@ -1,16 +1,44 @@
-<!--Claim Status-->
-<!--Is Approved-->
-<!--Table of Document Entries-->
+<div>
+  <b>Claim Status: </b> {{ claimStatusEntry.ClaimStatus }}
+</div>
+<div class="form-check">
+  <b>Claim Approved: </b>
+  <input class="form-check-input" type="checkbox" value="claimStausEntry.IsClaimApproved" disabled />
+</div>
+<h2>Claim Documents</h2>
+<div class="table-responsive table-striped table-em">
+  <table align="center" class="table">
+    <thead class="thead-dark">
+      <tr>
+        <td><b>Upload Date</b></td>
+        <td><b>Expiry Date</b></td>
+        <td><b>Verified</b></td>
+        <td><b>Status</b></td>
+        <td><b>Type</b></td>
+        <td><b>Name</b></td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let claimDocumentEntry of claimStausEntry.ClaimDocumentEntries">
+        <td><i>{{ claimDocumentEntry.UploadDate | date: 'shortDate' }}</i></td>
+        <td><i>{{ claimDocumentEntry.ExpirationDate | date: 'shortDate' }}</i></td>
+        <td><input type="checkbox" value="claimDocumentEntry.IsFileVerified" disabled /></td>
+        <td>{{ claimDocumentEntry.FileVerificationStatus }}</td>
+        <td>{{ claimDocumentEntry.FileType }}</td>
+        <td (click)="dowloadFileFromServer(claimDocumentEntry.FileName)">{{ claimDocumentEntry.FileName }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 <!-- Need to have the ability to upload and download file, plus view the claim terms and such -->
 <h1>Upload File</h1>
 <input #file type="file" multiple (change)="uploadFilesToServer($event.target.files)" />
 <!-- Somehow the above line looks more accurate -->
 <!--<input #file type="file" multiple (change)="uploadFilesToServer(file.files)" />-->
 <br />
-<!--<span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
-  {{progress}}%
-</span>
 
+<!--<span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
+</span>
 <span style="font-weight:bold;color:green;" *ngIf="message">
-  {{message}}
 </span>-->

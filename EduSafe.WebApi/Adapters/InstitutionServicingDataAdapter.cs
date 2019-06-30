@@ -42,7 +42,7 @@ namespace EduSafe.WebApi.Adapters
                 CustomerCity = institutionServicingData.InstitutionAccountData.City,
                 CustomerState = institutionServicingData.InstitutionAccountData.State,
                 CustomerZip = institutionServicingData.InstitutionAccountData.ZipCode,
-                CustomerEmails = institutionServicingData.Emails.Select(e => e.Email).ToList(),
+                CustomerEmails = institutionServicingData.Emails.Select(e => new CustomerEmailEntry(e)).ToList(),
 
                 CustomerBalance = institutionServicingData.NextPaymentAndBalanceInformation.CurrentBalance,
                 MonthlyPaymentAmount = institutionServicingData.NextPaymentAndBalanceInformation.NextPaymentAmount,

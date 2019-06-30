@@ -41,7 +41,7 @@ namespace EduSafe.Core.Repositories.Database
             var nextPaymentAndBalanceEntity = servicingDataContext
                 .InstitutionsNextPaymentAndBalanceInformationEntities
                 .Where(e => e.InstitutionsAccountNumber == institutionAccountNumber)
-                .OrderBy(i => i.Id).LastOrDefault();
+                .OrderBy(i => i.Id).ToList().LastOrDefault();
 
             var emailsSetId = institutionCustomerDataEntity.EmailsSetId;
             var emailEntities = servicingDataContext.EmailsEntities

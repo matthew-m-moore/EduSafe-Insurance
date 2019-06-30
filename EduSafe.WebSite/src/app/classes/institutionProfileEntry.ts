@@ -1,3 +1,4 @@
+import { CustomerEmailEntry } from './customerEmailEntry';
 import { PaymentHistoryEntry } from './paymentHistoryEntry';
 import { CustomerProfileEntry } from './customerProfileEntry';
 import { NotificationHistoryEntry } from './notificationHistoryEntry';
@@ -12,7 +13,7 @@ export class InstitutionProfileEntry {
   CustomerCity: string;
   CustomerState: string;
   CustomerZip: string;
-  CustomerEmails: string[];
+  CustomerEmails: CustomerEmailEntry[];
   CustomerBalance: number;
   MonthlyPaymentAmount: number;
   NextPaymentDueDate: Date;
