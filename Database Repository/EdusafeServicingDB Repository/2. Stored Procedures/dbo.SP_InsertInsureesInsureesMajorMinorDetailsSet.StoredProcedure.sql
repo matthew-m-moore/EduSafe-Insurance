@@ -1,10 +1,10 @@
-IF EXISTS (SELECT * FROM sys.objects WHERE NAME = 'SP_InsertInsureesInsureesMajorMinorDetailsSet' and TYPE = 'P') 
+IF EXISTS (SELECT * FROM sys.objects WHERE NAME = 'SP_InsertInsureesMajorMinorDetailsSet' and TYPE = 'P') 
 BEGIN 
-	DROP PROCEDURE SP_InsertInsureesInsureesMajorMinorDetailsSet
+	DROP PROCEDURE SP_InsertInsureesMajorMinorDetailsSet
 END 
 GO
 
-CREATE PROCEDURE SP_InsertInsureesInsureesMajorMinorDetailsSet
+CREATE PROCEDURE SP_InsertInsureesMajorMinorDetailsSet
 	@AccountNumber bigint
 	, @Description varchar(250)
 AS
