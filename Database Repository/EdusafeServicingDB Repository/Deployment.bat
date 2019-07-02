@@ -71,5 +71,6 @@ sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertOptionType.StoredProcedure.sql" >> "CreateSp.txt
 sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "2. Stored Procedures\dbo.SP_InsertPaymentStatusType.StoredProcedure.sql" >> "CreateSp.txt
 
-sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i 6. Constraintsdbo.dbo.ForeignKeyConstraints.Constraints.sql" >> "CreateFK
+sqlcmd -S edusafe.database.windows.net  -d EdusafeServicingDB -U EduSafeAdmin -P Master123 -i "6. Constraints\dbo.ForeignKeyConstraints.Constraints.sql" >> "CreateFK.txt
+
 

@@ -1,10 +1,10 @@
-IF EXISTS (SELECT * FROM sys.objects WHERE NAME = 'SP_InsertInstitutionsPaymentHistoryEntry' and TYPE = 'P') 
+IF EXISTS (SELECT * FROM sys.objects WHERE NAME = 'SP_InsertInsureesPaymentHistoryEntry' and TYPE = 'P') 
 BEGIN 
-	DROP PROCEDURE SP_InsertInstitutionsPaymentHistoryEntry
+	DROP PROCEDURE SP_InsertInsureesPaymentHistoryEntry
 END 
 GO
 
-CREATE PROCEDURE SP_InsertInstitutionsPaymentHistoryEntry
+CREATE PROCEDURE SP_InsertInsureesPaymentHistoryEntry
 	@AccountNumber bigint
 	, @PaymentAmount float 
 	, @PaymentDate datetime 

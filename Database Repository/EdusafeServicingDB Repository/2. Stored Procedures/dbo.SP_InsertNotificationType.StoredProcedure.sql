@@ -5,7 +5,7 @@ END
 GO
 
 CREATE PROCEDURE SP_InsertNotificationType
-	@NotificationType varchar(25)
+	@NotificationType varchar(50)
 	, @Description varchar(250)
 
 AS
