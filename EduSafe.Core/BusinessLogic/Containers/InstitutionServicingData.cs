@@ -13,6 +13,7 @@ namespace EduSafe.Core.BusinessLogic.Containers
         public List<InstitutionsNotificationHistoryEntryEntity> NotificationHistory { get; set; }
         public List<InstitutionsPaymentHistoryEntryEntity> PaymentHistory { get; set; }
 
+        public int EmailSetId { get; set; }
         public List<EmailsEntity> Emails { get; set; }
 
         public List<long> IndividualInsureeAccountNumbers { get; set; }

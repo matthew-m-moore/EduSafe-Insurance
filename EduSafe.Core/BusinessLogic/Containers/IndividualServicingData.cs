@@ -17,6 +17,7 @@ namespace EduSafe.Core.BusinessLogic.Containers
         public InsureesPremiumCalculationDetailsEntity PremiumCalculationDetails { get; set; }
         public List<InsureesPremiumCalculationOptionDetailsEntity> PremiumCalculationOptionDetails { get; set; }
 
+        public int EmailSetId { get; set; }
         public List<EmailsEntity> Emails { get; set; }
 
         public List<InsureesMajorMinorDetailsEntity> MajorMinorDetails { get; set; }

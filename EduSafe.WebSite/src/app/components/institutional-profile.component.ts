@@ -6,8 +6,10 @@ import { PaymentHistoryComponent } from '../components/payment-history.component
 import { IndividualProfileComponent } from '../components/individual-profile.component'
 
 import { InstitutionProfileEntry } from '../classes/institutionProfileEntry';
+import { CustomerEmailEntry } from '../classes/customerEmailEntry';
 
 import { ServicingDataService } from '../services/servicingData.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'institutional-profile',
@@ -20,17 +22,28 @@ export class InstitutionalProfileComponent implements OnInit {
   customerNumber: string;
 
   public isCustomerInformationRetrievedSuccessfully = true;
+  public canNewEmailBeAdded = false;
   public customerHasPaymentHistory = false;
   public customerHasNotificationHistory = false;
+
+  isCustomerInformationCollapsed = true;
+  isStudentInformationCollapsed = true;
+  isPaymentHistoryCollapsed = true;
+  isNotificationHistoryCollapsed = true;
+
+  @Input() newEmailAddress: string;
+  @Input() isNewEmailAddressPrimary: boolean;
 
   @ViewChild('paymentHistory') private paymentHistoryComponent: PaymentHistoryComponent;
   @ViewChild('notificationHistory') private notificationHistoryComponent: NotificationHistoryComponent;
 
   constructor(
+    private authenticationService: AuthenticationService,
     private servicingDataService: ServicingDataService,
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {
+    this.institutionProfileEntry = new InstitutionProfileEntry();
       this.activatedRoute.queryParams
         .subscribe((params) => {
           this.customerNumber = params.customerNumber;
@@ -41,22 +54,80 @@ export class InstitutionalProfileComponent implements OnInit {
     this.router.navigate(['/portal-authentication']);
   }
 
-  ngOnInit(): void {
-    this.servicingDataService.getInstituionalServicingData(this.customerNumber)
+  makeEmailPrimary(emailEntry: CustomerEmailEntry): void {
+    this.servicingDataService.makeEmailAddressPrimary(emailEntry)
       .then(result => {
-        this.institutionProfileEntry = result;
-        if (!this.institutionProfileEntry.CustomerIdNumber) {
-          this.isCustomerInformationRetrievedSuccessfully = false;
-        }   
-        else {
-          this.paymentHistoryComponent =
-            new PaymentHistoryComponent(this.institutionProfileEntry.PaymentHistoryEntries);
-          this.notificationHistoryComponent =
-            new NotificationHistoryComponent(this.institutionProfileEntry.NotificationHistoryEntries);
+        if (result === true)
+          this.institutionProfileEntry.CustomerEmails.forEach(email => {
+            if (email.EmailAddress === emailEntry.EmailAddress)
+              email.IsPrimary = true;
+            else
+              email.IsPrimary = false;
+          });
+      });
+  }
 
-          this.customerHasPaymentHistory = this.paymentHistoryComponent.checkPaymentHistory();
-          this.customerHasNotificationHistory = this.notificationHistoryComponent.checkNotificationHistory();
+  removeEmail(emailEntry: CustomerEmailEntry): void {
+    if (emailEntry.IsPrimary)
+      return; // Display: "Cannot remove primary email address."
+    // "Please select another primary email address for this account before removing this email address."
+
+    this.servicingDataService.removeEmailAddress(emailEntry)
+      .then(result => {
+        if (result === true)
+          this.institutionProfileEntry.CustomerEmails =
+            this.institutionProfileEntry.CustomerEmails.filter(email => email.EmailAddress !== emailEntry.EmailAddress);
+      });
+  }
+
+  addEmailAddress(): void {
+    var customerEmailEntry = new CustomerEmailEntry();
+    customerEmailEntry.EmailAddress = this.newEmailAddress;
+    customerEmailEntry.IsPrimary = this.isNewEmailAddressPrimary;
+    customerEmailEntry.EmailSetId = this.institutionProfileEntry.EmailSetId;
+
+    this.servicingDataService
+      .addNewEmailAddress(customerEmailEntry)
+      .then(resultEmailId => {
+        if (resultEmailId > 0) {
+          customerEmailEntry.EmailId = resultEmailId;
+          this.institutionProfileEntry.CustomerEmails.push(customerEmailEntry);
         }
       });
+  }
+
+  checkIfEmailCanBeAdded(): void {
+    if (this.newEmailAddress.includes("@")) {
+      this.canNewEmailBeAdded = true;
+      this.institutionProfileEntry.CustomerEmails.forEach(email => {
+        if (email.EmailAddress === this.newEmailAddress)
+          this.canNewEmailBeAdded = false;
+      });
+    }
+    else
+      this.canNewEmailBeAdded = false;
+  };
+
+  ngOnInit(): void {
+    if (!this.authenticationService.isAuthenticated)
+      this.goBackToAuthentication();
+    else {
+      this.servicingDataService.getInstituionalServicingData(this.customerNumber)
+        .then(result => {
+          this.institutionProfileEntry = result;
+          if (!this.institutionProfileEntry.CustomerIdNumber) {
+            this.isCustomerInformationRetrievedSuccessfully = false;
+          }
+          else {
+            this.paymentHistoryComponent =
+              new PaymentHistoryComponent(this.institutionProfileEntry.PaymentHistoryEntries);
+            this.notificationHistoryComponent =
+              new NotificationHistoryComponent(this.institutionProfileEntry.NotificationHistoryEntries);
+
+            this.customerHasPaymentHistory = this.paymentHistoryComponent.checkPaymentHistory();
+            this.customerHasNotificationHistory = this.notificationHistoryComponent.checkNotificationHistory();
+          }
+        });
+    }
   }
 }

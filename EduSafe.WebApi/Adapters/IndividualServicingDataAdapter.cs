@@ -62,6 +62,8 @@ namespace EduSafe.WebApi.Adapters
                 CustomerCity = individualServicingData.IndividualAccountData.City,
                 CustomerState = individualServicingData.IndividualAccountData.State,
                 CustomerZip = individualServicingData.IndividualAccountData.ZipCode,
+
+                EmailSetId = individualServicingData.EmailSetId,
                 CustomerEmails = individualServicingData.Emails.Select(e => new CustomerEmailEntry(e)).ToList(),
 
                 CollegeName = collegeName,

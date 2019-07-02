@@ -27,6 +27,7 @@ export class IndividualProfileComponent implements OnInit {
   public customerHasClaims = false;
   public showClaimsHistory = false;
 
+  isAcademicInformationCollapsed = true;
   isCustomerInformationCollapsed = true;
   isPaymentHistoryCollapsed = true;
   isNotificationHistoryCollapsed = true;
@@ -60,15 +61,19 @@ export class IndividualProfileComponent implements OnInit {
         if (result === true)
           this.customerProfileEntry.CustomerEmails.forEach(email => {
             if (email.EmailAddress === emailEntry.EmailAddress)
-              email.IsPrimary = false;
-            else
               email.IsPrimary = true;
+            else
+              email.IsPrimary = false;
           });
       });
   }
 
   removeEmail(emailEntry: CustomerEmailEntry): void {
-    this.servicingDataService.removeAddressPrimary(emailEntry)
+    if (emailEntry.IsPrimary)
+      return; // Display: "Cannot remove primary email address."
+              // "Please select another primary email address for this account before removing this email address."
+
+    this.servicingDataService.removeEmailAddress(emailEntry)
       .then(result => {
         if (result === true)
           this.customerProfileEntry.CustomerEmails =
@@ -80,6 +85,7 @@ export class IndividualProfileComponent implements OnInit {
     var customerEmailEntry = new CustomerEmailEntry();
     customerEmailEntry.EmailAddress = this.newEmailAddress;
     customerEmailEntry.IsPrimary = this.isNewEmailAddressPrimary;
+    customerEmailEntry.EmailSetId = this.customerProfileEntry.EmailSetId;
 
     this.servicingDataService
       .addNewEmailAddress(customerEmailEntry)

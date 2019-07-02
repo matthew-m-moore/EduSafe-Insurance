@@ -1,20 +1,83 @@
-<!--Next Payment Due-->
-<!--Next Payment Amount-->
-<!--Student Details (Expands if Opened? Needs Excel Export Button)-->
-  <!--Can double-click on a student to see their individual page-->
+<h1>Edu$afe Institutional Policyholder Portal</h1>
+<h2>Institution Policyholder ID: {{institutionProfileEntry.CustomerIdNumber}}</h2>
+<b>Outstanding Balance: </b> ${{ institutionProfileEntry.CustomerBalance | number: '1.2-2' }}<br />
+<b>Next Payment Amount: </b> ${{ institutionProfileEntry.MonthlyPaymentAmount | number: '1.2-2' }}<br />
+<b>Next Payment Due: </b> {{ institutionProfileEntry.NextPaymentDueDate | date: 'shortDate' }}<br />
+<br />
 <div id="accordion">
+  <div class="card w-100">
+    <div class="card-header">
+      <button class="btn btn-link"
+              (click)="isCustomerInformationCollapsed = !isCustomerInformationCollapsed"
+              aria-expanded="false">
+        Policyholder Contact Information
+      </button>
+    </div>
+    <div class="collapse" [collapse]="isCustomerInformationCollapsed" data-parent="#accordion">
+      <div class="card-body">
+        <ul>
+          <li><b>Name:</b> {{ institutionProfileEntry.CustomerName }}</li>
+          <li><b>Address (1):</b> {{ institutionProfileEntry.CustomerAddress1 }}</li>
+          <li><b>Address (2):</b> {{ institutionProfileEntry.CustomerAddress2 }}</li>
+          <li><b>Address (3):</b> {{ institutionProfileEntry.CustomerAddress3 }}</li>
+          <li><b>City:</b> {{ institutionProfileEntry.CustomerCity }}</li>
+          <li><b>State:</b> {{ institutionProfileEntry.CustomerState }}</li>
+          <li><b>Zip:</b> {{ institutionProfileEntry.CustomerZip }}</li>
+        </ul>
+        <b>Emails:</b>
+        <div class="table-sm">
+          <table align="center" class="table">
+            <thead>
+              <tr>
+                <td><b>Address</b></td>
+                <td><b>Is Primary</b></td>
+                <td><b>Action</b></td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let customerEmailEntry of institutionProfileEntry.CustomerEmails">
+                <td>{{ customerEmailEntry.EmailAddress }}</td>
+                <td><input type="checkbox" [(ngModel)]="customerEmailEntry.IsPrimary" [ngModelOptions]="{standalone: true}" disabled /></td>
+                <td>
+                  <button class="btn btn-success" (click)="makeEmailPrimary(customerEmailEntry)">Make Primary</button>
+                  <button class="btn btn-dark" (click)="removeEmail(customerEmailEntry)">Remove Email</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <form>
+          <div class="form-group">
+            <input type="email" class="form-control" placeholder="Enter New Email"
+                    [(ngModel)]="newEmailAddress"
+                    (ngModelChange)="checkIfEmailCanBeAdded($event)"
+                    name="addNewEmailInput">
+            <button class="btn btn-primary" (click)="addEmailAddress()" [disabled]="canNewEmailBeAdded">Add Email</button>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="makeNewEmailPrimary"
+                    [(ngModel)]="isNewEmailAddressPrimary"
+                    name="makeNewEmailPrimaryCheckbox">
+            <label class="form-check-label" for="makeNewEmailPrimary">Make Primary</label>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!--Student Details (Expands if Opened? Needs Excel Export Button)-->
+  <!--Can double-click on a student to see their individual page-->
   <div *ngIf="customerHasPaymentHistory">
     <div class="card w-100">
       <div class="card-header">
         <h2>
-          <button class="btn btn-secondary"
-                  data-toggle="collapse"
-                  data-target="#paymentHistoryTable">
-            Notification History
+          <button class="btn btn-link"
+                  (click)="isPaymentHistoryCollapsed = !isPaymentHistoryCollapsed"
+                  aria-expanded="false">
+            Payment History
           </button>
         </h2>
       </div>
-      <div id="paymentHistoryTable" class="collapse show" data-parent="#accordion">
+      <div class="collapse" [collapse]="isPaymentHistoryCollapsed" data-parent="#accordion">
         <div class="card-body">
           <payment-history #paymentHistory></payment-history>
         </div>
@@ -25,14 +88,14 @@
     <div class="card w-100">
       <div class="card-header">
         <h2>
-          <button class="btn btn-secondary"
-                  data-toggle="collapse"
-                  data-target="#notificationHistoryTable">
+          <button class="btn btn-link"
+                  (click)="isNotificationHistoryCollapsed = !isNotificationHistoryCollapsed"
+                  aria-expanded="false">
             Notification History
           </button>
         </h2>
       </div>
-      <div id="notificationHistoryTable" class="collapse show" data-parent="#accordion">
+      <div class="collapse" [collapse]="isNotificationHistoryCollapsed" data-parent="#accordion">
         <div class="card-body">
           <notification-history #notificationHistory></notification-history>
         </div>
@@ -40,3 +103,5 @@
     </div>
   </div>
 </div>
+
+

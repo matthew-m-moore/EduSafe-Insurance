@@ -15,6 +15,8 @@ namespace EduSafe.WebApi.Models
         public string CustomerCity { get; set; }
         public string CustomerState { get; set; }
         public string CustomerZip { get; set; }
+
+        public int EmailSetId { get; set; }
         public List<CustomerEmailEntry> CustomerEmails { get; set; }
 
         public double CustomerBalance { get; set; }

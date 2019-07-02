@@ -67,6 +67,7 @@ namespace EduSafe.Core.Repositories.Database
             individualServicingData.EnrollmentVerificationHistory = enrollmentVerificationEntities;
             individualServicingData.GraduationVerificationHistory = graduationVerificationEntities;
 
+            individualServicingData.EmailSetId = emailsSetId;
             individualServicingData.Emails = emailEntities;
         }
 

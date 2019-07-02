@@ -13,6 +13,7 @@ export class InstitutionProfileEntry {
   CustomerCity: string;
   CustomerState: string;
   CustomerZip: string;
+  EmailSetId: number;
   CustomerEmails: CustomerEmailEntry[];
   CustomerBalance: number;
   MonthlyPaymentAmount: number;

@@ -1,25 +1,63 @@
 <h1>Edu$afe Policyholder Information Portal</h1>
 <h2>Individual Policyholder ID: {{customerProfileEntry.CustomerIdNumber}}</h2>
 <div *ngIf="!showClaimsHistory">
-  <b>Total Paid-In Premiums: </b> {{ customerProfileEntry.TotalPaidInPremiums }}
-  <b>Next Premium Amount: </b> {{ customerProfileEntry.MonthlyPaymentAmount }}
+  <b>Total Paid-In Premiums: </b> ${{ customerProfileEntry.TotalPaidInPremiums | number: '1.2-2' }}<br />
+  <b>Outstanding Balance: </b> ${{ customerProfileEntry.CustomerBalance | number: '1.2-2' }}<br />
+  <b>Next Premium Amount: </b> ${{ customerProfileEntry.MonthlyPaymentAmount | number: '1.2-2' }}<br />
+  <b>Next Payment Due: </b> {{ customerProfileEntry.NextPaymentDueDate | date: 'shortDate' }}<br />
+  <br />
+  <b>Total Coverage: </b> ${{ customerProfileEntry.TotalCoverageAmount | number: '1.2-2' }}<br />
+  <b>Remaining Coverage: </b> ${{ customerProfileEntry.RemainingCoverageAmount | number: '1.2-2' }}<br />
+  <b>Coverage Months: </b> {{ customerProfileEntry.CoverageMonths }}<br />
+  <br />
   <h2>Additional Coverage Options</h2>
   <ul>
     <li *ngFor="let claimOptionEntry of customerProfileEntry.ClaimOptionEntries">
       <i>{{ claimOptionEntry.ClaimOptionType }} : {{ claimOptionEntry.ClaimOptionDescription }}</i>
     </li>
   </ul>
-  <!--Policy Details (Expands if Opened?)-->
+  <form>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="enrollmentVerified"
+             [(ngModel)]="customerProfileEntry.EnrollmentVerified"
+             name="enrollmentVerifiedCheckbox" disabled>
+      <label class="form-check-label" for="enrollmentVerified">Enrollment Verified</label>
+    </div>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="graduationVerified"
+             [(ngModel)]="customerProfileEntry.GraduationVerified"
+             name="graduationVerifiedCheckbox">
+      <label class="form-check-label" for="graduationVerified">Graduation Verified</label>
+    </div>
+  </form>
   <div id="accordion">
     <div class="card w-100">
       <div class="card-header">
-        <h2>
-          <button class="btn btn-link"
-                  (click)="isCustomerInformationCollapsed = !isCustomerInformationCollapsed"
-                  aria-expanded="false">
-            Policyholder Contact Information
-          </button>
-        </h2>
+        <button class="btn btn-link"
+                (click)="isAcademicInformationCollapsed = !isAcademicInformationCollapsed"
+                aria-expanded="false">
+          Policyholder Academic Information
+        </button>
+      </div>
+      <div class="collapse" [collapse]="isAcademicInformationCollapsed" data-parent="#accordion">
+        <div class="card-body">
+          <ul>
+            <li><b>College:</b> {{ customerProfileEntry.CollegeName }}</li>
+            <li><b>Major(s):</b> {{ customerProfileEntry.CollegeMajor }}</li>
+            <li><b>Minor(s):</b> {{ customerProfileEntry.CollegeMinor }}</li>
+            <li><b>Start Date:</b> {{ customerProfileEntry.CollegeStartDate | date: 'shortDate' }}</li>
+            <li><b>Graduation Date:</b> {{ customerProfileEntry.ExpectedGraduationDate | date: 'shortDate' }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card w-100">
+      <div class="card-header">
+        <button class="btn btn-link"
+                (click)="isCustomerInformationCollapsed = !isCustomerInformationCollapsed"
+                aria-expanded="false">
+          Policyholder Contact Information
+        </button>
       </div>
       <div class="collapse" [collapse]="isCustomerInformationCollapsed" data-parent="#accordion">
         <div class="card-body">
@@ -31,46 +69,44 @@
             <li><b>City:</b> {{ customerProfileEntry.CustomerCity }}</li>
             <li><b>State:</b> {{ customerProfileEntry.CustomerState }}</li>
             <li><b>Zip:</b> {{ customerProfileEntry.CustomerZip }}</li>
-            <li>
-              <b>Emails:</b>
-              <div class="table-sm">
-                <table align="center" class="table">
-                  <thead>
-                    <tr>
-                      <td><b>Address</b></td>
-                      <td><b>Is Primary</b></td>
-                      <td><b>Action</b></td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let customerEmailEntry of customerProfileEntry.CustomerEmails">
-                      <td>{{ customerEmailEntry.EmailAddress }}</td>
-                      <td><input type="checkbox" [(ngModel)]="customerEmailEntry.IsPrimary" [ngModelOptions]="{standalone: true}" disabled /></td>
-                      <td>
-                        <button class="btn btn-success" (click)="makeEmailPrimary(customerEmailEntry)">Make Primary</button>
-                        <button class="btn btn-dark" (click)="removeEmail(customerEmailEntry)">Remove Email</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <form>
-                <div class="form-group">
-                  <input type="email" class="form-control" placeholder="Enter New Email"
-                         [(ngModel)]="newEmailAddress"
-                         (ngModelChange)="checkIfEmailCanBeAdded($event)"
-                         name="addNewEmailInput">
-                  <button class="btn btn-primary" (click)="addEmailAddress()" [disabled]="canNewEmailBeAdded">Add Email</button>
-                </div>
-                <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="makeNewEmailPrimary"
-                         [(ngModel)]="isNewEmailAddressPrimary"
-                         name="makeNewEmailPrimaryCheckbox">
-                  <label class="form-check-label" for="makeNewEmailPrimary">Make Primary</label>
-                </div>
-              </form>
-            </li>
           </ul>
+          <b>Emails:</b>
+          <div class="table-sm">
+            <table align="center" class="table">
+              <thead>
+                <tr>
+                  <td><b>Address</b></td>
+                  <td><b>Is Primary</b></td>
+                  <td><b>Action</b></td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let customerEmailEntry of customerProfileEntry.CustomerEmails">
+                  <td>{{ customerEmailEntry.EmailAddress }}</td>
+                  <td><input type="checkbox" [(ngModel)]="customerEmailEntry.IsPrimary" [ngModelOptions]="{standalone: true}" disabled /></td>
+                  <td>
+                    <button class="btn btn-success" (click)="makeEmailPrimary(customerEmailEntry)">Make Primary</button>
+                    <button class="btn btn-dark" (click)="removeEmail(customerEmailEntry)">Remove Email</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <form>
+            <div class="form-group">
+              <input type="email" class="form-control" placeholder="Enter New Email"
+                     [(ngModel)]="newEmailAddress"
+                     (ngModelChange)="checkIfEmailCanBeAdded($event)"
+                     name="addNewEmailInput">
+              <button class="btn btn-primary" (click)="addEmailAddress()" [disabled]="canNewEmailBeAdded">Add Email</button>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="makeNewEmailPrimary"
+                     [(ngModel)]="isNewEmailAddressPrimary"
+                     name="makeNewEmailPrimaryCheckbox">
+              <label class="form-check-label" for="makeNewEmailPrimary">Make Primary</label>
+            </div>
+          </form>
         </div>
       </div>
     </div>

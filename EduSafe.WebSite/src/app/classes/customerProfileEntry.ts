@@ -15,6 +15,7 @@ export class CustomerProfileEntry {
   CustomerCity: string;
   CustomerState: string;
   CustomerZip: string;
+  EmailSetId: number;
   CustomerEmails: CustomerEmailEntry[];
   CollegeName: string;
   CollegeMajor: string;

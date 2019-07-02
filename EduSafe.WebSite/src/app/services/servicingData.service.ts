@@ -37,7 +37,7 @@ export class ServicingDataService {
       .then(response => response.json() as boolean);
   }
 
-  removeAddressPrimary(customerEmailEntry: CustomerEmailEntry): Promise<boolean> {
+  removeEmailAddress(customerEmailEntry: CustomerEmailEntry): Promise<boolean> {
     const apiUrl = `${this.emailUrl}/remove`;
     return this.http.put(apiUrl, JSON.stringify(customerEmailEntry), { headers: this.headers })
       .toPromise()

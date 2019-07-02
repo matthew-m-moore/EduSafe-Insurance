@@ -50,6 +50,7 @@ namespace EduSafe.Core.Repositories.Database
             institutionServicingData.InstitutionAccountData = institutionCustomerDataEntity;
             institutionServicingData.NextPaymentAndBalanceInformation = nextPaymentAndBalanceEntity;
 
+            institutionServicingData.EmailSetId = emailsSetId;
             institutionServicingData.Emails = emailEntities;
         }
 
