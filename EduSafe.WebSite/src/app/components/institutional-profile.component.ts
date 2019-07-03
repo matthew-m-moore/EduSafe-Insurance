@@ -3,13 +3,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { NotificationHistoryComponent } from '../components/notification-history.component'
 import { PaymentHistoryComponent } from '../components/payment-history.component'
-import { IndividualProfileComponent } from '../components/individual-profile.component'
 
 import { InstitutionProfileEntry } from '../classes/institutionProfileEntry';
+import { CustomerProfileEntry } from '../classes/customerProfileEntry';
 import { CustomerEmailEntry } from '../classes/customerEmailEntry';
 
-import { ServicingDataService } from '../services/servicingData.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { ServicingDataService } from '../services/servicingData.service';
+import { ExcelExportService } from '../services/excelExport.service';
+
 
 @Component({
   selector: 'institutional-profile',
@@ -40,6 +42,7 @@ export class InstitutionalProfileComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private servicingDataService: ServicingDataService,
+    private excelExportService: ExcelExportService,
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {
@@ -70,7 +73,7 @@ export class InstitutionalProfileComponent implements OnInit {
   removeEmail(emailEntry: CustomerEmailEntry): void {
     if (emailEntry.IsPrimary)
       return; // Display: "Cannot remove primary email address."
-    // "Please select another primary email address for this account before removing this email address."
+              // "Please select another primary email address for this account before removing this email address."
 
     this.servicingDataService.removeEmailAddress(emailEntry)
       .then(result => {
@@ -107,6 +110,25 @@ export class InstitutionalProfileComponent implements OnInit {
     else
       this.canNewEmailBeAdded = false;
   };
+
+  exportToExcel(customerProfileEntries: CustomerProfileEntry[]): void {
+    
+  }
+
+  openIndividualCustomerPage(customerProfileEntry: CustomerProfileEntry): void {
+    let newTabUrl = this.router.createUrlTree(['/individual-profile'], {
+      queryParams: { customerNumber: customerProfileEntry.CustomerIdNumber }
+    });
+
+    window.open(newTabUrl.toString(), '_blank');
+  }
+
+  checkClaimsHistory(customerProfileEntry: CustomerProfileEntry): boolean {
+    if (!customerProfileEntry.ClaimStatusEntries)
+      return false;
+    if (customerProfileEntry.ClaimStatusEntries.length > 0)
+      return true;
+  }
 
   ngOnInit(): void {
     if (!this.authenticationService.isAuthenticated)

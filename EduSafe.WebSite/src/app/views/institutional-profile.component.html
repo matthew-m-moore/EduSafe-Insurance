@@ -49,15 +49,15 @@
         <form>
           <div class="form-group">
             <input type="email" class="form-control" placeholder="Enter New Email"
-                    [(ngModel)]="newEmailAddress"
-                    (ngModelChange)="checkIfEmailCanBeAdded($event)"
-                    name="addNewEmailInput">
+                   [(ngModel)]="newEmailAddress"
+                   (ngModelChange)="checkIfEmailCanBeAdded($event)"
+                   name="addNewEmailInput">
             <button class="btn btn-primary" (click)="addEmailAddress()" [disabled]="canNewEmailBeAdded">Add Email</button>
           </div>
           <div class="form-check">
             <input type="checkbox" class="form-check-input" id="makeNewEmailPrimary"
-                    [(ngModel)]="isNewEmailAddressPrimary"
-                    name="makeNewEmailPrimaryCheckbox">
+                   [(ngModel)]="isNewEmailAddressPrimary"
+                   name="makeNewEmailPrimaryCheckbox">
             <label class="form-check-label" for="makeNewEmailPrimary">Make Primary</label>
           </div>
         </form>
@@ -66,6 +66,62 @@
   </div>
   <!--Student Details (Expands if Opened? Needs Excel Export Button)-->
   <!--Can double-click on a student to see their individual page-->
+  <div class="card w-100">
+    <div class="card-header">
+      <h2>
+        <button class="btn btn-link"
+                (click)="isStudentInformationCollapsed = !isStudentInformationCollapsed"
+                aria-expanded="false">
+          Student Details
+        </button>
+      </h2>
+    </div>
+    <div class="collapse" [collapse]="isStudentInformationCollapsed" data-parent="#accordion">
+      <div class="card-body">
+        <button class="btn btn-info"
+                (click)="exportToExcel(institutionProfileEntry.CustomerProfileEntries)">Export to Excel</button>
+        <div class="table-sm table-striped">
+          <table align="center" class="table">
+            <thead>
+              <tr>
+                <td><b>School ID</b></td>
+                <td><b>Policy ID</b></td>
+                <td><b>Name</b></td>
+                <td><b>Major</b></td>
+                <td><b>Start Date</b></td>
+                <td><b>Grad. Date</b></td>
+                <td><b>Payment</b></td>
+                <td><b>Total Paid-In</b></td>
+                <td><b>Coverage</b></td>
+                <td><b>Remaining</b></td>
+                <td><b>Enrolled</b></td>
+                <td><b>Graduated</b></td>
+                <td><b>Has Claims</b></td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let customerProfileEntry of institutionProfileEntry.CustomerProfileEntries"
+                  (click)="openIndividualCustomerPage(customerProfileEntry)">
+                <td> XX123ABC </td>
+                <td>{{ customerProfileEntry.CustomerIdNumber }}</td>
+                <td>{{ customerProfileEntry.CustomerName }}</td>
+                <td>{{ customerProfileEntry.CollegeMajor }}</td>
+                <td>{{ customerProfileEntry.CollegeStartDate }}</td>
+                <td>{{ customerProfileEntry.ExpectedGraduationDate }}</td>
+                <td>{{ customerProfileEntry.MonthlyPaymentAmount }}</td>
+                <td>{{ customerProfileEntry.TotalPaidInPremiums }}</td>
+                <td>{{ customerProfileEntry.TotalCoverageAmount }}</td>
+                <td>{{ customerProfileEntry.RemainingCoverageAmount }}</td>
+                <td><input type="checkbox" [(ngModel)]="customerProfileEntry.EnrollmentVerified" [ngModelOptions]="{standalone: true}" disabled /></td>
+                <td><input type="checkbox" [(ngModel)]="customerProfileEntry.GraduationVerified" [ngModelOptions]="{standalone: true}" disabled /></td>
+                <td><input type="checkbox" [(ngModel)]="checkClaimsHistory(customerProfileEntry)" [ngModelOptions]="{standalone: true}" disabled /></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
   <div *ngIf="customerHasPaymentHistory">
     <div class="card w-100">
       <div class="card-header">
