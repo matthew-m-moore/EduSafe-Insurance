@@ -167,6 +167,7 @@
     <Compile Include="Adapters\ArticlesLoadingAdapter.cs" />
     <Compile Include="Adapters\AuthenticationAdapater.cs" />
     <Compile Include="Adapters\CollegeDataAdapter.cs" />
+    <Compile Include="Adapters\ExcelExportAdapter.cs" />
     <Compile Include="Adapters\FileTransferAdapter.cs" />
     <Compile Include="Adapters\InstitutionServicingDataAdapter.cs" />
     <Compile Include="Adapters\PremiumComputationAdapter.cs" />

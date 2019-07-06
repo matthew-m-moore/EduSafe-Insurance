@@ -10,14 +10,14 @@ using EduSafe.WebApi.Models;
 
 namespace EduSafe.WebApi.Adapters
 {
-    public class IndividualServicingDataAdapter
+    internal class IndividualServicingDataAdapter
     {
         private readonly ServicingDataTypesRepository _servicingDataTypesRepository;
         private readonly IndividualServicingDataRepository _individualServicingDataRepository;
 
         private const string _optionDescription = "% of 'Total Paid-In Premiums' returned";
 
-        public IndividualServicingDataAdapter()
+        internal IndividualServicingDataAdapter()
         {
             var databaseContext = DatabaseContextRetriever.GetServicingDataContext();
 
@@ -25,7 +25,7 @@ namespace EduSafe.WebApi.Adapters
             _individualServicingDataRepository = new IndividualServicingDataRepository(databaseContext);
         }
 
-        public CustomerProfileEntry GetIndividualProfileData(long individualAccountNumber)
+        internal CustomerProfileEntry GetIndividualProfileData(long individualAccountNumber)
         {
             var individualServicingData = _individualServicingDataRepository.GetIndividualServicingData(individualAccountNumber);
 

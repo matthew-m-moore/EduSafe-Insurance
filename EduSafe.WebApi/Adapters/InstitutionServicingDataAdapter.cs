@@ -7,13 +7,13 @@ using EduSafe.WebApi.Models;
 
 namespace EduSafe.WebApi.Adapters
 {
-    public class InstitutionServicingDataAdapter
+    internal class InstitutionServicingDataAdapter
     {
         private readonly ServicingDataTypesRepository _servicingDataTypesRepository;
         private readonly InstitutionServicingDataRepository _institutionServicingDataRepository;
         private readonly IndividualServicingDataAdapter _individualServicingDataAdapter;
 
-        public InstitutionServicingDataAdapter()
+        internal InstitutionServicingDataAdapter()
         {
             var databaseContext = DatabaseContextRetriever.GetServicingDataContext();
 
@@ -22,7 +22,7 @@ namespace EduSafe.WebApi.Adapters
             _individualServicingDataAdapter = new IndividualServicingDataAdapter();
         }
 
-        public InstitutionProfileEntry GetInstitutionProfileData(long institutionAccountNumber)
+        internal InstitutionProfileEntry GetInstitutionProfileData(long institutionAccountNumber)
         {
             var institutionServicingData = _institutionServicingDataRepository.GetInstitutionServicingData(institutionAccountNumber);
            

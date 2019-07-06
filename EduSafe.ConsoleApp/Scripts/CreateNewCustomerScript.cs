@@ -11,8 +11,8 @@ namespace EduSafe.ConsoleApp.Scripts
         private const string _institutionalCustomer = "institutional";
         private const string _individualCustomer = "individual";
 
-        private static readonly string _institutionalDirectoryPath = FileServerSettings.InstitutionalCustomersDirectoryPath;
-        private static readonly string _individualDirectoryPath = FileServerSettings.IndividualCustomersDirectoryPath;
+        private static readonly string _institutionalDirectoryPath = FileServerSettings.InstitutionalCustomersDirectory;
+        private static readonly string _individualDirectoryPath = FileServerSettings.IndividualCustomersDirectory;
 
         public List<string> GetArgumentsList()
         {

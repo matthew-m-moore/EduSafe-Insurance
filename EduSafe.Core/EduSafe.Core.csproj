@@ -111,6 +111,8 @@
     <Compile Include="Interfaces\IParameterizer.cs" />
     <Compile Include="Interfaces\IScenario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reporting\PaymentHistoryReport.cs" />
+    <Compile Include="Reporting\StudentInformationReport.cs" />
     <Compile Include="Repositories\Database\AuthenticationRepository.cs" />
     <Compile Include="Repositories\Database\DatabaseRepository.cs" />
     <Compile Include="Repositories\Database\IndividualServicingDataRepository.cs" />

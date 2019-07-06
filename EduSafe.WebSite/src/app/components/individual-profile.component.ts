@@ -7,8 +7,9 @@ import { PaymentHistoryComponent } from '../components/payment-history.component
 import { CustomerProfileEntry } from '../classes/customerProfileEntry';
 import { CustomerEmailEntry } from '../classes/customerEmailEntry';
 
-import { ServicingDataService } from '../services/servicingData.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { ServicingDataService } from '../services/servicingData.service';
+import { ExcelExportService } from '../services/excelExport.service';
 
 @Component({
   selector: 'individual-profile',
@@ -41,6 +42,7 @@ export class IndividualProfileComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private servicingDataService: ServicingDataService,
+    private excelExportService: ExcelExportService,
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {
@@ -108,6 +110,10 @@ export class IndividualProfileComponent implements OnInit {
     else
       this.canNewEmailBeAdded = false;
   };
+
+  exportPaymentsToExcel(): void {
+    this.excelExportService.getPaymentsExport(this.customerProfileEntry.PaymentHistoryEntries);
+  }
 
   checkClaimsHistory(): boolean {
     if (!this.customerProfileEntry.ClaimStatusEntries)

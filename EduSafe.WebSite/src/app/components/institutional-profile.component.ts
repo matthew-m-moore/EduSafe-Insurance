@@ -12,7 +12,6 @@ import { AuthenticationService } from '../services/authentication.service';
 import { ServicingDataService } from '../services/servicingData.service';
 import { ExcelExportService } from '../services/excelExport.service';
 
-
 @Component({
   selector: 'institutional-profile',
   templateUrl: '../views/institutional-profile.component.html',
@@ -111,16 +110,20 @@ export class InstitutionalProfileComponent implements OnInit {
       this.canNewEmailBeAdded = false;
   };
 
-  exportToExcel(customerProfileEntries: CustomerProfileEntry[]): void {
-    
-  }
-
   openIndividualCustomerPage(customerProfileEntry: CustomerProfileEntry): void {
     let newTabUrl = this.router.createUrlTree(['/individual-profile'], {
       queryParams: { customerNumber: customerProfileEntry.CustomerIdNumber }
     });
 
     window.open(newTabUrl.toString(), '_blank');
+  }
+
+  exportStudentsToExcel(): void {
+    this.excelExportService.getStudentsExport(this.institutionProfileEntry);
+  }
+
+  exportPaymentsToExcel(): void {
+    this.excelExportService.getPaymentsExport(this.institutionProfileEntry.PaymentHistoryEntries);
   }
 
   checkClaimsHistory(customerProfileEntry: CustomerProfileEntry): boolean {

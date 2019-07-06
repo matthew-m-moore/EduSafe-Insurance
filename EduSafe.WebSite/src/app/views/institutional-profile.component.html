@@ -79,7 +79,7 @@
     <div class="collapse" [collapse]="isStudentInformationCollapsed" data-parent="#accordion">
       <div class="card-body">
         <button class="btn btn-info"
-                (click)="exportToExcel(institutionProfileEntry.CustomerProfileEntries)">Export to Excel</button>
+                (click)="exportStudentsToExcel()">Export to Excel</button>
         <div class="table-sm table-striped">
           <table align="center" class="table">
             <thead>
@@ -125,16 +125,18 @@
   <div *ngIf="customerHasPaymentHistory">
     <div class="card w-100">
       <div class="card-header">
-        <h2>
-          <button class="btn btn-link"
-                  (click)="isPaymentHistoryCollapsed = !isPaymentHistoryCollapsed"
-                  aria-expanded="false">
-            Payment History
-          </button>
-        </h2>
+        <button class="btn btn-link"
+                (click)="isPaymentHistoryCollapsed = !isPaymentHistoryCollapsed"
+                aria-expanded="false">
+          Payment History
+        </button>
       </div>
       <div class="collapse" [collapse]="isPaymentHistoryCollapsed" data-parent="#accordion">
         <div class="card-body">
+          <button class="btn btn-info"
+                  (click)="exportPaymentsToExcel()">
+            Export to Excel
+          </button>
           <payment-history #paymentHistory></payment-history>
         </div>
       </div>
@@ -143,13 +145,11 @@
   <div *ngIf="customerHasNotificationHistory">
     <div class="card w-100">
       <div class="card-header">
-        <h2>
-          <button class="btn btn-link"
-                  (click)="isNotificationHistoryCollapsed = !isNotificationHistoryCollapsed"
-                  aria-expanded="false">
-            Notification History
-          </button>
-        </h2>
+        <button class="btn btn-link"
+                (click)="isNotificationHistoryCollapsed = !isNotificationHistoryCollapsed"
+                aria-expanded="false">
+          Notification History
+        </button>
       </div>
       <div class="collapse" [collapse]="isNotificationHistoryCollapsed" data-parent="#accordion">
         <div class="card-body">

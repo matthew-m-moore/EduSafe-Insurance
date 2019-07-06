@@ -72,6 +72,17 @@ namespace EduSafe.IO.Excel
         }
 
         /// <summary>
+        /// Exports the workbook internal to the ExcelFileWriter object to a memory stream where it can uploaded to a cloud share.
+        /// </summary>
+        public MemoryStream ExportWorkbookToMemoryStream()
+        {
+            var memoryStream = new MemoryStream();
+            ExcelWorkbook.SaveAs(memoryStream);
+
+            return memoryStream;
+        }
+
+        /// <summary>
         /// Adds a tab containing of a generic list of data to the internal workbook of the ExcelFileWriter.
         /// </summary>
         public void AddWorksheetForListOfData<T>(List<T> genericListOfData, string worksheetName = "ListOfData") where T : class

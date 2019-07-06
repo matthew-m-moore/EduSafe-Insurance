@@ -133,19 +133,19 @@ namespace EduSafe.IO {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\Matthew M\\Google Drive\\Edu$afe\\Code\\IndividualCustomers")]
-        public string IndividualCustomersDirectory {
+        [global::System.Configuration.DefaultSettingValueAttribute("IndividualCustomers")]
+        public string FilesIndividualCustomersDirectory {
             get {
-                return ((string)(this["IndividualCustomersDirectory"]));
+                return ((string)(this["FilesIndividualCustomersDirectory"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\Matthew M\\Google Drive\\Edu$afe\\Code\\InstitutionalCustomers")]
-        public string InstitutionalCustomersDirectory {
+        [global::System.Configuration.DefaultSettingValueAttribute("InstitutionalCustomers")]
+        public string FilesInstitutionalCustomersDirectory {
             get {
-                return ((string)(this["InstitutionalCustomersDirectory"]));
+                return ((string)(this["FilesInstitutionalCustomersDirectory"]));
             }
         }
         
@@ -191,6 +191,61 @@ namespace EduSafe.IO {
         public string ServicingDataPort {
             get {
                 return ((string)(this["ServicingDataPort"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https")]
+        public string FilesDefaultEndpointsProtocol {
+            get {
+                return ((string)(this["FilesDefaultEndpointsProtocol"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("servicingportalstorage")]
+        public string FilesAccountName {
+            get {
+                return ((string)(this["FilesAccountName"]));
+            }
+            set {
+                this["FilesAccountName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("YIZWTqXdovW1c4bOTp5bLh2R72+n4OSlJW0GHSjSlD4RidmEzgzj/chkNLrJZQNIfGFVyneUyIP6hFcAK" +
+            "mMI0Q")]
+        public string FilesAccountKey {
+            get {
+                return ((string)(this["FilesAccountKey"]));
+            }
+            set {
+                this["FilesAccountKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("core.windows.net")]
+        public string FilesEndpointSuffix {
+            get {
+                return ((string)(this["FilesEndpointSuffix"]));
+            }
+            set {
+                this["FilesEndpointSuffix"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("edusafe-files")]
+        public string FilesShareName {
+            get {
+                return ((string)(this["FilesShareName"]));
             }
         }
     }

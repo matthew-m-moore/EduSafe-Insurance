@@ -4,24 +4,24 @@ using EduSafe.Core.Repositories.Database;
 
 namespace EduSafe.WebApi.Adapters
 {
-    public class AuthenticationAdapater
+    internal class AuthenticationAdapater
     {
         private AuthenticationRepository _authenicationRepository;
 
-        public AuthenticationAdapater(long customerNumber)
+        internal AuthenticationAdapater(long customerNumber)
         {
             _authenicationRepository = new AuthenticationRepository(customerNumber);
         }
 
-        public AuthenticationAdapater(string emailAddress)
+        internal AuthenticationAdapater(string emailAddress)
         {
             _authenicationRepository = new AuthenticationRepository(emailAddress);
         }
 
-        public List<long> GetAllCustomerNumbers() => 
+        internal List<long> GetAllCustomerNumbers() => 
             _authenicationRepository.AccountDataEntities.Select(e => e.AccountNumber).ToList();
 
-        public long GetCustomerNumberFromIdentifer(string customerIdentifier)
+        internal long GetCustomerNumberFromIdentifer(string customerIdentifier)
         {
             var accountData = _authenicationRepository
                 .AccountDataEntities.SingleOrDefault(e => e.FolderPath == customerIdentifier);
@@ -31,7 +31,7 @@ namespace EduSafe.WebApi.Adapters
                 : default;
         }
 
-        public string GetCustomerIdentifierFromNumber(long customerNumber)
+        internal string GetCustomerIdentifierFromNumber(long customerNumber)
         {
             var accountData = _authenicationRepository
                 .AccountDataEntities.SingleOrDefault(e => e.AccountNumber == customerNumber);

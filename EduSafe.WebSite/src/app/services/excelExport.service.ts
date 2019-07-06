@@ -13,10 +13,7 @@ export class ExcelExportService {
   private paymentsExcelExportUrl = EnvironmentSettings.BaseApiUrl + 'api/export/payments';
   private headers = new Headers({ 'Content-Type': 'application/json' });
 
-  constructor(
-    private http: Http,
-    private httpClient: HttpClient
-  ) { }
+  constructor(private http: Http) { }
 
   getStudentsExport(institutionProfileEntry: InstitutionProfileEntry) {
     this.http.post(this.studentsExcelExportUrl, JSON.stringify(institutionProfileEntry), { headers: this.headers })
