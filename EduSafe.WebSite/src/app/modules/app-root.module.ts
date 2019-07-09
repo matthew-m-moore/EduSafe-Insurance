@@ -44,6 +44,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { ExcelExportService } from '../services/excelExport.service';
 import { FileTransferService } from '../services/fileTransfer.service';
 import { ServicingDataService } from '../services/servicingData.service';
+import { ClaimStatusEntry } from '../classes/claimStatusEntry';
 
 @NgModule({
   imports: [
@@ -79,6 +80,9 @@ import { ServicingDataService } from '../services/servicingData.service';
     AnimateOnScrollDirective,
     DynamicTabsDirective,
   ],
+  entryComponents: [
+    ClaimTabComponent,
+  ],
   providers: [
     ActivityCaptureService,
     ModelCalculationService,
@@ -91,6 +95,7 @@ import { ServicingDataService } from '../services/servicingData.service';
     ExcelExportService,
     FileTransferService,
     ServicingDataService,
+    ClaimStatusEntry,
   ],
   bootstrap: [
     AppRootComponent

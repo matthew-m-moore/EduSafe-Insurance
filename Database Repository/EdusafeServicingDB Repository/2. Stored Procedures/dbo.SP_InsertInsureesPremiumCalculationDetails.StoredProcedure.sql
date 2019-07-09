@@ -5,7 +5,7 @@ END
 GO
 
 CREATE PROCEDURE SP_InsertInsureesPremiumCalculationDetails
-	@PremiumCalulated float 
+	@PremiumCalculated float 
 	, @PremiumCalculationDate datetime
 	, @TotalCoverageAmount float 
 	, @CoverageMonths int
@@ -21,7 +21,7 @@ INSERT INTO dbo.InsureesPremiumCalculationDetails
 (
 	CreatedOn
 	, CreatedBy
-	, PremiumCalulated
+	, PremiumCalculated
 	, PremiumCalculationDate
 	, TotalCoverageAmount
 	, CoverageMonths
@@ -36,7 +36,7 @@ VALUES
 (
 	GETDATE()
 	, USER
-	, @PremiumCalulated
+	, @PremiumCalculated
 	, @PremiumCalculationDate
 	, @TotalCoverageAmount
 	, @CoverageMonths

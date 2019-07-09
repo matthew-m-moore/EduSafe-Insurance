@@ -1,15 +1,14 @@
 <ul class="nav nav-tabs">
-  <li *ngFor="let tab of claimDynamicTabs" (click)="selectTab(tab)" [class.active]="tab.active">
-    <a href="#">{{tab.claimType}}</a>
+  <li *ngFor="let tab of claimDynamicTabs">
+    <a class="nav-link" (click)="selectTab(tab)" [class.active]="tab.active">{{tab.claimType}}</a>
   </li>
 </ul>
-<ng-content></ng-content>
 <div>
   <!--Loop through claim payment entries to show in table-->
 </div>
 
 <ng-template dynamicTabs></ng-template>
 
-<ng-template let-claim="claim" let-customer="customer" #claimEntry>
-  <claim-detail [claim]="claim" [customer]="customer"></claim-detail>
+<ng-template let-claim="claim" #claimEntry>
+  <claim-detail [claim]="claim"></claim-detail>
 </ng-template>

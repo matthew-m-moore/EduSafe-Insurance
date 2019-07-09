@@ -42,6 +42,14 @@ namespace EduSafe.Core.Repositories.Database
             var individualCustomerDataEntity = servicingDataContext.InsureesAccountDataEntities
                 .SingleOrDefault(e => e.AccountNumber == individualAccountNumber);
 
+            var institutionEntities = servicingDataContext.InstitutionsInsureeListEntities
+                .Where(e => e.InsureeAccountNumber == individualAccountNumber).ToList();
+            var instituionNumbers = institutionEntities.Select(e => e.InstitutionsAccountNumber).ToList();
+
+            var institutionDataEntities = servicingDataContext.InstitutionsAccountDataEntities
+                .Where(e => instituionNumbers.Contains(e.InstitutionsAccountNumber)).ToList();
+            var institutionUniqueIdentifiers = institutionDataEntities.Select(e => e.FolderPath).ToList();
+
             var nextPaymentAndBalanceEntity = servicingDataContext
                 .InsureesNextPaymentAndBalanceInformationEntities
                 .Where(e => e.AccountNumber == individualAccountNumber)
@@ -62,6 +70,7 @@ namespace EduSafe.Core.Repositories.Database
                 .Where(e => e.EmailsSetId == emailsSetId).ToList();
 
             individualServicingData.IndividualAccountData = individualCustomerDataEntity;
+            individualServicingData.InstitutionUniqueIdentifiers = institutionUniqueIdentifiers;
             individualServicingData.NextPaymentAndBalanceInformation = nextPaymentAndBalanceEntity;
 
             individualServicingData.EnrollmentVerificationHistory = enrollmentVerificationEntities;

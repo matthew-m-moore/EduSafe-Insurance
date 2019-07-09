@@ -42,7 +42,7 @@ namespace EduSafe.Core.Reporting
             "Has Claims",
         };
 
-        private static void AddReportTab(XLWorkbook excelWorkbook, List<StudentInformationRecord> studentInformationRecords)
+        public static void AddReportTab(XLWorkbook excelWorkbook, List<StudentInformationRecord> studentInformationRecords)
         {
             var excelWorksheet = excelWorkbook.Worksheets.Add(_reportTabName);
             AddReportHeadersLine(excelWorksheet);
@@ -54,6 +54,7 @@ namespace EduSafe.Core.Reporting
             }
 
             SetSheetFormatting(excelWorksheet);
+            _dataRowOffsetCounter = 1;
         }
 
         private static void AddReportHeadersLine(IXLWorksheet excelWorksheet)

@@ -1,20 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using ClosedXML.Excel;
+using EduSafe.Core.Reporting;
 using EduSafe.IO.Excel;
+using EduSafe.IO.Excel.Records;
 using EduSafe.WebApi.Models;
 
 namespace EduSafe.WebApi.Adapters
 {
     internal class ExcelExportAdapter
     {
-        public XLWorkbook CreateStudentInformationReport(InstitutionProfileEntry institutionProfileEntry, out string filePath)
+        public static ExcelFileWriter CreateStudentInformationReport(InstitutionProfileEntry institutionProfileEntry)
         {
-            //var excelFileWriter = new ExcelFileWriter();
-            //SecuritizationTranchesSummaryExcelReport.AddReportTab(excelFileWriter.ExcelWorkbook, securitizationResultsDictionary);
-            return new XLWorkbook();
+            var studentInformationRecords = institutionProfileEntry
+                .CustomerProfileEntries.Select(ConvertToStudentInformationRecord).ToList();
+
+            var excelFileWriter = new ExcelFileWriter();
+            StudentInformationReport.AddReportTab(excelFileWriter.ExcelWorkbook, studentInformationRecords);
+
+            return excelFileWriter;
+        }
+
+        public static ExcelFileWriter CreatePaymentHistoryReport(List<PaymentHistoryEntry> paymentHistoryEntries)
+        {
+            var paymentHistoryRecords = paymentHistoryEntries.Select(ConvertToPaymentHistoryRecord).ToList();
+
+            var excelFileWriter = new ExcelFileWriter();
+            PaymentHistoryReport.AddReportTab(excelFileWriter.ExcelWorkbook, paymentHistoryRecords);
+
+            return excelFileWriter;
+        }       
+
+        private static StudentInformationRecord ConvertToStudentInformationRecord(CustomerProfileEntry customerProfileEntry)
+        {
+            return new StudentInformationRecord
+            {
+                StudentSchoolId = "XX123ABC",
+                StudentPolicyId = customerProfileEntry.CustomerIdNumber,
+                StudentName = customerProfileEntry.CustomerName,
+                StudentMajor = customerProfileEntry.CollegeMajor,
+
+                CollegeStartDate = customerProfileEntry.CollegeStartDate,
+                CollegeGraduationDate = customerProfileEntry.ExpectedGraduationDate,
+
+                MonthlyPayment = customerProfileEntry.MonthlyPaymentAmount,
+                TotalPaidInPremiums = customerProfileEntry.TotalPaidInPremiums,
+                TotalCoverage = customerProfileEntry.TotalCoverageAmount,
+                RemainingCoverage = customerProfileEntry.RemainingCoverageAmount,
+
+                IsEnrolled = customerProfileEntry.EnrollmentVerified,
+                HasGraduated = customerProfileEntry.GraduationVerified,
+                HasClaims = customerProfileEntry.HasClaims,
+            };
+        }
+
+        private static PaymentHistoryRecord ConvertToPaymentHistoryRecord(PaymentHistoryEntry paymentHistoryEntry)
+        {
+            return new PaymentHistoryRecord
+            {
+                PaymentDate = paymentHistoryEntry.PaymentDate,
+                PaymentAmount = paymentHistoryEntry.PaymentAmount,
+                PaymentStatus = paymentHistoryEntry.PaymentStatus,
+                PaymentComments = paymentHistoryEntry.PaymentComments,
+            };
         }
     }
 }

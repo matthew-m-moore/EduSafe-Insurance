@@ -26,7 +26,7 @@
     <div class="form-check">
       <input type="checkbox" class="form-check-input" id="graduationVerified"
              [(ngModel)]="customerProfileEntry.GraduationVerified"
-             name="graduationVerifiedCheckbox">
+             name="graduationVerifiedCheckbox" disabled>
       <label class="form-check-label" for="graduationVerified">Graduation Verified</label>
     </div>
   </form>
@@ -125,7 +125,8 @@
                     (click)="exportPaymentsToExcel()">
               Export to Excel
             </button>
-            <payment-history #paymentHistory></payment-history>
+            <payment-history [paymentHistoryEntries]="customerProfileEntry.PaymentHistoryEntries">
+            </payment-history>
           </div>
         </div>
       </div>
@@ -141,18 +142,19 @@
         </div>
         <div class="collapse" [collapse]="isNotificationHistoryCollapsed" data-parent="#accordion">
           <div class="card-body">
-            <notification-history #notificationHistory></notification-history>
+            <notification-history [notificationHistoryEntries]="customerProfileEntry.NotificationHistoryEntries">
+            </notification-history>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <button type="button" class="btn btn-primary" (click)="toggleClaimsInventory()" [disabled]="!customerHasClaims">
+  <button type="button" class="btn btn-primary" (click)="toggleClaimsDetail()" [disabled]="!customerHasClaims">
     Show Claims
   </button>
 </div>
 <div *ngIf="showClaimsHistory">
-  <button type="button" class="btn btn-primary" (click)="toggleClaimsInventory()">
+  <button type="button" class="btn btn-primary" (click)="toggleClaimsDetail()">
     Hide Claims
   </button>
   <claims-inventory></claims-inventory>

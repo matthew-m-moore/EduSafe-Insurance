@@ -12,7 +12,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Insur
 			Id int IDENTITY(1,1)
 			, CreatedOn datetime not null
 			, CreatedBy varchar(25) not null
-			, PremiumCalulated float not null
+			, PremiumCalculated float not null
 			, PremiumCalculationDate datetime not null
 			, TotalCoverageAmount float not null
 			, CoverageMonths int not null

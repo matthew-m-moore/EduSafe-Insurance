@@ -36,4 +36,6 @@ export class CustomerProfileEntry {
   ClaimPaymentEntries: ClaimPaymentEntry[];
   EnrollmentVerified: boolean;
   GraduationVerified: boolean;
+  HasClaims: boolean;
+  InstitutionIdentifers: string[];
 }

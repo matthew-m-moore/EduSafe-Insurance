@@ -17,7 +17,7 @@ namespace EduSafe.WebApi.Controllers
         // Could this be the path to an IP address for our hosted file server perhaps?
         private const string _rootDirectoryPath = "~/App_Data";
 
-        // Should we set a file size limite somewhere for uploads?
+        // Should we set a file size limit somewhere for uploads?
         // POST: api/file/upload/{customerIdentifier}/{fileType}
         [Route("upload/{customerIdentifier}/{fileType}")]
         [HttpPost]

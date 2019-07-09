@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ClaimStatusEntry } from '../classes/claimStatusEntry';
 
 @Component({
   selector: 'claim-tab',
@@ -8,8 +9,7 @@ import { Component, Input } from '@angular/core';
 
 export class ClaimTabComponent {
   @Input('claimType') claimType: string;
-  @Input('customer') customerIdentifier: string;
   @Input() active = false;
   @Input() template;
-  @Input() dataContext;
+  @Input() claimStatusEntry : ClaimStatusEntry;
 }

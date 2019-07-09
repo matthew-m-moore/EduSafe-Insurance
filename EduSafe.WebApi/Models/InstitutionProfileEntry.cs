@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using EduSafe.WebApi.Interfaces;
 
 namespace EduSafe.WebApi.Models
 {
-    public class InstitutionProfileEntry
+    public class InstitutionProfileEntry : IProfileEntry
     {
         public long CustomerIdNumber { get; set; }
         public string CustomerUniqueId { get; set; }

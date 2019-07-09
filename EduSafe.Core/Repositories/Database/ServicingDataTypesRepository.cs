@@ -39,7 +39,7 @@ namespace EduSafe.Core.Repositories.Database
         public Dictionary<int, (NotificationType NotificationType, string NotificationDescription)> 
             NotificationTypeTupleDictionary => GetNotificationTypeDictionary();
 
-        public ServicingDataTypesRepository(DbContext databaseContext)
+        public ServicingDataTypesRepository(DbContext databaseContext = null)
         {
             _databaseContext = databaseContext;
         }

@@ -1,8 +1,5 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
-import { NotificationHistoryComponent } from '../components/notification-history.component'
-import { PaymentHistoryComponent } from '../components/payment-history.component'
 
 import { InstitutionProfileEntry } from '../classes/institutionProfileEntry';
 import { CustomerProfileEntry } from '../classes/customerProfileEntry';
@@ -34,9 +31,6 @@ export class InstitutionalProfileComponent implements OnInit {
 
   @Input() newEmailAddress: string;
   @Input() isNewEmailAddressPrimary: boolean;
-
-  @ViewChild('paymentHistory') private paymentHistoryComponent: PaymentHistoryComponent;
-  @ViewChild('notificationHistory') private notificationHistoryComponent: NotificationHistoryComponent;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -112,7 +106,10 @@ export class InstitutionalProfileComponent implements OnInit {
 
   openIndividualCustomerPage(customerProfileEntry: CustomerProfileEntry): void {
     let newTabUrl = this.router.createUrlTree(['/individual-profile'], {
-      queryParams: { customerNumber: customerProfileEntry.CustomerIdNumber }
+      queryParams: {
+        customerNumber: customerProfileEntry.CustomerIdNumber,
+        institutionIdentifer: this.institutionProfileEntry.CustomerUniqueId
+      }
     });
 
     window.open(newTabUrl.toString(), '_blank');
@@ -123,14 +120,21 @@ export class InstitutionalProfileComponent implements OnInit {
   }
 
   exportPaymentsToExcel(): void {
-    this.excelExportService.getPaymentsExport(this.institutionProfileEntry.PaymentHistoryEntries);
+    this.excelExportService.getInstitutionPaymentsExport(this.institutionProfileEntry);
   }
 
-  checkClaimsHistory(customerProfileEntry: CustomerProfileEntry): boolean {
-    if (!customerProfileEntry.ClaimStatusEntries)
+  checkPaymentHistory(): boolean {
+    if (this.institutionProfileEntry.PaymentHistoryEntries)
+      return this.institutionProfileEntry.PaymentHistoryEntries.length > 0
+    else
       return false;
-    if (customerProfileEntry.ClaimStatusEntries.length > 0)
-      return true;
+  }
+
+  checkNotificationHistory(): boolean {
+    if (this.institutionProfileEntry.NotificationHistoryEntries)
+      return this.institutionProfileEntry.NotificationHistoryEntries.length > 0
+    else
+      return false;
   }
 
   ngOnInit(): void {
@@ -144,15 +148,10 @@ export class InstitutionalProfileComponent implements OnInit {
             this.isCustomerInformationRetrievedSuccessfully = false;
           }
           else {
-            this.paymentHistoryComponent =
-              new PaymentHistoryComponent(this.institutionProfileEntry.PaymentHistoryEntries);
-            this.notificationHistoryComponent =
-              new NotificationHistoryComponent(this.institutionProfileEntry.NotificationHistoryEntries);
-
-            this.customerHasPaymentHistory = this.paymentHistoryComponent.checkPaymentHistory();
-            this.customerHasNotificationHistory = this.notificationHistoryComponent.checkNotificationHistory();
+            this.customerHasPaymentHistory = this.checkPaymentHistory();
+            this.customerHasNotificationHistory = this.checkNotificationHistory();
           }
         });
-    }
+      }
   }
 }

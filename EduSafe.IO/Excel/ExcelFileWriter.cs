@@ -6,15 +6,13 @@ using System.IO;
 using System.Linq;
 using EduSafe.Common.Utilities;
 using ClosedXML.Excel;
+using EduSafe.Common;
 
 namespace EduSafe.IO.Excel
 {
     public class ExcelFileWriter
     {
         private string _filePath;
-
-        private const string _tempFileExtension = ".tmp";
-        private const string _excelFileExtension = ".xlsx";
 
         private bool _openFileOnSave = false;
         private bool _overwriteFileOnSave = false;
@@ -115,16 +113,16 @@ namespace EduSafe.IO.Excel
         // Note that saving a temp file will never overwrite an exiting file since each temp file name is unique.
         private void SaveWorkbookAsTempFile(bool openFileOnSave)
         {
-            var tempDirectoryFilePath = Path.GetTempFileName().Replace(_tempFileExtension, _excelFileExtension);
+            var tempDirectoryFilePath = Path.GetTempFileName().Replace(Constants.TempFileExtension, Constants.ExcelFileExtension);
             SaveWorkbook(tempDirectoryFilePath, openFileOnSave, false);
         }
 
         private void SaveWorkbook(string filePathOnSave, bool openFileOnSave, bool overwriteFileOnSave)
         {
             // Add a proper file extension if none exists
-            if (!filePathOnSave.EndsWith(_excelFileExtension))
+            if (!filePathOnSave.EndsWith(Constants.ExcelFileExtension))
             {
-                filePathOnSave += _excelFileExtension;
+                filePathOnSave += Constants.ExcelFileExtension;
             }
 
             // The default behavior of ClosedXML is to overwrite on save

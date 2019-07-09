@@ -9,6 +9,9 @@ namespace EduSafe.Common
         public const string DatabaseOwnerSchemaName = "dbo";
         public const string IndividualCustomerSchemaName = "cust";
 
+        public const string TempFileExtension = ".tmp";
+        public const string ExcelFileExtension = ".xlsx";
+
         public const string PeriodIdentifier = "Period";
         public const string TotalIdentifier = "Total";
 

@@ -1,8 +1,7 @@
 <div [hidden]="!active" class="pane">
-  <ng-content></ng-content>
   <ng-container *ngIf="template"
                 [ngTemplateOutlet]="template"
-                [ngTemplateOutletContext]="{ claim: dataContext, customer: customerIdentifier  }">
+                [ngTemplateOutletContext]="{ claim: claimStatusEntry }">
   </ng-container>
 </div>
 

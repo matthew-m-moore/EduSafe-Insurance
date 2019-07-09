@@ -106,15 +106,15 @@
                 <td>{{ customerProfileEntry.CustomerIdNumber }}</td>
                 <td>{{ customerProfileEntry.CustomerName }}</td>
                 <td>{{ customerProfileEntry.CollegeMajor }}</td>
-                <td>{{ customerProfileEntry.CollegeStartDate }}</td>
-                <td>{{ customerProfileEntry.ExpectedGraduationDate }}</td>
+                <td>{{ customerProfileEntry.CollegeStartDate  | date: 'shortDate' }}</td>
+                <td>{{ customerProfileEntry.ExpectedGraduationDate  | date: 'shortDate' }}</td>
                 <td>{{ customerProfileEntry.MonthlyPaymentAmount }}</td>
                 <td>{{ customerProfileEntry.TotalPaidInPremiums }}</td>
                 <td>{{ customerProfileEntry.TotalCoverageAmount }}</td>
                 <td>{{ customerProfileEntry.RemainingCoverageAmount }}</td>
                 <td><input type="checkbox" [(ngModel)]="customerProfileEntry.EnrollmentVerified" [ngModelOptions]="{standalone: true}" disabled /></td>
                 <td><input type="checkbox" [(ngModel)]="customerProfileEntry.GraduationVerified" [ngModelOptions]="{standalone: true}" disabled /></td>
-                <td><input type="checkbox" [(ngModel)]="checkClaimsHistory(customerProfileEntry)" [ngModelOptions]="{standalone: true}" disabled /></td>
+                <td><input type="checkbox" [(ngModel)]="customerProfileEntry.HasClaims" [ngModelOptions]="{standalone: true}" disabled /></td>
               </tr>
             </tbody>
           </table>
@@ -137,7 +137,8 @@
                   (click)="exportPaymentsToExcel()">
             Export to Excel
           </button>
-          <payment-history #paymentHistory></payment-history>
+          <payment-history [paymentHistoryEntries]="institutionProfileEntry.PaymentHistoryEntries">
+          </payment-history>
         </div>
       </div>
     </div>
@@ -153,7 +154,8 @@
       </div>
       <div class="collapse" [collapse]="isNotificationHistoryCollapsed" data-parent="#accordion">
         <div class="card-body">
-          <notification-history #notificationHistory></notification-history>
+          <notification-history [notificationHistoryEntries]="institutionProfileEntry.NotificationHistoryEntries">
+          </notification-history>
         </div>
       </div>
     </div>

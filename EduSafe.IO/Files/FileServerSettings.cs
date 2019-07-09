@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EduSafe.IO.Files
+﻿namespace EduSafe.IO.Files
 {
     public static class FileServerSettings
     {
@@ -14,8 +8,10 @@ namespace EduSafe.IO.Files
         private const string _endpointSuffix = "EndpointSuffix";
 
         public static string FileShareName => InputOutput.Default.FilesShareName;
+
         public static string IndividualCustomersDirectory => InputOutput.Default.FilesIndividualCustomersDirectory;
         public static string InstitutionalCustomersDirectory => InputOutput.Default.FilesInstitutionalCustomersDirectory;
+        public static string ReportsDirectory => InputOutput.Default.FilesReportsFolder;
 
         public static string AssembleConnectionString()
         {

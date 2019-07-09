@@ -8,6 +8,7 @@ namespace EduSafe.Core.BusinessLogic.Containers
     public class IndividualServicingData
     {
         public InsureesAccountDataEntity IndividualAccountData { get; set; }
+        public List<string> InstitutionUniqueIdentifiers { get; set; }
 
         public InsureesNextPaymentAndBalanceInformationEntity NextPaymentAndBalanceInformation { get; set; }
 
@@ -29,6 +30,6 @@ namespace EduSafe.Core.BusinessLogic.Containers
         public Dictionary<long, ClaimStatusEntryEntity> ClaimStatusDictionary { get; set; }
         public Dictionary<long, List<ClaimDocumentEntryEntity>> ClaimDocumentsDictionary { get; set; }
 
-        public List<ClaimPaymentEntryEntity> ClaimsPaymentHistory { get; set; }
+        public List<ClaimPaymentEntryEntity> ClaimsPaymentHistory { get; set; }   
     }
 }

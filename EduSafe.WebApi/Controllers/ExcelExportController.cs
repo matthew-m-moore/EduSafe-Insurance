@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-using ClosedXML.Excel;
+using EduSafe.Common;
+using EduSafe.IO.Excel;
+using EduSafe.IO.Files;
+using EduSafe.WebApi.Adapters;
+using EduSafe.WebApi.Interfaces;
 using EduSafe.WebApi.Models;
 
 namespace EduSafe.WebApi.Controllers
@@ -13,54 +16,72 @@ namespace EduSafe.WebApi.Controllers
     [RoutePrefix("api/export")]
     public class ExcelExportController : ApiController
     {
-        const string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        private const string _contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        private const string _studentInformationReportNameStub = "-Student-Details-";
+        private const string _paymentHistoryReportNameStub = "-Payment-History-";
 
-        // GET: api/export/students
+        // POST: api/export/students
         [Route("students")]
         [HttpPost]
         public HttpResponseMessage ExportCustomerProfiles(InstitutionProfileEntry institutionProfileEntry)
         {
-            var dataTable = new DataTable();
-            var fileName = "example.xlsx";
+            var fileName = ConstructFileName(institutionProfileEntry, _studentInformationReportNameStub);
+            var excelFileWriter = ExcelExportAdapter.CreateStudentInformationReport(institutionProfileEntry);
 
-            var workbook = new XLWorkbook();
-            workbook.Worksheets.Add(dataTable);
-            workbook.SaveAs(fileName);
-
-            using (var memoryStream = new MemoryStream())
-            {
-                var response = new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new ByteArrayContent(memoryStream.ToArray())
-                };
-
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                {
-                    FileName = fileName
-                };
-
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
-                //response.Content.Headers.ContentLength = ;
-
-                return response;
-            }            
+            return CreateHttpResponseMessage(institutionProfileEntry, excelFileWriter, fileName);
         }
 
-        // GET: api/export/payments
-        [Route("payments")]
+        // POST: api/export/payments-institution
+        [Route("payments-institution")]
         [HttpPost]
-        public HttpResponseMessage ExportPaymentHistory(List<PaymentHistoryEntry> paymentHistoryEntries)
+        public HttpResponseMessage ExportPaymentHistory(InstitutionProfileEntry institutionProfileEntry)
         {
-            var dataTable = new DataTable();
-            var fileName = "example.xlsx";
+            var fileName = ConstructFileName(institutionProfileEntry, _paymentHistoryReportNameStub);
+            var paymentHistoryEntries = institutionProfileEntry.PaymentHistoryEntries;
+            var excelFileWriter = ExcelExportAdapter.CreatePaymentHistoryReport(paymentHistoryEntries);
 
-            var workbook = new XLWorkbook();
-            workbook.Worksheets.Add(dataTable);
-            workbook.SaveAs(fileName);
+            return CreateHttpResponseMessage(institutionProfileEntry, excelFileWriter, fileName);
+        }
 
-            using (var memoryStream = new MemoryStream())
+        // POST: api/export/payments-individual
+        [Route("payments-individual")]
+        [HttpPost]
+        public HttpResponseMessage ExportPaymentHistory(CustomerProfileEntry customerProfileEntry)
+        {
+            var fileName = ConstructFileName(customerProfileEntry, _paymentHistoryReportNameStub);
+            var paymentHistoryEntries = customerProfileEntry.PaymentHistoryEntries;
+            var excelFileWriter = ExcelExportAdapter.CreatePaymentHistoryReport(paymentHistoryEntries);
+
+            return CreateHttpResponseMessage(customerProfileEntry, excelFileWriter, fileName);
+        }
+
+        private static string ConstructFileName(IProfileEntry profileEntry, string reportNameStub)
+        {
+            var timeStamp = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss");
+            var fileName = profileEntry.CustomerIdNumber.ToString()
+                + reportNameStub
+                + timeStamp
+                + Constants.ExcelFileExtension;
+
+            return fileName;
+        }
+
+        private static HttpResponseMessage CreateHttpResponseMessage(
+            IProfileEntry profileEntry, 
+            ExcelFileWriter excelFileWriter, 
+            string fileName)
+        {
+            using (var memoryStream = excelFileWriter.ExportWorkbookToMemoryStream())
             {
+                var targetFilePath = Path.Combine(
+                    FileServerSettings.InstitutionalCustomersDirectory,
+                    profileEntry.CustomerUniqueId,
+                    FileServerSettings.ReportsDirectory);
+
+                // This saves the file to the customer's folder in the file share
+                var fileServerUtility = new FileServerUtility(FileServerSettings.FileShareName);
+                fileServerUtility.UploadFileFromStream(targetFilePath, fileName, memoryStream);
+
                 var response = new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -72,8 +93,11 @@ namespace EduSafe.WebApi.Controllers
                     FileName = fileName
                 };
 
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
-                //response.Content.Headers.ContentLength = ;
+                // This allows you to access the file name, even with CORS in play
+                response.Content.Headers.Add("FileName", fileName);
+                response.Content.Headers.Add("Access-Control-Expose-Headers", "FileName");
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue(_contentType);
+                response.Content.Headers.ContentLength = memoryStream.Length;
 
                 return response;
             }

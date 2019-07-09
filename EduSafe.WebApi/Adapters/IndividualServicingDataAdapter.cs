@@ -5,7 +5,6 @@ using EduSafe.Common.Enums;
 using EduSafe.Common.ExtensionMethods;
 using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.Core.Repositories.Database;
-using EduSafe.IO.Database;
 using EduSafe.WebApi.Models;
 
 namespace EduSafe.WebApi.Adapters
@@ -19,10 +18,8 @@ namespace EduSafe.WebApi.Adapters
 
         internal IndividualServicingDataAdapter()
         {
-            var databaseContext = DatabaseContextRetriever.GetServicingDataContext();
-
-            _servicingDataTypesRepository = new ServicingDataTypesRepository(databaseContext);
-            _individualServicingDataRepository = new IndividualServicingDataRepository(databaseContext);
+            _servicingDataTypesRepository = new ServicingDataTypesRepository();
+            _individualServicingDataRepository = new IndividualServicingDataRepository();
         }
 
         internal CustomerProfileEntry GetIndividualProfileData(long individualAccountNumber)
@@ -37,7 +34,7 @@ namespace EduSafe.WebApi.Adapters
             var paymentHistory = GetPaymentHistory(individualServicingData, out var totalPaidInPremiums);
 
             var claimOptionEntries = GetClaimOptionEntries(individualServicingData);
-            var claimStatusEntries = GetClaimStatusEntries(individualServicingData);
+            var claimStatusEntries = GetClaimStatusEntries(individualServicingData, out var hasClaims);
             var claimPaymentEntries = GetClaimPaymentEntries(individualServicingData, out var remainingCoverageAmount);
 
             var collegeName = string.Empty;
@@ -107,6 +104,10 @@ namespace EduSafe.WebApi.Adapters
                 GraduationVerified = (graduationVerificationEntity != null)
                     ? graduationVerificationEntity.IsVerified
                     : default,
+
+                HasClaims = hasClaims,
+
+                InstitutionIdentifers = individualServicingData.InstitutionUniqueIdentifiers,
             };
 
             return customerProfileEntry;
@@ -226,7 +227,7 @@ namespace EduSafe.WebApi.Adapters
             return claimOptionEntries;
         }
 
-        private List<ClaimStatusEntry> GetClaimStatusEntries(IndividualServicingData individualServicingData)
+        private List<ClaimStatusEntry> GetClaimStatusEntries(IndividualServicingData individualServicingData, out bool hasClaims)
         {
             var claimStatusEntries = new List<ClaimStatusEntry>();
 
@@ -243,7 +244,7 @@ namespace EduSafe.WebApi.Adapters
 
                 var claimStatusEntry = new ClaimStatusEntry
                 {
-                    ClaimType = claimType.ToString(),
+                    ClaimType = claimType.GetFriendlyDescription(),
                     ClaimStatus = claimStatus.ToString(),
                     IsClaimApproved = claimStatusEntity.IsClaimApproved,
                     ClaimDocumentEntries = claimDocumentEntries,
@@ -252,6 +253,7 @@ namespace EduSafe.WebApi.Adapters
                 claimStatusEntries.Add(claimStatusEntry);
             }
 
+            hasClaims = claimStatusEntries.Any();
             return claimStatusEntries;
         }
 

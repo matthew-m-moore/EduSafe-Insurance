@@ -62,17 +62,20 @@
     <Setting Name="FilesDefaultEndpointsProtocol" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https</Value>
     </Setting>
-    <Setting Name="FilesAccountName" Type="System.String" Scope="User">
+    <Setting Name="FilesAccountName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">servicingportalstorage</Value>
     </Setting>
-    <Setting Name="FilesAccountKey" Type="System.String" Scope="User">
+    <Setting Name="FilesAccountKey" Type="System.String" Scope="Application">
       <Value Profile="(Default)">YIZWTqXdovW1c4bOTp5bLh2R72+n4OSlJW0GHSjSlD4RidmEzgzj/chkNLrJZQNIfGFVyneUyIP6hFcAKmMI0Q</Value>
     </Setting>
-    <Setting Name="FilesEndpointSuffix" Type="System.String" Scope="User">
+    <Setting Name="FilesEndpointSuffix" Type="System.String" Scope="Application">
       <Value Profile="(Default)">core.windows.net</Value>
     </Setting>
     <Setting Name="FilesShareName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">edusafe-files</Value>
+    </Setting>
+    <Setting Name="FilesReportsFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Reports</Value>
     </Setting>
   </Settings>
 </SettingsFile>

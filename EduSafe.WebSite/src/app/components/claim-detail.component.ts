@@ -12,7 +12,6 @@ import { FileTransferService } from '../services/fileTransfer.service';
 
 export class ClaimDetailComponent implements OnInit {
   @Input('claim') claimStatusEntry: ClaimStatusEntry;
-  @Input('customer') customerIdentifier: string;
   claimType: string;
 
   public isFileUploading = false;
@@ -21,12 +20,12 @@ export class ClaimDetailComponent implements OnInit {
   constructor(private fileTransferService: FileTransferService) { }
 
   dowloadFileFromServer(fileName: string): void {
-    this.fileTransferService.downloadFile(fileName, this.customerIdentifier, this.claimType);
+    this.fileTransferService.downloadFile(fileName, this.claimType);
   }
 
   uploadFilesToServer(files: FileList): void {
     this.isFileUploading = true;
-    this.fileTransferService.uploadFiles(files, this.customerIdentifier, this.claimType)
+    this.fileTransferService.uploadFiles(files, this.claimType)
       .then(uploadSuccess => {
         this.isFileUploaded = uploadSuccess;
         this.isFileUploading = false;

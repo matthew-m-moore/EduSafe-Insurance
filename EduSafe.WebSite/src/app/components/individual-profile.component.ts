@@ -1,8 +1,5 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
-import { NotificationHistoryComponent } from '../components/notification-history.component'
-import { PaymentHistoryComponent } from '../components/payment-history.component'
 
 import { CustomerProfileEntry } from '../classes/customerProfileEntry';
 import { CustomerEmailEntry } from '../classes/customerEmailEntry';
@@ -20,6 +17,7 @@ import { ExcelExportService } from '../services/excelExport.service';
 export class IndividualProfileComponent implements OnInit {
   customerProfileEntry: CustomerProfileEntry;
   customerNumber: string;
+  insitutionIdentifer: string;
 
   public isCustomerInformationRetrievedSuccessfully = true;
   public canNewEmailBeAdded = false;
@@ -36,9 +34,6 @@ export class IndividualProfileComponent implements OnInit {
   @Input() newEmailAddress: string;
   @Input() isNewEmailAddressPrimary: boolean;
 
-  @ViewChild('paymentHistory') private paymentHistoryComponent: PaymentHistoryComponent;
-  @ViewChild('notificationHistory') private notificationHistoryComponent: NotificationHistoryComponent;
-
   constructor(
     private authenticationService: AuthenticationService,
     private servicingDataService: ServicingDataService,
@@ -50,7 +45,16 @@ export class IndividualProfileComponent implements OnInit {
       this.activatedRoute.queryParams
         .subscribe((params) => {
           this.customerNumber = params.customerNumber;
+          this.insitutionIdentifer = params.institutionIdentifer;
         });
+  }
+
+  checkPassedViaInstitution(): boolean {
+    if (this.insitutionIdentifer)
+      return this.customerProfileEntry
+        .InstitutionIdentifers.some(identifier => identifier === this.insitutionIdentifer);
+    else
+      return true;
   }
 
   goBackToAuthentication(): void {
@@ -112,7 +116,7 @@ export class IndividualProfileComponent implements OnInit {
   };
 
   exportPaymentsToExcel(): void {
-    this.excelExportService.getPaymentsExport(this.customerProfileEntry.PaymentHistoryEntries);
+    this.excelExportService.getIndividualPaymentsExport(this.customerProfileEntry);
   }
 
   checkClaimsHistory(): boolean {
@@ -126,8 +130,22 @@ export class IndividualProfileComponent implements OnInit {
     this.showClaimsHistory = !this.showClaimsHistory;
   }
 
+  checkPaymentHistory(): boolean {
+    if (this.customerProfileEntry.PaymentHistoryEntries)
+      return this.customerProfileEntry.PaymentHistoryEntries.length > 0
+    else
+      return false;
+  }
+
+  checkNotificationHistory(): boolean {
+    if (this.customerProfileEntry.NotificationHistoryEntries)
+      return this.customerProfileEntry.NotificationHistoryEntries.length > 0
+    else
+      return false;
+  }
+
   ngOnInit(): void {
-    if (!this.authenticationService.isAuthenticated)
+    if (!this.authenticationService.isAuthenticated && !this.insitutionIdentifer)
       this.goBackToAuthentication();
     else {
       this.authenticationService.isAuthenticated = false;
@@ -138,17 +156,14 @@ export class IndividualProfileComponent implements OnInit {
             this.isCustomerInformationRetrievedSuccessfully = false;
           }
           else {
-            this.paymentHistoryComponent =
-              new PaymentHistoryComponent(this.customerProfileEntry.PaymentHistoryEntries);
-            this.notificationHistoryComponent =
-              new NotificationHistoryComponent(this.customerProfileEntry.NotificationHistoryEntries);
+            if (!this.checkPassedViaInstitution())
+              this.goBackToAuthentication();
 
-            this.customerHasPaymentHistory = this.paymentHistoryComponent.checkPaymentHistory();
-            this.customerHasNotificationHistory = this.notificationHistoryComponent.checkNotificationHistory();
-
+            this.customerHasPaymentHistory = this.checkPaymentHistory();
+            this.customerHasNotificationHistory = this.checkNotificationHistory();
             this.customerHasClaims = this.checkClaimsHistory();
           }
         });
-    }
+      }
   }
 }

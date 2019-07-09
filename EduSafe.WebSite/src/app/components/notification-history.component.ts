@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input} from '@angular/core';
 
 import { NotificationHistoryEntry } from '../classes/notificationHistoryEntry';
 
@@ -9,16 +9,5 @@ import { NotificationHistoryEntry } from '../classes/notificationHistoryEntry';
 })
 
 export class NotificationHistoryComponent {
-  public notificationHistoryEntries: NotificationHistoryEntry[]
-
-  constructor(notificationHistoryEntries: NotificationHistoryEntry[]) {
-      this.notificationHistoryEntries = notificationHistoryEntries;
-  }
-
-  checkNotificationHistory(): boolean {
-    if (this.notificationHistoryEntries)
-      return this.notificationHistoryEntries.length > 0
-
-    return false;
-  }
+  @Input() notificationHistoryEntries: NotificationHistoryEntry[]
 }

@@ -203,19 +203,16 @@ namespace EduSafe.IO {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("servicingportalstorage")]
         public string FilesAccountName {
             get {
                 return ((string)(this["FilesAccountName"]));
             }
-            set {
-                this["FilesAccountName"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("YIZWTqXdovW1c4bOTp5bLh2R72+n4OSlJW0GHSjSlD4RidmEzgzj/chkNLrJZQNIfGFVyneUyIP6hFcAK" +
             "mMI0Q")]
@@ -223,20 +220,14 @@ namespace EduSafe.IO {
             get {
                 return ((string)(this["FilesAccountKey"]));
             }
-            set {
-                this["FilesAccountKey"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("core.windows.net")]
         public string FilesEndpointSuffix {
             get {
                 return ((string)(this["FilesEndpointSuffix"]));
-            }
-            set {
-                this["FilesEndpointSuffix"] = value;
             }
         }
         
@@ -246,6 +237,15 @@ namespace EduSafe.IO {
         public string FilesShareName {
             get {
                 return ((string)(this["FilesShareName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Reports")]
+        public string FilesReportsFolder {
+            get {
+                return ((string)(this["FilesReportsFolder"]));
             }
         }
     }

@@ -1,12 +1,4 @@
-import {
-  Component,
-  ContentChildren,
-  QueryList,
-  AfterContentInit,
-  ViewChild,
-  ComponentFactoryResolver,
-  ViewContainerRef,
-  OnInit} from '@angular/core';
+import { Component, OnInit, AfterContentInit, ViewChild, ComponentFactoryResolver} from '@angular/core';
 
 import { IndividualProfileComponent } from './individual-profile.component';
 import { ClaimTabComponent } from './claim-tab.component';
@@ -15,6 +7,8 @@ import { ClaimStatusEntry } from '../classes/claimStatusEntry';
 import { ClaimPaymentEntry } from '../classes/claimPaymentEntry';
 
 import { DynamicTabsDirective } from '../directives/dynamicTabs.directive';
+
+import { FileTransferService } from '../services/fileTransfer.service';
 
 @Component({
   selector: 'claims-inventory',
@@ -26,18 +20,18 @@ export class ClaimsComponent implements OnInit, AfterContentInit {
   claimStatusEntries: ClaimStatusEntry[];
   claimPaymentEntries: ClaimPaymentEntry[];
   claimDynamicTabs: ClaimTabComponent[] = [];
-  customerIdentifier: string;
 
   public isFileUploading = false;
   public isFileUploaded = false;
 
-  // @ContentChildren(ClaimTabComponent) claimTabs: QueryList<ClaimTabComponent>;
   @ViewChild(DynamicTabsDirective) dynamicTabPlaceholder: DynamicTabsDirective;
   @ViewChild('claimEntry') claimEntryTemplate;
 
   constructor(
     private individualProfileComponent: IndividualProfileComponent,
-    private componentFactoryResolver: ComponentFactoryResolver) { }
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private fileTransferService: FileTransferService)
+  { }
 
   onClaimExists(claim: ClaimStatusEntry) {
     this.createTab(
@@ -56,22 +50,18 @@ export class ClaimsComponent implements OnInit, AfterContentInit {
 
     const tabInstance: ClaimTabComponent = componentReference.instance as ClaimTabComponent;
     tabInstance.claimType = claimType;
-    tabInstance.customerIdentifier = this.customerIdentifier;
     tabInstance.template = template;
-    tabInstance.dataContext = claim;
+    tabInstance.claimStatusEntry = claim;
 
     this.claimDynamicTabs.push(componentReference.instance as ClaimTabComponent);
-    // this.selectTab(this.claimDynamicTabs[this.claimDynamicTabs.length - 1]);
   }
 
   selectTab(claimTab: ClaimTabComponent) {
-    // this.claimTabs.toArray().forEach(tab => (tab.active = false));
     this.claimDynamicTabs.forEach(tab => (tab.active = false));
-
     claimTab.active = true;
   }
 
-  ngAfterContentInit() {
+  ngAfterContentInit(): void {
     if (this.claimDynamicTabs.length > 0)
       this.selectTab(this.claimDynamicTabs[0]);
   }
@@ -81,7 +71,7 @@ export class ClaimsComponent implements OnInit, AfterContentInit {
       this.individualProfileComponent.customerProfileEntry.ClaimStatusEntries;
     this.claimPaymentEntries =
       this.individualProfileComponent.customerProfileEntry.ClaimPaymentEntries;
-    this.customerIdentifier =
+    this.fileTransferService.customerIdentifier =
       this.individualProfileComponent.customerProfileEntry.CustomerUniqueId;
 
     this.claimStatusEntries.forEach(claimEntry => this.onClaimExists(claimEntry));

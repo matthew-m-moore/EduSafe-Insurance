@@ -12,20 +12,21 @@ export class FileTransferService {
 
   public uploadProgress: number;
   public uploadMessage: string;
+  public customerIdentifier: string;
 
   constructor(
     private http: Http,
     private httpClient: HttpClient
   ) { }
 
-  uploadFiles(files: FileList, customerIdentifier: string, claimType: string) : Promise<boolean> {
+  uploadFiles(files: FileList, claimType: string) : Promise<boolean> {
     if (files.length === 0) {
       this.uploadMessage = "No Files Selected";
       return Promise.resolve(false);
     }
 
     const formData = new FormData();
-    const apiUrl = `${this.uploadFilesUrl}/${customerIdentifier}/${claimType}`;
+    const apiUrl = `${this.uploadFilesUrl}/${this.customerIdentifier}/${claimType}`;
 
     for (var i = 0; i < files.length; i++)
       formData.append(files.item(i).name, files.item(i));
@@ -53,8 +54,8 @@ export class FileTransferService {
   }
 
   // Do need to return anything here or does the browser just handle this for me?
-  downloadFile(fileName: string, customerIdentifier: string, claimType: string): void {
-    const apiUrl = `${this.downloadFileUrl}/${customerIdentifier}/${claimType}/${fileName}`;
+  downloadFile(fileName: string, claimType: string): void {
+    const apiUrl = `${this.downloadFileUrl}/${this.customerIdentifier}/${claimType}/${fileName}`;
     this.http.get(apiUrl);
   }
 }

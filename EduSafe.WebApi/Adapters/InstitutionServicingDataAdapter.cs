@@ -15,10 +15,8 @@ namespace EduSafe.WebApi.Adapters
 
         internal InstitutionServicingDataAdapter()
         {
-            var databaseContext = DatabaseContextRetriever.GetServicingDataContext();
-
-            _servicingDataTypesRepository = new ServicingDataTypesRepository(databaseContext);
-            _institutionServicingDataRepository = new InstitutionServicingDataRepository(databaseContext);
+            _servicingDataTypesRepository = new ServicingDataTypesRepository();
+            _institutionServicingDataRepository = new InstitutionServicingDataRepository();
             _individualServicingDataAdapter = new IndividualServicingDataAdapter();
         }
 

@@ -19,7 +19,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let claimDocumentEntry of claimStausEntry.ClaimDocumentEntries">
+      <tr *ngFor="let claimDocumentEntry of claimStatusEntry.ClaimDocumentEntries">
         <td><i>{{ claimDocumentEntry.UploadDate | date: 'shortDate' }}</i></td>
         <td><i>{{ claimDocumentEntry.ExpirationDate | date: 'shortDate' }}</i></td>
         <td><input type="checkbox" value="claimDocumentEntry.IsFileVerified" disabled /></td>

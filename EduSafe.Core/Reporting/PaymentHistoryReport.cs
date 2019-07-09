@@ -29,7 +29,7 @@ namespace EduSafe.Core.Reporting
             "Comments",
         };
 
-        private static void AddReportTab(XLWorkbook excelWorkbook, List<PaymentHistoryRecord> paymentHistoryRecords)
+        public static void AddReportTab(XLWorkbook excelWorkbook, List<PaymentHistoryRecord> paymentHistoryRecords)
         {
             var excelWorksheet = excelWorkbook.Worksheets.Add(_reportTabName);
             AddReportHeadersLine(excelWorksheet);
@@ -41,6 +41,7 @@ namespace EduSafe.Core.Reporting
             }
 
             SetSheetFormatting(excelWorksheet);
+            _dataRowOffsetCounter = 1;
         }
 
         private static void AddReportHeadersLine(IXLWorksheet excelWorksheet)
