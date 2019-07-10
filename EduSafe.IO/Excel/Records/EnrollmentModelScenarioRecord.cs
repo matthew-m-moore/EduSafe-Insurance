@@ -16,8 +16,9 @@
         public double? Premium { get; set; }
         public double PaidIn { get; set; }
         public double Margin { get; set; }
-        public double AnnualIncome { get; set; }
-        public int CoverageMonths { get; set; }
+        public double UnemploymentCoverage { get; set; }
+        public double DropOutWarranty { get; set; }
+        public int WarrantyCoverageMonths { get; set; }
 
         public double EarlyHireOptionRatio { get; set; }
         public double DropOutOptionRatio { get; set; }

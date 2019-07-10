@@ -6,6 +6,8 @@
 
         public double Premium { get; set; }
         public double ProbabilityAdjustedCoverage { get; set; }
+        public double ProbabilityAdjustedDropOutWarranty { get; set; }
+
         public double ProbabilityAdjustedPremium { get; set; }
         public double ProbabilityAdjustedEquity { get; set; }
 
@@ -13,6 +15,8 @@
         public double ProbabilityAdjustedDropOutClaims { get; set; }
         public double ProbabilityAdjustedGradSchoolClaims { get; set; }
         public double ProbabilityAdjustedEarlyHireClaims { get; set; }
+
+        public double ProbabilityAdjustedDropOutWarrantyClaims { get; set; }
         public double ProbabilityAdjustedUnemploymentClaims { get; set; }
 
         public double TotalCostsAndClaims =>
@@ -20,12 +24,14 @@
             ProbabilityAdjustedDropOutClaims +
             ProbabilityAdjustedGradSchoolClaims +
             ProbabilityAdjustedEarlyHireClaims +
+            ProbabilityAdjustedDropOutWarrantyClaims +
             ProbabilityAdjustedUnemploymentClaims;
 
         public double TotalClaims =>
             ProbabilityAdjustedDropOutClaims +
             ProbabilityAdjustedGradSchoolClaims +
             ProbabilityAdjustedEarlyHireClaims +
+            ProbabilityAdjustedDropOutWarrantyClaims +
             ProbabilityAdjustedUnemploymentClaims;
 
         public double IncrementalLossReserves { get; set; }
@@ -45,6 +51,8 @@
 
             Premium = premiumCalculationCashFlow.Premium;
             ProbabilityAdjustedCoverage = premiumCalculationCashFlow.ProbabilityAdjustedCoverage;
+            ProbabilityAdjustedDropOutWarranty = premiumCalculationCashFlow.ProbabilityAdjustedDropOutWarranty;
+
             ProbabilityAdjustedPremium = premiumCalculationCashFlow.ProbabilityAdjustedPremium;
             ProbabilityAdjustedEquity = premiumCalculationCashFlow.ProbabilityAdjustedEquity;
 
@@ -52,6 +60,8 @@
             ProbabilityAdjustedDropOutClaims = premiumCalculationCashFlow.ProbabilityAdjustedDropOutClaims;
             ProbabilityAdjustedGradSchoolClaims = premiumCalculationCashFlow.ProbabilityAdjustedGradSchoolClaims;
             ProbabilityAdjustedEarlyHireClaims = premiumCalculationCashFlow.ProbabilityAdjustedEarlyHireClaims;
+
+            ProbabilityAdjustedDropOutWarrantyClaims = premiumCalculationCashFlow.ProbabilityAdjustedDropOutWarrantyClaims;
             ProbabilityAdjustedUnemploymentClaims = premiumCalculationCashFlow.ProbabilityAdjustedUnemploymentClaims;
 
             IncrementalLossReserves = premiumCalculationCashFlow.IncrementalLossReserves;
@@ -69,6 +79,8 @@
 
             Premium *= scaleFactor;
             ProbabilityAdjustedCoverage *= scaleFactor;
+            ProbabilityAdjustedDropOutWarranty *= scaleFactor;
+
             ProbabilityAdjustedPremium *= scaleFactor;
             ProbabilityAdjustedEquity *= scaleFactor;
 
@@ -76,6 +88,8 @@
             ProbabilityAdjustedDropOutClaims *= scaleFactor;
             ProbabilityAdjustedGradSchoolClaims *= scaleFactor;
             ProbabilityAdjustedEarlyHireClaims *= scaleFactor;
+
+            ProbabilityAdjustedDropOutWarrantyClaims *= scaleFactor;
             ProbabilityAdjustedUnemploymentClaims *= scaleFactor;
 
             IncrementalLossReserves *= scaleFactor;
@@ -90,6 +104,8 @@
 
                 Premium += premiumCalculationCashFlow.Premium;
                 ProbabilityAdjustedCoverage += premiumCalculationCashFlow.ProbabilityAdjustedCoverage;
+                ProbabilityAdjustedDropOutWarranty += premiumCalculationCashFlow.ProbabilityAdjustedDropOutWarranty;
+
                 ProbabilityAdjustedPremium += premiumCalculationCashFlow.ProbabilityAdjustedPremium;
                 ProbabilityAdjustedEquity += premiumCalculationCashFlow.ProbabilityAdjustedEquity;
 
@@ -97,6 +113,8 @@
                 ProbabilityAdjustedDropOutClaims += premiumCalculationCashFlow.ProbabilityAdjustedDropOutClaims;
                 ProbabilityAdjustedGradSchoolClaims += premiumCalculationCashFlow.ProbabilityAdjustedGradSchoolClaims;
                 ProbabilityAdjustedEarlyHireClaims += premiumCalculationCashFlow.ProbabilityAdjustedEarlyHireClaims;
+
+                ProbabilityAdjustedDropOutWarrantyClaims += premiumCalculationCashFlow.ProbabilityAdjustedDropOutWarrantyClaims;
                 ProbabilityAdjustedUnemploymentClaims += premiumCalculationCashFlow.ProbabilityAdjustedUnemploymentClaims;
 
                 IncrementalLossReserves += premiumCalculationCashFlow.IncrementalLossReserves;

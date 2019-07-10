@@ -85,7 +85,7 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
                 ServicingCosts = PremiumCalculation.ServicingCostsDataTable,
                 PremiumCalculationCashFlows = PremiumCalculation.CalculatedCashFlows,
                 EnrollmentStateTimeSeries = CreateTimeSeriesEntries(enrollmentStateTimeSeries),
-                TotalCoverageAmount = PremiumCalculation.PremiumCalculationModelInput.IncomeCoverageAmount,
+                TotalCoverageAmount = PremiumCalculation.PremiumCalculationModelInput.UnemploymentCoverageAmount,
                 CalculatedMonthlyPremium = premium,
             };
 
@@ -112,7 +112,7 @@ namespace EduSafe.Core.BusinessLogic.Scenarios
                 ServicingCosts = PremiumCalculation.ServicingCostsDataTable,
                 PremiumCalculationCashFlows = PremiumCalculation.CalculatedCashFlows,
                 EnrollmentStateTimeSeries = CreateTimeSeriesEntries(enrollmentStateTimeSeries),
-                TotalCoverageAmount = PremiumCalculation.PremiumCalculationModelInput.IncomeCoverageAmount,
+                TotalCoverageAmount = PremiumCalculation.PremiumCalculationModelInput.UnemploymentCoverageAmount,
                 CalculatedMonthlyPremium = premium
             };
 

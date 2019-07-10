@@ -3,8 +3,25 @@
     <a class="nav-link" (click)="selectTab(tab)" [class.active]="tab.active">{{tab.claimType}}</a>
   </li>
 </ul>
-<div>
-  <!--Loop through claim payment entries to show in table-->
+<div class="table-responsive table-sm">
+  <table align="center" class="table">
+    <thead class="thead-light">
+      <tr>
+        <td><b>Date</b></td>
+        <td><b>Amount</b></td>
+        <td><b>Status</b></td>
+        <td><b>Comments</b></td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let claimPaymentEntry of claimPaymentEntries">
+        <td><i>{{ claimPaymentEntry.PaymentDate | date: 'shortDate' }}</i></td>
+        <td>${{ claimPaymentEntry.PaymentAmount | number: '1.2-2' }}</td>
+        <td>{{ claimPaymentEntry.PaymentStatus }}</td>
+        <td>{{ claimPaymentEntry.PaymentComments }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <ng-template dynamicTabs></ng-template>

@@ -49,8 +49,9 @@ namespace EduSafe.Core.Repositories.Excel.Converters
 
             var discountFactorCurve = _interestRateCurveSets[rateCurveSet][interestRateCurveType];
 
-            var annualIncomeCoverage = enrollmentModelScenarioRecord.AnnualIncome;
-            var monthsOfIncomeCoverage = enrollmentModelScenarioRecord.CoverageMonths;
+            var unemploymentCoverage = enrollmentModelScenarioRecord.UnemploymentCoverage;
+            var dropOutWarranty = enrollmentModelScenarioRecord.DropOutWarranty;
+            var warrantyCoverageMonths = enrollmentModelScenarioRecord.WarrantyCoverageMonths;
             var dropOutCoverageOption = enrollmentModelScenarioRecord.DropOutOptionRatio;
             var gradSchoolCoverageOption = enrollmentModelScenarioRecord.GradSchoolOptionRatio;
             var earlyHireCoverageOption = enrollmentModelScenarioRecord.EarlyHireOptionRatio;
@@ -58,8 +59,9 @@ namespace EduSafe.Core.Repositories.Excel.Converters
 
             var premiumCalculationModelInput =
                 new PremiumCalculationModelInput(
-                    annualIncomeCoverage,
-                    monthsOfIncomeCoverage,
+                    unemploymentCoverage,
+                    dropOutWarranty,
+                    warrantyCoverageMonths,
                     discountFactorCurve,
                     dropOutCoverageOption,
                     gradSchoolCoverageOption,

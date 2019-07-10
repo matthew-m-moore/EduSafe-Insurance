@@ -95,7 +95,6 @@ import { ClaimStatusEntry } from '../classes/claimStatusEntry';
     ExcelExportService,
     FileTransferService,
     ServicingDataService,
-    ClaimStatusEntry,
   ],
   bootstrap: [
     AppRootComponent

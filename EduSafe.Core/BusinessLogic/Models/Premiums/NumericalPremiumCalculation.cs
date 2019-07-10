@@ -99,12 +99,12 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
 
                 Premium = PremiumCalculationModelInput.PreviouslyPaidInPremiums,
                 ProbabilityAdjustedPremium = PremiumCalculationModelInput.PreviouslyPaidInPremiums,
-                ProbabilityAdjustedCoverage = PremiumCalculationModelInput.IncomeCoverageAmount,
+                ProbabilityAdjustedCoverage = PremiumCalculationModelInput.UnemploymentCoverageAmount,
             };
 
             if (firstUnemploymentPeriod < Constants.MonthsInOneYear)
             {
-                initialPeriodCashFlow.TotalLossReserves = totalUnemploymentFraction * PremiumCalculationModelInput.IncomeCoverageAmount;
+                initialPeriodCashFlow.TotalLossReserves = totalUnemploymentFraction * PremiumCalculationModelInput.UnemploymentCoverageAmount;
                 initialPeriodCashFlow.IncrementalLossReserves = initialPeriodCashFlow.TotalLossReserves;
             }
 
@@ -122,11 +122,17 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             var discountFactor = CalculateDiscountFactor(monthlyPeriod);
             var costsAndFees = servicingCosts.Field<double>(Constants.TotalIdentifier);
 
-            var dropOutCoverage = PremiumCalculationModelInput.DropOutOptionCoveragePercentage.GetValueOrDefault(0.0);
-            var gradSchoolCoverage = PremiumCalculationModelInput.GradSchoolOptionCoveragePercentage.GetValueOrDefault(0.0);
-            var earlyHireCoverage = PremiumCalculationModelInput.EarlyHireOptionCoveragePercentage.GetValueOrDefault(0.0);
+            var unemploymentCoverage = PremiumCalculationModelInput.UnemploymentCoverageAmount;
+            var dropOutWarrantyMonths = PremiumCalculationModelInput.DropOutWarrantyCoverageMonths;
 
-            var unemploymentCoverage = PremiumCalculationModelInput.IncomeCoverageAmount;
+            double dropOutCoverage = 0.0, dropOutWarrantyCoverage = 0.0;
+            if (monthlyPeriod > dropOutWarrantyMonths)
+                dropOutCoverage = PremiumCalculationModelInput.DropOutOptionCoveragePercentage.GetValueOrDefault(0.0);    
+            else
+                dropOutWarrantyCoverage = PremiumCalculationModelInput.DropOutWarrantyCoverageAmount;
+
+            var gradSchoolCoverage = PremiumCalculationModelInput.GradSchoolOptionCoveragePercentage.GetValueOrDefault(0.0);
+            var earlyHireCoverage = PremiumCalculationModelInput.EarlyHireOptionCoveragePercentage.GetValueOrDefault(0.0);         
 
             var enrollmentFraction = enrollmentStateArray.GetTotalState(StudentEnrollmentState.Enrolled);
             var dropOutFraction = enrollmentStateArray[StudentEnrollmentState.DroppedOut];
@@ -137,6 +143,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
 
             var previouslyPaidInPremiums = PremiumCalculationModelInput.PreviouslyPaidInPremiums;
             var probabilityAdjustedCoverage = unemploymentCoverage * enrollmentFraction;
+            var probabilityAdjustedDropOutWarranty = dropOutWarrantyCoverage * enrollmentFraction;
             var probabilityAdjustedPremium = premiumAmountGuess * enrollmentFraction;
             var probabilityAdjustedEquity = probabilityAdjustedPremium * PremiumCalculationModelInput.PremiumMargin;
             var totalPremiumsPaidIn = (monthlyPeriod * premiumAmountGuess) + previouslyPaidInPremiums;         
@@ -148,6 +155,8 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
 
                 Premium = premiumAmountGuess,
                 ProbabilityAdjustedCoverage = probabilityAdjustedCoverage,
+                ProbabilityAdjustedDropOutWarranty = probabilityAdjustedDropOutWarranty,
+
                 ProbabilityAdjustedPremium = probabilityAdjustedPremium,
                 ProbabilityAdjustedEquity = probabilityAdjustedEquity,
                 ProbabilityAdjustedCostsAndFees = servicingCosts.Field<double>(Constants.TotalIdentifier),
@@ -156,6 +165,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
                 ProbabilityAdjustedGradSchoolClaims = gradSchoolCoverage * gradSchoolFraction * totalPremiumsPaidIn,
                 ProbabilityAdjustedEarlyHireClaims = earlyHireCoverage * earlyHireFraction * totalPremiumsPaidIn,
 
+                ProbabilityAdjustedDropOutWarrantyClaims = dropOutWarrantyCoverage * dropOutFraction,
                 ProbabilityAdjustedUnemploymentClaims = unemploymentCoverage * unemploymentFraction,
             };
 

@@ -13,6 +13,8 @@ namespace EduSafe.Common.Enums
         GradSchoolOption,
         [Description("Terminate Education")]
         TerminationOption,
+        [Description("Terminate Education")]
+        TerminationWarranty,
         [Description("Early Hire")]
         EarlyHireOption,
         [Description("College Closure")]

@@ -61,11 +61,10 @@ namespace EduSafe.WebApi.Adapters
             };
 
             foreach (var numberOfCoverageMonths in _incomeCoverageMonths)
-            {
-                
-                baseScenario.CoverageMonths = numberOfCoverageMonths;
+            {               
+                baseScenario.UnemploymentCoverage = modelInputEntry.IncomeCoverageAmount * (numberOfCoverageMonths / Constants.MonthsInOneYear);
                 var premiumComputationScenario = _premiumComputationRepository.GetPremiumComputationScenario(baseScenario);
-                var incomeCoverageAmount = premiumComputationScenario.PremiumCalculation.PremiumCalculationModelInput.IncomeCoverageAmount;
+                var incomeCoverageAmount = premiumComputationScenario.PremiumCalculation.PremiumCalculationModelInput.UnemploymentCoverageAmount;
                 var modelOutputEntry = new ModelOutputEntry { AmountOfSalaryCoverage = incomeCoverageAmount };
 
                 for (var year = 1; year <= 3; year++)
@@ -101,8 +100,6 @@ namespace EduSafe.WebApi.Adapters
             ModelInputEntry modelInputEntry, 
             string schoolType)
         {
-            baseScenario.AnnualIncome = modelInputEntry.IncomeCoverageAmount;
-
             // Let the user type in whatever major they want, even if we don't have it
             var collegeMajorData = collegeMajorDateDictionary[_otherMajor];
             if (collegeMajorDateDictionary.ContainsKey(modelInputEntry.CollegeMajor))

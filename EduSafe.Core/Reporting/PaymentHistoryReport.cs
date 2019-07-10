@@ -110,12 +110,12 @@ namespace EduSafe.Core.Reporting
 
             // Status
             excelWorksheet.Cell(_blankRowsOffset + dataRowOffsetCounter, dataColumnOffsetCounter + _blankColumnsOffset).Value = paymentHistoryRecord.PaymentStatus;
-            excelWorksheet.Cell(_blankRowsOffset + dataRowOffsetCounter, dataColumnOffsetCounter + _blankColumnsOffset).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+            excelWorksheet.Cell(_blankRowsOffset + dataRowOffsetCounter, dataColumnOffsetCounter + _blankColumnsOffset).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
             dataColumnOffsetCounter++;
 
             // Comments
             excelWorksheet.Cell(_blankRowsOffset + dataRowOffsetCounter, dataColumnOffsetCounter + _blankColumnsOffset).Value = paymentHistoryRecord.PaymentComments;
-            excelWorksheet.Cell(_blankRowsOffset + dataRowOffsetCounter, dataColumnOffsetCounter + _blankColumnsOffset).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+            excelWorksheet.Cell(_blankRowsOffset + dataRowOffsetCounter, dataColumnOffsetCounter + _blankColumnsOffset).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
             dataColumnOffsetCounter++;
         }
     }

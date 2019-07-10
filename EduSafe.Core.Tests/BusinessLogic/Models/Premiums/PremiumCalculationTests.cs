@@ -144,16 +144,18 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.Premiums
                 new DataCurve<double>(0.0235), 1,
                 DayCountConvention.Thirty360);
 
-            var annualIncomeCoverage = 50000;
-            var monthsOfIncomeCoverage = 6;
+            var unemploymentCoverage = 25000d;
+            var dropOutWarranty = 0.0;
+            var warrantyCoverageMonths = 0;
             var dropOutCoverageOption = 0.25;
             var gradSchoolCoverageOption = 0.25;
             var earlyHireCoverageOption = 0.25;
 
             var premiumCalculationModelInput =
                 new PremiumCalculationModelInput(
-                    annualIncomeCoverage,
-                    monthsOfIncomeCoverage,
+                    unemploymentCoverage,
+                    dropOutWarranty,
+                    warrantyCoverageMonths,
                     discountFactorCurve,
                     dropOutCoverageOption,
                     gradSchoolCoverageOption,
