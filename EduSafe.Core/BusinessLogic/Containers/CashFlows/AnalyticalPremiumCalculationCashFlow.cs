@@ -6,9 +6,10 @@
         public double PaidInPremiumGradSchoolAdjustment { get; set; }
         public double PaidInPremiumEarlyHireAdjustment { get; set; }
 
-        public double TotalCostsAndUnemploymentClaims =>
+        public double TotalCostsPlusUnemploymentAndWarrantyClaims =>
             ProbabilityAdjustedCostsAndFees +
-            ProbabilityAdjustedUnemploymentClaims;
+            ProbabilityAdjustedUnemploymentClaims +
+            ProbabilityAdjustedDropOutWarrantyClaims;
 
         public double TotalPaidInPremiumAdjustments =>
             PaidInPremiumDropOutAdjustment +
@@ -22,7 +23,7 @@
             ProbabilityAdjustedGradSchoolClaims +
             ProbabilityAdjustedEarlyHireClaims;
 
-        public double DiscountedTotalNumerator => (TotalCostsAndUnemploymentClaims + TotalPaidInPremiumAdjustments) * DiscountFactor;
+        public double DiscountedTotalNumerator => (TotalCostsPlusUnemploymentAndWarrantyClaims + TotalPaidInPremiumAdjustments) * DiscountFactor;
         public double DiscountedTotalDenominator => (ProbabilityAdjustedPremium - TotalPremiumBasedClaims - ProbabilityAdjustedEquity) * DiscountFactor;
 
         public AnalyticalPremiumCalculationCashFlow(PremiumCalculationCashFlow premiumCalculationCashFlow)

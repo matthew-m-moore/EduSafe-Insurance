@@ -36,6 +36,8 @@ namespace EduSafe.Core.BusinessLogic.Containers
         {
             UnemploymentCoverageAmount = unemploymentCoverageAmount;
             DropOutWarrantyCoverageAmount = dropOutWarrantyCoverageAmount;
+            DropOutWarrantyCoverageMonths = dropOutWarrantyCoverageMonths;
+
             DiscountRateCurve = discountRateCurve;
             PremiumMargin = premiumMargin;
 
