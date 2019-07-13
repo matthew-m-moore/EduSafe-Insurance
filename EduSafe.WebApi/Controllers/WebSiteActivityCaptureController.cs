@@ -1,6 +1,5 @@
 ﻿using System.Web.Http;
-using EduSafe.IO.Database;
-using EduSafe.IO.Database.Entities.WebApp;
+using EduSafe.Core.Savers;
 using EduSafe.WebApi.Models;
 
 namespace EduSafe.WebApi.Controllers
@@ -11,14 +10,10 @@ namespace EduSafe.WebApi.Controllers
         // POST: api/activity/record
         [Route("record")]
         [HttpPost]
-        public bool RecordIpAddress(ActivityInputEntry activityInputEntry)
+        internal bool RecordIpAddress(ActivityInputEntry activityInputEntry)
         {
-            using (var databaseContext = DatabaseContextRetriever.GetWebSiteInquiryContext())
-            {
-                var webSiteInquiryIpAddressEntity = new WebSiteInquiryIpAddressEntity { IpAddress = activityInputEntry.IpAddress };
-                databaseContext.WebSiteInquiryIpAddressEntities.Add(webSiteInquiryIpAddressEntity);
-                databaseContext.SaveChanges();
-            }
+            var webSiteInquiryDatabaseSaver = new WebSiteInquiryDatabaseSaver();
+            webSiteInquiryDatabaseSaver.SaveIpAddress(activityInputEntry.IpAddress);
 
             return true;
         }
@@ -28,23 +23,15 @@ namespace EduSafe.WebApi.Controllers
         [HttpPost]
         public bool RecordCalculationInputs(ModelInputEntry modelInputEntry)
         {
-            using (var databaseContext = DatabaseContextRetriever.GetWebSiteInquiryContext())
-            {
-                databaseContext.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
-                var webSiteInquiryAnswersToQuestionsEntity = new WebSiteInquiryAnswersToQuestionsEntity
-                {
-                    IpAddress = modelInputEntry.IpAddress,
-                    CollegeName = modelInputEntry.CollegeName,
-                    CollegeType = modelInputEntry.PublicOrPrivateSchool,
-                    Major = modelInputEntry.CollegeMajor,
-                    CollegeStartDate = modelInputEntry.CollegeStartDate,
-                    GraduationDate = modelInputEntry.ExpectedGraduationDate,
-                    AnnualCoverage = modelInputEntry.IncomeCoverageAmount
-                };
-
-                databaseContext.WebSiteInquiryAnswersToQuestionsEntities.Add(webSiteInquiryAnswersToQuestionsEntity);
-                databaseContext.SaveChanges();
-            }
+            var webSiteInquiryDatabaseSaver = new WebSiteInquiryDatabaseSaver();
+            webSiteInquiryDatabaseSaver.SaveCalculationInputs(
+                modelInputEntry.IpAddress,
+                modelInputEntry.CollegeName,
+                modelInputEntry.PublicOrPrivateSchool,
+                modelInputEntry.CollegeMajor,
+                modelInputEntry.CollegeStartDate,
+                modelInputEntry.ExpectedGraduationDate,
+                modelInputEntry.IncomeCoverageAmount);
 
             return true;
         }
@@ -54,19 +41,11 @@ namespace EduSafe.WebApi.Controllers
         [HttpPost]
         public bool RecordInquiryEmailAddress(InquiryEmailEntry inquiryEmailEntry)
         {
-            using (var databaseContext = DatabaseContextRetriever.GetWebSiteInquiryContext())
-            {
-                var webSiteInquiryEmailAddressEntity = new WebSiteInquiryEmailAddressEntity
-                {
-                    IpAddress = inquiryEmailEntry.IpAddress,
-                    EmailAddress = inquiryEmailEntry.ContactAddress,
-                    ContactName = inquiryEmailEntry.ContactName,
-                    OptOut = false
-                };
-
-                databaseContext.WebSiteInquiryEmailAddressEntities.Add(webSiteInquiryEmailAddressEntity);
-                databaseContext.SaveChanges();
-            }
+            var webSiteInquiryDatabaseSaver = new WebSiteInquiryDatabaseSaver();
+            webSiteInquiryDatabaseSaver.SaveEmailAddress(
+                inquiryEmailEntry.IpAddress,
+                inquiryEmailEntry.ContactAddress,
+                inquiryEmailEntry.ContactName);
 
             return true;
         }
@@ -76,19 +55,11 @@ namespace EduSafe.WebApi.Controllers
         [HttpPost]
         public bool RecordResultsEmailAddress(ResultsEmailEntry resultsEmailEntry)
         {
-            using (var databaseContext = DatabaseContextRetriever.GetWebSiteInquiryContext())
-            {
-                var webSiteInquiryEmailAddressEntity = new WebSiteInquiryEmailAddressEntity
-                {
-                    IpAddress = resultsEmailEntry.ModelInputEntry.IpAddress,
-                    EmailAddress = resultsEmailEntry.RecipientAddress,
-                    ContactName = resultsEmailEntry.RecipientName,
-                    OptOut = false
-                };
-
-                databaseContext.WebSiteInquiryEmailAddressEntities.Add(webSiteInquiryEmailAddressEntity);
-                databaseContext.SaveChanges();
-            }
+            var webSiteInquiryDatabaseSaver = new WebSiteInquiryDatabaseSaver();
+            webSiteInquiryDatabaseSaver.SaveEmailAddress(
+                resultsEmailEntry.ModelInputEntry.IpAddress,
+                resultsEmailEntry.RecipientAddress,
+                resultsEmailEntry.RecipientName);
 
             return true;
         }

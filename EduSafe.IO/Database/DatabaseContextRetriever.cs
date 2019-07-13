@@ -1,4 +1,5 @@
-﻿using EduSafe.IO.Database.Contexts;
+﻿using System.Data.Entity;
+using EduSafe.IO.Database.Contexts;
 
 namespace EduSafe.IO.Database
 {
@@ -14,6 +15,11 @@ namespace EduSafe.IO.Database
         {
             var databaseConnectionString = DatabaseConnectionSettings.CreateDatabaseConnectionString<ServicingDataContext>();
             return new ServicingDataContext(databaseConnectionString);
+        }
+
+        public static void LogDatabaseActvityForDebug(DbContext databaseContext)
+        {
+            databaseContext.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
         }
     }
 }

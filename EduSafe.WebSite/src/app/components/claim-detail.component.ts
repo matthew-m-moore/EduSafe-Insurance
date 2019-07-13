@@ -20,12 +20,12 @@ export class ClaimDetailComponent implements OnInit {
   constructor(private fileTransferService: FileTransferService) { }
 
   dowloadFileFromServer(fileName: string): void {
-    this.fileTransferService.downloadFile(fileName, this.claimType);
+    this.fileTransferService.downloadFile(fileName, this.claimStatusEntry);
   }
 
   uploadFilesToServer(files: FileList): void {
     this.isFileUploading = true;
-    this.fileTransferService.uploadFiles(files, this.claimType)
+    this.fileTransferService.uploadFiles(files, this.claimStatusEntry)
       .then(uploadSuccess => {
         this.isFileUploaded = uploadSuccess;
         this.isFileUploading = false;

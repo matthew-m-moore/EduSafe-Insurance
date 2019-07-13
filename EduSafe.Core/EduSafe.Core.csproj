@@ -147,10 +147,13 @@
     <Compile Include="Repositories\Excel\PremiumComputationRepository.cs" />
     <Compile Include="Repositories\Excel\VectorRepository.cs" />
     <Compile Include="Repositories\Excel\ForecastedFirstYearPercentageRepository.cs" />
+    <Compile Include="Savers\ClaimDocumentDatabaseSaver.cs" />
+    <Compile Include="Savers\DatabaseSaver.cs" />
+    <Compile Include="Savers\EmailsEntityDatabaseSaver.cs" />
+    <Compile Include="Savers\WebSiteInquiryDatabaseSaver.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\Database\Converters\" />
-    <Folder Include="Savers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EduSafe.Common\EduSafe.Common.csproj">

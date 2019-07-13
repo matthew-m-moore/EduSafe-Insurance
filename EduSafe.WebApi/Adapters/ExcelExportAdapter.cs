@@ -9,7 +9,7 @@ namespace EduSafe.WebApi.Adapters
 {
     internal class ExcelExportAdapter
     {
-        public static ExcelFileWriter CreateStudentInformationReport(InstitutionProfileEntry institutionProfileEntry)
+        internal static ExcelFileWriter CreateStudentInformationReport(InstitutionProfileEntry institutionProfileEntry)
         {
             var studentInformationRecords = institutionProfileEntry
                 .CustomerProfileEntries.Select(ConvertToStudentInformationRecord).ToList();
@@ -20,7 +20,7 @@ namespace EduSafe.WebApi.Adapters
             return excelFileWriter;
         }
 
-        public static ExcelFileWriter CreatePaymentHistoryReport(List<PaymentHistoryEntry> paymentHistoryEntries)
+        internal static ExcelFileWriter CreatePaymentHistoryReport(List<PaymentHistoryEntry> paymentHistoryEntries)
         {
             var paymentHistoryRecords = paymentHistoryEntries.Select(ConvertToPaymentHistoryRecord).ToList();
 

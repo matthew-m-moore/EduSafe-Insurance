@@ -4,6 +4,7 @@ namespace EduSafe.WebApi.Models
 {
     public class ClaimStatusEntry
     {
+        public long ClaimNumber { get; set; }
         public string ClaimType { get; set; }
         public string ClaimStatus { get; set; }        
         public bool IsClaimApproved { get; set; }

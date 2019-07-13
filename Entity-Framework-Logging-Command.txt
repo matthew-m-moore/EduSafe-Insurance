@@ -1,0 +1,1 @@
+databaseContext.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);

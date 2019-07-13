@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 import { HttpClient, HttpRequest, HttpEventType } from '@angular/common/http';
 
 import { EnvironmentSettings } from '../classes/environmentSettings';
+import { ClaimStatusEntry } from '../classes/claimStatusEntry';
 
 @Injectable()
 
@@ -19,14 +20,17 @@ export class FileTransferService {
     private httpClient: HttpClient
   ) { }
 
-  uploadFiles(files: FileList, claimType: string) : Promise<boolean> {
+  uploadFiles(files: FileList, claimStatusEntry: ClaimStatusEntry) : Promise<boolean> {
     if (files.length === 0) {
       this.uploadMessage = "No Files Selected";
       return Promise.resolve(false);
     }
 
+    var claimType = claimStatusEntry.ClaimType;
+    var claimNumber = claimStatusEntry.ClaimDocumentEntries;
+
     const formData = new FormData();
-    const apiUrl = `${this.uploadFilesUrl}/${this.customerIdentifier}/${claimType}`;
+    const apiUrl = `${this.uploadFilesUrl}/${this.customerIdentifier}/${claimType}/${claimNumber}`;
 
     for (var i = 0; i < files.length; i++)
       formData.append(files.item(i).name, files.item(i));
@@ -54,8 +58,11 @@ export class FileTransferService {
   }
 
   // Do need to return anything here or does the browser just handle this for me?
-  downloadFile(fileName: string, claimType: string): void {
-    const apiUrl = `${this.downloadFileUrl}/${this.customerIdentifier}/${claimType}/${fileName}`;
+  downloadFile(fileName: string, claimStatusEntry: ClaimStatusEntry): void {
+    var claimType = claimStatusEntry.ClaimType;
+    var claimNumber = claimStatusEntry.ClaimDocumentEntries;
+
+    const apiUrl = `${this.downloadFileUrl}/${this.customerIdentifier}/${claimType}/${claimNumber}/${fileName}`;
     this.http.get(apiUrl);
   }
 }

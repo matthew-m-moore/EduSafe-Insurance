@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using System.Web.Http;
-using EduSafe.IO.Database;
-using EduSafe.IO.Database.Contexts;
-using EduSafe.IO.Database.Entities.Servicing;
+﻿using System.Web.Http;
+using EduSafe.Core.Savers;
 using EduSafe.WebApi.Adapters;
 using EduSafe.WebApi.Models;
 
@@ -46,20 +43,11 @@ namespace EduSafe.WebApi.Controllers
         [HttpPut]
         public bool MakeEmailAddressPrimary(CustomerEmailEntry customerEmailEntry)
         {
-            try
-            {
-                using (var servicingDataContext = DatabaseContextRetriever.GetServicingDataContext())
-                {
-                    UpdateEmailAddressToPrimary(customerEmailEntry, servicingDataContext);
-                    servicingDataContext.SaveChanges();
-                }
+            var servicingDataDatabaseSaver = new EmailsEntityDatabaseSaver();
 
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return servicingDataDatabaseSaver.UpdateEmailAddressToPrimary(
+                customerEmailEntry.EmailSetId,
+                customerEmailEntry.EmailAddress);
         }
 
         // PUT: api/servicing/email/remove
@@ -67,25 +55,11 @@ namespace EduSafe.WebApi.Controllers
         [HttpPut]
         public bool DeleteEmailAddress(CustomerEmailEntry customerEmailEntry)
         {
-            try
-            {
-                using (var servicingDataContext = DatabaseContextRetriever.GetServicingDataContext())
-                {
-                    var emailEntityToRemove = servicingDataContext.EmailsEntities
-                        .SingleOrDefault(e => e.Email == customerEmailEntry.EmailAddress);
+            var servicingDataDatabaseSaver = new EmailsEntityDatabaseSaver();
 
-                    if (emailEntityToRemove == null) return false;
-
-                    servicingDataContext.EmailsEntities.Remove(emailEntityToRemove);
-                    servicingDataContext.SaveChanges();
-                }
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return servicingDataDatabaseSaver.DeleteEmailAddress(
+                customerEmailEntry.EmailSetId,
+                customerEmailEntry.EmailAddress);
         }
 
         // POST: api/servicing/email/add
@@ -93,44 +67,12 @@ namespace EduSafe.WebApi.Controllers
         [HttpPost]
         public int AddNewEmailAddress(CustomerEmailEntry customerEmailEntry)
         {
-            try
-            {
-                var emailEntityToAdd = new EmailsEntity
-                {
-                    EmailsSetId = customerEmailEntry.EmailSetId,
-                    Email = customerEmailEntry.EmailAddress,
-                    IsPrimary = customerEmailEntry.IsPrimary,
-                };
+            var servicingDataDatabaseSaver = new EmailsEntityDatabaseSaver();
 
-                using (var servicingDataContext = DatabaseContextRetriever.GetServicingDataContext())
-                {
-                    if (customerEmailEntry.IsPrimary)
-                        UpdateEmailAddressToPrimary(customerEmailEntry, servicingDataContext);
-
-                    servicingDataContext.EmailsEntities.Add(emailEntityToAdd);
-                    servicingDataContext.SaveChanges();
-                }
-
-                return emailEntityToAdd.Id;
-            }
-            catch
-            {
-                return 0;
-            }
-        }
-
-        private void UpdateEmailAddressToPrimary(CustomerEmailEntry customerEmailEntry, ServicingDataContext servicingDataContext)
-        {
-            var emailEntities = servicingDataContext.EmailsEntities
-                .Where(e => e.EmailsSetId == customerEmailEntry.EmailSetId).ToList();
-
-            foreach (var emailEntity in emailEntities)
-            {
-                if (emailEntity.Email == customerEmailEntry.EmailAddress)
-                    emailEntity.IsPrimary = true;
-                else
-                    emailEntity.IsPrimary = false;
-            }
+            return servicingDataDatabaseSaver.SaveNewEmailAddress(
+                customerEmailEntry.EmailSetId,
+                customerEmailEntry.EmailAddress,
+                customerEmailEntry.IsPrimary);
         }
     }
 }

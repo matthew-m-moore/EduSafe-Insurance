@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using EduSafe.Core.Savers;
 using EduSafe.IO.Files;
 using EduSafe.WebApi.Adapters;
 
@@ -19,9 +20,7 @@ namespace EduSafe.WebApi.Controllers
 
         // Should we set a file size limit somewhere for uploads?
         // POST: api/file/upload/{customerIdentifier}/{fileType}
-        [Route("upload/{customerIdentifier}/{fileType}")]
-        [HttpPost]
-        public async Task<HttpResponseMessage> UploadFileToServer(int customerIdentifier, string claimType)
+        public async Task<HttpResponseMessage> UploadFileToServer(string customerIdentifier, string claimType)
         {
             var isRequestValid = !Request.Content.IsMimeMultipartContent();
             if (!isRequestValid)
@@ -56,33 +55,45 @@ namespace EduSafe.WebApi.Controllers
         }
 
         // Another example I found of a file upload method, which takes a slightly different tack
-        public IHttpActionResult UploadFiles()
+        // POST: api/file/upload/{customerIdentifier}/{claimType}/{claimNumber}
+        [Route("upload/{customerIdentifier}/{claimType}/{claimNumber}")]
+        [HttpPost]
+        public IHttpActionResult UploadFiles(string customerIdentifier, string claimType, long claimNumber)
         {
             int i = 0;
             int cntSuccess = 0;
             var uploadedFileNames = new List<string>();
             string result = string.Empty;
 
-            HttpResponseMessage response = new HttpResponseMessage();
+            var response = new HttpResponseMessage();
+            var claimDocumentDatabaseSaver = new ClaimDocumentDatabaseSaver();
 
             var httpRequest = HttpContext.Current.Request;
             if (httpRequest.Files.Count > 0)
             {
-                foreach (string file in httpRequest.Files)
+                foreach (HttpPostedFile postedFile in httpRequest.Files)
                 {
-                    var postedFile = httpRequest.Files[i];
-                    var filePath = HttpContext.Current.Server.MapPath("~/UploadedFiles/" + postedFile.FileName);
-                    try
+                    // var postedFile = httpRequest.Files[i];
+                    // var filePath = HttpContext.Current.Server.MapPath("~/UploadedFiles/" + postedFile.FileName);
+                    var fileName = postedFile.FileName;
+                    var stream = postedFile.InputStream;
+                    var claimFolderName = claimType + "-" + claimNumber.ToString();
+
+                    var targetFilePath = Path.Combine(
+                        FileServerSettings.IndividualCustomersDirectory,
+                        customerIdentifier,
+                        claimFolderName);
+
+                    // This saves the file to the customer's folder in the file share
+                    var fileServerUtility = new FileServerUtility(FileServerSettings.FileShareName);
+                    if (fileServerUtility.UploadFileFromStream(targetFilePath, fileName, stream))
                     {
-                        postedFile.SaveAs(filePath);
+                        claimDocumentDatabaseSaver.SaveClaimDocumentEntry(claimNumber, fileName);
                         uploadedFileNames.Add(httpRequest.Files[i].FileName);
                         cntSuccess++;
                     }
-                    catch (Exception ex)
-                    {
-                        throw ex;
-                    }
 
+                    // postedFile.SaveAs(filePath);
                     i++;
                 }
             }
@@ -101,10 +112,10 @@ namespace EduSafe.WebApi.Controllers
             return Json(result);
         }
 
-        // GET: api/file/download/{customerIdentifier}/{fileType}/{fileName}
-        [Route("download/{customerIdentifier}/{fileType}/{fileName}")]
+        // GET: api/file/download/{customerIdentifier}/{claimType}/{claimNumber}/{fileName}
+        [Route("download/{customerIdentifier}/{claimType}/{claimNumber}/{fileName}")]
         [HttpGet]
-        public void DownloadFileFromServer(int customerIdentifier, string claimType, string fileName)
+        public void DownloadFileFromServer(string customerIdentifier, string claimType, string fileName, long claimNumber)
         {
             var response = HttpContext.Current.Response;
             response.ClearContent();
@@ -115,7 +126,7 @@ namespace EduSafe.WebApi.Controllers
 
             var filePath = Path.Combine(_rootDirectoryPath, fileName);
             response.TransmitFile(HttpContext.Current.Server.MapPath(filePath));
-
+            
             response.Flush();
             response.End();
         }

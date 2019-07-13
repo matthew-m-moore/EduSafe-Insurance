@@ -15,9 +15,19 @@ namespace EduSafe.Common
         public const string PeriodIdentifier = "Period";
         public const string TotalIdentifier = "Total";
 
+        public const string PdfFileHttpContentType = "application/pdf";
+
+        public const string ExcelFileHttpContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        public const string WordFileHttpContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+        public const string OldWordFileHttpContentType = "application/msword";
+        public const string OldExcelFileHttpContentType = "application/vnd.ms-excel";
+
         public static DateTime SqlMinDate = new DateTime(1900, 1, 1);
 
         public static int ProcessorCount = Environment.ProcessorCount;
+
+        public const int MonthsToDocumentExpiration = 4;
 
         public const int MonthsInOneYear = 12;
 

@@ -16,7 +16,6 @@ namespace EduSafe.WebApi.Controllers
     [RoutePrefix("api/export")]
     public class ExcelExportController : ApiController
     {
-        private const string _contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         private const string _studentInformationReportNameStub = "-Student-Details-";
         private const string _paymentHistoryReportNameStub = "-Payment-History-";
 
@@ -96,7 +95,7 @@ namespace EduSafe.WebApi.Controllers
                 // This allows you to access the file name, even with CORS in play
                 response.Content.Headers.Add("FileName", fileName);
                 response.Content.Headers.Add("Access-Control-Expose-Headers", "FileName");
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue(_contentType);
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue(Constants.ExcelFileHttpContentType);
                 response.Content.Headers.ContentLength = memoryStream.Length;
 
                 return response;
