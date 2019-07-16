@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { ClaimStatusEntry } from '../classes/claimStatusEntry';
+import { ClaimDocumentEntry } from '../classes/claimDocumentEntry';
 
 import { FileTransferService } from '../services/fileTransfer.service';
 
@@ -16,20 +17,43 @@ export class ClaimDetailComponent implements OnInit {
 
   public isFileUploading = false;
   public isFileUploaded = false;
+  public fileNameAlreadyExists = false;
+  public noFilesSelected = false;
 
   constructor(private fileTransferService: FileTransferService) { }
 
-  dowloadFileFromServer(fileName: string): void {
-    this.fileTransferService.downloadFile(fileName, this.claimStatusEntry);
+  dowloadFileFromServer(claimDocumentEntry: ClaimDocumentEntry): void {
+    this.fileTransferService.downloadFile(claimDocumentEntry, this.claimStatusEntry);
   }
 
   uploadFilesToServer(files: FileList): void {
+    if (!this.isFileListOkayForUpload(files)) return;
+
     this.isFileUploading = true;
     this.fileTransferService.uploadFiles(files, this.claimStatusEntry)
       .then(uploadSuccess => {
         this.isFileUploaded = uploadSuccess;
         this.isFileUploading = false;
       });
+  }
+
+  isFileListOkayForUpload(files: FileList): boolean {
+    var numberOfFiles = files.length;
+
+    if (numberOfFiles === 0) {
+      this.noFilesSelected = true;
+      return false;
+    }
+
+    for (var i = 0; i < numberOfFiles; i++) {
+      var fileNameToUpload = files[i].name;
+      if (this.claimStatusEntry.ClaimDocumentEntries.some(document => document.FileName === fileNameToUpload)) {
+        this.fileNameAlreadyExists = true;
+        return false;
+      }
+    }
+
+    return true;
   }
 
   ngOnInit(): void {

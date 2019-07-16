@@ -29,6 +29,24 @@ namespace EduSafe.IO.Files
                 throw new Exception(string.Format("ERROR: File share root directory does not exist.", fileShareName));
         }
 
+        public MemoryStream DownloadFileToMemoryStream(string fileDirectoryPath, string fileName)
+        {
+            var targetDirectory = _fileShareRootDirectory.GetDirectoryReference(fileDirectoryPath);
+
+            if (!targetDirectory.Exists())
+                throw new Exception(string.Format("ERROR: Target directory for file download '{0}' does not exist.", fileDirectoryPath));
+
+            var fileToDownload = targetDirectory.GetFileReference(fileName);
+
+            if (!fileToDownload.Exists())
+                throw new Exception(string.Format("ERROR: Target file for download '{0}' does not exist.", fileName));
+
+            var memoryStream = new MemoryStream();
+            fileToDownload.DownloadToStream(memoryStream);
+
+            return memoryStream;
+        }
+
         public bool UploadFileFromStream(string fileDirectoryPath, string fileName, Stream stream)
         {     
             var nestedDirectoriesList = fileDirectoryPath.Split(Path.DirectorySeparatorChar).ToList();
@@ -47,7 +65,7 @@ namespace EduSafe.IO.Files
             var targetDirectory = _fileShareRootDirectory.GetDirectoryReference(fileDirectoryPath);
 
             if (!targetDirectory.Exists())
-                throw new Exception(string.Format("ERROR: Target directory for file upload '{0}' does not exist.", targetDirectory));
+                throw new Exception(string.Format("ERROR: Target directory for file upload '{0}' does not exist.", fileDirectoryPath));
 
             stream.Position = 0;
             var fileToUpload = targetDirectory.GetFileReference(fileName);

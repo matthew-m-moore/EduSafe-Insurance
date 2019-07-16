@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using EduSafe.Common;
 using EduSafe.Core.Savers;
 using EduSafe.IO.Files;
-using EduSafe.WebApi.Adapters;
 
 namespace EduSafe.WebApi.Controllers
 {
@@ -79,14 +80,14 @@ namespace EduSafe.WebApi.Controllers
                     var stream = postedFile.InputStream;
                     var claimFolderName = claimType + "-" + claimNumber.ToString();
 
-                    var targetFilePath = Path.Combine(
+                    var targetFolderPath = Path.Combine(
                         FileServerSettings.IndividualCustomersDirectory,
                         customerIdentifier,
                         claimFolderName);
 
                     // This saves the file to the customer's folder in the file share
                     var fileServerUtility = new FileServerUtility(FileServerSettings.FileShareName);
-                    if (fileServerUtility.UploadFileFromStream(targetFilePath, fileName, stream))
+                    if (fileServerUtility.UploadFileFromStream(targetFolderPath, fileName, stream))
                     {
                         claimDocumentDatabaseSaver.SaveClaimDocumentEntry(claimNumber, fileName);
                         uploadedFileNames.Add(httpRequest.Files[i].FileName);
@@ -112,23 +113,44 @@ namespace EduSafe.WebApi.Controllers
             return Json(result);
         }
 
-        // GET: api/file/download/{customerIdentifier}/{claimType}/{claimNumber}/{fileName}
-        [Route("download/{customerIdentifier}/{claimType}/{claimNumber}/{fileName}")]
+        // GET: api/file/download/{customerIdentifier}/{claimType}/{claimNumber}/{fileName}/{fileType}
+        [Route("download/{customerIdentifier}/{claimType}/{claimNumber}/{fileName}/{fileType}")]
         [HttpGet]
-        public void DownloadFileFromServer(string customerIdentifier, string claimType, string fileName, long claimNumber)
+        public HttpResponseMessage DownloadFileFromServer
+            (string customerIdentifier, string claimType, long claimNumber, string fileName, string fileType)
         {
-            var response = HttpContext.Current.Response;
-            response.ClearContent();
-            response.Clear();
+            var claimFolderName = claimType + "-" + claimNumber.ToString();
+            var targetFolderPath = Path.Combine(
+                FileServerSettings.IndividualCustomersDirectory,
+                customerIdentifier,
+                claimFolderName);
 
-            response.ContentType = "text/plain";
-            response.AddHeader("Content-Disposition", "attachment; filename=" + fileName + ";");
+            var fullFileName = string.Concat(fileName, ".", fileType.ToLower());
+            var fileServerUtility = new FileServerUtility(FileServerSettings.FileShareName);
 
-            var filePath = Path.Combine(_rootDirectoryPath, fileName);
-            response.TransmitFile(HttpContext.Current.Server.MapPath(filePath));
+            using (var memoryStream = fileServerUtility.DownloadFileToMemoryStream(targetFolderPath, fullFileName))
+            {
+                var response = new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new ByteArrayContent(memoryStream.ToArray())
+                };
+
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = fileName
+                };
+
+                // This allows you to access the file name, even with CORS in play
+                response.Content.Headers.Add("FileName", fileName);
+                response.Content.Headers.Add("Access-Control-Expose-Headers", "FileName");
+                response.Content.Headers.ContentLength = memoryStream.Length;
+
+                if (Constants.FileExtensionToContentTypeDictionary.TryGetValue(fileType.ToLower(), out var contentType))
+                    response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
             
-            response.Flush();
-            response.End();
+                return response;
+            }
         }
     }
 }

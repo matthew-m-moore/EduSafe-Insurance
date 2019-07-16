@@ -12,9 +12,6 @@ namespace EduSafe.Common
         public const string TempFileExtension = ".tmp";
         public const string ExcelFileExtension = ".xlsx";
 
-        public const string PeriodIdentifier = "Period";
-        public const string TotalIdentifier = "Total";
-
         public const string PdfFileHttpContentType = "application/pdf";
 
         public const string ExcelFileHttpContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -22,6 +19,9 @@ namespace EduSafe.Common
 
         public const string OldWordFileHttpContentType = "application/msword";
         public const string OldExcelFileHttpContentType = "application/vnd.ms-excel";
+
+        public const string PeriodIdentifier = "Period";
+        public const string TotalIdentifier = "Total";
 
         public static DateTime SqlMinDate = new DateTime(1900, 1, 1);
 
@@ -60,5 +60,14 @@ namespace EduSafe.Common
             StudentEnrollmentState.GraduatedUnemployed,
             StudentEnrollmentState.GraduateSchool
         };
+
+        public static readonly Dictionary<string, string> FileExtensionToContentTypeDictionary = new Dictionary<string, string>
+        {
+            ["xls"] = OldExcelFileHttpContentType,
+            ["xlsx"] = ExcelFileHttpContentType,
+            ["doc"] = OldExcelFileHttpContentType,
+            ["docx"] = WordFileHttpContentType,
+            ["pdf"] = PdfFileHttpContentType,
+        };        
     }
 }
