@@ -29,8 +29,9 @@ namespace EduSafe.IO.Database.Mappings.Servicing
 
             MapToStoredProcedures(s =>
                 s.Update(i => i.HasName("SP_UpdateEmails", Constants.IndividualCustomerSchemaName)
-                    .Parameter(p => p.Id, "Id")
+                    .Parameter(p => p.Id, "Id")            
                     .Parameter(p => p.EmailsSetId, "EmailsSetId")
+                    .Parameter(p => p.Email, "Email")
                     .Parameter(p => p.IsPrimary, "IsPrimary")
                     ));
 

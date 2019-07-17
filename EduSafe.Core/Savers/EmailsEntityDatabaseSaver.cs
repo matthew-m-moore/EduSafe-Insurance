@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using EduSafe.IO.Database;
 using EduSafe.IO.Database.Contexts;
@@ -67,13 +68,14 @@ namespace EduSafe.Core.Savers
             {
                 using (var servicingDataContext = DatabaseContext as ServicingDataContext)
                 {
+                    DatabaseContextRetriever.LogDatabaseActvityForDebug(servicingDataContext);
                     UpdateEmailAddressToPrimary(servicingDataContext, emailSetId, emailAddress);
                     servicingDataContext.SaveChanges();
                 }
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }

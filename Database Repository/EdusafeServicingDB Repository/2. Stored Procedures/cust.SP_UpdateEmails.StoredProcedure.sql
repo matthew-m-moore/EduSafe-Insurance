@@ -4,9 +4,11 @@ BEGIN
 END 
 GO
 
+--Note that Entity Framework 6 forces all columns to be included as inputs, even if not all are used
 CREATE PROCEDURE cust.SP_UpdateEmails
 		@Id int
 		, @EmailsSetId int
+		, @Email varchar(50)
 		, @IsPrimary bit
 		
 AS

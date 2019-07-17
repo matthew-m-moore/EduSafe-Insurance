@@ -60,12 +60,12 @@ namespace EduSafe.WebApi.Controllers
         // POST: api/file/upload/{customerIdentifier}/{claimType}/{claimNumber}
         [Route("upload/{customerIdentifier}/{claimType}/{claimNumber}")]
         [HttpPost]
-        public IHttpActionResult UploadFiles(string customerIdentifier, string claimType, long claimNumber)
+        public IHttpActionResult UploadFiles(string customerIdentifier, string claimType, string claimNumber)
         {
-            int i = 0;
             int cntSuccess = 0;
             var uploadedFileNames = new List<string>();
-            string result = string.Empty;
+            var result = string.Empty;
+            var claimNumberAsLong = long.Parse(claimNumber);
 
             var response = new HttpResponseMessage();
             var claimDocumentDatabaseSaver = new ClaimDocumentDatabaseSaver();
@@ -73,13 +73,13 @@ namespace EduSafe.WebApi.Controllers
             var httpRequest = HttpContext.Current.Request;
             if (httpRequest.Files.Count > 0)
             {
-                foreach (HttpPostedFile postedFile in httpRequest.Files)
+                for (var i = 0; i < httpRequest.Files.Count; i++)
                 {
-                    // var postedFile = httpRequest.Files[i];
+                    var postedFile = httpRequest.Files[i];
                     // var filePath = HttpContext.Current.Server.MapPath("~/UploadedFiles/" + postedFile.FileName);
                     var fileName = postedFile.FileName;
                     var stream = postedFile.InputStream;
-                    var claimFolderName = claimType + "-" + claimNumber.ToString();
+                    var claimFolderName = claimType + "-" + claimNumberAsLong.ToString();
 
                     var targetFolderPath = Path.Combine(
                         FileServerSettings.IndividualCustomersDirectory,
@@ -90,13 +90,12 @@ namespace EduSafe.WebApi.Controllers
                     var fileServerUtility = new FileServerUtility(FileServerSettings.FileShareName);
                     if (fileServerUtility.UploadFileFromStream(targetFolderPath, fileName, stream))
                     {
-                        claimDocumentDatabaseSaver.SaveClaimDocumentEntry(claimNumber, claimType, fileName);
+                        claimDocumentDatabaseSaver.SaveClaimDocumentEntry(claimNumberAsLong, claimType, fileName);
                         uploadedFileNames.Add(httpRequest.Files[i].FileName);
                         cntSuccess++;
                     }
 
                     // postedFile.SaveAs(filePath);
-                    i++;
                 }
             }
 

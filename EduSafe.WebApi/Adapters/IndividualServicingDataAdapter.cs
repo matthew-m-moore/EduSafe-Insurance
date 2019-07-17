@@ -244,6 +244,7 @@ namespace EduSafe.WebApi.Adapters
 
                 var claimStatusEntry = new ClaimStatusEntry
                 {
+                    ClaimNumber = claimNumber,
                     ClaimType = claimType.GetFriendlyDescription(),
                     ClaimStatus = claimStatus.ToString(),
                     IsClaimApproved = claimStatusEntity.IsClaimApproved,
