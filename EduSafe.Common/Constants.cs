@@ -68,6 +68,7 @@ namespace EduSafe.Common
             ["doc"] = OldExcelFileHttpContentType,
             ["docx"] = WordFileHttpContentType,
             ["pdf"] = PdfFileHttpContentType,
+            // ["img"], ["jpg"], ["bmp"], etc. still need to be added
         };        
     }
 }

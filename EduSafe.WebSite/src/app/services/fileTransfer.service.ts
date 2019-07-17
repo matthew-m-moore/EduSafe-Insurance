@@ -60,10 +60,9 @@ export class FileTransferService {
     var claimType = claimStatusEntry.ClaimType;
     var claimNumber = claimStatusEntry.ClaimNumber;
     var fileName = claimDocumentEntry.FileName;
-    var fileType = claimDocumentEntry.FileType;
 
     const apiUrl =
-      `${this.downloadFileUrl}/${this.customerIdentifier}/${claimType}/${claimNumber}/${fileName}/${fileType}`;
+      `${this.downloadFileUrl}/${this.customerIdentifier}/${claimType}/${claimNumber}/${fileName}`;
     this.http.get(apiUrl);
   }
 }

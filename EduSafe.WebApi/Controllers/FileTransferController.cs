@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using EduSafe.Common;
+using EduSafe.Common.ExtensionMethods;
 using EduSafe.Core.Savers;
 using EduSafe.IO.Files;
 
@@ -89,7 +90,7 @@ namespace EduSafe.WebApi.Controllers
                     var fileServerUtility = new FileServerUtility(FileServerSettings.FileShareName);
                     if (fileServerUtility.UploadFileFromStream(targetFolderPath, fileName, stream))
                     {
-                        claimDocumentDatabaseSaver.SaveClaimDocumentEntry(claimNumber, fileName);
+                        claimDocumentDatabaseSaver.SaveClaimDocumentEntry(claimNumber, claimType, fileName);
                         uploadedFileNames.Add(httpRequest.Files[i].FileName);
                         cntSuccess++;
                     }
@@ -114,10 +115,10 @@ namespace EduSafe.WebApi.Controllers
         }
 
         // GET: api/file/download/{customerIdentifier}/{claimType}/{claimNumber}/{fileName}/{fileType}
-        [Route("download/{customerIdentifier}/{claimType}/{claimNumber}/{fileName}/{fileType}")]
+        [Route("download/{customerIdentifier}/{claimType}/{claimNumber}/{fileName}")]
         [HttpGet]
         public HttpResponseMessage DownloadFileFromServer
-            (string customerIdentifier, string claimType, long claimNumber, string fileName, string fileType)
+            (string customerIdentifier, string claimType, long claimNumber, string fileName)
         {
             var claimFolderName = claimType + "-" + claimNumber.ToString();
             var targetFolderPath = Path.Combine(
@@ -125,10 +126,10 @@ namespace EduSafe.WebApi.Controllers
                 customerIdentifier,
                 claimFolderName);
 
-            var fullFileName = string.Concat(fileName, ".", fileType.ToLower());
+            var fileExtension = fileName.GetFileNameExtension();
             var fileServerUtility = new FileServerUtility(FileServerSettings.FileShareName);
 
-            using (var memoryStream = fileServerUtility.DownloadFileToMemoryStream(targetFolderPath, fullFileName))
+            using (var memoryStream = fileServerUtility.DownloadFileToMemoryStream(targetFolderPath, fileName))
             {
                 var response = new HttpResponseMessage
                 {
@@ -146,7 +147,7 @@ namespace EduSafe.WebApi.Controllers
                 response.Content.Headers.Add("Access-Control-Expose-Headers", "FileName");
                 response.Content.Headers.ContentLength = memoryStream.Length;
 
-                if (Constants.FileExtensionToContentTypeDictionary.TryGetValue(fileType.ToLower(), out var contentType))
+                if (Constants.FileExtensionToContentTypeDictionary.TryGetValue(fileExtension, out var contentType))
                     response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
             
                 return response;

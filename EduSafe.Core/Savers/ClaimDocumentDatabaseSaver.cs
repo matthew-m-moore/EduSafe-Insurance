@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Linq;
 using EduSafe.Common;
 using EduSafe.Common.Enums;
+using EduSafe.Common.ExtensionMethods;
 using EduSafe.IO.Database;
 using EduSafe.IO.Database.Contexts;
 using EduSafe.IO.Database.Entities.Servicing.Claims;
@@ -13,16 +14,10 @@ namespace EduSafe.Core.Savers
     {
         public override DbContext DatabaseContext => DatabaseContextRetriever.GetServicingDataContext();
 
-        public void SaveClaimDocumentEntry(long claimNumber, string fileName)
+        public void SaveClaimDocumentEntry(long claimNumber, string fileType, string fileName)
         {
             var currentDateTime = DateTime.Now;
             var expirationDateTime = currentDateTime.AddMonths(Constants.MonthsToDocumentExpiration);
-
-            var parsedFileNameArray = fileName.Split('.');
-            var fileExtension = (parsedFileNameArray.Length > 1)
-                ? parsedFileNameArray.Last().ToUpper()
-                : string.Empty;
-
             var typeId = (int) FileVerificationStatusType.Uploaded;
 
             using (var servicingDataContext = DatabaseContext as ServicingDataContext)
@@ -31,7 +26,7 @@ namespace EduSafe.Core.Savers
                 {
                     ClaimNumber = claimNumber,
                     FileName = fileName,
-                    FileType = fileExtension,
+                    FileType = fileType,
                     FileVerificationStatusTypeId = typeId,
                     UploadDate = currentDateTime,
                     ExpirationDate = expirationDateTime,

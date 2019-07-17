@@ -71,6 +71,19 @@ namespace EduSafe.Common.ExtensionMethods
         }
 
         /// <summary>
+        /// Returns the extension at the end of a file name, if available.
+        /// </summary>
+        public static string GetFileNameExtension(this string fileNameAsString)
+        {
+            var parsedFileNameArray = fileNameAsString.Split('.');
+            var fileExtension = (parsedFileNameArray.Length > 1)
+                ? parsedFileNameArray.Last().ToLower()
+                : string.Empty;
+
+            return fileExtension;
+        }
+
+        /// <summary>
         /// Converts a string to a target Enum type. The generic constraint is only on struct; be sure to pass an Enum type.
         /// </summary>
         public static TEnum ConvertToEnum<TEnum>(this string stringToConvert) where TEnum : struct, Enum

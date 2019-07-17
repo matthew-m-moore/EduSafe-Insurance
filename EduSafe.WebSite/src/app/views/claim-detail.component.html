@@ -23,7 +23,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let claimDocumentEntry of claimStatusEntry.ClaimDocumentEntries">
+      <tr *ngFor="let claimDocumentEntry of claimStatusEntry.ClaimDocumentEntries"
+          (click)="dowloadFileFromServer(claimDocumentEntry)">
         <td><i>{{ claimDocumentEntry.UploadDate | date: 'shortDate' }}</i></td>
         <td><i>{{ claimDocumentEntry.ExpirationDate | date: 'shortDate' }}</i></td>
         <td><input type="checkbox" [(ngModel)]="claimDocumentEntry.IsFileVerified" [ngModelOptions]="{standalone: true}" disabled /></td>
