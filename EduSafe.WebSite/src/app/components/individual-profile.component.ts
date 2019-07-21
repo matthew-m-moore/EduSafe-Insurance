@@ -99,6 +99,15 @@ export class IndividualProfileComponent implements OnInit {
         if (resultEmailId > 0) {
           customerEmailEntry.EmailId = resultEmailId;
           this.customerProfileEntry.CustomerEmails.push(customerEmailEntry);
+
+          if (this.isNewEmailAddressPrimary) {
+            this.customerProfileEntry.CustomerEmails.forEach(email => {
+              if (email.EmailAddress === this.newEmailAddress)
+                email.IsPrimary = true;
+              else
+                email.IsPrimary = false;
+            });
+          }
         }
       });
   }

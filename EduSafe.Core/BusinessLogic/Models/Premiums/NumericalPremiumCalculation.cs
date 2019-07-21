@@ -14,6 +14,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
     {
         private List<PremiumCalculationCashFlow> _calculatedCashFlows;
         private List<EnrollmentStateArray> _enrollmentStateTimeSeries;
+        private List<Stack<double>> _warrantyPaymentStacksList;
         private const double _targetPrecision = 1e-12;
 
         public NumericalPremiumCalculation(PremiumCalculationModelInput premiumCalculationModelInput)
@@ -69,13 +70,17 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             var totalUnemploymentFraction = _enrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.GraduatedUnemployed);
             var initialPeriodCashFlow = CreateInitialCashFlow(totalUnemploymentFraction, firstUnemploymentPeriod);
 
+            var totalMonthsEnrollmentProjected = _enrollmentStateTimeSeries.Count;
+            var totalCashFlowPeriods = PremiumCalculationModelInput.CalculateTotalCashFlowPeriods(totalMonthsEnrollmentProjected - 1);
+
             _calculatedCashFlows = new List<PremiumCalculationCashFlow>();
             _calculatedCashFlows.Add(initialPeriodCashFlow);          
 
-            foreach (var enrollmentStateArray in _enrollmentStateTimeSeries)
+            for (var monthlyPeriod = 1; monthlyPeriod <= totalCashFlowPeriods; monthlyPeriod++)
             {
-                var monthlyPeriod = enrollmentStateArray.MonthlyPeriod;
-                if (monthlyPeriod == 0) continue;
+                var enrollmentStateArray = (monthlyPeriod < totalMonthsEnrollmentProjected)
+                    ? _enrollmentStateTimeSeries[monthlyPeriod]
+                    : new EnrollmentStateArray(monthlyPeriod);
 
                 var currentPeriodCashFlow = CalculateCashFlow(
                     enrollmentStateArray, 

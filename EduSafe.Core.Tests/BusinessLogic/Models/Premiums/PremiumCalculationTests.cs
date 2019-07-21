@@ -147,6 +147,8 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.Premiums
             var unemploymentCoverage = 25000d;
             var dropOutWarranty = 0.0;
             var warrantyCoverageMonths = 0;
+            var warrantyLagMonths = 0;
+            var warrantyRepaymentMonths = 0;
             var dropOutCoverageOption = 0.25;
             var gradSchoolCoverageOption = 0.25;
             var earlyHireCoverageOption = 0.25;
@@ -156,6 +158,8 @@ namespace EduSafe.Core.Tests.BusinessLogic.Models.Premiums
                     unemploymentCoverage,
                     dropOutWarranty,
                     warrantyCoverageMonths,
+                    warrantyLagMonths,
+                    warrantyRepaymentMonths,
                     discountFactorCurve,
                     dropOutCoverageOption,
                     gradSchoolCoverageOption,

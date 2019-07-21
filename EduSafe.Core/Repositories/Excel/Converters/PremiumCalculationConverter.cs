@@ -52,6 +52,8 @@ namespace EduSafe.Core.Repositories.Excel.Converters
             var unemploymentCoverage = enrollmentModelScenarioRecord.UnemploymentCoverage;
             var dropOutWarranty = enrollmentModelScenarioRecord.DropOutWarranty;
             var warrantyCoverageMonths = enrollmentModelScenarioRecord.WarrantyCoverageMonths;
+            var warrantyLagMonths = enrollmentModelScenarioRecord.WarrantyLagMonths;
+            var warrantyRepaymentMonths = enrollmentModelScenarioRecord.WarrantyRepayMonths;
             var dropOutCoverageOption = enrollmentModelScenarioRecord.DropOutOptionRatio;
             var gradSchoolCoverageOption = enrollmentModelScenarioRecord.GradSchoolOptionRatio;
             var earlyHireCoverageOption = enrollmentModelScenarioRecord.EarlyHireOptionRatio;
@@ -62,6 +64,8 @@ namespace EduSafe.Core.Repositories.Excel.Converters
                     unemploymentCoverage,
                     dropOutWarranty,
                     warrantyCoverageMonths,
+                    warrantyLagMonths,
+                    warrantyRepaymentMonths,
                     discountFactorCurve,
                     dropOutCoverageOption,
                     gradSchoolCoverageOption,

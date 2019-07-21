@@ -18,7 +18,10 @@
         public double Margin { get; set; }
         public double UnemploymentCoverage { get; set; }
         public double DropOutWarranty { get; set; }
+
         public int WarrantyCoverageMonths { get; set; }
+        public int WarrantyLagMonths { get; set; }
+        public int WarrantyRepayMonths { get; set; }
 
         public double EarlyHireOptionRatio { get; set; }
         public double DropOutOptionRatio { get; set; }

@@ -88,6 +88,15 @@ export class InstitutionalProfileComponent implements OnInit {
         if (resultEmailId > 0) {
           customerEmailEntry.EmailId = resultEmailId;
           this.institutionProfileEntry.CustomerEmails.push(customerEmailEntry);
+
+          if (this.isNewEmailAddressPrimary) {
+            this.institutionProfileEntry.CustomerEmails.forEach(email => {
+              if (email.EmailAddress === this.newEmailAddress)
+                email.IsPrimary = true;
+              else
+                email.IsPrimary = false;
+            });
+          }
         }
       });
   }

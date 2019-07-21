@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using EduSafe.Common.Curves;
 using EduSafe.Common.Enums;
 
@@ -14,7 +15,10 @@ namespace EduSafe.Core.BusinessLogic.Containers
 
         public double UnemploymentCoverageAmount { get; }
         public double DropOutWarrantyCoverageAmount { get; }
+
         public int DropOutWarrantyCoverageMonths { get; }
+        public int DropOutWarrantyLagMonths { get; set; }
+        public int DropOutWarrantyRepaymentMonths { get; set; }
 
         public InterestRateCurve DiscountRateCurve { get; private set; }
 
@@ -28,6 +32,8 @@ namespace EduSafe.Core.BusinessLogic.Containers
             double unemploymentCoverageAmount,
             double dropOutWarrantyCoverageAmount,
             int dropOutWarrantyCoverageMonths,
+            int dropOutWarrantyLagMonths,
+            int dropOutWarrantyRepaymentMonths,
             InterestRateCurve discountRateCurve,
             double? dropOutOptionCoveragePercentage = null,
             double? gradSchoolOptionCoveragePercentage = null,
@@ -36,7 +42,10 @@ namespace EduSafe.Core.BusinessLogic.Containers
         {
             UnemploymentCoverageAmount = unemploymentCoverageAmount;
             DropOutWarrantyCoverageAmount = dropOutWarrantyCoverageAmount;
+
             DropOutWarrantyCoverageMonths = dropOutWarrantyCoverageMonths;
+            DropOutWarrantyLagMonths = dropOutWarrantyLagMonths;
+            DropOutWarrantyRepaymentMonths = dropOutWarrantyRepaymentMonths;
 
             DiscountRateCurve = discountRateCurve;
             PremiumMargin = premiumMargin;
@@ -69,6 +78,8 @@ namespace EduSafe.Core.BusinessLogic.Containers
                 UnemploymentCoverageAmount,
                 DropOutWarrantyCoverageAmount,
                 DropOutWarrantyCoverageMonths,
+                DropOutWarrantyLagMonths,
+                DropOutWarrantyRepaymentMonths,
                 copyOfDiscountRateCurve,
                 copyOfDropOutOptionCoveragePercentage,
                 copyOfGradSchoolOptionCoveragePercentage,
@@ -89,6 +100,13 @@ namespace EduSafe.Core.BusinessLogic.Containers
         public void SetDiscountRateCurve(DataCurve<double> discountRateCurve)
         {
             DiscountRateCurve.RateCurve = discountRateCurve;
+        }
+
+        public int CalculateTotalCashFlowPeriods(int monthsToProjectEnrollment)
+        {
+            var lastDropOutWarrantyMonth = DropOutWarrantyCoverageMonths + DropOutWarrantyLagMonths + DropOutWarrantyRepaymentMonths;
+            var totalCashFlowPeriods = Math.Max(lastDropOutWarrantyMonth, monthsToProjectEnrollment);
+            return totalCashFlowPeriods;
         }
     }
 }
