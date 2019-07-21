@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using EduSafe.Common;
@@ -14,12 +15,14 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
     {
         private List<PremiumCalculationCashFlow> _calculatedCashFlows;
         private List<EnrollmentStateArray> _enrollmentStateTimeSeries;
-        private List<Stack<double>> _warrantyPaymentStacksList;
+        private List<Queue<double>> _warrantyPaymentQueuesList;
         private const double _targetPrecision = 1e-12;
 
         public NumericalPremiumCalculation(PremiumCalculationModelInput premiumCalculationModelInput)
-            : base (premiumCalculationModelInput)
-        { }
+            : base(premiumCalculationModelInput)
+        {
+            _warrantyPaymentQueuesList = new List<Queue<double>>();
+        }       
 
         /// <summary>
         /// Returns a deep, member-wise copy of the object.
@@ -66,7 +69,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
 
         protected double CalculateCashFlows(double premiumAmountGuess = 1.0)
         {
-            var firstUnemploymentPeriod = _enrollmentStateTimeSeries.First(e => e[StudentEnrollmentState.GraduatedUnemployed] > 0.0).MonthlyPeriod;
+            int firstUnemploymentPeriod = DetermineFirstUnemploymentPeriod();
             var totalUnemploymentFraction = _enrollmentStateTimeSeries.Last().GetTotalState(StudentEnrollmentState.GraduatedUnemployed);
             var initialPeriodCashFlow = CreateInitialCashFlow(totalUnemploymentFraction, firstUnemploymentPeriod);
 
@@ -74,7 +77,7 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             var totalCashFlowPeriods = PremiumCalculationModelInput.CalculateTotalCashFlowPeriods(totalMonthsEnrollmentProjected - 1);
 
             _calculatedCashFlows = new List<PremiumCalculationCashFlow>();
-            _calculatedCashFlows.Add(initialPeriodCashFlow);          
+            _calculatedCashFlows.Add(initialPeriodCashFlow);
 
             for (var monthlyPeriod = 1; monthlyPeriod <= totalCashFlowPeriods; monthlyPeriod++)
             {
@@ -83,8 +86,8 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
                     : new EnrollmentStateArray(monthlyPeriod);
 
                 var currentPeriodCashFlow = CalculateCashFlow(
-                    enrollmentStateArray, 
-                    ref totalUnemploymentFraction, 
+                    enrollmentStateArray,
+                    ref totalUnemploymentFraction,
                     premiumAmountGuess,
                     firstUnemploymentPeriod,
                     monthlyPeriod);
@@ -93,6 +96,15 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             }
 
             return _calculatedCashFlows.Sum(c => c.DiscountedCashFlow);
+        }
+
+        private int DetermineFirstUnemploymentPeriod()
+        {
+            var firstUnemploymentPeriod = 0;
+            var firstUnemploymentStateArray = _enrollmentStateTimeSeries.FirstOrDefault(e => e[StudentEnrollmentState.GraduatedUnemployed] > 0.0);
+            if (firstUnemploymentStateArray != null) firstUnemploymentPeriod = firstUnemploymentStateArray.MonthlyPeriod;
+
+            return firstUnemploymentPeriod;
         }
 
         protected virtual PremiumCalculationCashFlow CreateInitialCashFlow(double totalUnemploymentFraction, int firstUnemploymentPeriod)
@@ -123,9 +135,8 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             int firstUnemploymentPeriod,
             int monthlyPeriod)
         {
-            var servicingCosts = ServicingCostsDataTable.Rows[monthlyPeriod - 1];
+            var costsAndFees = RetrieveTotalServicingCosts(monthlyPeriod);
             var discountFactor = CalculateDiscountFactor(monthlyPeriod);
-            var costsAndFees = servicingCosts.Field<double>(Constants.TotalIdentifier);
 
             var unemploymentCoverage = PremiumCalculationModelInput.UnemploymentCoverageAmount;
             var dropOutWarrantyMonths = PremiumCalculationModelInput.DropOutWarrantyCoverageMonths;
@@ -151,7 +162,9 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             var probabilityAdjustedDropOutWarranty = dropOutWarrantyCoverage * enrollmentFraction;
             var probabilityAdjustedPremium = premiumAmountGuess * enrollmentFraction;
             var probabilityAdjustedEquity = probabilityAdjustedPremium * PremiumCalculationModelInput.PremiumMargin;
-            var totalPremiumsPaidIn = (monthlyPeriod * premiumAmountGuess) + previouslyPaidInPremiums;         
+            var totalPremiumsPaidIn = (monthlyPeriod * premiumAmountGuess) + previouslyPaidInPremiums;
+
+            AddDropOutWarrantyPaymentQueue(dropOutWarrantyCoverage, dropOutFraction);
 
             var currentPeriodCashFlow = new PremiumCalculationCashFlow
             {
@@ -164,13 +177,13 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
 
                 ProbabilityAdjustedPremium = probabilityAdjustedPremium,
                 ProbabilityAdjustedEquity = probabilityAdjustedEquity,
-                ProbabilityAdjustedCostsAndFees = servicingCosts.Field<double>(Constants.TotalIdentifier),
+                ProbabilityAdjustedCostsAndFees = costsAndFees,
 
                 ProbabilityAdjustedDropOutClaims = dropOutCoverage * dropOutFraction * totalPremiumsPaidIn,
                 ProbabilityAdjustedGradSchoolClaims = gradSchoolCoverage * gradSchoolFraction * totalPremiumsPaidIn,
                 ProbabilityAdjustedEarlyHireClaims = earlyHireCoverage * earlyHireFraction * totalPremiumsPaidIn,
 
-                ProbabilityAdjustedDropOutWarrantyClaims = dropOutWarrantyCoverage * dropOutFraction,
+                ProbabilityAdjustedDropOutWarrantyClaims = CalculateDropOutWarrantyClaims(),
                 ProbabilityAdjustedUnemploymentClaims = unemploymentCoverage * unemploymentFraction,
             };
 
@@ -187,6 +200,48 @@ namespace EduSafe.Core.BusinessLogic.Models.Premiums
             }
 
             return currentPeriodCashFlow;
+        }
+
+        private double RetrieveTotalServicingCosts(int monthlyPeriod)
+        {
+            var totalPeriodsOfCosts = ServicingCostsDataTable.Rows.Count;
+            if (monthlyPeriod > totalPeriodsOfCosts) return 0.0;
+
+            var servicingCosts = ServicingCostsDataTable.Rows[monthlyPeriod - 1];
+            var costsAndFees = servicingCosts.Field<double>(Constants.TotalIdentifier);
+            return costsAndFees;
+        }
+
+        private void AddDropOutWarrantyPaymentQueue(double dropOutWarrantyCoverage, double dropOutFraction)
+        {
+            if (dropOutWarrantyCoverage <= 0.0) return;
+
+            var dropOutWarrantyCoveragePayment = dropOutWarrantyCoverage * dropOutFraction;        
+            var dropOutWarrantyRepaymentMonths = PremiumCalculationModelInput.DropOutWarrantyRepaymentMonths;
+            var dropOutWarrantyRepaymentLagMonths = PremiumCalculationModelInput.DropOutWarrantyLagMonths;
+
+            if (dropOutWarrantyRepaymentMonths > 0)
+                dropOutWarrantyCoveragePayment /= dropOutWarrantyRepaymentMonths;
+
+            var dropOutWarrantyRepaymentList = Enumerable.Repeat(0.0, dropOutWarrantyRepaymentLagMonths).ToList();
+            dropOutWarrantyRepaymentList.AddRange(Enumerable.Repeat(dropOutWarrantyCoveragePayment, Math.Max(dropOutWarrantyRepaymentMonths, 1)));
+
+            var dropOutWarrantyRepaymentQueue = new Queue<double>(dropOutWarrantyRepaymentList);
+            _warrantyPaymentQueuesList.Add(dropOutWarrantyRepaymentQueue);
+        }
+
+        private double CalculateDropOutWarrantyClaims()
+        {
+            var probabilityAdjustedDropOutWarrantyClaims = 0.0;
+
+            if (_warrantyPaymentQueuesList.Any())
+            {
+                foreach (var paymentQueue in _warrantyPaymentQueuesList)
+                    if (paymentQueue.Count > 0)
+                        probabilityAdjustedDropOutWarrantyClaims += paymentQueue.Dequeue();
+            }
+
+            return probabilityAdjustedDropOutWarrantyClaims;
         }
     }
 }

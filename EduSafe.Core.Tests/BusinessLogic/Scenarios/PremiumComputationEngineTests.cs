@@ -14,11 +14,11 @@ namespace EduSafe.Core.Tests.BusinessLogic.Scenarios
         private const string _dataFileOne = "EduSafe.Core.Tests.Resources.Dropout-Rate-Test-Scenarios-Single.xlsx";
         private const string _dataFileTwo = "EduSafe.Core.Tests.Resources.EduSafe-Website-For-Profit-Scenario-Testing-Small.xlsx";
 
-        private static Stream _inputFileStreamOne = Assembly.GetExecutingAssembly().GetManifestResourceStream(_dataFileOne);
-        private static Stream _inputFileStreamTwo = Assembly.GetExecutingAssembly().GetManifestResourceStream(_dataFileTwo);
+        private static readonly Stream _inputFileStreamOne = Assembly.GetExecutingAssembly().GetManifestResourceStream(_dataFileOne);
+        private static readonly Stream _inputFileStreamTwo = Assembly.GetExecutingAssembly().GetManifestResourceStream(_dataFileTwo);
 
-        private bool _outputExcel = false;
-        private double _precision = 1e-8;
+        private readonly bool _outputExcel = false;
+        private readonly double _precision = 1e-8;
 
         [TestMethod, Owner("Matthew Moore")]
         public void PremiumComputationEngine_LoadSingleScenarioFromExcel_CheckResults()
@@ -129,6 +129,48 @@ namespace EduSafe.Core.Tests.BusinessLogic.Scenarios
                     premiumComputationScenario.RepricingModel.EnrollmentModel.EnrollmentStateTimeSeries,
                     premiumComputationScenario.PremiumCalculation,
                     premiumComputationResult.ServicingCosts);
+
+                excelFileWriter.ExportWorkbook();
+            }
+        }
+
+        [TestMethod, Owner("Matthew Moore")]
+        public void PremiumComputationEngine_SingleScenarioWithDropOutWarrantySpreadPayments_CheckResults()
+        {
+            var premiumComputationRepository = new PremiumComputationRepository(_inputFileStreamTwo);
+            var premiumComputationScenario = premiumComputationRepository.GetPremiumComputationScenarioById(8, true);
+            var premiumComputationResult = premiumComputationScenario.ComputePremiumResult();
+
+            var premium = premiumComputationResult.CalculatedMonthlyPremium;
+            Assert.AreEqual(65.49231415, premium, _precision);
+
+            if (_outputExcel)
+            {
+                var excelFileWriter = PremiumCalculationTests.CreateExcelOutput(
+                    premiumComputationScenario.RepricingModel.EnrollmentModel.EnrollmentStateTimeSeries,
+                    premiumComputationScenario.PremiumCalculation,
+                    premiumComputationResult.ServicingCosts, false);
+
+                excelFileWriter.ExportWorkbook();
+            }
+        }
+
+        [TestMethod, Owner("Matthew Moore")]
+        public void PremiumComputationEngine_SingleScenarioWithDropOutWarrantyOnly_CheckResults()
+        {
+            var premiumComputationRepository = new PremiumComputationRepository(_inputFileStreamTwo);
+            var premiumComputationScenario = premiumComputationRepository.GetPremiumComputationScenarioById(9, true);
+            var premiumComputationResult = premiumComputationScenario.ComputePremiumResult();
+
+            var premium = premiumComputationResult.CalculatedMonthlyPremium;
+            Assert.AreEqual(122.046312304, premium, _precision);
+
+            if (_outputExcel)
+            {
+                var excelFileWriter = PremiumCalculationTests.CreateExcelOutput(
+                    premiumComputationScenario.RepricingModel.EnrollmentModel.EnrollmentStateTimeSeries,
+                    premiumComputationScenario.PremiumCalculation,
+                    premiumComputationResult.ServicingCosts, false);
 
                 excelFileWriter.ExportWorkbook();
             }
