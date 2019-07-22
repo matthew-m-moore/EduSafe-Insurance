@@ -14,8 +14,9 @@ namespace EduSafe.Core.BusinessLogic.CostsOrFees
         public PeriodicCostOrFee(
             PaymentConvention paymentConvention,
             string description,
-            double baseAmount)
-            : base(description, baseAmount)
+            double baseAmount,
+            int? endingPeriod = null)
+            : base(description, baseAmount, endingPeriod)
         {
             SetBaseStateForAdjustment(StudentEnrollmentState.Enrolled);
             FrequencyInMonths = (int)paymentConvention;
@@ -40,6 +41,8 @@ namespace EduSafe.Core.BusinessLogic.CostsOrFees
                 BaseAmount);
 
             periodicCostOrFee.SetStartingPeriod(StartingPeriodOfCostOrFee);
+            periodicCostOrFee.SetEndingPeriod(EndingPeriodOfCostOrFee);
+
             return periodicCostOrFee;
         }
 
@@ -50,6 +53,9 @@ namespace EduSafe.Core.BusinessLogic.CostsOrFees
 
         public override double CalculateAmount(int monthlyPeriod, List<EnrollmentStateArray> enrollmentStateTimeSeries)
         {
+            if (monthlyPeriod < StartingPeriodOfCostOrFee) return 0.0;
+            if (EndingPeriodOfCostOrFee.HasValue && monthlyPeriod > EndingPeriodOfCostOrFee.Value) return 0.0;
+
             var adjustedMonthlyPeriod = monthlyPeriod - StartingPeriodOfCostOrFee;
             var isCostOrFeeMonth = MathUtility.CheckDivisibilityOfIntegers(adjustedMonthlyPeriod, FrequencyInMonths);
 

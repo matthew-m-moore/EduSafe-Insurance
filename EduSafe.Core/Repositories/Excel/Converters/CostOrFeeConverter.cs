@@ -10,6 +10,8 @@ namespace EduSafe.Core.Repositories.Excel.Converters
         {
             var costOrFeeName = costOrFeeRecord.CostOrFeeName;
             var baseAmount = costOrFeeRecord.Amount;
+            var endingPeriod = costOrFeeRecord.EndingPeriod;
+
             var isPeriodicCostOrFee = costOrFeeRecord.FrequencyInMonths.HasValue;
             var isEventBasedCostOrFee = !string.IsNullOrWhiteSpace(costOrFeeRecord.DrivingEvent);
 
@@ -25,7 +27,7 @@ namespace EduSafe.Core.Repositories.Excel.Converters
                 var paymentConvention = PaymentConventionConverter
                     .ConvertNullableIntegerToPaymentConvention(costOrFeeRecord.FrequencyInMonths);
 
-                var periodicCostOrFee = new PeriodicCostOrFee(paymentConvention, costOrFeeName, baseAmount);
+                var periodicCostOrFee = new PeriodicCostOrFee(paymentConvention, costOrFeeName, baseAmount, endingPeriod);
                 return periodicCostOrFee;
             }
 
@@ -34,7 +36,7 @@ namespace EduSafe.Core.Repositories.Excel.Converters
                 var eventStateForCostOrFee = StudentEnrollmentStateConverter
                     .ConvertStringToEnrollmentState(costOrFeeRecord.DrivingEvent);
 
-                var eventBasedCostOrFee = new EventBasedCostOrFee(eventStateForCostOrFee, costOrFeeName, baseAmount);
+                var eventBasedCostOrFee = new EventBasedCostOrFee(eventStateForCostOrFee, costOrFeeName, baseAmount, endingPeriod);
                 return eventBasedCostOrFee;
             }
 

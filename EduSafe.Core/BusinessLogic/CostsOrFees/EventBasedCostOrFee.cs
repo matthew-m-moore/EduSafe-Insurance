@@ -11,8 +11,9 @@ namespace EduSafe.Core.BusinessLogic.CostsOrFees
         public EventBasedCostOrFee(
             StudentEnrollmentState eventStateForCostOrFee,
             string description,
-            double baseAmount)
-            : base (description, baseAmount)
+            double baseAmount,
+            int? endingPeriod = null)
+            : base (description, baseAmount, endingPeriod)
         {
             EventStateForCostOrFee = eventStateForCostOrFee;
         }
@@ -28,11 +29,16 @@ namespace EduSafe.Core.BusinessLogic.CostsOrFees
                 BaseAmount);
 
             eventBasedCostOrFee.SetStartingPeriod(StartingPeriodOfCostOrFee);
+            eventBasedCostOrFee.SetEndingPeriod(EndingPeriodOfCostOrFee);
+
             return eventBasedCostOrFee;
         }
 
         public override double CalculateAmount(int monthlyPeriod, List<EnrollmentStateArray> enrollmentStateTimeSeries)
         {
+            if (monthlyPeriod < StartingPeriodOfCostOrFee) return 0.0;
+            if (EndingPeriodOfCostOrFee.HasValue && monthlyPeriod > EndingPeriodOfCostOrFee.Value) return 0.0;
+
             var currentPeriodStateArray = enrollmentStateTimeSeries[monthlyPeriod];
             var eventStateDeltaAmount = currentPeriodStateArray[EventStateForCostOrFee];
 
