@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
+
+import { AppRootComponent } from '../components/app-root.component';
 
 @Component({
   selector: 'edusafe-home',
@@ -7,9 +9,17 @@ import { Router } from '@angular/router';
   styleUrls: ['../styles/home.component.css']
 })
 
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private appRootComponent: AppRootComponent) { }
+
+  loadInstitutionsPage(): void {
+    let routingUrl = ['/institutions'];
+    this.router.navigate(routingUrl);
+    window.scroll(0, 0);
+  }
 
   revealModelInputs(): void {
     let routingUrl = ['/edusafe-model'];
@@ -21,5 +31,9 @@ export class HomeComponent {
     let routingUrl = ['/edusafe-contact'];
     this.router.navigate(routingUrl);
     window.scroll(0, 0);
+  }
+
+  ngOnInit(): void {
+    this.appRootComponent.isInstitutional = false;
   }
 }

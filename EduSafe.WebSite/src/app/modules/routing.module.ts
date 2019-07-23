@@ -6,6 +6,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from '../components/home.component';
 import { ModelComponent } from '../components/model.component';
 import { ModelOuputComponent } from '../components/output.component';
+
+import { InstitutionsComponent } from '../components/institutions.component';
+import { InstitutionsModelComponent } from '../components/institutions-model.component';
+import { InstitutionsOutputComponent } from '../components/institutions-output.component';
+
 import { ContactComponent } from '../components/contact.component';
 import { ArticlesComponent } from '../components/articles.component';
 
@@ -47,6 +52,30 @@ const appRoutes: Routes = [
     data: {
       title: 'Edu$afe, Your Monthly Payment Results',
       metaDescription: 'View your monthly payment results for various levels of coverage. Send your results to yourself by email for future reference.'
+    }
+  },
+  {
+    path: 'institutions',
+    component: InstitutionsComponent,
+    data: {
+      title: 'Edu$afe, Securing Your Students',
+      metaDescription: 'Edu$afe provides a combined warranty/insurance product to help institutions protect their students from defaulting on their student loans, even when students drop out.'
+    }
+  },
+  {
+    path: 'institutions-model',
+    component: InstitutionsModelComponent,
+    data: {
+      title: 'Edu$afe, Estimate Your Payments',
+      metaDescription: ''
+    }
+  },
+  {
+    path: 'institutions-output',
+    component: InstitutionsOutputComponent,
+    data: {
+      title: 'Edu$afe, Your Esimated Payments Results',
+      metaDescription: ''
     }
   },
   {

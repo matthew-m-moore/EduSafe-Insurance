@@ -19,6 +19,9 @@ import { AppRootComponent } from '../components/app-root.component';
 import { HomeComponent } from '../components/home.component';
 import { ModelComponent } from '../components/model.component';
 import { ModelOuputComponent } from '../components/output.component';
+import { InstitutionsComponent } from '../components/institutions.component';
+import { InstitutionsModelComponent } from '../components/institutions-model.component';
+import { InstitutionsOutputComponent } from '../components/institutions-output.component';
 import { ContactComponent } from '../components/contact.component';
 import { ArticlesComponent } from '../components/articles.component';
 import { AuthenticationComponent } from '../components/authentication.component';
@@ -44,7 +47,6 @@ import { AuthenticationService } from '../services/authentication.service';
 import { ExcelExportService } from '../services/excelExport.service';
 import { FileTransferService } from '../services/fileTransfer.service';
 import { ServicingDataService } from '../services/servicingData.service';
-import { ClaimStatusEntry } from '../classes/claimStatusEntry';
 
 @NgModule({
   imports: [
@@ -67,6 +69,9 @@ import { ClaimStatusEntry } from '../classes/claimStatusEntry';
     HomeComponent,
     ModelComponent,
     ModelOuputComponent,
+    InstitutionsComponent,
+    InstitutionsModelComponent,
+    InstitutionsOutputComponent,
     ContactComponent,
     ArticlesComponent,
     AuthenticationComponent,

@@ -19,8 +19,10 @@ export class AppRootComponent implements OnInit {
 
   titleText = 'Edu$afe';
   subtitleText = 'Securing Your Future';
+  institutionalText = 'Securing Your Students';
 
   public ipAddress = "";
+  public isInstitutional = false;
 
   constructor(
     private activityCaptureService: ActivityCaptureService,

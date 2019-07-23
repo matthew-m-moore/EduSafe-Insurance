@@ -2,13 +2,18 @@
   <div class="row fade-in-top" style="margin: auto">
     <div class="col-md-4 text-md-left text-center" id="titleHeader">
       <h1><i class="fa fa-graduation-cap" aria-hidden="true"></i>{{ titleText }}</h1>
-      <h3>{{ subtitleText }}</h3>
+      <h3 *ngIf="!isInstitutional">{{ subtitleText }}</h3>
+      <h3 *ngIf="isInstitutional">{{ institutionalText }}</h3>
     </div>
     <div class="col-md-8 text-md-right text-center" id="navigationHeader">
       <ul class="navigation">
-        <li routerLink="/edusafe-home" routerLinkActive="active">
+        <li *ngIf="!isInstitutional" routerLink="/edusafe-home" routerLinkActive="active">
           <i class="fa fa-home" aria-hidden="true"></i>&nbsp;home</li>
-        <li routerLink="/edusafe-model" routerLinkActive="active">
+        <li *ngIf="!isInstitutional" routerLink="/edusafe-model" routerLinkActive="active">
+          <i class="fa fa-calculator" aria-hidden="true"></i>&nbsp;calc</li>
+        <li *ngIf="isInstitutional" routerLink="/institutions" routerLinkActive="active">
+          <i class="fa fa-university" aria-hidden="true"></i>&nbsp;home</li>
+        <li *ngIf="isInstitutional" routerLink="/institutions-model" routerLinkActive="active">
           <i class="fa fa-calculator" aria-hidden="true"></i>&nbsp;calc</li>
         <li routerLink="/edusafe-news" routerLinkActive="active">
           <i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp;news</li>

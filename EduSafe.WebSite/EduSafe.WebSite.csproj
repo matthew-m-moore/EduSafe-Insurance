@@ -85,6 +85,9 @@
     <Content Include="src\app\styles\contact.component.css" />
     <Content Include="src\app\styles\individual-profile.component.css" />
     <Content Include="src\app\styles\institutional-profile.component.css" />
+    <Content Include="src\app\styles\institutions-model.component.css" />
+    <Content Include="src\app\styles\institutions-ouput.component.css" />
+    <Content Include="src\app\styles\institutions.component.css" />
     <Content Include="src\app\styles\notification-history.component.css" />
     <Content Include="src\app\styles\output.component.css" />
     <Content Include="src\app\styles\payment-history.component.css" />
@@ -96,6 +99,9 @@
     <Content Include="src\app\views\contact.component.html" />
     <Content Include="src\app\views\individual-profile.component.html" />
     <Content Include="src\app\views\institutional-profile.component.html" />
+    <Content Include="src\app\views\institutions-model.component.html" />
+    <Content Include="src\app\views\institutions-output.component.html" />
+    <Content Include="src\app\views\institutions.component.html" />
     <Content Include="src\app\views\notification-history.component.html" />
     <Content Include="src\app\views\payment-history.component.html" />
     <Content Include="src\assets\EduSafe_0_Logo.png" />
@@ -157,6 +163,9 @@
     <TypeScriptCompile Include="src\app\components\home.component.ts" />
     <TypeScriptCompile Include="src\app\components\individual-profile.component.ts" />
     <TypeScriptCompile Include="src\app\components\institutional-profile.component.ts" />
+    <TypeScriptCompile Include="src\app\components\institutions-model.component.ts" />
+    <TypeScriptCompile Include="src\app\components\institutions-output.component.ts" />
+    <TypeScriptCompile Include="src\app\components\institutions.component.ts" />
     <TypeScriptCompile Include="src\app\components\model.component.ts" />
     <TypeScriptCompile Include="src\app\components\notification-history.component.ts" />
     <TypeScriptCompile Include="src\app\components\output.component.ts" />
