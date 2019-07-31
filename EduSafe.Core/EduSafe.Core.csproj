@@ -63,6 +63,7 @@
     <Compile Include="BusinessLogic\Containers\CollegeMajorData.cs" />
     <Compile Include="BusinessLogic\Containers\CompoundKeys\VectorAssignmentEntry.cs" />
     <Compile Include="BusinessLogic\Containers\IndividualServicingData.cs" />
+    <Compile Include="BusinessLogic\Containers\InstitutionalGradData.cs" />
     <Compile Include="BusinessLogic\Containers\InstitutionServicingData.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumComputationForecastingInput.cs" />
     <Compile Include="BusinessLogic\Containers\PremiumComputationResultSummary.cs" />

@@ -16,7 +16,7 @@ namespace EduSafe.WebApi.Controllers
         {
             if (string.IsNullOrWhiteSpace(collegeName)) return new List<string>();
 
-            var collegesList = CollegeDataAdapter.CollegeMajorDataRepository.CollegesList;
+            var collegesList = CollegeDataAdapter.CollegeDataRepository.CollegesList;
             var matchingColleges = collegesList.Where(c => c.ToUpper().Contains(collegeName)).ToList();
 
             return matchingColleges;
@@ -29,7 +29,7 @@ namespace EduSafe.WebApi.Controllers
         {
             if (string.IsNullOrWhiteSpace(description)) return new List<string>();
 
-            var collegeMajorsDictionary = CollegeDataAdapter.CollegeMajorDataRepository.CollegeMajorDataDictionary;
+            var collegeMajorsDictionary = CollegeDataAdapter.CollegeDataRepository.CollegeMajorDataDictionary;
             var matchingCollegeMajors = collegeMajorsDictionary.Keys
                 .Where(k => k.ToUpper().Contains(description)).ToList();
 
@@ -41,7 +41,7 @@ namespace EduSafe.WebApi.Controllers
         [HttpGet]
         public List<CollegeMajorData> GetCollegeMajors()
         {
-            var collegeMajorsDictionary = CollegeDataAdapter.CollegeMajorDataRepository.CollegeMajorDataDictionary;
+            var collegeMajorsDictionary = CollegeDataAdapter.CollegeDataRepository.CollegeMajorDataDictionary;
             var collegeMajors = collegeMajorsDictionary.Values.ToList();
 
             return collegeMajors;

@@ -11,15 +11,44 @@ namespace EduSafe.Core.Repositories.Excel
     {
         private const string _collegesListDataTab = "List Of US Colleges";
         private const string _collegeMajorDataTab = "NCES Data By Major";
+        private const string _institutionalGradRates = "Institutional Graduation Rates";
 
         public readonly HashSet<string> CollegesList;
         public readonly ConcurrentDictionary<string, CollegeMajorData> CollegeMajorDataDictionary;
+        public readonly ConcurrentDictionary<string, Dictionary<string, InstitutionalGradData>> InstitutionalDataDictionary;
 
         public CollegeDataRepository(Stream inputFileStream) : base(inputFileStream)
         {
+            var institutionalDataDictionary = CreateInstitutionalDataDictionary();
+            InstitutionalDataDictionary = new ConcurrentDictionary<string, Dictionary<string, InstitutionalGradData>>(institutionalDataDictionary);
+
             var collegeMajorDataDictionary = CreateCollegeMajorDataDictionary();
             CollegeMajorDataDictionary = new ConcurrentDictionary<string, CollegeMajorData>(collegeMajorDataDictionary);
             CollegesList = CreateCollegesList();
+        }
+
+        private Dictionary<string, Dictionary<string, InstitutionalGradData>> CreateInstitutionalDataDictionary()
+        {
+            var institutionalDataDictionary = new Dictionary<string, Dictionary<string, InstitutionalGradData>>();
+            var institutionalDataRecords = _ExcelFileReader.GetDataFromSpecificTab<InstitutionalDataRecord>(_institutionalGradRates);
+
+            foreach (var record in institutionalDataRecords)
+            {
+                var institutionalGradData = new InstitutionalGradData(
+                    record.LoanInterestRate,
+                    record.GradTargetYear1,
+                    record.GradTargetYear2,
+                    record.GradTargetYear3,
+                    record.UnemploymentTarget);
+
+                if (!institutionalDataDictionary.ContainsKey(record.DegreeType))
+                    institutionalDataDictionary.Add(record.DegreeType, new Dictionary<string, InstitutionalGradData>());
+
+                if (!institutionalDataDictionary[record.DegreeType].ContainsKey(record.CollegeType))
+                    institutionalDataDictionary[record.DegreeType].Add(record.CollegeType, institutionalGradData);
+            }
+
+            return institutionalDataDictionary;
         }
 
         private Dictionary<string, CollegeMajorData> CreateCollegeMajorDataDictionary()

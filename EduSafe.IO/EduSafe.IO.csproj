@@ -170,6 +170,7 @@
     <Compile Include="Excel\Records\DayCountConventionRecord.cs" />
     <Compile Include="Excel\Records\EnrollmentModelScenarioRecord.cs" />
     <Compile Include="Excel\Records\ForecastingParametersRecord.cs" />
+    <Compile Include="Excel\Records\InstitutionalDataRecord.cs" />
     <Compile Include="Excel\Records\InterestRateTypeDetailRecord.cs" />
     <Compile Include="Excel\Records\PaymentHistoryRecord.cs" />
     <Compile Include="Excel\Records\ReinvestmentOptionsInputRecord.cs" />

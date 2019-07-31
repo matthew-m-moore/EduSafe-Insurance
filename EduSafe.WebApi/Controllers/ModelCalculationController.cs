@@ -29,7 +29,7 @@ namespace Dream.WebApp.Controllers
         [HttpPut]
         public ModelOutputSummary CalculatePremiums(ModelInputEntry modelInputEntry)
         {
-            var premiumComputationAdapter = new PremiumComputationAdapter();
+            var premiumComputationAdapter = new IndividualPremiumComputationAdapter();
             var modelOutputSummary = premiumComputationAdapter.RunPremiumComputationScenarios(modelInputEntry);
 
             return modelOutputSummary;

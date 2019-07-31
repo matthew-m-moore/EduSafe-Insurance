@@ -67,15 +67,15 @@ const appRoutes: Routes = [
     component: InstitutionsModelComponent,
     data: {
       title: 'Edu$afe, Estimate Your Payments',
-      metaDescription: ''
+      metaDescription: 'Provide basic information about your institution, such as graduation rates and average student loan debt burden, in order to estimate your payments.'
     }
   },
   {
     path: 'institutions-output',
     component: InstitutionsOutputComponent,
     data: {
-      title: 'Edu$afe, Your Esimated Payments Results',
-      metaDescription: ''
+      title: 'Edu$afe, Your Estimated Payments Results',
+      metaDescription: 'View an estimated average monthly payment for various types of coverage. Send the results to yourself by email for future reference.'
     }
   },
   {

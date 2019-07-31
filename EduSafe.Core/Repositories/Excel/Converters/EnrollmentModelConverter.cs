@@ -47,15 +47,21 @@ namespace EduSafe.Core.Repositories.Excel.Converters
         {
             var enrollmentTargetsArray = new EnrollmentTargetsArray();
 
+            var twoYearGradTarget = enrollmentModelScenarioRecord.TwoYearGradTarget / Constants.PercentagePoints;
+            var threeYearGradTarget = enrollmentModelScenarioRecord.ThreeYearGradTarget / Constants.PercentagePoints;
             var fourYearGradTarget = enrollmentModelScenarioRecord.FourYearGradTarget / Constants.PercentagePoints;
             var fiveYearGradTarget = enrollmentModelScenarioRecord.FiveYearGradTarget / Constants.PercentagePoints;
             var sixYearGradTarget = enrollmentModelScenarioRecord.SixYearGradTarget / Constants.PercentagePoints;
 
+            var twoYearsInMonths = 2 * Constants.MonthsInOneYear;
+            var threeYearsInMonths = 3 * Constants.MonthsInOneYear;
             var fourYearsInMonths = 4 * Constants.MonthsInOneYear;
             var fiveYearsInMonths = 5 * Constants.MonthsInOneYear;
             var sixYearsInMonths = 6 * Constants.MonthsInOneYear;
 
             var graduationState = StudentEnrollmentState.Graduated;
+            enrollmentTargetsArray[twoYearsInMonths, graduationState] = new EnrollmentTarget(graduationState, twoYearGradTarget, twoYearsInMonths);
+            enrollmentTargetsArray[threeYearsInMonths, graduationState] = new EnrollmentTarget(graduationState, threeYearGradTarget, threeYearsInMonths);
             enrollmentTargetsArray[fourYearsInMonths, graduationState] = new EnrollmentTarget(graduationState, fourYearGradTarget, fourYearsInMonths);
             enrollmentTargetsArray[fiveYearsInMonths, graduationState] = new EnrollmentTarget(graduationState, fiveYearGradTarget, fiveYearsInMonths);
             enrollmentTargetsArray[sixYearsInMonths, graduationState] = new EnrollmentTarget(graduationState, sixYearGradTarget, sixYearsInMonths);

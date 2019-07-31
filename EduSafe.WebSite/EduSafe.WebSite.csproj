@@ -146,6 +146,9 @@
     <TypeScriptCompile Include="src\app\classes\customerProfileEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\environmentSettings.ts" />
     <TypeScriptCompile Include="src\app\classes\inquiryEmailEntry.ts" />
+    <TypeScriptCompile Include="src\app\classes\institutionInputEntry.ts" />
+    <TypeScriptCompile Include="src\app\classes\institutionOutputEntry.ts" />
+    <TypeScriptCompile Include="src\app\classes\institutionOutputSummary.ts" />
     <TypeScriptCompile Include="src\app\classes\institutionProfileEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\modelInputEntry.ts" />
     <TypeScriptCompile Include="src\app\classes\modelOutputEntry.ts" />

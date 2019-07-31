@@ -13,11 +13,11 @@ namespace EduSafe.WebApi.Adapters
         private const string _websiteCollegeDataFile = "EduSafe.WebApi.App_Data.EduSafe-Website-College-Data.xlsx";
         private static Stream _websiteCollegeDataFileStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(_websiteCollegeDataFile);
 
-        internal static CollegeDataRepository CollegeMajorDataRepository;
+        internal static CollegeDataRepository CollegeDataRepository;
 
         internal static void LoadDataRepository()
         {
-            CollegeMajorDataRepository = new CollegeDataRepository(_websiteCollegeDataFileStream);
+            CollegeDataRepository = new CollegeDataRepository(_websiteCollegeDataFileStream);
         }
     }
 }

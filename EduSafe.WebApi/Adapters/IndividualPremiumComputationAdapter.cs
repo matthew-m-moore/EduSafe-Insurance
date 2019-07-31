@@ -12,7 +12,7 @@ using EduSafe.WebApi.Models;
 
 namespace EduSafe.WebApi.Adapters
 {
-    internal class PremiumComputationAdapter
+    internal class IndividualPremiumComputationAdapter
     {
         private const string _websiteScenarioDataFile = "EduSafe.WebApi.App_Data.EduSafe-Website-Scenario-Data.xlsx";
 
@@ -33,7 +33,7 @@ namespace EduSafe.WebApi.Adapters
 
         private PremiumComputationRepository _premiumComputationRepository;
 
-        internal PremiumComputationAdapter()
+        internal IndividualPremiumComputationAdapter()
         {
             _premiumComputationRepository = new PremiumComputationRepository(_websiteScenarioDataFileStream);
         }
@@ -41,11 +41,11 @@ namespace EduSafe.WebApi.Adapters
         internal ModelOutputSummary RunPremiumComputationScenarios(ModelInputEntry modelInputEntry)
         {
             var baseScenariosDictionary = _premiumComputationRepository.GetEnrollmentModelScenariosByName();
-            var collegeMajorDateDictionary = CollegeDataAdapter.CollegeMajorDataRepository.CollegeMajorDataDictionary;
+            var collegeMajorDataDictionary = CollegeDataAdapter.CollegeDataRepository.CollegeMajorDataDictionary;
 
             var schoolType = modelInputEntry.PublicOrPrivateSchool;
             var baseScenario = baseScenariosDictionary[schoolType];
-            baseScenario = AdjustBaseScenario(collegeMajorDateDictionary, baseScenario, modelInputEntry, schoolType);
+            baseScenario = AdjustBaseScenario(collegeMajorDataDictionary, baseScenario, modelInputEntry, schoolType);
 
             var startDate = modelInputEntry.CollegeStartDate;
             var endDate = modelInputEntry.ExpectedGraduationDate;

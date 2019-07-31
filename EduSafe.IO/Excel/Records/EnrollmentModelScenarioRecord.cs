@@ -27,6 +27,8 @@
         public double DropOutOptionRatio { get; set; }
         public double GradSchoolOptionRatio { get; set; }
 
+        public double TwoYearGradTarget { get; set; }
+        public double ThreeYearGradTarget { get; set; }
         public double FourYearGradTarget { get; set; }
         public double FiveYearGradTarget { get; set; }
         public double SixYearGradTarget { get; set; }

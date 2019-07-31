@@ -168,8 +168,9 @@
     <Compile Include="Adapters\AuthenticationAdapater.cs" />
     <Compile Include="Adapters\CollegeDataAdapter.cs" />
     <Compile Include="Adapters\ExcelExportAdapter.cs" />
+    <Compile Include="Adapters\InstitutionalPremiumComputationAdapter.cs" />
     <Compile Include="Adapters\InstitutionServicingDataAdapter.cs" />
-    <Compile Include="Adapters\PremiumComputationAdapter.cs" />
+    <Compile Include="Adapters\IndividualPremiumComputationAdapter.cs" />
     <Compile Include="Adapters\IndividualServicingDataAdapter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AriticlesLoadingController.cs" />
@@ -195,6 +196,9 @@
     <Compile Include="Models\CustomerEmailEntry.cs" />
     <Compile Include="Models\CustomerProfileEntry.cs" />
     <Compile Include="Models\InquiryEmailEntry.cs" />
+    <Compile Include="Models\InstitutionInputEntry.cs" />
+    <Compile Include="Models\InstitutionOutputEntry.cs" />
+    <Compile Include="Models\InstitutionOutputSummary.cs" />
     <Compile Include="Models\InstitutionProfileEntry.cs" />
     <Compile Include="Models\ModelInputEntry.cs" />
     <Compile Include="Models\ModelOutputEntry.cs" />

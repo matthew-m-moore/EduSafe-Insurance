@@ -16,6 +16,12 @@ export class InstitutionsComponent implements OnInit {
     private appRootComponent: AppRootComponent)
   { }
 
+  loadIndividualsPage(): void {
+    let routingUrl = ['/edusafe-home'];
+    this.router.navigate(routingUrl);
+    window.scroll(0, 0);
+  }
+
   revealModelInputs(): void {
     let routingUrl = ['/institutions-model'];
     this.router.navigate(routingUrl);
