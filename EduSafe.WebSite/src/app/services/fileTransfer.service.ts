@@ -3,8 +3,8 @@ import { Http } from '@angular/http';
 import { HttpClient, HttpRequest, HttpEventType } from '@angular/common/http';
 
 import { EnvironmentSettings } from '../classes/environmentSettings';
-import { ClaimStatusEntry } from '../classes/claimStatusEntry';
-import { ClaimDocumentEntry } from '../classes/claimDocumentEntry';
+import { ClaimStatusEntry } from '../classes/servicing/claimStatusEntry';
+import { ClaimDocumentEntry } from '../classes/servicing/claimDocumentEntry';
 
 @Injectable()
 

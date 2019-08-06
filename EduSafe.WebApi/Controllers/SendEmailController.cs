@@ -2,6 +2,8 @@
 using System.Web.Http;
 using EduSafe.IO.Email;
 using EduSafe.WebApi.Models;
+using EduSafe.WebApi.Models.Individuals;
+using EduSafe.WebApi.Models.Institutions;
 
 namespace EduSafe.WebApi.Controllers
 {

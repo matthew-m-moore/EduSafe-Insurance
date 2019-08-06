@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 
 import { ActivityInputEntry } from '../classes/activityInputEntry';
-import { ModelInputEntry } from '../classes/modelInputEntry';
+import { ModelInputEntry } from '../classes/individuals/modelInputEntry';
+import { InstitutionInputEntry } from '../classes/institutions/institutionInputEntry';
 import { InquiryEmailEntry } from '../classes/inquiryEmailEntry';
-import { ResultsEmailEntry } from '../classes/resultsEmailEntry';
+import { ResultsEmailEntry } from '../classes/individuals/resultsEmailEntry';
+import { InstitutionResultEmailEntry } from '../classes/institutions/institutionResultEmailEntry';
 import { EnvironmentSettings } from '../classes/environmentSettings';
 
 @Injectable()
@@ -12,6 +14,7 @@ import { EnvironmentSettings } from '../classes/environmentSettings';
 export class ActivityCaptureService {
   private ipAddressCaptureUrl = EnvironmentSettings.BaseApiUrl + '/api/activity/record';
   private calculationCaptureUrl = EnvironmentSettings.BaseApiUrl + '/api/activity/calc';
+  private institutionCalcCaptureUrl = EnvironmentSettings.BaseApiUrl + '/api/activity/calc-institution';
   private emailInquiryCaptureUrl = EnvironmentSettings.BaseApiUrl + '/api/activity/email-inquiry';
   private emailResultsCaptureUrl = EnvironmentSettings.BaseApiUrl + '/api/activity/email-results';
   private headers = new Headers({ 'Content-Type': 'application/json' });
@@ -27,6 +30,13 @@ export class ActivityCaptureService {
 
   captureCalculationActivity(modelInputEntry: ModelInputEntry): Promise<boolean> {
     return this.http.post(this.calculationCaptureUrl, JSON.stringify(modelInputEntry), { headers: this.headers })
+      .toPromise()
+      .then(response => response.json() as boolean)
+      .catch(this.reportError);
+  }
+
+  captureInstitutionCalculationActivity(institutionInputEntry: InstitutionInputEntry): Promise<boolean> {
+    return this.http.post(this.institutionCalcCaptureUrl, JSON.stringify(institutionInputEntry), { headers: this.headers })
       .toPromise()
       .then(response => response.json() as boolean)
       .catch(this.reportError);

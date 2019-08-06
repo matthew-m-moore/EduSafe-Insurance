@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 
-import { CustomerEmailEntry } from '../classes/customerEmailEntry';
-import { CustomerProfileEntry } from '../classes/customerProfileEntry';
-import { InstitutionProfileEntry } from '../classes/institutionProfileEntry';
+import { CustomerEmailEntry } from '../classes/servicing/customerEmailEntry';
+import { CustomerProfileEntry } from '../classes/servicing/customerProfileEntry';
+import { InstitutionProfileEntry } from '../classes/servicing/institutionProfileEntry';
 import { EnvironmentSettings } from '../classes/environmentSettings';
 
 @Injectable()

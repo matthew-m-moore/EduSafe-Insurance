@@ -36,10 +36,12 @@ namespace EduSafe.Core.Repositories.Excel
             {
                 var institutionalGradData = new InstitutionalGradData(
                     record.LoanInterestRate,
+                    record.AverageLoanDebtAtGraduation,
                     record.GradTargetYear1,
                     record.GradTargetYear2,
                     record.GradTargetYear3,
-                    record.UnemploymentTarget);
+                    record.UnemploymentTarget,
+                    record.CohortDefaultRate);
 
                 if (!institutionalDataDictionary.ContainsKey(record.DegreeType))
                     institutionalDataDictionary.Add(record.DegreeType, new Dictionary<string, InstitutionalGradData>());

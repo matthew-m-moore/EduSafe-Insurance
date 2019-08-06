@@ -9,7 +9,7 @@ using EduSafe.IO.Excel;
 using EduSafe.IO.Files;
 using EduSafe.WebApi.Adapters;
 using EduSafe.WebApi.Interfaces;
-using EduSafe.WebApi.Models;
+using EduSafe.WebApi.Models.Servicing;
 
 namespace EduSafe.WebApi.Controllers
 {

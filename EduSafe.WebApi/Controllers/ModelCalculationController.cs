@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using EduSafe.WebApi.Adapters;
-using EduSafe.WebApi.Models;
+using EduSafe.WebApi.Models.Individuals;
+using EduSafe.WebApi.Models.Institutions;
 
 namespace Dream.WebApp.Controllers
 {
@@ -9,20 +10,6 @@ namespace Dream.WebApp.Controllers
     public class ModelCalculationController : ApiController
     {
         private static List<ModelOutputEntry> _modelOutputEntries = new List<ModelOutputEntry>();
-
-        // GET: api/calculate
-        [Route("")]
-        [HttpGet]
-        public ModelOutputSummary CheckApiTest()
-        {
-            var modelOutputSummary = new ModelOutputSummary
-            {
-                OutputTitle = "The Model Calculation API Works",
-                ModelOutputEntries = _modelOutputEntries
-            };
-
-            return modelOutputSummary;
-        }
 
         // PUT: api/calculate/premiums
         [Route("premiums")]
@@ -33,6 +20,17 @@ namespace Dream.WebApp.Controllers
             var modelOutputSummary = premiumComputationAdapter.RunPremiumComputationScenarios(modelInputEntry);
 
             return modelOutputSummary;
+        }
+
+        // PUT: api/calculate/institutional-premiums
+        [Route("institutional-premiums")]
+        [HttpPut]
+        public InstitutionOutputSummary CalculateInstitutionalPremiums(InstitutionInputEntry institutionInputEntry)
+        {
+            var premiumComputationAdapter = new InstitutionalPremiumComputationAdapter();
+            var institutionOutputSummary = premiumComputationAdapter.RunPremiumComputationScenarios(institutionInputEntry);
+
+            return institutionOutputSummary;
         }
     }
 }

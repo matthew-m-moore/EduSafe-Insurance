@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using EduSafe.WebApi.Models;
+using EduSafe.WebApi.Models.Servicing;
 
 namespace EduSafe.WebApi.Interfaces
 {

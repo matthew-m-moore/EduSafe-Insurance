@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms.DataVisualization.Charting;
 using EduSafe.Common.Enums;
 
 namespace EduSafe.Common.Utilities
@@ -44,6 +45,18 @@ namespace EduSafe.Common.Utilities
 
             var weightedAverage = sumOfWeightedValues / sumOfWeights;
             return weightedAverage;
+        }
+
+        /// <summary>
+        /// Leverages Microsoft's charting library to return the CDF of a Gaussian distribution at the Z-value provided.
+        /// Note that a Z-value of zero returns 50%. A Z-value of 2.0 returns about 98%.
+        /// </summary>
+        public static double NormalDistributionProbability(double zValue)
+        {
+            var emptyChart = new Chart();
+            var cumulativeProbability = emptyChart.DataManipulator.Statistics.NormalDistribution(zValue);
+
+            return cumulativeProbability;
         }
 
         /// <summary>

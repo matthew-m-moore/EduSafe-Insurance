@@ -1,7 +1,7 @@
 ﻿using System.Web.Http;
 using EduSafe.Core.Savers;
 using EduSafe.WebApi.Adapters;
-using EduSafe.WebApi.Models;
+using EduSafe.WebApi.Models.Servicing;
 
 namespace EduSafe.WebApi.Controllers
 {

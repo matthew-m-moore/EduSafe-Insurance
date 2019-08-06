@@ -3,7 +3,7 @@ using System.Linq;
 using EduSafe.Core.Reporting;
 using EduSafe.IO.Excel;
 using EduSafe.IO.Excel.Records;
-using EduSafe.WebApi.Models;
+using EduSafe.WebApi.Models.Servicing;
 
 namespace EduSafe.WebApi.Adapters
 {

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 
 import { InquiryEmailEntry } from '../classes/inquiryEmailEntry';
-import { ResultsEmailEntry } from '../classes/resultsEmailEntry';
+import { ResultsEmailEntry } from '../classes/individuals/resultsEmailEntry';
+import { InstitutionResultEmailEntry } from '../classes/institutions/institutionResultEmailEntry';
 import { EnvironmentSettings } from '../classes/environmentSettings';
 
 @Injectable()

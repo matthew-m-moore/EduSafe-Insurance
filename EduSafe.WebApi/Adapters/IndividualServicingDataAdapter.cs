@@ -5,7 +5,7 @@ using EduSafe.Common.Enums;
 using EduSafe.Common.ExtensionMethods;
 using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.Core.Repositories.Database;
-using EduSafe.WebApi.Models;
+using EduSafe.WebApi.Models.Servicing;
 
 namespace EduSafe.WebApi.Adapters
 {

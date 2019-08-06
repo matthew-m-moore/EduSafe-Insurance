@@ -1,6 +1,8 @@
 ﻿using System.Web.Http;
 using EduSafe.Core.Savers;
 using EduSafe.WebApi.Models;
+using EduSafe.WebApi.Models.Individuals;
+using EduSafe.WebApi.Models.Institutions;
 
 namespace EduSafe.WebApi.Controllers
 {
@@ -32,6 +34,24 @@ namespace EduSafe.WebApi.Controllers
                 modelInputEntry.CollegeStartDate,
                 modelInputEntry.ExpectedGraduationDate,
                 modelInputEntry.IncomeCoverageAmount);
+
+            return true;
+        }
+
+        // POST: api/activity/calc-institution
+        [Route("calc-institution")]
+        [HttpPost]
+        public bool RecordInstitutionCalculationInputs(InstitutionInputEntry institutionInputEntry)
+        {
+            var webSiteInquiryDatabaseSaver = new WebSiteInquiryDatabaseSaver();
+            //webSiteInquiryDatabaseSaver.SaveCalculationInputs(
+            //    institutionInputEntry.IpAddress,
+            //    institutionInputEntry.CollegeName,
+            //    institutionInputEntry.PublicOrPrivateSchool,
+            //    institutionInputEntry.CollegeMajor,
+            //    institutionInputEntry.CollegeStartDate,
+            //    institutionInputEntry.ExpectedGraduationDate,
+            //    institutionInputEntry.IncomeCoverageAmount);
 
             return true;
         }

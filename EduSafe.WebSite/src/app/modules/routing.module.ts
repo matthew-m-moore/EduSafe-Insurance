@@ -3,21 +3,21 @@ import { RouterModule, NavigationEnd, Routes, Router, ActivatedRoute } from '@an
 import { Title, Meta } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { HomeComponent } from '../components/home.component';
-import { ModelComponent } from '../components/model.component';
-import { ModelOuputComponent } from '../components/output.component';
+import { HomeComponent } from '../components/individuals/home.component';
+import { ModelComponent } from '../components/individuals/model.component';
+import { ModelOuputComponent } from '../components/individuals/output.component';
 
-import { InstitutionsComponent } from '../components/institutions.component';
-import { InstitutionsModelComponent } from '../components/institutions-model.component';
-import { InstitutionsOutputComponent } from '../components/institutions-output.component';
+import { InstitutionsComponent } from '../components/institutions/institutions.component';
+import { InstitutionsModelComponent } from '../components/institutions/institutions-model.component';
+import { InstitutionsOutputComponent } from '../components/institutions/institutions-output.component';
 
 import { ContactComponent } from '../components/contact.component';
 import { ArticlesComponent } from '../components/articles.component';
 
 import { AuthenticationComponent } from '../components/authentication.component';
-import { InstitutionalProfileComponent } from '../components/institutional-profile.component';
-import { IndividualProfileComponent } from '../components/individual-profile.component';
-import { ClaimsComponent } from '../components/claims.component';
+import { InstitutionalProfileComponent } from '../components/servicing/institutional-profile.component';
+import { IndividualProfileComponent } from '../components/servicing/individual-profile.component';
+import { ClaimsComponent } from '../components/servicing/claims.component';
 
 import { filter, mergeMap, map } from 'rxjs/operators';
 

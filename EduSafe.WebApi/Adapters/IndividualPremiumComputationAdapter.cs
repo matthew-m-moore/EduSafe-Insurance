@@ -8,7 +8,7 @@ using EduSafe.Common.Utilities;
 using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.Core.Repositories;
 using EduSafe.IO.Excel.Records;
-using EduSafe.WebApi.Models;
+using EduSafe.WebApi.Models.Individuals;
 
 namespace EduSafe.WebApi.Adapters
 {
