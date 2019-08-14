@@ -4,8 +4,8 @@ import { NotificationHistoryEntry } from '../../classes/servicing/notificationHi
 
 @Component({
   selector: 'notification-history',
-  templateUrl: '../views/servicing/notification-history.component.html',
-  styleUrls: ['../styles/servicing/notification-history.component.css']
+  templateUrl: '../../views/servicing/notification-history.component.html',
+  styleUrls: ['../../styles/servicing/notification-history.component.css']
 })
 
 export class NotificationHistoryComponent {

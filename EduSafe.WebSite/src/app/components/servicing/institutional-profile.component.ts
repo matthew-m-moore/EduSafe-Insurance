@@ -11,8 +11,8 @@ import { ExcelExportService } from '../../services/excelExport.service';
 
 @Component({
   selector: 'institutional-profile',
-  templateUrl: '../views/servicing/institutional-profile.component.html',
-  styleUrls: ['../styles/servicing/institutional-profile.component.css']
+  templateUrl: '../../views/servicing/institutional-profile.component.html',
+  styleUrls: ['../../styles/servicing/institutional-profile.component.css']
 })
 
 export class InstitutionalProfileComponent implements OnInit {

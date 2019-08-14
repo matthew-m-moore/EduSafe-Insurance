@@ -1,10 +1,93 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
+<div class="table-responsive">
+  <table align="center" class="table">
+    <thead>
+      <tr>
+        <td><b>Average Monthly Payment</b></td>
+        <td><b>Unenrollment Payback</b></td>
+        <td><b>Warranty Coverage</b></td>
+        <td><b>Unemployment Coverage</b></td>
+        <td><b>New Cohort Default Rate</b></td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let institutionOutputEntry of institutionOutputSummary.InstitutionOutputEntries">
+        <td>${{ institutionOutputEntry.AverageMonthlyPayment | number: '1.0-0' }}</td>
+        <td>{{ institutionOutputEntry.UnenrollmentPaybackOption | number: '1.0-0' }}%</td>
+        <td>${{ institutionOutputEntry.UnenrollmentWarrantyCoverage | number: '1.0-0' }}</td>
+        <td>${{ institutionOutputEntry.UndergraduateUnemploymentCoverage | number: '1.0-0' }}</td>
+        <td>{{ institutionOutputEntry.EndingCohortDefaultRate | number: '1.0-0' }}%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="row justify-content-center" id="policyDetailsContent">
+  <div class="col-md-8 text-left">
+    <i><u>Explanation</u>:</i> For an average monthly payment of <b>${{ institutionOutputEntry.AverageMonthlyPayment | number: '1.0-0' }}</b>
+    your institution will receive ${{ institutionOutputEntry.UnenrollmentWarrantyCoverage | number: '1.0-0' }} unenrollment warranty
+    coverage for each of your <b>{{ resultsEmailEntry.InstitutionInputEntry.StudentsPerStartingClass }}</b> students. This means former students
+    with an average monthly debt payment of ${{ institutionOutputEntry.UnenrolledStudentsMonthlyDebtPayment | number: '1.0-0' }} will have
+    36 months of their student loan payments completely covered if they unenroll within the first 12 months of their education for any reason.<br /><br />
+    Additionally, any of these students that graduate successfully will have ${{ institutionOutputEntry.UndergraduateUnemploymentCoverage | number: '1.0-0' }}
+    of credit unemployment insurance coverage. This means if these graduates cannot find a job commensurate with their education after graduation,
+    their average monthly student loan payments of ${{ institutionOutputEntry.GraduatedStudentsMonthlyDebtPayment | number: '1.0-0' }} will be
+    covered for up to 36 months after repayment begins.<br /><br />
+    With the combined effects of these two features of Edu$afe's product, your institution's federal loan 3-year cohort default rate
+    could drop from {{ resultsEmailEntry.InstitutionInputEntry.StartingCohortDefaultRate | number: '1.0-0' }}% to
+    <b>{{ institutionOutputEntry.EndingCohortDefaultRate | number: '1.0-0' }}%</b>.<br /><br />
+    For a slightly higher average monthly payment, your institution can also purchase an <i>"Unenrollment Payback"</i> option.
+    With this option in place, your institution can get paid back up to 50% of any premiums spent on an individual student who unenrolls
+    for any reason after the first 12 months of their education, and prior to completing their degree.
+  </div>
+</div>
+<div *ngIf="isSendingResults" class="row justify-content-center" id="sendingResultsProgressBar">
+  <div class="col-md-6 text-left">
+    <progressbar [value]="100" [animate]="true" [striped]="true">Sending...</progressbar>
+  </div>
+</div>
+<div *ngIf="isResultsEmailSent">
+  <br clear="all" />
+  {{ modalMessage }}
+  <br clear="all" />
+</div>
+<div>
+  <button type="button" class="btn btn-primary"
+          (click)="revealModelInputsAgain()">
+    Want to Estimate Your Payment Again?
+  </button>
+</div>
+<div>
+  <button type="button" class="btn btn-info" style="margin-bottom: 2em;"
+          (click)="openConfirmationModal(provideEmailTemplate)"
+          [disabled]="isResultsEmailSent">
+    Email Us Our Monthly Payment Estimate
+  </button>
+</div>
 
-</body>
-</html>
+<ng-template #provideEmailTemplate>
+  <div class="modal-body text-center">
+    <div class="form-group">
+      <label for="recipientAddressField"><b>Email Address:</b></label>
+      <input [(ngModel)]="resultsEmailEntry.RecipientAddress"
+             id="recipientAddressField"
+             name="recipientAddress"
+             class="form-control"
+             placeholder="Email Address" />
+    </div>
+
+    <div class="form-group">
+      <label for="recipientNameField"><b>Name (Optional):</b></label>
+      <input [(ngModel)]="resultsEmailEntry.RecipientName"
+             id="recipientNameField"
+             name="recipientName"
+             class="form-control"
+             placeholder="Name" />
+    </div>
+
+    <button type="button" class="btn btn-info" (click)="confirmSendEmail()">
+      Send Email
+    </button>
+    <button type="button" class="btn btn-default" (click)="declineSendEmail()">
+      Cancel
+    </button>
+  </div>
+</ng-template>

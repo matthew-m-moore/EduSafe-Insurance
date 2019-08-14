@@ -3,8 +3,8 @@ import { ClaimStatusEntry } from '../../classes/servicing/claimStatusEntry';
 
 @Component({
   selector: 'claim-tab',
-  templateUrl: '../views/servicing/claim-tab.component.html',
-  styleUrls: ['../styles/servicing/claim-tab.component.css']
+  templateUrl: '../../views/servicing/claim-tab.component.html',
+  styleUrls: ['../../styles/servicing/claim-tab.component.css']
 })
 
 export class ClaimTabComponent {

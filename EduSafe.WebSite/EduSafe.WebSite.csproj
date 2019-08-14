@@ -86,7 +86,7 @@
     <Content Include="src\app\styles\servicing\individual-profile.component.css" />
     <Content Include="src\app\styles\servicing\institutional-profile.component.css" />
     <Content Include="src\app\styles\institutions\institutions-model.component.css" />
-    <Content Include="src\app\styles\institutions\institutions-ouput.component.css" />
+    <Content Include="src\app\styles\institutions\institutions-output.component.css" />
     <Content Include="src\app\styles\institutions\institutions.component.css" />
     <Content Include="src\app\styles\servicing\notification-history.component.css" />
     <Content Include="src\app\styles\individuals\output.component.css" />

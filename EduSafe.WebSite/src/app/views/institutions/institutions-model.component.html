@@ -1,10 +1,151 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
+<div *ngIf="!isCalculated">
+  <form>
+    <div class="form-group">
+      <label for="collegeNameField">Name of University</label>
+      <input [(ngModel)]="institutionInputEntry.CollegeName"
+             [typeahead]="collegesList"
+             #collegesSearchBox (keyup)="searchCollege(collegesSearchBox.value)"
+             (blur)="checkIfPaymentCanBeCalculated()"
+             id="collegeNameField"
+             name="collegeName"
+             class="form-control"
+             placeholder="College Name" />
+    </div>
 
-</body>
-</html>
+    <div class="form-group">
+      <label for="schoolTypeField">Type of Institution</label>
+      <select required (change)="updateSchoolType($event.target.value)"
+              id="schoolTypeField"
+              class="form-control">
+        <option class="defaultSelect" disabled selected hidden>Please Select</option>
+        <option *ngFor="let collegeType of collegeTypesList" [ngValue]="collegeType">
+          {{ collegeType }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="degreeTypeField">Primary Degree Type Offered</label>
+      <select required (change)="updateDegreeType($event.target.value)"
+              id="degreeTypeField"
+              class="form-control">
+        <option class="defaultSelect" disabled selected hidden>Please Select</option>
+        <option *ngFor="let degreeType of degreeTypesList" [ngValue]="degreeType">
+          {{ degreeType }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="studentsToCoverField">Number of Students to Cover</label>
+      <input type="number"
+             [(ngModel)]="institutionInputEntry.StudentsPerStartingClass"
+             (ngModelChange)="checkIfPaymentCanBeCalculated()"
+             id="studentsToCoverField"
+             name="studentsToCover"
+             class="form-control"
+             placeholder="100" />
+    </div>
+
+    <div class="form-group col-md-4">
+      <label *ngIf="isTwoYearDegree" for="graduationRateField1">Graduation Rate Within 2 Years</label>
+      <label *ngIf="!isTwoYearDegree" for="graduationRateField1">Graduation Rate Within 4 Years</label>
+      <div class="input-group">
+        <input type="number"
+               [(ngModel)]="institutionInputEntry.GraduationWithinYears1"
+               (ngModelChange)="checkIfPaymentCanBeCalculated()"
+               id="graduationRateField1"
+               name="graduationRate1"
+               class="form-control"
+               style="direction: rtl"
+               placeholder="0" />
+        <div class="input-group-append">
+          <span class="input-group-text">%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group col-md-4">
+      <label *ngIf="isTwoYearDegree" for="graduationRateField2">Graduation Rate Within 3 Years</label>
+      <label *ngIf="!isTwoYearDegree" for="graduationRateField2">Graduation Rate Within 5 Years</label>
+      <div class="input-group">
+        <input type="number"
+               [(ngModel)]="institutionInputEntry.GraduationWithinYears2"
+               (ngModelChange)="checkIfPaymentCanBeCalculated()"
+               id="graduationRateField2"
+               name="graduationRate2"
+               class="form-control"
+               style="direction: rtl"
+               placeholder="0" />
+        <div class="input-group-append">
+          <span class="input-group-text">%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group col-md-4">
+      <label *ngIf="isTwoYearDegree" for="graduationRateField3">Graduation Rate Within 4 Years</label>
+      <label *ngIf="!isTwoYearDegree" for="graduationRateField3">Graduation Rate Within 6 Years</label>
+      <div class="input-group">
+        <input type="number"
+               [(ngModel)]="institutionInputEntry.GraduationWithinYears3"
+               (ngModelChange)="checkIfPaymentCanBeCalculated()"
+               id="graduationRateField3"
+               name="graduationRate3"
+               class="form-control"
+               style="direction: rtl"
+               placeholder="0" />
+        <div class="input-group-append">
+          <span class="input-group-text">%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group col-md-4">
+      <label for="cohortDefaultRateField">Federal Loan Cohort Default Rate</label>
+        <div class="input-group">
+        <input type="number"
+                [(ngModel)]="institutionInputEntry.StartingCohortDefaultRate"
+                (ngModelChange)="checkIfPaymentCanBeCalculated()"
+                id="cohortDefaultRateField"
+                name="cohortDefaultRate"
+                class="form-control"
+                style="direction: rtl"
+                placeholder="Pick Inst./Degree Type for Avg." />
+        <div class="input-group-append">
+          <span class="input-group-text">%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="averageLoanDebtField">Average Student Loan Debt at Graduation</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">$</span>
+        </div>
+        <input type="number"
+               [(ngModel)]="institutionInputEntry.AverageLoanDebtAtGraduation"
+               (ngModelChange)="checkIfPaymentCanBeCalculated()"
+               id="averageLoanDebtField"
+               name="averageLoanDebt"
+               class="form-control"
+               placeholder="25000" />
+      </div>
+    </div>
+</form>
+  <div *ngIf="isCalculating" class="row justify-content-center" id="calculatingProgressBar">
+    <div class="col-md-6 text-left">
+      <progressbar [value]="100" [animate]="true" [striped]="true">Calculating...</progressbar>
+    </div>
+  </div>
+
+  <button type="button" class="btn btn-primary"
+          (click)="submitForCalculation()"
+          [disabled]="!canPaymentBeEstimated">
+    Estimate Monthly Payments
+  </button>
+</div>
+<div *ngIf="isCalculated">
+  <institutions-output></institutions-output>
+</div>

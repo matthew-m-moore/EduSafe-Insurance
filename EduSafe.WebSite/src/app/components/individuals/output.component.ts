@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, AfterViewInit, ElementRef, TemplateRef } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal'
 
@@ -13,8 +14,8 @@ import { SendEmailService } from '../../services/sendEmail.Service';
 
 @Component({
   selector: 'edusafe-output',
-  templateUrl: '../views/individuals/output.component.html',
-  styleUrls: ['../styles/individuals/output.component.css']
+  templateUrl: '../../views/individuals/output.component.html',
+  styleUrls: ['../../styles/individuals/output.component.css']
 })
 
 export class ModelOuputComponent implements OnInit, AfterViewInit {
@@ -29,12 +30,19 @@ export class ModelOuputComponent implements OnInit, AfterViewInit {
   public isSendingResults = false;
 
   constructor(
+    private router: Router,
     private modelComponent: ModelComponent,
     private elementRef: ElementRef,
     private modalService: BsModalService,
     private sendEmailService: SendEmailService,
     private activityCaptureService: ActivityCaptureService
   ) { }
+
+  goToHome(): void {
+    let routingUrl = ['/edusafe-home'];
+    this.router.navigate(routingUrl);
+    window.scroll(0, 0);
+  }
 
   revealModelInputsAgain(): void {
     this.isResultsEmailSent = false;

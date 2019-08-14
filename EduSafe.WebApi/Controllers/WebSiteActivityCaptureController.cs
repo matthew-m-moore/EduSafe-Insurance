@@ -83,5 +83,19 @@ namespace EduSafe.WebApi.Controllers
 
             return true;
         }
+
+        // POST: api/activity/email-institution
+        [Route("email-institution")]
+        [HttpPost]
+        public bool RecordInstitutionResultEmailAddress(InstitutionResultEmailEntry institutionResultEmailEntry)
+        {
+            var webSiteInquiryDatabaseSaver = new WebSiteInquiryDatabaseSaver();
+            webSiteInquiryDatabaseSaver.SaveEmailAddress(
+                institutionResultEmailEntry.InstitutionInputEntry.IpAddress,
+                institutionResultEmailEntry.RecipientAddress,
+                institutionResultEmailEntry.RecipientName);
+
+            return true;
+        }
     }
 }

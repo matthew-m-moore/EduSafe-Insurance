@@ -15,8 +15,8 @@ import { debounceTime, distinctUntilChanged, switchMap, debounce } from 'rxjs/op
 
 @Component({
   selector: 'institutions-model',
-  templateUrl: '../views/institutions/institutions-model.component.html',
-  styleUrls: ['../styles/institutions/institutions-model.component.css']
+  templateUrl: '../../views/institutions/institutions-model.component.html',
+  styleUrls: ['../../styles/institutions/institutions-model.component.css']
 })
 
 export class InstitutionsModelComponent implements OnInit{
@@ -28,12 +28,6 @@ export class InstitutionsModelComponent implements OnInit{
   collegeTypesList = ['Public School', 'Private School', 'For-Profit College'];
   collegesList: Observable<string[]>;
   insitutionalGradData: Observable<InstitutionalGradData>;
-
-  public labelYears2 = 'Within 2 Years';
-  public labelYears3 = 'Within 3 Years';
-  public labelYears4 = 'Within 4 Years';
-  public labelYears5 = 'Within 5 Years';
-  public labelYears6 = 'Within 6 Years';
 
   public isCalculated = false;
   public isCalculating = false;
@@ -62,8 +56,6 @@ export class InstitutionsModelComponent implements OnInit{
 
     if (this.institutionInputEntry.TwoYearOrFourYearSchool)
       this.updateInstitutionalGradData();
-
-    this.checkIfPaymentCanBeCalculated();
   }
 
   updateDegreeType(degreeType): void {
@@ -76,8 +68,6 @@ export class InstitutionsModelComponent implements OnInit{
 
     if (this.institutionInputEntry.PublicOrPrivateSchool)
       this.updateInstitutionalGradData();
-
-    this.checkIfPaymentCanBeCalculated();
   }
 
   updateInstitutionalGradData(): void {
@@ -88,6 +78,7 @@ export class InstitutionsModelComponent implements OnInit{
         this.institutionInputEntry.GraduationWithinYears3 = institutionalGradData.GradTargetYear3;
         this.institutionInputEntry.AverageLoanDebtAtGraduation = institutionalGradData.AverageLoanDebt;
         this.institutionInputEntry.StartingCohortDefaultRate = institutionalGradData.CohortDefaultRate;
+        this.checkIfPaymentCanBeCalculated();
       })
   }
 
@@ -95,7 +86,6 @@ export class InstitutionsModelComponent implements OnInit{
     this.canPaymentBeEstimated =
       this.institutionInputEntry.PublicOrPrivateSchool &&
       this.institutionInputEntry.TwoYearOrFourYearSchool &&
-      this.institutionInputEntry.StudentsPerStartingClass > 0 &&
       this.institutionInputEntry.GraduationWithinYears1 > 0 &&
       this.institutionInputEntry.GraduationWithinYears2 > 0 &&
       this.institutionInputEntry.GraduationWithinYears3 > 0 &&
@@ -105,6 +95,10 @@ export class InstitutionsModelComponent implements OnInit{
 
   submitForCalculation(): void {
     this.isCalculating = true;
+
+    if (!this.institutionInputEntry.StudentsPerStartingClass || this.institutionInputEntry.StudentsPerStartingClass <= 0)
+      this.institutionInputEntry.StudentsPerStartingClass = 100;
+
     this.modelCalculationService.calcInstitutionOutput(this.institutionInputEntry)
       .then(institutionCalculationOutput => {
         this.institutionOutputSummary = institutionCalculationOutput;
@@ -119,6 +113,7 @@ export class InstitutionsModelComponent implements OnInit{
   ngOnInit(): void {
     this.institutionInputEntry = new InstitutionInputEntry();
     this.institutionInputEntry.IpAddress = this.appRootComponent.ipAddress;
+    this.appRootComponent.isInstitutional = true;
 
     this.collegesList = this.collegeSearchTerms.pipe(
       debounceTime(300),

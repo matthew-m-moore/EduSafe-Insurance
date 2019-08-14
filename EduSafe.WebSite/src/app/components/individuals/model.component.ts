@@ -17,8 +17,8 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'edusafe-model',
-  templateUrl: '../views/individuals/model.component.html',
-  styleUrls: ['../styles/individuals/model.component.css']
+  templateUrl: '../../views/individuals/model.component.html',
+  styleUrls: ['../../styles/individuals/model.component.css']
 })
 
 export class ModelComponent implements OnInit {
@@ -104,6 +104,7 @@ export class ModelComponent implements OnInit {
   ngOnInit(): void {
     this.modelInputEntry = new ModelInputEntry();
     this.modelInputEntry.IpAddress = this.appRootComponent.ipAddress;
+    this.appRootComponent.isInstitutional = false;
 
     this.datepickerConfig = Object.assign({}, {
       minMode: this.datepickerMinMode,

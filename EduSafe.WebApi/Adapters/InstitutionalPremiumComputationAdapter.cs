@@ -26,7 +26,7 @@ namespace EduSafe.WebApi.Adapters
 
         private static Stream _websiteScenarioDataFileStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(_websiteScenarioDataFile);
 
-        private readonly List<int> _warrantyCoverageMonths = new List<int> { 12, 24 };
+        private readonly List<int> _warrantyCoverageMonths = new List<int> { 12 };
         private readonly List<double> _unenrollmentPaybackOption = new List<double> { 0.0, 0.5 };
         private readonly List<double> _averageGraduationDebtMultiplier = new List<double> { 0.5, 1.0, 1.5 };
 
@@ -73,7 +73,7 @@ namespace EduSafe.WebApi.Adapters
                         baseScenario.DropOutOptionRatio = paybackOption;
                         baseScenario.WarrantyCoverageMonths = numberOfCoverageMonths;
 
-                        var premiumComputationScenario = _premiumComputationRepository.GetPremiumComputationScenario(baseScenario);
+                        var premiumComputationScenario = _premiumComputationRepository.GetPremiumComputationScenario(baseScenario, true);
                         var premiumComputationResults = premiumComputationScenario.Copy().ComputePremiumResult();
                         var averageMonthlyPremium = premiumComputationResults.ResultSummary.AverageMonthlyPremiums;
                         var numberOfStudents = institutionInputEntry.StudentsPerStartingClass;
@@ -91,10 +91,11 @@ namespace EduSafe.WebApi.Adapters
 
                         var institutionOutputEntry = new InstitutionOutputEntry
                         {
-                            StudentsMonthlyDebtPayment = graduateMonthlyPayment,
+                            UnenrolledStudentsMonthlyDebtPayment = dropOutMonthlyPayment,
+                            GraduatedStudentsMonthlyDebtPayment = graduateMonthlyPayment,
                             UndergraduateUnemploymentCoverage = unemploymentCoverage,
                             UnenrollmentWarrantyCoverage = unenrollmentCoverage,
-                            UnenrollmentPaybackOption = paybackOption,
+                            UnenrollmentPaybackOption = paybackOption * Constants.PercentagePoints,
                             AverageMonthlyPayment = averageMonthlyPremium * numberOfStudents,
                             EndingCohortDefaultRate = updatedCohortDefaultRate,
                         };

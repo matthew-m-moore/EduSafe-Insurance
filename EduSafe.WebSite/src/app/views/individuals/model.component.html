@@ -68,13 +68,18 @@
 
     <div class="form-group">
       <label for="incomeAmountField">How much would you like to be covered annually?</label>
-      <input type="number"
-             [(ngModel)]="modelInputEntry.IncomeCoverageAmount"
-             (ngModelChange)="checkIfPaymentCanBeCalculated()"
-             id="incomeAmountField"
-             name="incomeAmount"
-             class="form-control"
-             placeholder="Choose Major for Median" />
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">$</span>
+        </div>
+        <input type="number"
+               [(ngModel)]="modelInputEntry.IncomeCoverageAmount"
+               (ngModelChange)="checkIfPaymentCanBeCalculated()"
+               id="incomeAmountField"
+               name="incomeAmount"
+               class="form-control"
+               placeholder="Choose Major for Median Amount" />
+      </div>
     </div>
   </form>
   <div *ngIf="isCalculating" class="row justify-content-center" id="calculatingProgressBar">

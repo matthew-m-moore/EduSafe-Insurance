@@ -7,8 +7,8 @@ import { FileTransferService } from '../../services/fileTransfer.service';
 
 @Component({
   selector: 'claim-detail',
-  templateUrl: '../views/servicing/claim-detail.component.html',
-  styleUrls: ['../styles/servicing/claim-detail.component.css']
+  templateUrl: '../../views/servicing/claim-detail.component.html',
+  styleUrls: ['../../styles/servicing/claim-detail.component.css']
 })
 
 export class ClaimDetailComponent implements OnInit {

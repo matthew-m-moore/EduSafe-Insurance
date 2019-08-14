@@ -2,7 +2,8 @@
 {
     public class InstitutionOutputEntry
     {
-        public double StudentsMonthlyDebtPayment { get; set; }
+        public double UnenrolledStudentsMonthlyDebtPayment { get; set; }
+        public double GraduatedStudentsMonthlyDebtPayment { get; set; }
         public double UnenrollmentWarrantyCoverage { get; set; }
         public double UndergraduateUnemploymentCoverage { get; set; }
         public double UnenrollmentPaybackOption { get; set; }

@@ -1,5 +1,6 @@
 export class InstitutionOutputEntry {
-  StudentsMonthlyDebtPayment: number;
+  UnenrolledStudentsMonthlyDebtPayment: number;
+  GraduatedStudentsMonthlyDebtPayment: number;
   UnenrollmentWarrantyCoverage: number;
   UndergraduateUnemploymentCoverage: number;
   UnenrollmentPaybackOption: number;

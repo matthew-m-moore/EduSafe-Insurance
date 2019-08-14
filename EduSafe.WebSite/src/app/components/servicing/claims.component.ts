@@ -12,8 +12,8 @@ import { FileTransferService } from '../../services/fileTransfer.service';
 
 @Component({
   selector: 'claims-inventory',
-  templateUrl: '../views/servicing/claims.component.html',
-  styleUrls: ['../styles/servicing/claims.component.css']
+  templateUrl: '../../views/servicing/claims.component.html',
+  styleUrls: ['../../styles/servicing/claims.component.css']
 })
 
 export class ClaimsComponent implements OnInit, AfterContentInit {

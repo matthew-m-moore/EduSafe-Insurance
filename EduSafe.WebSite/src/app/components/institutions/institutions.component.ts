@@ -5,8 +5,8 @@ import { AppRootComponent } from '../../components/app-root.component';
 
 @Component({
   selector: 'institutions',
-  templateUrl: '../views/institutions/institutions.component.html',
-  styleUrls: ['../styles/institutions/institutions.component.css']
+  templateUrl: '../../views/institutions/institutions.component.html',
+  styleUrls: ['../../styles/institutions/institutions.component.css']
 })
 
 export class InstitutionsComponent implements OnInit {
@@ -19,6 +19,7 @@ export class InstitutionsComponent implements OnInit {
   loadIndividualsPage(): void {
     let routingUrl = ['/edusafe-home'];
     this.router.navigate(routingUrl);
+    this.appRootComponent.isInstitutional = false;
     window.scroll(0, 0);
   }
 

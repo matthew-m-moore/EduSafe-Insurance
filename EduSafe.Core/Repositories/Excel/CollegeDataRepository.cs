@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using EduSafe.Common;
 using EduSafe.Core.BusinessLogic.Containers;
 using EduSafe.IO.Excel.Records;
 
@@ -37,11 +38,11 @@ namespace EduSafe.Core.Repositories.Excel
                 var institutionalGradData = new InstitutionalGradData(
                     record.LoanInterestRate,
                     record.AverageLoanDebtAtGraduation,
-                    record.GradTargetYear1,
-                    record.GradTargetYear2,
-                    record.GradTargetYear3,
-                    record.UnemploymentTarget,
-                    record.CohortDefaultRate);
+                    record.GradTargetYear1 * Constants.PercentagePoints,
+                    record.GradTargetYear2 * Constants.PercentagePoints,
+                    record.GradTargetYear3 * Constants.PercentagePoints,
+                    record.UnemploymentTarget * Constants.PercentagePoints,
+                    record.CohortDefaultRate * Constants.PercentagePoints);
 
                 if (!institutionalDataDictionary.ContainsKey(record.DegreeType))
                     institutionalDataDictionary.Add(record.DegreeType, new Dictionary<string, InstitutionalGradData>());

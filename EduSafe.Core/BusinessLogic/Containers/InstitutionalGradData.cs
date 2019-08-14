@@ -1,4 +1,6 @@
-﻿namespace EduSafe.Core.BusinessLogic.Containers
+﻿using System;
+
+namespace EduSafe.Core.BusinessLogic.Containers
 {
     public class InstitutionalGradData
     {
@@ -21,11 +23,11 @@
         {
             LoanInterestRate = loanInterestRate;
             AverageLoanDebt = averageLoanDebt;
-            GradTargetYear1 = gradTargetYear1;
-            GradTargetYear2 = gradTargetYear2;
-            GradTargetYear3 = gradTargetYear3;
+            GradTargetYear1 = Math.Round(gradTargetYear1, 0);
+            GradTargetYear2 = Math.Round(gradTargetYear2, 0);
+            GradTargetYear3 = Math.Round(gradTargetYear3, 0);
             UnemploymentTarget = unemploymentTarget;
-            CohortDefaultRate = cohortDefaultRate;
+            CohortDefaultRate = Math.Round(cohortDefaultRate, 0);
         }
     }
 }

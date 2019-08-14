@@ -10,8 +10,8 @@ import { ExcelExportService } from '../../services/excelExport.service';
 
 @Component({
   selector: 'individual-profile',
-  templateUrl: '../views/servicing/individual-profile.component.html',
-  styleUrls: ['../styles/servicing/individual-profile.component.css']
+  templateUrl: '../../views/servicing/individual-profile.component.html',
+  styleUrls: ['../../styles/servicing/individual-profile.component.css']
 })
 
 export class IndividualProfileComponent implements OnInit {

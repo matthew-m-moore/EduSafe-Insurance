@@ -11,6 +11,7 @@ import { EnvironmentSettings } from '../classes/environmentSettings';
 export class SendEmailService {
   private contactEmailUrl = EnvironmentSettings.BaseApiUrl + '/api/email/contact';
   private resultsEmailUrl = EnvironmentSettings.BaseApiUrl + '/api/email/results';
+  private institutionResultEmailUrl = EnvironmentSettings.BaseApiUrl + '/api/email/institutional-results';
   private headers = new Headers({ 'Content-Type': 'application/json' });
 
   constructor(private http: Http) { }
@@ -24,6 +25,13 @@ export class SendEmailService {
 
   sendResultsEmail(resultsEmailEntry: ResultsEmailEntry): Promise<boolean> {
     return this.http.put(this.resultsEmailUrl, JSON.stringify(resultsEmailEntry), { headers: this.headers })
+      .toPromise()
+      .then(response => response.json() as boolean)
+      .catch(this.reportError);
+  }
+
+  sendInstitutionResultEmail(institutionResultEmailEntry: InstitutionResultEmailEntry): Promise<boolean> {
+    return this.http.put(this.institutionResultEmailUrl, JSON.stringify(institutionResultEmailEntry), { headers: this.headers })
       .toPromise()
       .then(response => response.json() as boolean)
       .catch(this.reportError);

@@ -17,6 +17,7 @@ export class ActivityCaptureService {
   private institutionCalcCaptureUrl = EnvironmentSettings.BaseApiUrl + '/api/activity/calc-institution';
   private emailInquiryCaptureUrl = EnvironmentSettings.BaseApiUrl + '/api/activity/email-inquiry';
   private emailResultsCaptureUrl = EnvironmentSettings.BaseApiUrl + '/api/activity/email-results';
+  private emailInstitutionResultCaptureUrl = EnvironmentSettings.BaseApiUrl + '/api/activity/email-institution';
   private headers = new Headers({ 'Content-Type': 'application/json' });
 
   constructor(private http: Http) { }
@@ -51,6 +52,13 @@ export class ActivityCaptureService {
 
   captureResultsEmailActivity(resultsEmailEntry: ResultsEmailEntry): Promise<boolean> {
     return this.http.post(this.emailResultsCaptureUrl, JSON.stringify(resultsEmailEntry), { headers: this.headers })
+      .toPromise()
+      .then(response => response.json() as boolean)
+      .catch(this.reportError);
+  }
+
+  captureInstitutionResultEmailActivity(institutionResultEmailEntry: InstitutionResultEmailEntry): Promise<boolean> {
+    return this.http.post(this.emailInstitutionResultCaptureUrl, JSON.stringify(institutionResultEmailEntry), { headers: this.headers })
       .toPromise()
       .then(response => response.json() as boolean)
       .catch(this.reportError);
