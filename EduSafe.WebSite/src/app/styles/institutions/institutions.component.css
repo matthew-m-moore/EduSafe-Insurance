@@ -14,6 +14,14 @@ button {
   margin-bottom: 2em;
 }
 
+table {
+  max-width: 350px;
+}
+
+.tableCaption {
+  font-size: 90%;
+}
+
 .subTitleContent {
   font-family: "Arial Black", Gadget, sans-serif;
   font-size: 150%;
@@ -82,6 +90,15 @@ button {
 
   #detailsContent {
     margin: 0.5em;
+    font-size: 80%;
+  }
+
+  table {
+    max-width: 75%;
+    font-size: 90%;
+  }
+
+  .tableCaption {
     font-size: 80%;
   }
 
