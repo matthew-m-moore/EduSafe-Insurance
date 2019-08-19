@@ -34,43 +34,30 @@ IF (SELECT Id FROM WebSiteInquiryMajor WHERE Major = @Major) is null
 	INSERT INTO WebSiteInquiryMajor VALUES (@Major, GETDATE(), USER);
 SET @MajorId = (SELECT Id FROM WebSiteInquiryMajor WHERE Major = @Major);  
 
-DECLARE @AnswersId int
-IF (
-	SELECT Id
-	FROM WebSiteInquiryAnswersToQuestions 
-	WHERE 
-			IpAddressId = @IpAddressId
-		and CollegeNameId = @CollegeNameId
-		and CollegeTypeId = @CollegeTypeId
-		and MajorId	= @MajorId 
-	) is null
-
-	INSERT INTO WebSiteInquiryAnswersToQuestions 
-	(
-		IpAddressId 
-		, CollegeNameId 
-		, CollegeTypeId
-		, MajorId
-		, CollegeStartDate
-		, GraduationDate
-		, AnnualCoverage
-		, CreatedOn
-		, CreatedBy
-	)
-
-	VALUES
-	(
-		@IpAddressId
-		, @CollegeNameId
-		, @CollegeTypeId
-		, @MajorId
-		, @CollegeStartDate
-		, @GraduationDate
-		, @AnnualCoverage
-		, GETDATE()
-		, USER
-		
-	);
+INSERT INTO WebSiteInquiryAnswersToQuestions 
+(
+	IpAddressId 
+	, CollegeNameId 
+	, CollegeTypeId
+	, MajorId
+	, CollegeStartDate
+	, GraduationDate
+	, AnnualCoverage
+	, CreatedOn
+	, CreatedBy
+)
+VALUES
+(
+	@IpAddressId
+	, @CollegeNameId
+	, @CollegeTypeId
+	, @MajorId
+	, @CollegeStartDate
+	, @GraduationDate
+	, @AnnualCoverage
+	, GETDATE()
+	, USER
+);
 
 SELECT   
 	Id     = MAX(Id)  

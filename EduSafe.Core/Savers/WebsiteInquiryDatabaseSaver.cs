@@ -47,6 +47,39 @@ namespace EduSafe.Core.Savers
             }
         }
 
+        public void SaveInstitutionalCalculationInputs(
+            string ipAddress,
+            string collegeName,
+            string collegeType,
+            string degreeType,
+            int studentsPerStartingClass,
+            double graduationWithinYears1,
+            double graduationWithinYears2,
+            double graduationWithinYears3,
+            double averageLoanDebtAtGraduation,
+            double startingCohortDefaultRate)
+        {
+            using (var databaseContext = DatabaseContext as WebSiteInquiryContext)
+            {
+                var webSiteInquiryInstitutionalInputsEntity = new WebSiteInquiryInstitutionalInputsEntity
+                {
+                    IpAddress = ipAddress,
+                    CollegeName = collegeName,
+                    CollegeType = collegeType,
+                    DegreeType = degreeType,
+                    StudentsPerStartingClass = studentsPerStartingClass,
+                    GraduationWithinYears1 = graduationWithinYears1,
+                    GraduationWithinYears2 = graduationWithinYears2,
+                    GraduationWithinYears3 = graduationWithinYears3,
+                    AverageLoanDebtAtGraduation = averageLoanDebtAtGraduation,
+                    StartingCohortDefaultRate = startingCohortDefaultRate
+                };
+
+                databaseContext.WebSiteInquiryInstitutionalInputsEntities.Add(webSiteInquiryInstitutionalInputsEntity);
+                databaseContext.SaveChanges();
+            }
+        }
+
         public void SaveEmailAddress(
             string ipAddress,
             string contactAddress,

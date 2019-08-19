@@ -44,14 +44,17 @@ namespace EduSafe.WebApi.Controllers
         public bool RecordInstitutionCalculationInputs(InstitutionInputEntry institutionInputEntry)
         {
             var webSiteInquiryDatabaseSaver = new WebSiteInquiryDatabaseSaver();
-            //webSiteInquiryDatabaseSaver.SaveCalculationInputs(
-            //    institutionInputEntry.IpAddress,
-            //    institutionInputEntry.CollegeName,
-            //    institutionInputEntry.PublicOrPrivateSchool,
-            //    institutionInputEntry.CollegeMajor,
-            //    institutionInputEntry.CollegeStartDate,
-            //    institutionInputEntry.ExpectedGraduationDate,
-            //    institutionInputEntry.IncomeCoverageAmount);
+            webSiteInquiryDatabaseSaver.SaveInstitutionalCalculationInputs(
+                institutionInputEntry.IpAddress,
+                institutionInputEntry.CollegeName,
+                institutionInputEntry.PublicOrPrivateSchool,
+                institutionInputEntry.TwoYearOrFourYearSchool,
+                institutionInputEntry.StudentsPerStartingClass,
+                institutionInputEntry.GraduationWithinYears1,
+                institutionInputEntry.GraduationWithinYears2,
+                institutionInputEntry.GraduationWithinYears3,
+                institutionInputEntry.AverageLoanDebtAtGraduation,
+                institutionInputEntry.StartingCohortDefaultRate);
 
             return true;
         }

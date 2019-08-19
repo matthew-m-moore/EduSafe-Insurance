@@ -117,7 +117,9 @@
     <Compile Include="Database\Entities\WebApp\WebSiteInquiryAnswersToQuestionsEntity.cs" />
     <Compile Include="Database\Entities\WebApp\WebSiteInquiryCollegeNameEntity.cs" />
     <Compile Include="Database\Entities\WebApp\WebSiteInquiryCollegeTypeEntity.cs" />
+    <Compile Include="Database\Entities\WebApp\WebSiteInquiryDegreeTypeEntity.cs" />
     <Compile Include="Database\Entities\WebApp\WebSiteInquiryEmailAddressEntity.cs" />
+    <Compile Include="Database\Entities\WebApp\WebSiteInquiryInstitutionalInputsEntity.cs" />
     <Compile Include="Database\Entities\WebApp\WebSiteInquiryIpAddressEntity.cs" />
     <Compile Include="Database\Entities\WebApp\WebSiteInquiryMajorEntity.cs" />
     <Compile Include="Database\Mappings\Servicing\EmailsMapping.cs" />
@@ -156,7 +158,9 @@
     <Compile Include="Database\Mappings\WebApp\WebSiteInquiryAnswersToQuestionsMapping.cs" />
     <Compile Include="Database\Mappings\WebApp\WebSiteInquiryCollegeNameMapping.cs" />
     <Compile Include="Database\Mappings\WebApp\WebSiteInquiryCollegeTypeMapping.cs" />
+    <Compile Include="Database\Mappings\WebApp\WebSiteInquiryDegreeTypeMapping.cs" />
     <Compile Include="Database\Mappings\WebApp\WebSiteInquiryEmailAddressMapping.cs" />
+    <Compile Include="Database\Mappings\WebApp\WebSiteInquiryInstitutionalInputsMapping.cs" />
     <Compile Include="Database\Mappings\WebApp\WebSiteInquiryIpAddressMapping.cs" />
     <Compile Include="Database\Mappings\WebApp\WebSiteInquiryMajorMapping.cs" />
     <Compile Include="Email\EmailCreator.cs" />

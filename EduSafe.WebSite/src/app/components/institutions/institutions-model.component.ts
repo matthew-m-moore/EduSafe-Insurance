@@ -11,7 +11,7 @@ import { ModelCalculationService } from '../../services/modelCalculation.service
 import { CollegeDataService } from '../../services/collegeData.service';
 
 import { Subject, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, debounce } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'institutions-model',

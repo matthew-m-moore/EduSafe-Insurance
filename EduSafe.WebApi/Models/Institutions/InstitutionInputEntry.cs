@@ -6,7 +6,7 @@
         public string CollegeName { get; set; }
         public string PublicOrPrivateSchool { get; set; }
         public string TwoYearOrFourYearSchool { get; set; }
-        public double StudentsPerStartingClass { get; set; }
+        public int StudentsPerStartingClass { get; set; }
         public double GraduationWithinYears1 { get; set; }
         public double GraduationWithinYears2 { get; set; }
         public double GraduationWithinYears3 { get; set; }
