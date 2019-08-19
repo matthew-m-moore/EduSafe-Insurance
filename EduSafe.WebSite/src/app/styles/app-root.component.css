@@ -85,7 +85,7 @@ button {
   font-size: 70%;
   margin: 0;
   padding: 2em;
-  padding-bottom: 20em;
+  padding-bottom: 50em;
   flex-grow: 4;
 }
 
@@ -147,7 +147,7 @@ button {
     font-size: 50%;
     margin: 0;
     padding: 2em;
-    padding-bottom: 20em;
+    padding-bottom: 50em;
   }
 }
 

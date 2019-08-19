@@ -1,2 +1,11 @@
-body {
+.authenticationForm {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+@media only screen and (max-width: 767px) {
+  .authenticationForm {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+  }
 }

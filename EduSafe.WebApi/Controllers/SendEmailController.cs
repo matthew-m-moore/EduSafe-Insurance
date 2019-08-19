@@ -12,6 +12,7 @@ namespace EduSafe.WebApi.Controllers
     {
         private const string _contactFrom = "Contact Email From: ";
         private const string _yourResults = "Your Monthly Premium Calculation Results from Edu$afe";
+        private const string _estimatedResults = "Estimated Premium Calculation Results from Edu$afe";
         private const string _contactUs = "Please don't hesitate to contact us at inquiries@edusafe.company if you have any questions.";
 
         private const string _buttonStart = "<button ";
@@ -79,15 +80,15 @@ namespace EduSafe.WebApi.Controllers
 
             // This gobbledeguk inserts our email in place of the buttons, left-aligns the table,
             // and also makes the remaining text appear below the table.
-            var editedEmailBody = startOfEmailBody + _contactUs + endOfEmailBody;
+            var editedEmailBody = startOfEmailBody + "<br>" + _contactUs + endOfEmailBody;
             editedEmailBody = editedEmailBody.Replace("align=\"center\"", "align=\"left\"");
             editedEmailBody = editedEmailBody.Replace(
-                "<i _ngcontent-",
-                "<br><br><br><br><br><br><br><br><div><i _ngcontent-");
+                "class=\"col-md-8 text-left\"><i _ngcontent-",
+                "class=\"col-md-8 text-left\"><br><br><br><br><br><br><br><br><br><br><br><div><i _ngcontent-");
             editedEmailBody += "</div>";
 
             var emailSender = new EmailSender();
-            var emailCreator = new EmailCreator(_yourResults, editedEmailBody, recipientAddress);
+            var emailCreator = new EmailCreator(_estimatedResults, editedEmailBody, recipientAddress);
             emailSender.Send(emailCreator);
             return true;
         }

@@ -14,6 +14,7 @@ namespace EduSafe.WebApi.Controllers
         [HttpPut]
         public bool AuthenticateCustomer(AuthenticationPackage authenticationPackage)
         {
+            return false;
             return !string.IsNullOrEmpty(authenticationPackage.EncryptedPassword);
         }
 
@@ -22,6 +23,7 @@ namespace EduSafe.WebApi.Controllers
         [HttpPost]
         public List<string> RetrieveCustomerNumbers(AuthenticationPackage authenticationPackage)
         {
+            return null;
             AuthenticationRepository authenticationRepository = null;
             var customerNumbers = new List<string>();
             var userIdentifier = authenticationPackage.CustomerIdentifier;

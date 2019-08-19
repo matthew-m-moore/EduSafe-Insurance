@@ -118,7 +118,9 @@
     <Content Include="src\assets\EduSafe_Icon.ico" />
     <Content Include="src\assets\EduSafe_Icon.png" />
     <Content Include="src\assets\EduSafe_Institution_CDR.png" />
+    <Content Include="src\assets\EduSafe_Institution_CDR_small.png" />
     <Content Include="src\assets\EduSafe_Institution_Outcomes.png" />
+    <Content Include="src\assets\EduSafe_Institution_Outcomes.svg" />
     <Content Include="src\browserslist" />
     <Content Include="src\edusafe-sitemap.xml" />
     <Content Include="src\tsconfig.app.json" />
