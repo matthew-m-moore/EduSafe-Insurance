@@ -50,7 +50,7 @@
           <div class="form-group">
             <input type="email" class="form-control" placeholder="Enter New Email"
                    [(ngModel)]="newEmailAddress"
-                   (ngModelChange)="checkIfEmailCanBeAdded($event)"
+                   (ngModelChange)="checkIfEmailCanBeAdded()"
                    name="addNewEmailInput">
             <button class="btn btn-primary" (click)="addEmailAddress()" [disabled]="!canNewEmailBeAdded">Add Email</button>
           </div>
