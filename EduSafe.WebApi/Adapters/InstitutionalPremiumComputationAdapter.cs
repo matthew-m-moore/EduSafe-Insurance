@@ -47,6 +47,7 @@ namespace EduSafe.WebApi.Adapters
 
             var collegeType = institutionInputEntry.PublicOrPrivateSchool;
             var institutionalGradData = institutionalDataDictionary[degreeType][collegeType];
+            var unenrollmentCoverageAmountMultiplier = (degreeType == _fourYearDegree) ? 0.25 : 0.50;
 
             baseScenario = AdjustBaseScenario(institutionalGradData, baseScenario, institutionInputEntry, degreeType);
 
@@ -62,7 +63,7 @@ namespace EduSafe.WebApi.Adapters
                     foreach (var debtMultiplier in _averageGraduationDebtMultiplier)
                     {
                         var unemploymentDebtAmount = debtMultiplier * institutionInputEntry.AverageLoanDebtAtGraduation;
-                        var unenrollmentDebtAmount = unemploymentDebtAmount / 2;
+                        var unenrollmentDebtAmount = unemploymentDebtAmount * unenrollmentCoverageAmountMultiplier;
 
                         var interestRate = institutionalGradData.LoanInterestRate;
                         var unemploymentCoverage = CalculateCoverageAmount(unemploymentDebtAmount, interestRate, out var graduateMonthlyPayment);
